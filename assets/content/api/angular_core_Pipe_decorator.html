@@ -1,0 +1,29 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/core</span><div class="docs-reference-title"><div><h1>Pipe</h1><div class="docs-api-item-label type-decorator full">decorator</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/core/src/metadata/directives.ts#L777-L783" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">code</i></a></div><section class="docs-reference-description"><p>Decorator that marks a class as pipe and supplies configuration metadata.</p></section><nav class="docs-pill-row"><a class="docs-pill" href="style-guide#02-09">Style Guide: Pipe Names</a></nav></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">
+  <code>
+    <span class="line ">@<span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/core/Pipe">Pipe</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ({</span></span><button aria-describedby="jump-msg" type="button" class="line " member-id="name"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  name</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button><button aria-describedby="jump-msg" type="button" class="line " member-id="pure"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  pure</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button><button aria-describedby="jump-msg" type="button" class="line " member-id="standalone"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  standalone</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button><span class="line "><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-members"><div class="docs-reference-members"><div id="name" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>name</h3><code>string</code></header><div class="docs-reference-card-body"><div class="docs-reference-card-item"><div><p>The pipe name to use in template bindings.
+Typically uses lowerCamelCase
+because the name cannot contain hyphens.</p></div></div></div></div><div id="pure" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>pure</h3><code>boolean | undefined</code></header><div class="docs-reference-card-body"><div class="docs-reference-card-item"><div><p>When true, the pipe is pure, meaning that the
+<code>transform()</code> method is invoked only when its input arguments
+change. Pipes are pure by default.</p>
+<p>If the pipe has internal state (that is, the result
+depends on state other than its arguments), set <code>pure</code> to false.
+In this case, the pipe is invoked on each change-detection cycle,
+even if the arguments have not changed.</p></div></div></div></div><div id="standalone" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>standalone</h3><code>boolean | undefined</code></header><div class="docs-reference-card-body"><div class="docs-reference-card-item"><div><p>Angular pipes marked as <code>standalone</code> do not need to be declared in an NgModule. Such
+pipes don&#39;t depend on any &quot;intermediate context&quot; of an NgModule (ex. configured providers).</p>
+<p>More information about standalone components, directives, and pipes can be found in <a href="guide/components/importing">this
+guide</a>.</p></div></div></div></div></div></div><div class="docs-reference-section"><h2 id="description" class="docs-reference-section-heading"><a href="#description" aria-label="Link to Description section" tabindex="-1">Description</a></h2><div><p>Decorator that marks a class as pipe and supplies configuration metadata.</p>
+<p>A pipe class must implement the <code><a href="/api/core/PipeTransform">PipeTransform</a></code> interface.
+For example, if the name is &quot;myPipe&quot;, use a template binding expression
+such as the following:</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{{ exp | myPipe }}</span></span></code></pre>
+        </pre>
+      </div>
+    <p>The result of the expression is passed to the pipe&#39;s <code>transform()</code> method.</p>
+<p>A pipe must belong to an NgModule in order for it to be available
+to a template. To make it a member of an NgModule,
+list it in the <code>declarations</code> field of the <code><a href="/api/core/NgModule">NgModule</a></code> metadata.</p></div></div></div>

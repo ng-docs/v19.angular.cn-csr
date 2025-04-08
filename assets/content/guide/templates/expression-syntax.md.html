@@ -1,0 +1,348 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Expression Syntax</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/templates/expression-syntax.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular expressions are based on JavaScript, but differ in some key ways. This guide walks through the similarities and differences between Angular expressions and standard JavaScript.</p>
+
+  <h2 id="value-literals">
+    <a href="#value-literals" class="docs-anchor" tabindex="-1" aria-label="Link to Value literals">Value literals</a>
+  </h2>
+  <p>Angular supports a subset of <a href="https://developer.mozilla.org/en-US/docs/Glossary/Literal" target="_blank">literal values</a> from JavaScript.</p>
+
+  <h3 id="supported-value-literals">
+    <a href="#supported-value-literals" class="docs-anchor" tabindex="-1" aria-label="Link to Supported value literals">Supported value literals</a>
+  </h3>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>Literal type</th>
+<th>Example values</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>String</td>
+<td><code>&#39;Hello&#39;</code>, <code>&quot;World&quot;</code></td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td><code>true</code>, <code>false</code></td>
+</tr>
+<tr>
+<td>Number</td>
+<td><code>123</code>, <code>3.14</code></td>
+</tr>
+<tr>
+<td>Object</td>
+<td><code>{name: &#39;Alice&#39;}</code></td>
+</tr>
+<tr>
+<td>Array</td>
+<td><code>[&#39;Onion&#39;, &#39;Cheese&#39;, &#39;Garlic&#39;]</code></td>
+</tr>
+<tr>
+<td>null</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td>Template string</td>
+<td><code>`Hello ${name}`</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="unsupported-literals">
+    <a href="#unsupported-literals" class="docs-anchor" tabindex="-1" aria-label="Link to Unsupported literals">Unsupported literals</a>
+  </h3>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>Literal type</th>
+<th>Example value</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>RegExp</td>
+<td><code>/\d+/</code></td>
+</tr>
+<tr>
+<td>Tagged template string</td>
+<td><code>tag`Hello ${name}`</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="globals">
+    <a href="#globals" class="docs-anchor" tabindex="-1" aria-label="Link to Globals">Globals</a>
+  </h2>
+  <p>Angular expressions support the following <a href="https://developer.mozilla.org/en-US/docs/Glossary/Global_object" target="_blank">globals</a>:</p>
+
+  <ul class="docs-list">
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined" target="_blank">undefined</a></li>
+<li><a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#any" target="_blank">$any</a></li>
+
+  </ul>
+  <p>No other JavaScript globals are supported. Common JavaScript globals include <code>Number</code>, <code>Boolean</code>, <code>NaN</code>, <code>Infinity</code>, <code>parseInt</code>, and more.</p>
+
+  <h2 id="local-variables">
+    <a href="#local-variables" class="docs-anchor" tabindex="-1" aria-label="Link to Local variables">Local variables</a>
+  </h2>
+  <p>Angular automatically makes special local variables available for use in expressions in specific contexts. These special variables always start with the dollar sign character (<code>$</code>).</p>
+<p>For example, <code>@for</code> blocks make several local variables corresponding to information about the loop, such as <code>$index</code>.</p>
+
+  <h2 id="what-operators-are-supported">
+    <a href="#what-operators-are-supported" class="docs-anchor" tabindex="-1" aria-label="Link to What operators are supported?">What operators are supported?</a>
+  </h2>
+  
+  <h3 id="supported-operators">
+    <a href="#supported-operators" class="docs-anchor" tabindex="-1" aria-label="Link to Supported operators">Supported operators</a>
+  </h3>
+  <p>Angular supports the following operators from standard JavaScript.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>Operator</th>
+<th>Example(s)</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>Add / Concatenate</td>
+<td><code>1 + 2</code></td>
+</tr>
+<tr>
+<td>Subtract</td>
+<td><code>52 - 3</code></td>
+</tr>
+<tr>
+<td>Multiply</td>
+<td><code>41 * 6</code></td>
+</tr>
+<tr>
+<td>Divide</td>
+<td><code>20 / 4</code></td>
+</tr>
+<tr>
+<td>Remainder (Modulo)</td>
+<td><code>17 % 5</code></td>
+</tr>
+<tr>
+<td>Parenthesis</td>
+<td><code>9 * (8 + 4)</code></td>
+</tr>
+<tr>
+<td>Conditional (Ternary)</td>
+<td><code>a &gt; b ? true : false</code></td>
+</tr>
+<tr>
+<td>And (Logical)</td>
+<td><code>&amp;&amp;</code></td>
+</tr>
+<tr>
+<td>Or (Logical)</td>
+<td><code>||</code></td>
+</tr>
+<tr>
+<td>Not (Logical)</td>
+<td><code>!</code></td>
+</tr>
+<tr>
+<td>Nullish Coalescing</td>
+<td><code>const foo = null ?? &#39;default&#39;</code></td>
+</tr>
+<tr>
+<td>Comparison Operators</td>
+<td><code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>==</code>, <code>===</code>, <code>!==</code></td>
+</tr>
+<tr>
+<td>Unary Negation</td>
+<td><code>const y = -x</code></td>
+</tr>
+<tr>
+<td>Unary Plus</td>
+<td><code>const x = +y</code></td>
+</tr>
+<tr>
+<td>Property Accessor</td>
+<td><code>person[&#39;name&#39;] = &#39;Mirabel&#39;</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>Angular expressions additionally also support the following non-standard operators:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>Operator</th>
+<th>Example(s)</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td><a href="/guide/templates/pipes">Pipe</a></td>
+<td><code>{{ total | currency }}</code></td>
+</tr>
+<tr>
+<td>Optional chaining*</td>
+<td><code>someObj.someProp?.nestedProp</code></td>
+</tr>
+<tr>
+<td>Non-null assertion (TypeScript)</td>
+<td><code>someObj!.someProp</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>*Note: Optional chaining behaves differently from the standard JavaScript version in that if the left side of Angular’s optional chaining operator is <code>null</code> or <code>undefined</code>, it returns <code>null</code> instead of <code>undefined</code>.</p>
+
+  <h3 id="unsupported-operators">
+    <a href="#unsupported-operators" class="docs-anchor" tabindex="-1" aria-label="Link to Unsupported operators">Unsupported operators</a>
+  </h3>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>Operator</th>
+<th>Example(s)</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>All bitwise operators</td>
+<td><code>&amp;</code>, <code>&amp;=</code>, <code>~</code>, <code>|=</code>, <code>^=</code>, etc.</td>
+</tr>
+<tr>
+<td>Assignment operators</td>
+<td><code>=</code></td>
+</tr>
+<tr>
+<td>Object destructuring</td>
+<td><code>const { name } = person</code></td>
+</tr>
+<tr>
+<td>Array destructuring</td>
+<td><code>const [firstItem] = items</code></td>
+</tr>
+<tr>
+<td>Comma operator</td>
+<td><code>x = (x++, x)</code></td>
+</tr>
+<tr>
+<td>typeof</td>
+<td><code>typeof 42</code></td>
+</tr>
+<tr>
+<td>void</td>
+<td><code>void 1</code></td>
+</tr>
+<tr>
+<td>in</td>
+<td><code>&#39;model&#39; in car</code></td>
+</tr>
+<tr>
+<td>instanceof</td>
+<td><code>car instanceof Automobile</code></td>
+</tr>
+<tr>
+<td>new</td>
+<td><code>new Car()</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="lexical-context-for-expressions">
+    <a href="#lexical-context-for-expressions" class="docs-anchor" tabindex="-1" aria-label="Link to Lexical context for expressions">Lexical context for expressions</a>
+  </h2>
+  <p>Angular expressions are evaluated within the context of the component class as well as any relevant <a href="/guide/templates/variables">template variables</a>, locals, and globals.</p>
+<p>When referring to class members, <code>this</code> is always implied.</p>
+
+  <h2 id="declarations">
+    <a href="#declarations" class="docs-anchor" tabindex="-1" aria-label="Link to Declarations">Declarations</a>
+  </h2>
+  <p>Generally speaking, declarations are not supported in Angular expressions. This includes, but is not limited to:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>Declarations</th>
+<th>Example(s)</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>Variables</td>
+<td><code>let label = &#39;abc&#39;</code>, <code>const item = &#39;apple&#39;</code></td>
+</tr>
+<tr>
+<td>Functions</td>
+<td><code>function myCustomFunction() { }</code></td>
+</tr>
+<tr>
+<td>Arrow Functions</td>
+<td><code>() =&gt; { }</code></td>
+</tr>
+<tr>
+<td>Classes</td>
+<td><code>class Rectangle { }</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Event listener statements</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/templates/expression-syntax.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Event handlers are <strong>statements</strong> rather than expressions. While they support all of the same syntax as Angular expressions, the are two key differences:</p>
+
+    <ol class="docs-ordered-list">
+      <li>Statements <strong>do support</strong> assignment operators (but not destructing assignments)</li>
+<li>Statements <strong>do not support</strong> pipes</li>
+
+    </ol>
+    

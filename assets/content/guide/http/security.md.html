@@ -1,0 +1,68 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1"><code>HttpClient</code> security</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/http/security.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p><code>HttpClient</code> includes built-in support for two common HTTP security mechanisms: XSSI protection and XSRF/CSRF protection.</p>
+
+    <div class="docs-alert docs-alert-tip">
+    <p><strong>Tip:</strong> Also consider adopting a <a href="https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy" target="_blank">Content Security Policy</a> for your APIs.</p>
+
+    </div>
+    
+  <h2 id="xssi-protection">
+    <a href="#xssi-protection" class="docs-anchor" tabindex="-1" aria-label="Link to XSSI protection">XSSI protection</a>
+  </h2>
+  <p>Cross-Site Script Inclusion (XSSI) is a form of <a href="https://en.wikipedia.org/wiki/Cross-site_scripting" target="_blank">Cross-Site Scripting</a> attack where an attacker loads JSON data from your API endpoints as <code>&lt;script&gt;</code>s on a page they control. Different JavaScript techniques can then be used to access this data.</p>
+<p>A common technique to prevent XSSI is to serve JSON responses with a "non-executable prefix", commonly <code>)]}&#39;,\n</code>. This prefix prevents the JSON response from being interpreted as valid executable JavaScript. When the API is loaded as data, the prefix can be stripped before JSON parsing.</p>
+<p><code>HttpClient</code> automatically strips this XSSI prefix (if present) when parsing JSON from a response.</p>
+
+  <h2 id="xsrf-csrf-protection">
+    <a href="#xsrf-csrf-protection" class="docs-anchor" tabindex="-1" aria-label="Link to XSRF/CSRF protection">XSRF/CSRF protection</a>
+  </h2>
+  <p><a href="https://en.wikipedia.org/wiki/Cross-site_request_forgery" target="_blank">Cross-Site Request Forgery (XSRF or CSRF)</a> is an attack technique by which the attacker can trick an authenticated user into unknowingly executing actions on your website.</p>
+<p><code>HttpClient</code> supports a <a href="https://en.wikipedia.org/wiki/Cross-site_request_forgery#Cookie-to-header_token" target="_blank">common mechanism</a> used to prevent XSRF attacks. When performing HTTP requests, an interceptor reads a token from a cookie, by default <code>XSRF-TOKEN</code>, and sets it as an HTTP header, <code>X-XSRF-TOKEN</code>. Because only code that runs on your domain could read the cookie, the backend can be certain that the HTTP request came from your client application and not an attacker.</p>
+<p>By default, an interceptor sends this header on all mutating requests (such as <code>POST</code>) to relative URLs, but not on GET/HEAD requests or on requests with an absolute URL.</p>
+
+    <div class="docs-callout docs-callout-helpful">
+      <h3>Why not protect GET requests?</h3>
+      <p>CSRF protection is only needed for requests that can change state on the backend. By their nature, CSRF attacks cross domain boundaries, and the web's <a href="https://developer.mozilla.org/docs/Web/Security/Same-origin_policy" target="_blank">same-origin policy</a> will prevent an attacking page from retrieving the results of authenticated GET requests.</p>
+
+    </div>
+    <p>To take advantage of this, your server needs to set a token in a JavaScript readable session cookie called <code>XSRF-TOKEN</code> on either the page load or the first GET request. On subsequent requests the server can verify that the cookie matches the <code>X-XSRF-TOKEN</code> HTTP header, and therefore be sure that only code running on your domain could have sent the request. The token must be unique for each user and must be verifiable by the server; this prevents the client from making up its own tokens. Set the token to a digest of your site's authentication cookie with a salt for added security.</p>
+<p>To prevent collisions in environments where multiple Angular apps share the same domain or subdomain, give each application a unique cookie name.</p>
+
+    <div class="docs-callout docs-callout-important">
+      <h3>HttpClient supports only the client half of the XSRF protection scheme</h3>
+      <p>Your backend service must be configured to set the cookie for your page, and to verify that the header is present on all eligible requests. Failing to do so renders Angular's default protection ineffective.</p>
+
+    </div>
+    
+  <h3 id="configure-custom-cookie-header-names">
+    <a href="#configure-custom-cookie-header-names" class="docs-anchor" tabindex="-1" aria-label="Link to Configure custom cookie/header names">Configure custom cookie/header names</a>
+  </h3>
+  <p>If your backend service uses different names for the XSRF token cookie or header, use <code>withXsrfConfiguration</code> to override the defaults.</p>
+<p>Add it to the <code>provideHttpClient</code> call as follows:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> appConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ApplicationConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    provideHttpClient</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">      withXsrfConfiguration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        cookieName: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'CUSTOM_XSRF_TOKEN'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        headerName: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'X-Custom-Xsrf-Header'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="disabling-xsrf-protection">
+    <a href="#disabling-xsrf-protection" class="docs-anchor" tabindex="-1" aria-label="Link to Disabling XSRF protection">Disabling XSRF protection</a>
+  </h3>
+  <p>If the built-in XSRF protection mechanism doesn't work for your application, you can disable it using the <code>withNoXsrfProtection</code> feature:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> appConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ApplicationConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    provideHttpClient</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">      withNoXsrfProtection</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre>
+    </pre>
+  </div>

@@ -1,0 +1,176 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular Language Service</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/language-service.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>The Angular Language Service provides code editors with a way to get completions, errors, hints, and navigation inside Angular templates.
+It works with external templates in separate HTML files, and also with in-line templates.</p>
+
+  <h2 id="configuring-compiler-options-for-the-angular-language-service">
+    <a href="#configuring-compiler-options-for-the-angular-language-service" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring compiler options for the Angular Language Service">Configuring compiler options for the Angular Language Service</a>
+  </h2>
+  <p>To enable the latest Language Service features, set the <code>strictTemplates</code> option in <code>tsconfig.json</code> by setting <code>strictTemplates</code> to <code>true</code>, as shown in the following example:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"angularCompilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "strictTemplates"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>For more information, see the <a href="reference/configs/angular-compiler-options">Angular compiler options</a> guide.</p>
+
+  <h2 id="features">
+    <a href="#features" class="docs-anchor" tabindex="-1" aria-label="Link to Features">Features</a>
+  </h2>
+  <p>Your editor autodetects that you are opening an Angular file.
+It then uses the Angular Language Service to read your <code>tsconfig.json</code> file, find all the templates you have in your application, and then provide language services for any templates that you open.</p>
+<p>Language services include:</p>
+
+  <ul class="docs-list">
+    <li>Completions lists</li>
+<li>AOT Diagnostic messages</li>
+<li>Quick info</li>
+<li>Go to definition</li>
+
+  </ul>
+  
+  <h3 id="autocompletion">
+    <a href="#autocompletion" class="docs-anchor" tabindex="-1" aria-label="Link to Autocompletion">Autocompletion</a>
+  </h3>
+  <p>Autocompletion can speed up your development time by providing you with contextual possibilities and hints as you type.
+This example shows autocomplete in an interpolation.
+As you type it out, you can press tab to complete.</p>
+<img alt="autocompletion" src="assets/images/guide/language-service/language-completion.gif">
+
+<p>There are also completions within elements.
+Any elements you have as a component selector will show up in the completion list.</p>
+
+  <h3 id="error-checking">
+    <a href="#error-checking" class="docs-anchor" tabindex="-1" aria-label="Link to Error checking">Error checking</a>
+  </h3>
+  <p>The Angular Language Service can forewarn you of mistakes in your code.
+In this example, Angular doesn't know what <code>orders</code> is or where it comes from.</p>
+<img alt="error checking" src="assets/images/guide/language-service/language-error.gif">
+
+
+  <h3 id="quick-info-and-navigation">
+    <a href="#quick-info-and-navigation" class="docs-anchor" tabindex="-1" aria-label="Link to Quick info and navigation">Quick info and navigation</a>
+  </h3>
+  <p>The quick-info feature lets you hover to see where components, directives, and modules come from.
+You can then click "Go to definition" or press F12 to go directly to the definition.</p>
+<img alt="navigation" src="assets/images/guide/language-service/language-navigation.gif">
+
+
+  <h2 id="angular-language-service-in-your-editor">
+    <a href="#angular-language-service-in-your-editor" class="docs-anchor" tabindex="-1" aria-label="Link to Angular Language Service in your editor">Angular Language Service in your editor</a>
+  </h2>
+  <p>Angular Language Service is currently available as an extension for <a href="https://code.visualstudio.com" target="_blank">Visual Studio Code</a>, <a href="https://www.jetbrains.com/webstorm" target="_blank">WebStorm</a>, <a href="https://www.sublimetext.com" target="_blank">Sublime Text</a> and <a href="https://www.eclipse.org/eclipseide" target="_blank">Eclipse IDE</a>.</p>
+
+  <h3 id="visual-studio-code">
+    <a href="#visual-studio-code" class="docs-anchor" tabindex="-1" aria-label="Link to Visual Studio Code">Visual Studio Code</a>
+  </h3>
+  <p>In <a href="https://code.visualstudio.com" target="_blank">Visual Studio Code</a>, install the extension from the <a href="https://marketplace.visualstudio.com/items?itemName=Angular.ng-template" target="_blank">Extensions: Marketplace</a>.
+Open the marketplace from the editor using the Extensions icon on the left menu pane, or use VS Quick Open (⌘+P on Mac, CTRL+P on Windows) and type "? ext".
+In the marketplace, search for Angular Language Service extension, and click the <strong>Install</strong> button.</p>
+<p>The Visual Studio Code integration with the Angular language service is maintained and distributed by the Angular team.</p>
+
+  <h3 id="visual-studio">
+    <a href="#visual-studio" class="docs-anchor" tabindex="-1" aria-label="Link to Visual Studio">Visual Studio</a>
+  </h3>
+  <p>In <a href="https://visualstudio.microsoft.com" target="_blank">Visual Studio</a>, install the extension from the <a href="https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.AngularLanguageService" target="_blank">Extensions: Marketplace</a>.
+Open the marketplace from the editor selecting Extensions on the top menu pane, and then selecting Manage Extensions.
+In the marketplace, search for Angular Language Service extension, and click the <strong>Install</strong> button.</p>
+<p>The Visual Studio integration with the Angular language service is maintained and distributed by Microsoft with help from the Angular team.
+Check out the project <a href="https://github.com/microsoft/vs-ng-language-service" target="_blank">here</a>.</p>
+
+  <h3 id="webstorm">
+    <a href="#webstorm" class="docs-anchor" tabindex="-1" aria-label="Link to WebStorm">WebStorm</a>
+  </h3>
+  <p>In <a href="https://www.jetbrains.com/webstorm" target="_blank">WebStorm</a>, enable the plugin <a href="https://plugins.jetbrains.com/plugin/6971-angular-and-angularjs" target="_blank">Angular and AngularJS</a>.</p>
+<p>Since WebStorm 2019.1, the <code>@angular/language-service</code> is not required anymore and should be removed from your <code>package.json</code>.</p>
+
+  <h3 id="sublime-text">
+    <a href="#sublime-text" class="docs-anchor" tabindex="-1" aria-label="Link to Sublime Text">Sublime Text</a>
+  </h3>
+  <p>In <a href="https://www.sublimetext.com" target="_blank">Sublime Text</a>, the Language Service supports only in-line templates when installed as a plug-in.
+You need a custom Sublime plug-in (or modifications to the current plug-in) for completions in HTML files.</p>
+<p>To use the Language Service for in-line templates, you must first add an extension to allow TypeScript, then install the Angular Language Service plug-in.
+Starting with TypeScript 2.3, TypeScript has a plug-in model that the language service can use.</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>Install the latest version of TypeScript in a local <code>node_modules</code> directory:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --save-dev</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> typescript</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>Install the Angular Language Service package in the same location:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --save-dev</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/language-service</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>Once the package is installed,  add the following to the <code>&quot;compilerOptions&quot;</code> section of your project's <code>tsconfig.json</code>.</p>
+<div class="docs-code" header="tsconfig.json">
+    <div class="docs-code-header"><h3>tsconfig.json</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"plugins"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">     {</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"name"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular/language-service"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ]</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>In your editor's user preferences (<code>Cmd+,</code> or <code>Ctrl+,</code>), add the following:</p>
+<div class="docs-code" header="Sublime Text user preferences">
+    <div class="docs-code-header"><h3>Sublime Text user preferences</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"typescript-tsdk"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"&lt;path to your folder&gt;/node_modules/typescript/lib"</span></span></code></pre>
+    </pre>
+  </div></li>
+
+    </ol>
+    <p>This lets the Angular Language Service provide diagnostics and completions in <code>.ts</code> files.</p>
+
+  <h3 id="eclipse-ide">
+    <a href="#eclipse-ide" class="docs-anchor" tabindex="-1" aria-label="Link to Eclipse IDE">Eclipse IDE</a>
+  </h3>
+  <p>Either directly install the "Eclipse IDE for Web and JavaScript developers" package which comes with the Angular Language Server included, or from other Eclipse IDE packages, use Help > Eclipse Marketplace to find and install <a href="https://marketplace.eclipse.org/content/wild-web-developer-html-css-javascript-typescript-nodejs-angular-json-yaml-kubernetes-xml" target="_blank">Eclipse Wild Web Developer</a>.</p>
+
+  <h3 id="neovim">
+    <a href="#neovim" class="docs-anchor" tabindex="-1" aria-label="Link to Neovim">Neovim</a>
+  </h3>
+  <p>Angular language service can be used with Neovim by using the <a href="https://github.com/neovim/nvim-lspconfig" target="_blank">nvim-lspconfig</a> plugin.</p>
+
+    <ol class="docs-ordered-list">
+      <li><p><a href="https://github.com/neovim/nvim-lspconfig?tab=readme-ov-file#install" target="_blank">Install nvim-lspconfig</a></p>
+</li>
+<li><p><a href="https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#angularls" target="_blank">Configure angularls for nvim-lspconfig</a></p>
+</li>
+
+    </ol>
+    
+  <h2 id="how-the-language-service-works">
+    <a href="#how-the-language-service-works" class="docs-anchor" tabindex="-1" aria-label="Link to How the Language Service works">How the Language Service works</a>
+  </h2>
+  <p>When you use an editor with a language service, the editor starts a separate language-service process and communicates with it through an <a href="https://en.wikipedia.org/wiki/Remote_procedure_call" target="_blank">RPC</a>, using the <a href="https://microsoft.github.io/language-server-protocol" target="_blank">Language Server Protocol</a>.
+When you type into the editor, the editor sends information to the language-service process to track the state of your project.</p>
+<p>When you trigger a completion list within a template, the editor first parses the template into an HTML <a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree" target="_blank">abstract syntax tree (AST)</a>.
+The Angular compiler interprets that tree to determine the context: which module the template is part of, the current scope, the component selector, and where your cursor is in the template AST.
+It can then determine the symbols that could potentially be at that position.</p>
+<p>It's a little more involved if you are in an interpolation.
+If you have an interpolation of <code>{{data.---}}</code> inside a <code>div</code> and need the completion list after <code>data.---</code>, the compiler can't use the HTML AST to find the answer.
+The HTML AST can only tell the compiler that there is some text with the characters "<code>{{data.---}}</code>".
+That's when the template parser produces an expression AST, which resides within the template AST.
+The Angular Language Services then looks at <code>data.---</code> within its context, asks the TypeScript Language Service what the members of <code>data</code> are, and returns the list of possibilities.</p>
+
+  <h2 id="more-information">
+    <a href="#more-information" class="docs-anchor" tabindex="-1" aria-label="Link to More information">More information</a>
+  </h2>
+  
+  <ul class="docs-list">
+    <li>For more in-depth information on the implementation, see the <a href="https://github.com/angular/angular/blob/main/packages/language-service/src" target="_blank">Angular Language Service source</a></li>
+<li>For more on the design considerations and intentions, see <a href="https://github.com/angular/vscode-ng-language-service/wiki/Design" target="_blank">design documentation here</a></li>
+
+  </ul>
+  

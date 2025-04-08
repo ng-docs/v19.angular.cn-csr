@@ -1,0 +1,172 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Async reactivity with resources</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/signals/resource.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+    <div class="docs-alert docs-alert-important">
+    <p><strong>IMPORTANT:</strong> <code>resource</code> is <a href="reference/releases#experimental">experimental</a>. It's ready for you to try, but it might change before it is stable.</p>
+
+    </div>
+    <p>Most signal APIs are synchronous— <code>signal</code>, <code>computed</code>, <code>input</code>, etc. However, applications often need to deal with data that is available asynchronously. A <code>Resource</code> gives you a way to incorporate async data into your application's signal-based code.</p>
+<p>You can use a <code>Resource</code> to perform any kind of async operation, but the most common use-case for <code>Resource</code> is fetching data from a server. The following example creates a resource to fetch some user data.</p>
+<p>The easiest way to create a <code>Resource</code> is the <code>resource</code> function.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {resource, Signal} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> userId</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Signal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> getUserId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> userResource</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> resource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Define a reactive request computation.</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // The request value recomputes whenever any read signals change.</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  request</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ({id: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">userId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()}),</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Define an async loader that retrieves data.</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // The resource calls this function every time the `request` value changes.</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  loader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: ({</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">request</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> fetchUser</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(request),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Create a computed signal based on the result of the resource's loader function.</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> firstName</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> computed</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> userResource.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">value</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().firstName);</span></span></code></pre>
+    </pre>
+  </div><p>The <code>resource</code> function accepts a <code>ResourceOptions</code> object with two main properties: <code>request</code> and <code>loader</code>.</p>
+<p>The <code>request</code> property defines a reactive computation that produce a request value. Whenever signals read in this computation change, the resource produces a new request value, similar to <code>computed</code>.</p>
+<p>The <code>loader</code> property defines a <code>ResourceLoader</code>— an async function that retrieves some state. The resource calls the loader every time the <code>request</code> computation produces a new value, passing that value to the loader. See <a href="#resource-loaders">Resource loaders</a> below for more details.</p>
+<p><code>Resource</code> has a <code>value</code> signal that contains the results of the loader.</p>
+
+  <h2 id="resource-loaders">
+    <a href="#resource-loaders" class="docs-anchor" tabindex="-1" aria-label="Link to Resource loaders">Resource loaders</a>
+  </h2>
+  <p>When creating a resource, you specify a <code>ResourceLoader</code>. This loader is an async function that accepts a single parameter— a <code>ResourceLoaderParams</code> object— and returns a value.</p>
+<p>The <code>ResourceLoaderParams</code> object contains three properties: <code>request</code>, <code>previous</code>, and <code>abortSignal</code>.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td><code>request</code></td>
+<td>The value of the resource's <code>request</code> computation.</td>
+</tr>
+<tr>
+<td><code>previous</code></td>
+<td>An object with a <code>status</code> property, containing the previous <code>ResourceStatus</code>.</td>
+</tr>
+<tr>
+<td><code>abortSignal</code></td>
+<td>An <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal" target="_blank"><code>AbortSignal</code></a>. See <a href="#aborting-requests">Aborting requests</a> below for details.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>If the <code>request</code> computation returns <code>undefined</code>, the loader function does not run and the resource status becomes <code>Idle</code>.</p>
+
+  <h3 id="aborting-requests">
+    <a href="#aborting-requests" class="docs-anchor" tabindex="-1" aria-label="Link to Aborting requests">Aborting requests</a>
+  </h3>
+  <p>A resource aborts an outstanding request if the <code>request</code> computation changes while the resource is loading.</p>
+<p>You can use the <code>abortSignal</code> in <code>ResourceLoaderParams</code> to respond to aborted requests. For example, the native <code>fetch</code> function accepts an <code>AbortSignal</code>:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> userId</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Signal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> getUserId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> userResource</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> resource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  request</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ({id: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">userId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()}),</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  loader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: ({</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">request</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">abortSignal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">User</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // fetch cancels any outstanding HTTP requests when the given `AbortSignal`</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // indicates that the request has been aborted.</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    return</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> fetch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`users/${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">request</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">.</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">id</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, {signal: abortSignal});</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>See <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal" target="_blank"><code>AbortSignal</code> on MDN</a> for more details on request cancellation with <code>AbortSignal</code>.</p>
+
+  <h3 id="reloading">
+    <a href="#reloading" class="docs-anchor" tabindex="-1" aria-label="Link to Reloading">Reloading</a>
+  </h3>
+  <p>You can programmatically trigger a resource's <code>loader</code> by calling the <code>reload</code> method.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> userId</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Signal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> getUserId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> userResource</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> resource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  request</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ({id: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">userId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()}),</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  loader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: ({</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">request</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> fetchUser</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(request),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ...</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">userResource.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">reload</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="resource-status">
+    <a href="#resource-status" class="docs-anchor" tabindex="-1" aria-label="Link to Resource status">Resource status</a>
+  </h2>
+  <p>The resource object has several signal properties for reading the status of the asynchronous loader.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td><code>value</code></td>
+<td>The most recent value of the resource, or <code>undefined</code> if no value has been received.</td>
+</tr>
+<tr>
+<td><code>hasValue</code></td>
+<td>Whether the resource has a value.</td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td>The most recent error encountered while running the resource's loader, or <code>undefined</code> if no error has occurred.</td>
+</tr>
+<tr>
+<td><code>isLoading</code></td>
+<td>Whether the resource loader is currently running.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>The resource's specific <code>ResourceStatus</code>, as described below.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>The <code>status</code> signal provides a specific <code>ResourceStatus</code> that describes the state of the resource.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>Status</th>
+<th align="left"><code>value()</code></th>
+<th>Description</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td><code>Idle</code></td>
+<td align="left"><code>undefined</code></td>
+<td>The resource has no valid request and the loader has not run.</td>
+</tr>
+<tr>
+<td><code>Error</code></td>
+<td align="left"><code>undefined</code></td>
+<td>The loader has encountered an error.</td>
+</tr>
+<tr>
+<td><code>Loading</code></td>
+<td align="left"><code>undefined</code></td>
+<td>The loader is running as a result of the <code>request</code> value changing.</td>
+</tr>
+<tr>
+<td><code>Reloading</code></td>
+<td align="left">Previous value</td>
+<td>The loader is running as a result calling of the resource's <code>reload</code> method.</td>
+</tr>
+<tr>
+<td><code>Resolved</code></td>
+<td align="left">Resolved value</td>
+<td>The loader has completed.</td>
+</tr>
+<tr>
+<td><code>Local</code></td>
+<td align="left">Locally set value</td>
+<td>The resource's value has been set locally via <code>.set()</code> or <code>.update()</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>You can use this status information to conditionally display user interface elements, such loading indicators and error messages.</p>

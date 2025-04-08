@@ -1,0 +1,63 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Disallowed function call inside reactive context</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0602.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>A function that is not allowed to run inside a reactive context was called from within a reactive context.</p>
+<p>For example, an <code>effect</code> cannot be scheduled from within a <code>computed</code> or an actively executing effect.
+Avoid calling functions like <code>effect</code> as part of template expressions, as those execute in their own reactive context.</p>
+<p>Computed expressions are expected to be pure.
+Pure means that expression do not trigger any side effects.
+Side effects are operations like scheduling <code>afterRender</code>, creating a new <code>effect</code>, or subscribing to observables.</p>
+<p>Some operations are explicitly banned inside reactive contexts in order to avoid common pitfalls.
+As an example, using <code>afterRender</code> inside a <code>computed</code> will schedule new render hooks every time the computed expression evaluates.
+This is likely not intended and could degrade application performance.</p>
+
+  <h3 id="fixing-the-error">
+    <a href="#fixing-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Fixing the error">Fixing the error</a>
+  </h3>
+  <p>This error guide is non-exhaustive.
+It captures a few common scenarios and how to address the error.</p>
+
+  <h4 id="afterrender">
+    <a href="#afterrender" class="docs-anchor" tabindex="-1" aria-label="Link to <code>afterRender</code>"><code>afterRender</code></a>
+  </h4>
+  <p>Move the call for <code>afterRender</code> outside of the reactive context.</p>
+<p>A good place to schedule the after render hook is in the component's class constructor.
+Alternatively, use <code>untracked</code> to leave the reactive context and explicitly opt-out of this error.</p>
+
+  <h4 id="effect">
+    <a href="#effect" class="docs-anchor" tabindex="-1" aria-label="Link to <code>effect</code>"><code>effect</code></a>
+  </h4>
+  <p>Move the call for <code>effect</code> outside of the reactive context.</p>
+<p>A good place to schedule an effect is in a <code>@Component</code>'s class constructor.</p>
+
+  <h4 id="tosignal">
+    <a href="#tosignal" class="docs-anchor" tabindex="-1" aria-label="Link to <code>toSignal</code>"><code>toSignal</code></a>
+  </h4>
+  <p>Move the call for <code>toSignal</code> outside of the reactive context.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">result </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> computed</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> dataSignal</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> toSignal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(dataObservable$);</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  return</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> doSomething</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">dataSignal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>can be refactored into:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">dataSignal </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> toSignal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(dataObservable$);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">result </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> computed</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> doSomething</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">dataSignal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()));</span></span></code></pre>
+    </pre>
+  </div><p>Alternatively, if this is not possible, consider manually subscribing to the observable.</p>
+<p>As a last resort, use <code>untracked</code> to leave the reactive context.
+Be careful as leaving the reactive context can result in signal reads to be ignored inside <code>untracked</code>.</p>
+<p>@debugging</p>
+<p>The error message mentions the function that was unexpectedly called.
+Look for this function call in your application code.</p>
+<p>Alternatively, the stack trace in your browser will show where the function was invoked and where it's located.</p>

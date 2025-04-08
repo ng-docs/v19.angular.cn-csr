@@ -1,0 +1,47 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Find out how much code you're testing</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/testing/code-coverage.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>The Angular CLI can run unit tests and create code coverage reports.
+Code coverage reports show you any parts of your code base that might not be properly tested by your unit tests.</p>
+<p>To generate a coverage report run the following command in the root of your project.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> test</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --no-watch</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --code-coverage</span></span></code></pre>
+    </pre>
+  </div><p>When the tests are complete, the command creates a new <code>/coverage</code> directory in the project.
+Open the <code>index.html</code> file to see a report with your source code and code coverage values.</p>
+<p>If you want to create code-coverage reports every time you test, set the following option in the Angular CLI configuration file, <code>angular.json</code>:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"test"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "codeCoverage"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="code-coverage-enforcement">
+    <a href="#code-coverage-enforcement" class="docs-anchor" tabindex="-1" aria-label="Link to Code coverage enforcement">Code coverage enforcement</a>
+  </h2>
+  <p>The code coverage percentages let you estimate how much of your code is tested.
+If your team decides on a set minimum amount to be unit tested, enforce this minimum with the Angular CLI.</p>
+<p>For example, suppose you want the code base to have a minimum of 80% code coverage.
+To enable this, open the <a href="https://karma-runner.github.io" target="_blank">Karma</a> test platform configuration file, <code>karma.conf.js</code>, and add the <code>check</code> property in the <code>coverageReporter:</code> key.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">coverageReporter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  dir</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">require</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'path'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">join</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(__dirname, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'./coverage/&lt;project-name&gt;'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  subdir</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'.'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  reporters</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { type: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'html'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { type: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'text-summary'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  check</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    global</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">      statements</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">80</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">      branches</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">80</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">      functions</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">80</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">      lines</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">80</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> Read more about creating and fine tuning Karma configuration in the <a href="guide/testing#configuration">testing guide</a>.</p>
+
+    </div>
+    <p>The <code>check</code> property causes the tool to enforce a minimum of 80% code coverage when the unit tests are run in the project.</p>
+<p>Read more on coverage configuration options in the <a href="https://github.com/karma-runner/karma-coverage/blob/master/docs/configuration.md" target="_blank">karma coverage documentation</a>.</p>

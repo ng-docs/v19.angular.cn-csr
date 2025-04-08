@@ -1,0 +1,44 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Slow computations</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/best-practices/runtime-performance/slow-computations.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>On every change detection cycle, Angular synchronously:</p>
+
+  <ul class="docs-list">
+    <li>Evaluates all template expressions in all components, unless specified otherwise, based on that each component's detection strategy</li>
+<li>Executes the <code>ngDoCheck</code>, <code>ngAfterContentChecked</code>, <code>ngAfterViewChecked</code>, and <code>ngOnChanges</code> lifecycle hooks.
+A single slow computation within a template or a lifecycle hook can slow down the entire change detection process because Angular runs the computations sequentially.</li>
+
+  </ul>
+  
+  <h2 id="identifying-slow-computations">
+    <a href="#identifying-slow-computations" class="docs-anchor" tabindex="-1" aria-label="Link to Identifying slow computations">Identifying slow computations</a>
+  </h2>
+  <p>You can identify heavy computations with Angular DevTools’ profiler. In the performance timeline, click a bar to preview a particular change detection cycle. This displays a bar chart, which shows how long the framework spent in change detection for each component. When you click a component, you can preview how long Angular spent  evaluating its template and lifecycle hooks.</p>
+<img alt="Angular DevTools profiler preview showing slow computation" src="assets/images/best-practices/runtime-performance/slow-computations.png">
+
+<p>For example, in the preceding screenshot, the second recorded change detection cycle is selected. Angular spent over 573 ms on this cycle, with the most time spent in the <code>EmployeeListComponent</code>. In the details panel, you can see that Angular spent over 297 ms evaluating the template of the <code>EmployeeListComponent</code>.</p>
+
+  <h2 id="optimizing-slow-computations">
+    <a href="#optimizing-slow-computations" class="docs-anchor" tabindex="-1" aria-label="Link to Optimizing slow computations">Optimizing slow computations</a>
+  </h2>
+  <p>Here are several techniques to remove slow computations:</p>
+
+  <ul class="docs-list">
+    <li><strong>Optimizing the underlying algorithm</strong>. This is the recommended approach. If you can speed up the algorithm that is causing the problem, you can speed up the entire change detection mechanism.</li>
+<li><strong>Caching using pure pipes</strong>. You can move the heavy computation to a pure <a href="guide/pipes">pipe</a>. Angular reevaluates a pure pipe only if it detects that its inputs have changed, compared to the previous time Angular called it.</li>
+<li><strong>Using memoization</strong>. <a href="https://en.wikipedia.org/wiki/Memoization" target="_blank">Memoization</a> is a similar technique to pure pipes, with the difference that pure pipes preserve only the last result from the computation where memoization could store multiple results.</li>
+<li><strong>Avoid repaints/reflows in lifecycle hooks</strong>. Certain <a href="https://web.dev/avoid-large-complex-layouts-and-layout-thrashing/" target="_blank">operations</a> cause the browser to either synchronously recalculate the layout of the page or re-render it. Since reflows and repaints are generally slow, you want to avoid performing them in every change detection cycle.</li>
+
+  </ul>
+  <p>Pure pipes and memoization have different trade-offs. Pure pipes are an Angular built-in concept compared to memoization, which is a general software engineering practice for caching function results. The memory overhead of memoization could be significant if you invoke the heavy computation frequently with different arguments.</p>

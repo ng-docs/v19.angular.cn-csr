@@ -1,0 +1,40 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">No Provider Found</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0201.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+    <div class="docs-video-container">
+      <iframe
+      class="docs-video"
+      src="https://www.youtube.com/embed/lAlOryf1-WU"
+      
+      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      credentialless
+      title="Video player"
+      ></iframe>
+    </div>
+    <p>You see this error when you try to inject a service but have not declared a corresponding provider. A provider is a mapping that supplies a value that you can inject into the constructor of a class in your application.</p>
+<p>Read more on providers in our <a href="guide/di">Dependency Injection guide</a>.</p>
+
+  <h2 id="debugging-the-error">
+    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">Debugging the error</a>
+  </h2>
+  <p>Work backwards from the object where the error states that a provider is missing: <code>No provider for ${this}!</code>. This is commonly thrown in services, which require non-existing providers.</p>
+<p>To fix the error ensure that your service is registered in the list of providers of an <code>NgModule</code> or has the <code>@Injectable</code> decorator with a <code>providedIn</code> property at top.</p>
+<p>The most common solution is to add a provider in <code>@Injectable</code> using <code>providedIn</code>:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Injectable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({ providedIn: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> })</span></span></code></pre>
+    </pre>
+  </div>

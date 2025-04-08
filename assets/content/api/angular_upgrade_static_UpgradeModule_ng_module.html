@@ -1,0 +1,165 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/upgrade/static</span><div class="docs-reference-title"><div><h1>UpgradeModule</h1><div class="docs-api-item-label type-ng_module full">NgModule</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/upgrade/static/src/upgrade_module.ts#L140-L345" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">code</i></a></div><section class="docs-reference-description"><p>An <code><a href="/api/core/NgModule">NgModule</a></code>, which you import to provide AngularJS core services,
+and has an instance method used to bootstrap the hybrid upgrade application.</p></section></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">
+  <code>
+    <span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/upgrade/static/UpgradeModule">UpgradeModule</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><button aria-describedby="jump-msg" type="button" class="line " member-id="constructor"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">injector</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/core/Injector">Injector</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">ngZone</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/core/NgZone">NgZone</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">platformRef</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/core/PlatformRef">PlatformRef</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/upgrade/static/UpgradeModule">UpgradeModule</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button><button aria-describedby="jump-msg" type="button" class="line " member-id="$injector"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  $injector</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button><button aria-describedby="jump-msg" type="button" class="line " member-id="injector"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  injector</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/core/Injector">Injector</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button><button aria-describedby="jump-msg" type="button" class="line " member-id="ngZone"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  override</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> ngZone</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/core/NgZone">NgZone</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button><button aria-describedby="jump-msg" type="button" class="line " member-id="bootstrap"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  bootstrap</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">element</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Element</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">modules</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[], </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">config</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button><span class="line "><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-members"><div class="docs-reference-members"><div id="constructor" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>constructor</h3><code><a href="/api/upgrade/static/UpgradeModule">UpgradeModule</a></code></header><div class="docs-reference-card-body"><div class="docs-reference-card-item "><div class="docs-function-definition"></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">injector</span><code><a href="/api/core/Injector">Injector</a></code><div class="docs-parameter-description"><p>The root <code><a href="/api/core/Injector">Injector</a></code> for the upgrade application.</p></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">ngZone</span><code><a href="/api/core/NgZone">NgZone</a></code><div class="docs-parameter-description"><p>The bootstrap zone for the upgrade application</p></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">platformRef</span><code><a href="/api/core/PlatformRef">PlatformRef</a></code><div class="docs-parameter-description"><p>The owning <code><a href="/api/core/NgModuleRef">NgModuleRef</a></code>s <code><a href="/api/core/PlatformRef">PlatformRef</a></code> instance.
+This is used to tie the lifecycle of the bootstrapped AngularJS apps to that of the Angular
+<code><a href="/api/core/PlatformRef">PlatformRef</a></code>.</p></div></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code><a href="/api/upgrade/static/UpgradeModule">UpgradeModule</a></code></div></div></div></div><div id="$injector" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>$injector</h3><code>any</code></header><div class="docs-reference-card-body"><div class="docs-reference-card-item"><div><p>The AngularJS <code>$injector</code> for the upgrade application.</p></div></div></div></div><div id="injector" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>injector</h3><code><a href="/api/core/Injector">Injector</a></code></header><div class="docs-reference-card-body"><div class="docs-reference-card-item"><div><p>The Angular Injector *</p></div></div></div></div><div id="ngZone" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>ngZone</h3><code><a href="/api/core/NgZone">NgZone</a></code></header><div class="docs-reference-card-body"><div class="docs-reference-card-item"><div><p>The bootstrap zone for the upgrade application</p></div></div></div></div><div id="bootstrap" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>bootstrap</h3><code>any</code></header><div class="docs-reference-card-body"><div class="docs-reference-card-item "><div class="docs-function-definition"><p>Bootstrap an AngularJS application from this NgModule</p></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">element</span><code>Element</code><div class="docs-parameter-description"><p>the element on which to bootstrap the AngularJS application</p></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">modules</span><code>string[]</code><div class="docs-parameter-description"><p>the AngularJS modules to bootstrap for this application</p></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">config</span><code>any</code><div class="docs-parameter-description"><p>optional extra AngularJS bootstrap configuration</p></div></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code>any</code></div></div></div></div></div></div><div class="docs-reference-section"><h2 id="description" class="docs-reference-section-heading"><a href="#description" aria-label="Link to Description section" tabindex="-1">Description</a></h2><div><p>An <code><a href="/api/core/NgModule">NgModule</a></code>, which you import to provide AngularJS core services,
+and has an instance method used to bootstrap the hybrid upgrade application.</p>
+<p><em>Part of the <a href="api?query=upgrade/static">upgrade/static</a>
+library for hybrid upgrade apps that support AOT compilation</em></p>
+<p>The <code>upgrade/static</code> package contains helpers that allow AngularJS and Angular components
+to be used together inside a hybrid upgrade application, which supports AOT compilation.</p>
+<p>Specifically, the classes and functions in the <code>upgrade/static</code> module allow the following:</p>
+
+      <ol class="docs-ordered-list">
+        <li>Creation of an Angular directive that wraps and exposes an AngularJS component so
+that it can be used in an Angular template. See <code><a href="/api/upgrade/static/UpgradeComponent">UpgradeComponent</a></code>.</li>
+<li>Creation of an AngularJS directive that wraps and exposes an Angular component so
+that it can be used in an AngularJS template. See <code><a href="/api/upgrade/static/downgradeComponent">downgradeComponent</a></code>.</li>
+<li>Creation of an Angular root injector provider that wraps and exposes an AngularJS
+service so that it can be injected into an Angular context. See
+<a href="/api/upgrade/static/UpgradeModule#upgrading-an-angular-1-service"><code>Upgrading an AngularJS service</code></a> below.</li>
+<li>Creation of an AngularJS service that wraps and exposes an Angular injectable
+so that it can be injected into an AngularJS context. See <code><a href="/api/upgrade/static/downgradeInjectable">downgradeInjectable</a></code>.</li>
+<li>Bootstrapping of a hybrid Angular application which contains both of the frameworks
+coexisting in a single application.</li>
+
+      </ol></div></div><div class="docs-reference-section"><h2 id="usage-notes" class="docs-reference-section-heading"><a href="#usage-notes" aria-label="Link to Usage Notes section" tabindex="-1">Usage Notes</a></h2><div>
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {UpgradeModule} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/upgrade/static'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+        </pre>
+      </div>
+    <p>See also the <a href="/api/upgrade/static/UpgradeModule#examples"><code>examples</code></a> below.</p>
+
+      <h3 id="mental-model" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#mental-model" aria-label="Link to Mental Model section" tabIndex="-1">
+          Mental Model
+        </a>
+      </h3>
+    <p>When reasoning about how a hybrid application works it is useful to have a mental model which
+describes what is happening and explains what is happening at the lowest level.</p>
+
+      <ol class="docs-ordered-list">
+        <li>There are two independent frameworks running in a single application, each framework treats
+the other as a black box.</li>
+<li>Each DOM element on the page is owned exactly by one framework. Whichever framework
+instantiated the element is the owner. Each framework only updates/interacts with its own
+DOM elements and ignores others.</li>
+<li>AngularJS directives always execute inside the AngularJS framework codebase regardless of
+where they are instantiated.</li>
+<li>Angular components always execute inside the Angular framework codebase regardless of
+where they are instantiated.</li>
+<li>An AngularJS component can be &quot;upgraded&quot;&quot; to an Angular component. This is achieved by
+defining an Angular directive, which bootstraps the AngularJS component at its location
+in the DOM. See <code><a href="/api/upgrade/static/UpgradeComponent">UpgradeComponent</a></code>.</li>
+<li>An Angular component can be &quot;downgraded&quot; to an AngularJS component. This is achieved by
+defining an AngularJS directive, which bootstraps the Angular component at its location
+in the DOM. See <code><a href="/api/upgrade/static/downgradeComponent">downgradeComponent</a></code>.</li>
+<li>Whenever an &quot;upgraded&quot;/&quot;downgraded&quot; component is instantiated the host element is owned by
+the framework doing the instantiation. The other framework then instantiates and owns the
+view for that component.
+      <ol class="docs-ordered-list">
+        <li>This implies that the component bindings will always follow the semantics of the
+instantiation framework.</li>
+<li>The DOM attributes are parsed by the framework that owns the current template. So
+attributes in AngularJS templates must use kebab-case, while AngularJS templates must use
+camelCase.</li>
+<li>However the template binding syntax will always use the Angular style, e.g. square
+brackets (<code>[...]</code>) for property binding.</li>
+
+      </ol>
+      </li>
+<li>Angular is bootstrapped first; AngularJS is bootstrapped second. AngularJS always owns the
+root component of the application.</li>
+<li>The new application is running in an Angular zone, and therefore it no longer needs calls to
+<code>$apply()</code>.</li>
+
+      </ol>
+      
+      <h3 id="the-upgrademodule-class" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#the-upgrademodule-class" aria-label="Link to The `UpgradeModule` class section" tabIndex="-1">
+          The <code data-skip-anchor>UpgradeModule</code> class
+        </a>
+      </h3>
+    <p>This class is an <code><a href="/api/core/NgModule">NgModule</a></code>, which you import to provide AngularJS core services,
+and has an instance method used to bootstrap the hybrid upgrade application.</p>
+
+    <ul class="docs-list">
+      <li><p>Core AngularJS services<br />
+Importing this <code><a href="/api/core/NgModule">NgModule</a></code> will add providers for the core
+<a href="https://docs.angularjs.org/api/ng/service">AngularJS services</a> to the root injector.</p>
+</li>
+<li><p>Bootstrap<br />
+The runtime instance of this class contains a <a href="/api/upgrade/static/UpgradeModule#bootstrap"><code><code>bootstrap()</code></code></a>
+method, which you use to bootstrap the top level AngularJS module onto an element in the
+DOM for the hybrid upgrade app.</p>
+<p>It also contains properties to access the <a href="/api/upgrade/static/UpgradeModule#injector"><code>root injector</code></a>, the
+bootstrap <code><a href="/api/core/NgZone">NgZone</a></code> and the
+<a href="https://docs.angularjs.org/api/auto/service/$injector">AngularJS $injector</a>.</p>
+</li>
+
+    </ul>
+    
+      <h3 id="examples" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#examples" aria-label="Link to Examples section" tabIndex="-1">
+          Examples
+        </a>
+      </h3>
+    <p>Import the <code><a href="/api/upgrade/static/UpgradeModule">UpgradeModule</a></code> into your top level Angular <a href="/api/core/NgModule"><code>NgModule</code></a>.</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// This NgModule represents the Angular pieces of the application</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/core/NgModule">NgModule</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [Ng2HeroesComponent, Ng1HeroComponentWrapper],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    HeroesService,</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // Register an Angular provider whose value is the "upgraded" AngularJS service</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    {provide: TextFormatter, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">useFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">i</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> i.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'textFormatter'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">), deps: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'$injector'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // We must import `UpgradeModule` to get access to the AngularJS core services</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [BrowserModule, UpgradeModule],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Ng2AppModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span></code></pre>
+        </pre>
+      </div>
+    <p>Then inject <code><a href="/api/upgrade/static/UpgradeModule">UpgradeModule</a></code> into your Angular <code><a href="/api/core/NgModule">NgModule</a></code> and use it to bootstrap the top level
+<a href="https://docs.angularjs.org/api/ng/type/angular.Module">AngularJS module</a> in the
+<code>ngDoBootstrap()</code> method.</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Ng2AppModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> upgrade</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/upgrade/static/UpgradeModule">UpgradeModule</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  ngDoBootstrap</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // We bootstrap the AngularJS app.</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.upgrade.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrap</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(document.body, [ng1AppModule.name]);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+        </pre>
+      </div>
+    <p>Finally, kick off the whole process, by bootstrapping your top level Angular <code><a href="/api/core/NgModule">NgModule</a></code>.</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// We bootstrap the Angular module as we would do in a normal Angular app.</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// (We are using the dynamic browser platform as this example has not been compiled AOT.)</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">platformBrowserDynamic</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Ng2AppModule);</span></span></code></pre>
+        </pre>
+      </div>
+    
+      <h3 id="upgrading-an-angularjs-service" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#upgrading-an-angularjs-service" aria-label="Link to Upgrading an AngularJS service section" tabIndex="-1">
+          Upgrading an AngularJS service
+        </a>
+      </h3>
+    <p>There is no specific API for upgrading an AngularJS service. Instead you should just follow the
+following recipe:</p>
+<p>Let&#39;s say you have an AngularJS service:</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TextFormatter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  titleCase</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">value</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> value.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">replace</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">/</span><span style="--shiki-light:#032F62;--shiki-dark:#DBEDFF">((</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">^|</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\s</span><span style="--shiki-light:#032F62;--shiki-dark:#DBEDFF">)</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">[a-z]</span><span style="--shiki-light:#032F62;--shiki-dark:#DBEDFF">)</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">/</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">g</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, (</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">_</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">c</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> c.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">toUpperCase</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// This AngularJS service will be "upgraded" to be used in Angular</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ng1AppModule.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">service</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'textFormatter'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, [TextFormatter]);</span></span></code></pre>
+        </pre>
+      </div>
+    <p>Then you should define an Angular provider to be included in your <code><a href="/api/core/NgModule">NgModule</a></code> <code>providers</code>
+property.</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Register an Angular provider whose value is the "upgraded" AngularJS service</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    {</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provide</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: TextFormatter, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">useFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">i</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> i.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'textFormatter'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">), </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">deps</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'$injector'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]},</span></span></code></pre>
+        </pre>
+      </div>
+    <p>Then you can use the &quot;upgraded&quot; AngularJS service by injecting it into an Angular component
+or service.</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(textFormatter: TextFormatter) {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // Change all the hero names to title case, using the "upgraded" AngularJS service</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.heroes.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forEach</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">((</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">hero</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Hero</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (hero.name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> textFormatter.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">titleCase</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(hero.name)));</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span></code></pre>
+        </pre>
+      </div>
+    </div></div></div>

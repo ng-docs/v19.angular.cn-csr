@@ -1,0 +1,80 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">End to End Testing</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/end-to-end.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>End-to-end or (E2E) testing is a form of testing used to assert your entire application works as expected from start to finish or <em>"end-to-end"</em>. E2E testing differs from unit testing in that it is completely decoupled from the underlying implementation details of your code. It is typically used to validate an application in a way that mimics the way a user would interact with it. This page serves as a guide to getting started with end-to-end testing in Angular using the Angular CLI.</p>
+
+  <h2 id="set-up-e2e-testing">
+    <a href="#set-up-e2e-testing" class="docs-anchor" tabindex="-1" aria-label="Link to Set Up E2E Testing">Set Up E2E Testing</a>
+  </h2>
+  <p>The Angular CLI downloads and installs everything you need to run end-to-end tests for your Angular application.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> e2e</span></span></code></pre>
+    </pre>
+  </div><p>The <code>ng e2e</code> command will first check your project for the "e2e" target. If it can't locate it, the CLI will then prompt you which e2e package you would like to use and walk you through the setup.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Cannot</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> find</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "e2e"</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> target</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> for</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> the</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> specified</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> project.</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">You</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> can</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> a</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> package</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> that</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> implements</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> these</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> capabilities.</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">For</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> example:</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Cypress:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @cypress/schematic</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Nightwatch:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @nightwatch/schematics</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">WebdriverIO:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @wdio/schematics</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Playwright:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> playwright-ng-schematics</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Puppeteer:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @puppeteer/ng-schematics</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Would</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> you</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> like</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> to</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> a</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> package</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> with</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "e2e"</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> capabilities</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> now?</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">No</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">❯</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Cypress</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Nightwatch</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">WebdriverIO</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Playwright</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Puppeteer</span></span></code></pre>
+    </pre>
+  </div><p>If you don't find the test runner you would like to use from the list above, you can manually add a package using <code>ng add</code>.</p>
+
+  <h2 id="running-e2e-tests">
+    <a href="#running-e2e-tests" class="docs-anchor" tabindex="-1" aria-label="Link to Running E2E Tests">Running E2E Tests</a>
+  </h2>
+  <p>Now that your application is configured for end-to-end testing we can now run the same command to execute your tests.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> e2e</span></span></code></pre>
+    </pre>
+  </div><p>Note, their isn't anything "special" about running your tests with any of the integrated e2e packages. The <code>ng e2e</code> command is really just running the <code>e2e</code> builder under the hood. You can always <a href="tools/cli/cli-builder#creating-a-builder">create your own custom builder</a> named <code>e2e</code> and run it using <code>ng e2e</code>.</p>
+
+  <h2 id="more-information-on-end-to-end-testing-tools">
+    <a href="#more-information-on-end-to-end-testing-tools" class="docs-anchor" tabindex="-1" aria-label="Link to More information on end-to-end testing tools">More information on end-to-end testing tools</a>
+  </h2>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Testing Tool</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">Cypress</td>
+<td align="left"><a href="https://docs.cypress.io/guides/end-to-end-testing/writing-your-first-end-to-end-test" target="_blank">Getting started with Cypress</a></td>
+</tr>
+<tr>
+<td align="left">Nightwatch</td>
+<td align="left"><a href="https://nightwatchjs.org/guide/writing-tests/introduction.html" target="_blank">Getting started with Nightwatch</a></td>
+</tr>
+<tr>
+<td align="left">WebdriverIO</td>
+<td align="left"><a href="https://webdriver.io/docs/gettingstarted" target="_blank">Getting started with Webdriver.io</a></td>
+</tr>
+<tr>
+<td align="left">Playwright</td>
+<td align="left"><a href="https://playwright.dev/docs/writing-tests" target="_blank">Getting started with Playwright</a></td>
+</tr>
+<tr>
+<td align="left">Puppeteer</td>
+<td align="left"><a href="https://pptr.dev" target="_blank">Getting started with Puppeteer</a></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  

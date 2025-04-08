@@ -1,0 +1,119 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/common</span><div class="docs-reference-title"><div><h1>getLocaleNumberFormat</h1><div class="docs-api-item-label type-function full">function</div><div class="docs-api-item-label type-deprecated full">Deprecated</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/common/src/i18n/locale_data_api.ts#L523-L526" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">code</i></a></div><section class="docs-reference-description"><p>Retrieves a number format for a given locale.</p></section><nav class="docs-pill-row"><a class="docs-pill" href="/api/common/NumberFormatStyle">NumberFormatStyle</a><a class="docs-pill" href="http://cldr.unicode.org/translation/number-patterns">CLDR website</a><a class="docs-pill" href="guide/i18n">Internationalization (i18n) Guide</a></nav></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">
+  <code>
+    <span class="line shiki-deprecated"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/common/getLocaleNumberFormat">getLocaleNumberFormat</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line "><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  locale</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line "><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  type</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/common/NumberFormatStyle">NumberFormatStyle</a></span></span><span class="line "><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-members"><div id="getLocaleNumberFormat_0" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>getLocaleNumberFormat</h3><div><code>string</code></div></header><div class="docs-reference-card-body"><div class="docs-reference-card-item docs-reference-card-item-deprecated"><div class="docs-function-definition"><p>Retrieves a number format for a given locale.</p>
+<p>Numbers are formatted using patterns, like <code>#,###.00</code>. For example, the pattern <code>#,###.00</code>
+when used to format the number 12345.678 could result in &quot;12&#39;345,678&quot;. That would happen if the
+grouping separator for your language is an apostrophe, and the decimal separator is a comma.</p>
+<p><b>Important:</b> The characters <code>.</code> <code>,</code> <code>0</code> <code>#</code> (and others below) are special placeholders
+that stand for the decimal separator, and so on, and are NOT real characters.
+You must NOT &quot;translate&quot; the placeholders. For example, don&#39;t change <code>.</code> to <code>,</code> even though in
+your language the decimal point is written with a comma. The symbols should be replaced by the
+local equivalents, using the appropriate <code><a href="/api/common/NumberSymbol">NumberSymbol</a></code> for your language.</p>
+<p>Here are the special characters used in number patterns:</p>
+
+      <div class="docs-table docs-scroll-track-transparent">
+        <table>
+          <thead>
+          <tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+
+          </thead>
+          <tbody>
+          <tr>
+<td>.</td>
+<td>Replaced automatically by the character used for the decimal point.</td>
+</tr>
+<tr>
+<td>,</td>
+<td>Replaced by the &quot;grouping&quot; (thousands) separator.</td>
+</tr>
+<tr>
+<td>0</td>
+<td>Replaced by a digit (or zero if there aren&#39;t enough digits).</td>
+</tr>
+<tr>
+<td>#</td>
+<td>Replaced by a digit (or nothing if there aren&#39;t enough).</td>
+</tr>
+<tr>
+<td>¤</td>
+<td>Replaced by a currency symbol, such as $ or USD.</td>
+</tr>
+<tr>
+<td>%</td>
+<td>Marks a percent format. The % symbol may change position, but must be retained.</td>
+</tr>
+<tr>
+<td>E</td>
+<td>Marks a scientific format. The E symbol may change position, but must be retained.</td>
+</tr>
+<tr>
+<td>&#39;</td>
+<td>Special characters used as literal characters are quoted with ASCII single quotes.</td>
+</tr>
+
+          </tbody>
+        </table>
+      </div></div><div><div class="docs-deprecation-message"><span class="docs-param-keyword docs-deprecated">@deprecated</span><span><p>Angular recommends relying on the <code>Intl</code> API for i18n.
+Let <code>Intl.NumberFormat</code> determine the number format instead</p>
+</span></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">locale</span><code>string</code><div class="docs-parameter-description"><p>A locale code for the locale format rules to use.</p></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">type</span><code><a href="/api/common/NumberFormatStyle">NumberFormatStyle</a></code><div class="docs-parameter-description"><p>The type of numeric value to be formatted (such as <code>Decimal</code> or <code>Currency</code>.)</p></div></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code>string</code></div></div></div></div></div><div class="docs-reference-section"><h2 id="description" class="docs-reference-section-heading"><a href="#description" aria-label="Link to Description section" tabindex="-1">Description</a></h2><div><p>Retrieves a number format for a given locale.</p>
+<p>Numbers are formatted using patterns, like <code>#,###.00</code>. For example, the pattern <code>#,###.00</code>
+when used to format the number 12345.678 could result in &quot;12&#39;345,678&quot;. That would happen if the
+grouping separator for your language is an apostrophe, and the decimal separator is a comma.</p>
+<p><b>Important:</b> The characters <code>.</code> <code>,</code> <code>0</code> <code>#</code> (and others below) are special placeholders
+that stand for the decimal separator, and so on, and are NOT real characters.
+You must NOT &quot;translate&quot; the placeholders. For example, don&#39;t change <code>.</code> to <code>,</code> even though in
+your language the decimal point is written with a comma. The symbols should be replaced by the
+local equivalents, using the appropriate <code><a href="/api/common/NumberSymbol">NumberSymbol</a></code> for your language.</p>
+<p>Here are the special characters used in number patterns:</p>
+
+      <div class="docs-table docs-scroll-track-transparent">
+        <table>
+          <thead>
+          <tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+
+          </thead>
+          <tbody>
+          <tr>
+<td>.</td>
+<td>Replaced automatically by the character used for the decimal point.</td>
+</tr>
+<tr>
+<td>,</td>
+<td>Replaced by the &quot;grouping&quot; (thousands) separator.</td>
+</tr>
+<tr>
+<td>0</td>
+<td>Replaced by a digit (or zero if there aren&#39;t enough digits).</td>
+</tr>
+<tr>
+<td>#</td>
+<td>Replaced by a digit (or nothing if there aren&#39;t enough).</td>
+</tr>
+<tr>
+<td>¤</td>
+<td>Replaced by a currency symbol, such as $ or USD.</td>
+</tr>
+<tr>
+<td>%</td>
+<td>Marks a percent format. The % symbol may change position, but must be retained.</td>
+</tr>
+<tr>
+<td>E</td>
+<td>Marks a scientific format. The E symbol may change position, but must be retained.</td>
+</tr>
+<tr>
+<td>&#39;</td>
+<td>Special characters used as literal characters are quoted with ASCII single quotes.</td>
+</tr>
+
+          </tbody>
+        </table>
+      </div></div></div></div>

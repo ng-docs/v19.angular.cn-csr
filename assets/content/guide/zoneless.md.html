@@ -1,0 +1,164 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular without ZoneJS (Zoneless)</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/zoneless.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+  <h2 id="why-use-zoneless">
+    <a href="#why-use-zoneless" class="docs-anchor" tabindex="-1" aria-label="Link to Why use Zoneless?">Why use Zoneless?</a>
+  </h2>
+  <p>The main advantages to removing ZoneJS as a dependency are:</p>
+
+  <ul class="docs-list">
+    <li><strong>Improved performance</strong>: ZoneJS uses DOM events and async tasks as indicators of when application state <em>might</em> have updated and subsequently triggers application synchronization to run change detection on the application's views. ZoneJS does not have any insight into whether application state actually changed and so this synchronization is triggered more frequently than necessary.</li>
+<li><strong>Improved Core Web Vitals</strong>: ZoneJS brings a fair amount of overhead, both in payload size and in startup time cost.</li>
+<li><strong>Improved debugging experience</strong>: ZoneJS makes debugging code more difficult. Stack traces are harder to understand with ZoneJS. It's also difficult to understand when code breaks as a result of being outside the Angular Zone.</li>
+<li><strong>Better ecosystem compatibility</strong>: ZoneJS works by patching browser APIs but does not automatically have patches for every new browser API. Some APIs cannot be patched effectively, such as <code>async</code>/<code>await</code>, and have to be downleveled to work with ZoneJS. Sometimes libraries in the ecosystem are also incompatible with the way ZoneJS patches the native APIs. Removing ZoneJS as a dependency ensures better long-term compatibility by removing a source of complexity, monkey patching, and ongoing maintenance.</li>
+
+  </ul>
+  
+  <h2 id="enabling-zoneless-in-an-application">
+    <a href="#enabling-zoneless-in-an-application" class="docs-anchor" tabindex="-1" aria-label="Link to Enabling Zoneless in an application">Enabling Zoneless in an application</a>
+  </h2>
+  <p>The API for enabling Zoneless is currently experimental. Neither the shape, nor the underlying behavior is stable and can change
+in patch versions. There are known feature gaps, including the lack of an ergonomic API which prevents the application from serializing too early with Server Side Rendering.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// standalone bootstrap</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(MyApp, {providers: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  provideExperimentalZonelessChangeDetection</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]});</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// NgModule bootstrap</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">platformBrowser</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppModule);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provideExperimentalZonelessChangeDetection</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="removing-zonejs">
+    <a href="#removing-zonejs" class="docs-anchor" tabindex="-1" aria-label="Link to Removing ZoneJS">Removing ZoneJS</a>
+  </h2>
+  <p>Zoneless applications should remove ZoneJS entirely from the build to reduce bundle size. ZoneJS is typically
+loaded via the <code>polyfills</code> option in <code>angular.json</code>, both in the <code>build</code> and <code>test</code> targets. Remove <code>zone.js</code>
+and <code>zone.js/testing</code> from both to remove it from the build. Projects which use an explicit <code>polyfills.ts</code> file
+should remove <code>import &#39;zone.js&#39;;</code> and <code>import &#39;zone.js/testing&#39;;</code> from the file.</p>
+<p>After removing ZoneJS from the build, there is no longer a need for a <code>zone.js</code> dependency either and the
+package can be removed entirely:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> uninstall</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> zone.js</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="requirements-for-zoneless-compatibility">
+    <a href="#requirements-for-zoneless-compatibility" class="docs-anchor" tabindex="-1" aria-label="Link to Requirements for Zoneless compatibility">Requirements for Zoneless compatibility</a>
+  </h2>
+  <p>Angular relies on notifications from core APIs in order to determine when to run change detection and on which views.
+These notifications include:</p>
+
+  <ul class="docs-list">
+    <li><code>ChangeDetectorRef.markForCheck</code> (called automatically by <code>AsyncPipe</code>)</li>
+<li><code>ComponentRef.setInput</code></li>
+<li>Updating a signal that's read in a template</li>
+<li>Bound host or template listeners callbacks</li>
+<li>Attaching a view that was marked dirty by one of the above</li>
+
+  </ul>
+  
+  <h3 id="onpush-compatible-components">
+    <a href="#onpush-compatible-components" class="docs-anchor" tabindex="-1" aria-label="Link to <code>OnPush</code>-compatible components"><code>OnPush</code>-compatible components</a>
+  </h3>
+  <p>One way to ensure that a component is using the correct notification mechanisms from above is to
+use <a href="/best-practices/skipping-subtrees#using-onpush">ChangeDetectionStrategy.OnPush</a>.</p>
+<p>The <code>OnPush</code> change detection strategy is not required, but it is a recommended step towards zoneless compatibility for application components. It is not always possible for library components to use <code>ChangeDetectionStrategy.OnPush</code>.
+When a library component is a host for user-components which might use <code>ChangeDetectionStrategy.Default</code>, it cannot use <code>OnPush</code> because that would prevent the child component from being refreshed if it is not <code>OnPush</code> compatible and relies on ZoneJS to trigger change detection. Components can use the <code>Default</code> strategy as long as they notify Angular when change detection needs to run (calling <code>markForCheck</code>, using signals, <code>AsyncPipe</code>, etc.).
+Being a host for a user component means using an API such as <code>ViewContainerRef.createComponent</code> and not just hosting a portion of a template from a user component (i.e. content projection or a using a template ref input).</p>
+
+  <h3 id="remove-ngzoneonmicrotaskempty-ngzoneonunstable-ngzoneisstable-or-ngzoneonstable">
+    <a href="#remove-ngzoneonmicrotaskempty-ngzoneonunstable-ngzoneisstable-or-ngzoneonstable" class="docs-anchor" tabindex="-1" aria-label="Link to Remove <code>NgZone.onMicrotaskEmpty</code>, <code>NgZone.onUnstable</code>, <code>NgZone.isStable</code>, or <code>NgZone.onStable</code>">Remove <code>NgZone.onMicrotaskEmpty</code>, <code>NgZone.onUnstable</code>, <code>NgZone.isStable</code>, or <code>NgZone.onStable</code></a>
+  </h3>
+  <p>Applications and libraries need to remove uses of <code>NgZone.onMicrotaskEmpty</code>, <code>NgZone.onUnstable</code> and <code>NgZone.onStable</code>.
+These observables will never emit when an Application enables zoneless change detection.
+Similarly, <code>NgZone.isStable</code> will always be <code>true</code> and should not be used as a condition for code execution.</p>
+<p>The <code>NgZone.onMicrotaskEmpty</code> and <code>NgZone.onStable</code> observables are most often used to wait for Angular to
+complete change detection before performing a task. Instead, these can be replaced by <code>afterNextRender</code>
+if they need to wait for a single change detection or <code>afterRender</code> if there is some condition that might span
+several change detection rounds. In other cases, these observables were used because they happened to be
+familiar and have similar timing to what was needed. More straightforward or direct DOM APIs can be used instead,
+such as <code>MutationObserver</code> when code needs to wait for certain DOM state (rather than waiting for it indirectly
+through Angular's render hooks).</p>
+
+    <div class="docs-callout docs-callout-helpful">
+      <h3>NgZone.run and NgZone.runOutsideAngular are compatible with Zoneless</h3>
+      <p><code>NgZone.run</code> and <code>NgZone.runOutsideAngular</code> do not need to be removed in order for code to be compatible with
+Zoneless applications. In fact, removing these calls can lead to performance regressions for libraries that
+are used in applications that still rely on ZoneJS.</p>
+
+    </div>
+    
+  <h3 id="pendingtasks-for-server-side-rendering-ssr">
+    <a href="#pendingtasks-for-server-side-rendering-ssr" class="docs-anchor" tabindex="-1" aria-label="Link to <code>PendingTasks</code> for Server Side Rendering (SSR)"><code>PendingTasks</code> for Server Side Rendering (SSR)</a>
+  </h3>
+  <p>If you are using SSR with Angular, you may know that it relies on ZoneJS to help determine when the application
+is "stable" and can be serialized. If there are asynchronous tasks that should prevent serialization, an application
+not using ZoneJS must make Angular aware of these with the <a href="/api/core/PendingTasks">PendingTasks</a> service. Serialization
+will wait for the first moment that all pending tasks have been removed.</p>
+<p>The two most straightforward uses of pending tasks are the <code>run</code> method:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> taskService</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(PendingTasks);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">taskService.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">run</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">async</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> someResult</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> await</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> doSomeWorkThatNeedsToBeRendered</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.someState.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(someResult);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>For more complicated use-cases, you can manuall add and remove a pending tasks:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> taskService</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(PendingTasks);</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> taskCleanup</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> taskService.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">add</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">try</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  await</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> doSomeWorkThatNeedsToBeRendered</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">catch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // handle error</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">finally</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  taskCleanup</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>In addition, the <a href="/api/core/rxjs-interop/pendingUntilEvent#">pendingUntilEvent</a> helper in <code>rxjs-interop</code> ensures
+the application remains unstable until the observable emits, complets, errors, or is unsubscribed.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">readonly myObservableState </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> someObservable.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">pipe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">pendingUntilEvent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span></code></pre>
+    </pre>
+  </div><p>The framework uses this service internally as well to prevent serialization until asynchronous tasks are complete. These include, but are not limited to,
+an ongoing Router navigation and an incomplete <code>HttpClient</code> request.</p>
+
+  <h2 id="testing-and-debugging">
+    <a href="#testing-and-debugging" class="docs-anchor" tabindex="-1" aria-label="Link to Testing and Debugging">Testing and Debugging</a>
+  </h2>
+  
+  <h3 id="using-zoneless-in-testbed">
+    <a href="#using-zoneless-in-testbed" class="docs-anchor" tabindex="-1" aria-label="Link to Using Zoneless in <code>TestBed</code>">Using Zoneless in <code>TestBed</code></a>
+  </h3>
+  <p>The zoneless provider function can also be used with <code>TestBed</code> to help
+ensure the components under test are compatible with a Zoneless
+Angular application.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">TestBed.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">configureTestingModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provideExperimentalZonelessChangeDetection</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> fixture</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> TestBed.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">createComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(MyComponent);</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">await</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> fixture.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">whenStable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span></code></pre>
+    </pre>
+  </div><p>To ensure tests have the most similar behavior to production code,
+avoid using <code>fixture.detectChanges()</code> when possible. This forces
+change detection to run when Angular might otherwise have not
+scheduled change detection. Tests should ensure these notifications
+are happening and allow Angular to handle when to synchronize
+state rather than manually forcing it to happen in the test.</p>
+<p>For existing test suites, using <code>fixture.detectChanges()</code> is a common pattern
+and it is likely not worth the effort of converting these to
+<code>await fixture.whenStable()</code>. <code>TestBed</code> will still enforce that the
+fixture's component is <code>OnPush</code> compatible and throws <code>ExpressionChangedAfterItHasBeenCheckedError</code>
+if it finds that template values were updated without a
+change notification (i.e. <code>fixture.componentInstance.someValue = &#39;newValue&#39;;</code>).
+If the component is used in production, this issue should be addressed by updating
+the component to use signals for state or call <code>ChangeDetectorRef.markForCheck()</code>.
+If the component is only used as a test wrapper and never used in an application,
+it is acceptable to use <code>fixture.changeDetectorRef.markForCheck()</code>.</p>
+
+  <h3 id="debug-mode-check-to-ensure-updates-are-detected">
+    <a href="#debug-mode-check-to-ensure-updates-are-detected" class="docs-anchor" tabindex="-1" aria-label="Link to Debug-mode check to ensure updates are detected">Debug-mode check to ensure updates are detected</a>
+  </h3>
+  <p>Angular also provides an additional tool to help verify that an application is making
+updates to state in a zoneless-compatible way. <code>provideExperimentalCheckNoChangesForDebug</code>
+can be used to periodically check to ensure that no bindings have been updated
+without a notification. Angular throws <code>ExpressionChangedAfterItHasBeenCheckedError</code>
+if there is an updated binding that would not have refreshed by the zoneless change
+detection.</p>

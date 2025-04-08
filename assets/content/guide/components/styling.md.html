@@ -1,0 +1,120 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Styling components</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/components/styling.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+    <div class="docs-alert docs-alert-tip">
+    <p><strong>Tip:</strong> This guide assumes you've already read the <a href="essentials">Essentials Guide</a>. Read that first if you're new to Angular.</p>
+
+    </div>
+    <p>Components can optionally include CSS styles that apply to that component's DOM:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'profile-photo'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> src</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"profile-photo.jpg"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> alt</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Your profile photo"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  styles: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D"> img</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">border-radius</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">50</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">%</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; } </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ProfilePhoto</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>You can also choose to write your styles in separate files:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'profile-photo'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  templateUrl: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'profile-photo.html'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  styleUrl: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'profile-photo.css'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ProfilePhoto</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>When Angular compiles your component, these styles are emitted with your component's JavaScript
+output. This means that component styles participate in the JavaScript module system. When you
+render an Angular component, the framework automatically includes its associated styles, even when
+lazy-loading a component.</p>
+<p>Angular works with any tool that outputs CSS,
+including <a href="https://sass-lang.com" target="_blank">Sass</a>, <a href="https://lesscss.org" target="_blank">less</a>,
+and <a href="https://stylus-lang.com" target="_blank">stylus</a>.</p>
+
+  <h2 id="style-scoping">
+    <a href="#style-scoping" class="docs-anchor" tabindex="-1" aria-label="Link to Style scoping">Style scoping</a>
+  </h2>
+  <p>Every component has a <strong>view encapsulation</strong> setting that determines how the framework scopes a
+component's styles. There are three view encapsulation modes: <code>Emulated</code>, <code>ShadowDom</code>, and <code>None</code>.
+You can specify the mode in the <code>@Component</code> decorator:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  encapsulation: ViewEncapsulation.None,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ProfilePhoto</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="viewencapsulationemulated">
+    <a href="#viewencapsulationemulated" class="docs-anchor" tabindex="-1" aria-label="Link to ViewEncapsulation.Emulated">ViewEncapsulation.Emulated</a>
+  </h3>
+  <p>By default, Angular uses emulated encapsulation so that a component's styles only apply to elements
+defined in that component's template. In this mode, the framework generates a unique HTML attribute
+for each component instance, adds that attribute to elements in the component's template, and
+inserts that attribute into the CSS selectors defined in your component's styles.</p>
+<p>This mode ensures that a component's styles do not leak out and affect other components. However,
+global styles defined outside of a component may still affect elements inside a component with
+emulated encapsulation.</p>
+<p>In emulated mode, Angular supports
+the <a href="https://developer.mozilla.org/docs/Web/CSS/:host" target="_blank"><code>:host</code></a>
+and <a href="https://developer.mozilla.org/docs/Web/CSS/:host-context" target="_blank"><code>:host-context()</code></a> pseudo
+classes without
+using <a href="https://developer.mozilla.org/docs/Web/Web_Components/Using_shadow_DOM" target="_blank">Shadow DOM</a>.
+During compilation, the framework transforms these pseudo classes into attributes so it doesn't 
+comply with these native pseudo classes' rules at runtime (e.g. browser compatibility, specificity). Angular's
+emulated encapsulation mode does not support any other pseudo classes related to Shadow DOM, such
+as <code>::shadow</code> or <code>::part</code>.</p>
+
+  <h4 id="ng-deep">
+    <a href="#ng-deep" class="docs-anchor" tabindex="-1" aria-label="Link to <code>::ng-deep</code>"><code>::ng-deep</code></a>
+  </h4>
+  <p>Angular's emulated encapsulation mode supports a custom pseudo class, <code>::ng-deep</code>. Applying this
+pseudo class to a CSS rule disables encapsulation for that rule, effectively turning it into a
+global style. <strong>The Angular team strongly discourages new use of <code>::ng-deep</code></strong>. These APIs remain
+exclusively for backwards compatibility.</p>
+
+  <h3 id="viewencapsulationshadowdom">
+    <a href="#viewencapsulationshadowdom" class="docs-anchor" tabindex="-1" aria-label="Link to ViewEncapsulation.ShadowDom">ViewEncapsulation.ShadowDom</a>
+  </h3>
+  <p>This mode scopes styles within a component by
+using <a href="https://developer.mozilla.org/docs/Web/Web_Components/Using_shadow_DOM" target="_blank">the web standard Shadow DOM API</a>.
+When enabling this mode, Angular attaches a shadow root to the component's host element and renders
+the component's template and styles into the corresponding shadow tree.</p>
+<p>This mode strictly guarantees that <em>only</em> that component's styles apply to elements in the
+component's template. Global styles cannot affect elements in a shadow tree and styles inside the
+shadow tree cannot affect elements outside of that shadow tree.</p>
+<p>Enabling <code>ShadowDom</code> encapsulation, however, impacts more than style scoping. Rendering the
+component in a shadow tree affects event propagation, interaction
+with <a href="https://developer.mozilla.org/docs/Web/Web_Components/Using_templates_and_slots" target="_blank">the <code>&lt;slot&gt;</code> API</a>,
+and how browser developer tools show elements. Always understand the full implications of using
+Shadow DOM in your application before enabling this option.</p>
+
+  <h3 id="viewencapsulationnone">
+    <a href="#viewencapsulationnone" class="docs-anchor" tabindex="-1" aria-label="Link to ViewEncapsulation.None">ViewEncapsulation.None</a>
+  </h3>
+  <p>This mode disables all style encapsulation for the component. Any styles associated with the
+component behave as global styles.</p>
+
+    <div class="docs-alert docs-alert-note">
+    <p><strong>Note:</strong> In <code>Emulated</code> and <code>ShadowDom</code> modes, Angular doesn't 100% guarantee that your component's styles will always override styles coming from outside it.
+It is assumed that these styles have the same specificity as your component's styles in case of collision.</p>
+
+    </div>
+    
+  <h2 id="defining-styles-in-templates">
+    <a href="#defining-styles-in-templates" class="docs-anchor" tabindex="-1" aria-label="Link to Defining styles in templates">Defining styles in templates</a>
+  </h2>
+  <p>You can use the <code>&lt;style&gt;</code> element in a component's template to define additional styles. The
+component's view encapsulation mode applies to styles defined this way.</p>
+<p>Angular does not support bindings inside of style elements.</p>
+
+  <h2 id="referencing-external-style-files">
+    <a href="#referencing-external-style-files" class="docs-anchor" tabindex="-1" aria-label="Link to Referencing external style files">Referencing external style files</a>
+  </h2>
+  <p>Component templates can
+use <a href="https://developer.mozilla.org/docs/Web/HTML/Element/link" target="_blank">the <code>&lt;link&gt;</code> element</a> to
+reference CSS files. Additionally, your CSS may
+use <a href="https://developer.mozilla.org/docs/Web/CSS/@import" target="_blank">the <code>@import</code>at-rule</a> to reference
+CSS files. Angular treats these references as <em>external</em> styles. External styles are not affected by
+emulated view encapsulation.</p>

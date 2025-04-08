@@ -1,0 +1,338 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Router reference</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/routing/router-reference.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>The following sections highlight some core router concepts.</p>
+
+  <h2 id="router-imports">
+    <a href="#router-imports" class="docs-anchor" tabindex="-1" aria-label="Link to Router imports">Router imports</a>
+  </h2>
+  <p>The Angular Router is an optional service that presents a particular component view for a given URL.
+It isn't part of the Angular core and thus is in its own library package, <code>@angular/router</code>.</p>
+<p>Import what you need from it as you would from any other Angular package.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { provideRouter } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/router'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> For more on browser URL styles, see <a href="guide/routing/common-router-tasks#browser-url-styles"><code>LocationStrategy</code> and browser URL styles</a>.</p>
+
+    </div>
+    
+  <h2 id="configuration">
+    <a href="#configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Configuration">Configuration</a>
+  </h2>
+  <p>A routed Angular application has one singleton instance of the <code>Router</code> service.
+When the browser's URL changes, that router looks for a corresponding <code>Route</code> from which it can determine the component to display.</p>
+<p>A router has no routes until you configure it.
+The following example creates five route definitions, configures the router via the <code>provideRouter</code> method, and adds the result to the <code>providers</code> array of the <code>ApplicationConfig</code>'.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> appRoutes</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Routes</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  { path: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'crisis-center'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, component: CrisisListComponent },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  { path: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'hero/:id'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,      component: HeroDetailComponent },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    path: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'heroes'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    component: HeroListComponent,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    data: { title: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Heroes List'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  { path: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    redirectTo: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/heroes'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    pathMatch: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'full'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  { path: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'**'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, component: PageNotFoundComponent }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">];</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> appConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ApplicationConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provideRouter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(appRoutes, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withDebugTracing</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>The <code>routes</code> array of routes describes how to navigate.
+Pass it to the <code>provideRouter</code> method in the <code>ApplicationConfig</code> <code>providers</code> to configure the router.</p>
+<p>Each <code>Route</code> maps a URL <code>path</code> to a component.
+There are no leading slashes in the path.
+The router parses and builds the final URL for you, which lets you use both relative and absolute paths when navigating between application views.</p>
+<p>The <code>:id</code> in the second route is a token for a route parameter.
+In a URL such as <code>/hero/42</code>, "42" is the value of the <code>id</code> parameter.
+The corresponding <code>HeroDetailComponent</code> uses that value to find and present the hero whose <code>id</code> is 42.</p>
+<p>The <code>data</code> property in the third route is a place to store arbitrary data associated with this specific route.
+The data property is accessible within each activated route.
+Use it to store items such as page titles, breadcrumb text, and other read-only, static data.
+Use the resolve guard to retrieve dynamic data.</p>
+<p>The empty path in the fourth route represents the default path for the application —the place to go when the path in the URL is empty, as it typically is at the start.
+This default route redirects to the route for the <code>/heroes</code> URL and, therefore, displays the <code>HeroesListComponent</code>.</p>
+<p>If you need to see what events are happening during the navigation lifecycle, there is the <code>withDebugTracing</code> feature.
+This outputs each router event that took place during each navigation lifecycle to the browser console.
+Use <code>withDebugTracing</code> only for debugging purposes.
+You set the <code>withDebugTracing</code> option in the object passed as the second argument to the <code>provideRouter</code> method.</p>
+
+  <h2 id="router-outlet">
+    <a href="#router-outlet" class="docs-anchor" tabindex="-1" aria-label="Link to Router outlet">Router outlet</a>
+  </h2>
+  <p>The <code>RouterOutlet</code> is a directive from the router library that is used like a component.
+It acts as a placeholder that marks the spot in the template where the router should display the components for that outlet.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- Routed components go here --&gt;</span></span></code></pre>
+    </pre>
+  </div><p>Given the preceding configuration, when the browser URL for this application becomes <code>/heroes</code>, the router matches that URL to the route path <code>/heroes</code> and displays the <code>HeroListComponent</code> as a sibling element to the <code>RouterOutlet</code> that you've placed in the host component's template.</p>
+
+  <h2 id="router-links">
+    <a href="#router-links" class="docs-anchor" tabindex="-1" aria-label="Link to Router links">Router links</a>
+  </h2>
+  <p>To navigate as a result of some user action such as the click of an anchor tag, use <code>RouterLink</code>.</p>
+<p>Consider the following template:</p>
+<div class="docs-code" path="adev/src/content/examples/router/src/app/app.component.1.html" header="src/app/app.component.html">
+    <div class="docs-code-header"><h3>src/app/app.component.html</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Angular Router&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/crisis-center"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLinkActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"active"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ariaCurrentWhenActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"page"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Crisis Center&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/heroes"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLinkActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"active"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ariaCurrentWhenActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"page"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Heroes&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div><p>The <code>RouterLink</code> directives on the anchor tags give the router control over those elements.
+The navigation paths are fixed, so you can assign a string as a one-time binding to the <code>routerLink</code>.</p>
+<p>Had the navigation path been more dynamic, you could have bound to a template expression that returned an array of route link parameters; that is, the <a href="guide/routing/common-router-tasks#link-parameters-array">link parameters array</a>.
+The router resolves that array into a complete URL.</p>
+
+  <h2 id="active-router-links">
+    <a href="#active-router-links" class="docs-anchor" tabindex="-1" aria-label="Link to Active router links">Active router links</a>
+  </h2>
+  <p>The <code>RouterLinkActive</code> directive toggles CSS classes for active <code>RouterLink</code> bindings based on the current <code>RouterState</code>.</p>
+<p>On each anchor tag, you see a <a href="guide/templates/property-binding">property binding</a> to the <code>RouterLinkActive</code> directive that looks like</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">routerLinkActive="..."</span></span></code></pre>
+    </pre>
+  </div><p>The template expression to the right of the equal sign, <code>=</code>, contains a space-delimited string of CSS classes that the Router adds when this link is active and removes when the link is inactive.
+You set the <code>RouterLinkActive</code> directive to a string of classes such as <code>routerLinkActive=&quot;active fluffy&quot;</code> or bind it to a component property that returns such a string.
+For example,</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[routerLinkActive]</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"someStringProperty"</span></span></code></pre>
+    </pre>
+  </div><p>Active route links cascade down through each level of the route tree, so parent and child router links can be active at the same time.
+To override this behavior, bind to the <code>[routerLinkActiveOptions]</code> input binding with the <code>{ exact: true }</code> expression.
+By using <code>{ exact: true }</code>, a given <code>RouterLink</code> is only active if its URL is an exact match to the current URL.</p>
+<p><code>RouterLinkActive</code> also allows you to easily apply the <code>aria-current</code> attribute to the active element, thus providing a more accessible experience for all users. For more information see the Accessibility Best Practices <a href="/best-practices/a11y#active-links-identification">Active links identification section</a>.</p>
+
+  <h2 id="router-state">
+    <a href="#router-state" class="docs-anchor" tabindex="-1" aria-label="Link to Router state">Router state</a>
+  </h2>
+  <p>After the end of each successful navigation lifecycle, the router builds a tree of <code>ActivatedRoute</code> objects that make up the current state of the router.
+You can access the current <code>RouterState</code> from anywhere in the application using the <code>Router</code> service and the <code>routerState</code> property.</p>
+<p>Each <code>ActivatedRoute</code> in the <code>RouterState</code> provides methods to traverse up and down the route tree to get information from parent, child, and sibling routes.</p>
+
+  <h2 id="activated-route">
+    <a href="#activated-route" class="docs-anchor" tabindex="-1" aria-label="Link to Activated route">Activated route</a>
+  </h2>
+  <p>The route path and parameters are available through an injected router service called the <a href="api/router/ActivatedRoute">ActivatedRoute</a>.
+It has a great deal of useful information including:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Property</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>url</code></td>
+<td align="left">An <code>Observable</code> of the route paths, represented as an array of strings for each part of the route path.</td>
+</tr>
+<tr>
+<td align="left"><code>data</code></td>
+<td align="left">An <code>Observable</code> that contains the <code>data</code> object provided for the route. Also contains any resolved values from the resolve guard.</td>
+</tr>
+<tr>
+<td align="left"><code>params</code></td>
+<td align="left">An <code>Observable</code> that contains the required and optional parameters specific to the route.</td>
+</tr>
+<tr>
+<td align="left"><code>paramMap</code></td>
+<td align="left">An <code>Observable</code> that contains a <a href="api/router/ParamMap">map</a> of the required and optional parameters specific to the route. The map supports retrieving single and multiple values from the same parameter.</td>
+</tr>
+<tr>
+<td align="left"><code>queryParamMap</code></td>
+<td align="left">An <code>Observable</code> that contains a <a href="api/router/ParamMap">map</a> of the query parameters available to all routes. The map supports retrieving single and multiple values from the query parameter.</td>
+</tr>
+<tr>
+<td align="left"><code>queryParams</code></td>
+<td align="left">An <code>Observable</code> that contains the query parameters available to all routes.</td>
+</tr>
+<tr>
+<td align="left"><code>fragment</code></td>
+<td align="left">An <code>Observable</code> of the URL fragment available to all routes.</td>
+</tr>
+<tr>
+<td align="left"><code>outlet</code></td>
+<td align="left">The name of the <code>RouterOutlet</code> used to render the route. For an unnamed outlet, the outlet name is primary.</td>
+</tr>
+<tr>
+<td align="left"><code>routeConfig</code></td>
+<td align="left">The route configuration used for the route that contains the origin path.</td>
+</tr>
+<tr>
+<td align="left"><code>parent</code></td>
+<td align="left">The route's parent <code>ActivatedRoute</code> when this route is a child route.</td>
+</tr>
+<tr>
+<td align="left"><code>firstChild</code></td>
+<td align="left">Contains the first <code>ActivatedRoute</code> in the list of this route's child routes.</td>
+</tr>
+<tr>
+<td align="left"><code>children</code></td>
+<td align="left">Contains all the child routes activated under the current route.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="router-events">
+    <a href="#router-events" class="docs-anchor" tabindex="-1" aria-label="Link to Router events">Router events</a>
+  </h2>
+  <p>During each navigation, the <code>Router</code> emits navigation events through the <code>Router.events</code> property.
+These events are shown in the following table.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Router event</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><a href="api/router/NavigationStart"><code>NavigationStart</code></a></td>
+<td align="left">Triggered when navigation starts.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/RouteConfigLoadStart"><code>RouteConfigLoadStart</code></a></td>
+<td align="left">Triggered before the <code>Router</code> lazy loads a route configuration.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/RouteConfigLoadEnd"><code>RouteConfigLoadEnd</code></a></td>
+<td align="left">Triggered after a route has been lazy loaded.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/RoutesRecognized"><code>RoutesRecognized</code></a></td>
+<td align="left">Triggered when the Router parses the URL and the routes are recognized.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/GuardsCheckStart"><code>GuardsCheckStart</code></a></td>
+<td align="left">Triggered when the Router begins the Guards phase of routing.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/ChildActivationStart"><code>ChildActivationStart</code></a></td>
+<td align="left">Triggered when the Router begins activating a route's children.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/ActivationStart"><code>ActivationStart</code></a></td>
+<td align="left">Triggered when the Router begins activating a route.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/GuardsCheckEnd"><code>GuardsCheckEnd</code></a></td>
+<td align="left">Triggered when the Router finishes the Guards phase of routing successfully.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/ResolveStart"><code>ResolveStart</code></a></td>
+<td align="left">Triggered when the Router begins the Resolve phase of routing.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/ResolveEnd"><code>ResolveEnd</code></a></td>
+<td align="left">Triggered when the Router finishes the Resolve phase of routing successfully.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/ChildActivationEnd"><code>ChildActivationEnd</code></a></td>
+<td align="left">Triggered when the Router finishes activating a route's children.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/ActivationEnd"><code>ActivationEnd</code></a></td>
+<td align="left">Triggered when the Router finishes activating a route.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/NavigationEnd"><code>NavigationEnd</code></a></td>
+<td align="left">Triggered when navigation ends successfully.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/NavigationCancel"><code>NavigationCancel</code></a></td>
+<td align="left">Triggered when navigation is canceled. This can happen when a Route Guard returns false during navigation, or redirects by returning a <code>UrlTree</code> or <code>RedirectCommand</code>.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/NavigationError"><code>NavigationError</code></a></td>
+<td align="left">Triggered when navigation fails due to an unexpected error.</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/Scroll"><code>Scroll</code></a></td>
+<td align="left">Represents a scrolling event.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>When you enable the <code>withDebugTracing</code> feature, Angular logs these events to the console.</p>
+
+  <h2 id="router-terminology">
+    <a href="#router-terminology" class="docs-anchor" tabindex="-1" aria-label="Link to Router terminology">Router terminology</a>
+  </h2>
+  <p>Here are the key <code>Router</code> terms and their meanings:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Router part</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>Router</code></td>
+<td align="left">Displays the application component for the active URL. Manages navigation from one component to the next.</td>
+</tr>
+<tr>
+<td align="left"><code>provideRouter</code></td>
+<td align="left">provides the necessary service providers for navigating through application views.</td>
+</tr>
+<tr>
+<td align="left"><code>RouterModule</code></td>
+<td align="left">A separate NgModule that provides the necessary service providers and directives for navigating through application views.</td>
+</tr>
+<tr>
+<td align="left"><code>Routes</code></td>
+<td align="left">Defines an array of Routes, each mapping a URL path to a component.</td>
+</tr>
+<tr>
+<td align="left"><code>Route</code></td>
+<td align="left">Defines how the router should navigate to a component based on a URL pattern. Most routes consist of a path and a component type.</td>
+</tr>
+<tr>
+<td align="left"><code>RouterOutlet</code></td>
+<td align="left">The directive (<code>&lt;router-outlet&gt;</code>) that marks where the router displays a view.</td>
+</tr>
+<tr>
+<td align="left"><code>RouterLink</code></td>
+<td align="left">The directive for binding a clickable HTML element to a route. Clicking an element with a <code>routerLink</code> directive that's bound to a <em>string</em> or a <em>link parameters array</em> triggers a navigation.</td>
+</tr>
+<tr>
+<td align="left"><code>RouterLinkActive</code></td>
+<td align="left">The directive for adding/removing classes from an HTML element when an associated <code>routerLink</code> contained on or inside the element becomes active/inactive. It can also set the <code>aria-current</code> of an active link for better accessibility.</td>
+</tr>
+<tr>
+<td align="left"><code>ActivatedRoute</code></td>
+<td align="left">A service that's provided to each route component that contains route specific information such as route parameters, static data, resolve data, global query parameters, and the global fragment.</td>
+</tr>
+<tr>
+<td align="left"><code>RouterState</code></td>
+<td align="left">The current state of the router including a tree of the currently activated routes together with convenience methods for traversing the route tree.</td>
+</tr>
+<tr>
+<td align="left">Link parameters array</td>
+<td align="left">An array that the router interprets as a routing instruction. You can bind that array to a <code>RouterLink</code> or pass the array as an argument to the <code>Router.navigate</code> method.</td>
+</tr>
+<tr>
+<td align="left">Routing component</td>
+<td align="left">An Angular component with a <code>RouterOutlet</code> that displays views based on router navigations.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  

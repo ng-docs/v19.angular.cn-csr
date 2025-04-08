@@ -1,0 +1,152 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Component selectors</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/components/selectors.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+    <div class="docs-alert docs-alert-tip">
+    <p><strong>Tip:</strong> This guide assumes you've already read the <a href="essentials">Essentials Guide</a>. Read that first if you're new to Angular.</p>
+
+    </div>
+    <p>Every component defines
+a <a href="https://developer.mozilla.org/docs/Web/CSS/CSS_selectors" target="_blank">CSS selector</a> that determines how
+the component is used:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'profile-photo'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ProfilePhoto</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>You use a component by creating a matching HTML element in the templates of <em>other</em> components:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">profile-photo</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">button</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Upload a new profile photo&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">button</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UserProfile</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p><strong>Angular matches selectors statically at compile-time</strong>. Changing the DOM at run-time, either via
+Angular bindings or with DOM APIs, does not affect the components rendered.</p>
+<p><strong>An element can match exactly one component selector.</strong> If multiple component selectors match a
+single element, Angular reports an error.</p>
+<p><strong>Component selectors are case-sensitive.</strong></p>
+
+  <h2 id="types-of-selectors">
+    <a href="#types-of-selectors" class="docs-anchor" tabindex="-1" aria-label="Link to Types of selectors">Types of selectors</a>
+  </h2>
+  <p>Angular supports a limited subset
+of <a href="https://developer.mozilla.org/docs/Web/CSS/CSS_Selectors" target="_blank">basic CSS selector types</a> in
+component selectors:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th><strong>Selector type</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Examples</strong></th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>Type selector</td>
+<td>Matches elements based on their HTML tag name, or node name.</td>
+<td><code>profile-photo</code></td>
+</tr>
+<tr>
+<td>Attribute selector</td>
+<td>Matches elements based on the presence of an HTML attribute and, optionally, an exact value for that attribute.</td>
+<td><code>[dropzone]</code> <code>[type=&quot;reset&quot;]</code></td>
+</tr>
+<tr>
+<td>Class selector</td>
+<td>Matches elements based on the presence of a CSS class.</td>
+<td><code>.menu-item</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>For attribute values, Angular supports matching an exact attribute value with the equals (<code>=</code>)
+operator. Angular does not support other attribute value operators.</p>
+<p>Angular component selectors do not support combinators, including
+the <a href="https://developer.mozilla.org/docs/Web/CSS/Descendant_combinator" target="_blank">descendant combinator</a>
+or <a href="https://developer.mozilla.org/docs/Web/CSS/Child_combinator" target="_blank">child combinator</a>.</p>
+<p>Angular component selectors do not support
+specifying <a href="https://developer.mozilla.org/docs/Web/SVG/Namespaces_Crash_Course" target="_blank">namespaces</a>.</p>
+
+  <h3 id="the-not-pseudo-class">
+    <a href="#the-not-pseudo-class" class="docs-anchor" tabindex="-1" aria-label="Link to The <code>:not</code> pseudo-class">The <code>:not</code> pseudo-class</a>
+  </h3>
+  <p>Angular supports <a href="https://developer.mozilla.org/docs/Web/CSS/:not" target="_blank">the <code>:not</code> pseudo-class</a>.
+You can append this pseudo-class to any other selector to narrow which elements a component's
+selector matches. For example, you could define a <code>[dropzone]</code> attribute selector and prevent
+matching <code>textarea</code> elements:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'[dropzone]:not(textarea)'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> DropZone</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>Angular does not support any other pseudo-classes or pseudo-elements in component selectors.</p>
+
+  <h3 id="combining-selectors">
+    <a href="#combining-selectors" class="docs-anchor" tabindex="-1" aria-label="Link to Combining selectors">Combining selectors</a>
+  </h3>
+  <p>You can combine multiple selectors by concatenating them. For example, you can match <code>&lt;button&gt;</code>
+elements that specify <code>type=&quot;reset&quot;</code>:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'button[type="reset"]'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ResetButton</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>You can also define multiple selectors with a comma-separated list:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'drop-zone, [dropzone]'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> DropZone</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>Angular creates a component for each element that matches <em>any</em> of the selectors in the list.</p>
+
+  <h2 id="choosing-a-selector">
+    <a href="#choosing-a-selector" class="docs-anchor" tabindex="-1" aria-label="Link to Choosing a selector">Choosing a selector</a>
+  </h2>
+  <p>The vast majority of components should use a custom element name as their selector. All custom
+element names should include a hyphen as described
+by <a href="https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name" target="_blank">the HTML specification</a>.
+By default, Angular reports an error if it encounters a custom tag name that does not match any
+available components, preventing bugs due to mistyped component names.</p>
+<p>See <a href="guide/components/advanced-configuration">Advanced component configuration</a> for details on
+using <a href="https://developer.mozilla.org/docs/Web/Web_Components" target="_blank">native custom elements</a> in
+Angular templates.</p>
+
+  <h3 id="selector-prefixes">
+    <a href="#selector-prefixes" class="docs-anchor" tabindex="-1" aria-label="Link to Selector prefixes">Selector prefixes</a>
+  </h3>
+  <p>The Angular team recommends using a short, consistent prefix for all the custom components
+defined inside your project. For example, if you were to build YouTube with Angular, you might
+prefix your components with <code>yt-</code>, with components like <code>yt-menu</code>, <code>yt-player</code>, etc. Namespacing
+your selectors like this makes it immediately clear where a particular component comes from. By
+default, the Angular CLI uses <code>app-</code>.</p>
+<p>Angular uses the <code>ng</code> selector prefix for its own framework APIs. Never use <code>ng</code> as a selector
+prefix for your own custom components.</p>
+
+  <h3 id="when-to-use-an-attribute-selector">
+    <a href="#when-to-use-an-attribute-selector" class="docs-anchor" tabindex="-1" aria-label="Link to When to use an attribute selector">When to use an attribute selector</a>
+  </h3>
+  <p>You should consider an attribute selector when you want to create a component on a standard native
+element. For example, if you want to create a custom button component, you can take advantage of the
+standard <code>&lt;button&gt;</code> element by using an attribute selector:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'button[yt-upload]'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">   ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> YouTubeUploadButton</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>This approach allows consumers of the component to directly use all the element's standard APIs
+without extra work. This is especially valuable for ARIA attributes such as <code>aria-label</code>.</p>
+<p>Angular does not report errors when it encounters custom attributes that don't match an available
+component. When using components with attribute selectors, consumers may forget to import the
+component or its NgModule, resulting in the component not rendering.
+See <a href="guide/components/importing">Importing and using components</a> for more information.</p>
+<p>Components that define attribute selectors should use lowercase, dash-case attributes. You can
+follow the same prefixing recommendation described above.</p>

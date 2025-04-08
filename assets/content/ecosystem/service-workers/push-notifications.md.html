@@ -1,0 +1,123 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Push notifications</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/ecosystem/service-workers/push-notifications.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Push notifications are a compelling way to engage users.
+Through the power of service workers, notifications can be delivered to a device even when your application is not in focus.</p>
+<p>The Angular service worker enables the display of push notifications and the handling of notification click events.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> When using the Angular service worker, push notification interactions are handled using the <code>SwPush</code> service.
+To learn more about the browser APIs involved see <a href="https://developer.mozilla.org/docs/Web/API/Push_API" target="_blank">Push API</a> and <a href="https://developer.mozilla.org/docs/Web/API/Notifications_API/Using_the_Notifications_API" target="_blank">Using the Notifications API</a>.</p>
+
+    </div>
+    
+  <h2 id="notification-payload">
+    <a href="#notification-payload" class="docs-anchor" tabindex="-1" aria-label="Link to Notification payload">Notification payload</a>
+  </h2>
+  <p>Invoke push notifications by pushing a message with a valid payload.
+See <code>SwPush</code> for guidance.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> In Chrome, you can test push notifications without a backend.
+Open Devtools -> Application -> Service Workers and use the <code>Push</code> input to send a JSON notification payload.</p>
+
+    </div>
+    
+  <h2 id="notification-click-handling">
+    <a href="#notification-click-handling" class="docs-anchor" tabindex="-1" aria-label="Link to Notification click handling">Notification click handling</a>
+  </h2>
+  <p>The default behavior for the <code>notificationclick</code> event is to close the notification and notify <code>SwPush.notificationClicks</code>.</p>
+<p>You can specify an additional operation to be executed on <code>notificationclick</code> by adding an <code>onActionClick</code> property to the <code>data</code> object, and providing a <code>default</code> entry.
+This is especially useful for when there are no open clients when a notification is clicked.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "notification"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"New Notification!"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "data"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "onActionClick"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"operation"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"openWindow"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"url"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"foo"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="operations">
+    <a href="#operations" class="docs-anchor" tabindex="-1" aria-label="Link to Operations">Operations</a>
+  </h3>
+  <p>The Angular service worker supports the following operations:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Operations</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>openWindow</code></td>
+<td align="left">Opens a new tab at the specified URL.</td>
+</tr>
+<tr>
+<td align="left"><code>focusLastFocusedOrOpen</code></td>
+<td align="left">Focuses the last focused client. If there is no client open, then it opens a new tab at the specified URL.</td>
+</tr>
+<tr>
+<td align="left"><code>navigateLastFocusedOrOpen</code></td>
+<td align="left">Focuses the last focused client and navigates it to the specified URL. If there is no client open, then it opens a new tab at the specified URL.</td>
+</tr>
+<tr>
+<td align="left"><code>sendRequest</code></td>
+<td align="left">Send a simple GET request to the specified URL.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+    <div class="docs-alert docs-alert-important">
+    <p><strong>IMPORTANT:</strong> URLs are resolved relative to the service worker's registration scope.<br />If an <code>onActionClick</code> item does not define a <code>url</code>, then the service worker's registration scope is used.</p>
+
+    </div>
+    
+  <h3 id="actions">
+    <a href="#actions" class="docs-anchor" tabindex="-1" aria-label="Link to Actions">Actions</a>
+  </h3>
+  <p>Actions offer a way to customize how the user can interact with a notification.</p>
+<p>Using the <code>actions</code> property, you can define a set of available actions.
+Each action is represented as an action button that the user can click to interact with the notification.</p>
+<p>In addition, using the <code>onActionClick</code> property on the <code>data</code> object, you can tie each action to an operation to be performed when the corresponding action button is clicked:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "notification"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"New Notification!"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "actions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"action"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"foo"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Open new tab"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"action"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"bar"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Focus last"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"action"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"baz"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Navigate last"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"action"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"qux"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Send request in the background"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"action"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"other"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Just notify existing clients"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ],</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "data"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "onActionClick"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"operation"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"openWindow"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        "foo"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"operation"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"openWindow"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"url"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/absolute/path"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        "bar"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"operation"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"focusLastFocusedOrOpen"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"url"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"relative/path"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        "baz"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"operation"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"navigateLastFocusedOrOpen"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"url"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"https://other.domain.com/"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        "qux"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"operation"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"sendRequest"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"url"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"https://yet.another.domain.com/"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-important">
+    <p><strong>IMPORTANT:</strong> If an action does not have a corresponding <code>onActionClick</code> entry, then the notification is closed and <code>SwPush.notificationClicks</code> is notified on existing clients.</p>
+
+    </div>
+    
+  <h2 id="more-on-angular-service-workers">
+    <a href="#more-on-angular-service-workers" class="docs-anchor" tabindex="-1" aria-label="Link to More on Angular service workers">More on Angular service workers</a>
+  </h2>
+  <p>You might also be interested in the following:</p>
+
+    <nav class="docs-pill-row">
+      
+    <a class="docs-pill" href="ecosystem/service-workers/communications">
+      Communicating with the Service Worker
+    </a>
+    
+    <a class="docs-pill" href="ecosystem/service-workers/devops">
+      Service Worker devops
+    </a>
+    
+
+    </nav>
+    

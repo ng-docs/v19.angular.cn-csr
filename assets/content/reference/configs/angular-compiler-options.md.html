@@ -1,0 +1,266 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular compiler options</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/configs/angular-compiler-options.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>When you use <a href="tools/cli/aot-compiler">ahead-of-time compilation (AOT)</a>, you can control how your application is compiled by specifying Angular compiler options in the <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript configuration file</a>.</p>
+<p>The Angular options object, <code>angularCompilerOptions</code>, is a sibling to the <code>compilerOptions</code> object that supplies standard options to the TypeScript compiler.</p>
+<div class="docs-code" path="adev/src/content/examples/angular-compiler-options/tsconfig.json" visiblelines="1,2,3,4,24,25,26,27,30,31" header="tsconfig.json">
+    <div class="docs-code-header"><h3>tsconfig.json</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* To learn more about this file see: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "compileOnSave"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "compilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "baseUrl"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "outDir"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./dist/out-tsc"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "forceConsistentCasingInFileNames"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "strict"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "noImplicitOverride"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "noPropertyAccessFromIndexSignature"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "noImplicitReturns"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "noFallthroughCasesInSwitch"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "sourceMap"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "declaration"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "downlevelIteration"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "experimentalDecorators"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "moduleResolution"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"node"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "importHelpers"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "target"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"es2020"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "module"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"es2020"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "lib"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "es2020"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "dom"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "angularCompilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "enableI18nLegacyMessageIdFormat"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "strictInjectionParameters"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "strictInputAccessModifiers"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "strictTemplates"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="configuration-inheritance-with-extends">
+    <a href="#configuration-inheritance-with-extends" class="docs-anchor" tabindex="-1" aria-label="Link to Configuration inheritance with <code>extends</code>">Configuration inheritance with <code>extends</code></a>
+  </h2>
+  <p>Like the TypeScript compiler, the Angular AOT compiler also supports <code>extends</code> in the <code>angularCompilerOptions</code> section of the TypeScript configuration file.
+The <code>extends</code> property is at the top level, parallel to <code>compilerOptions</code> and <code>angularCompilerOptions</code>.</p>
+<p>A TypeScript configuration can inherit settings from another file using the <code>extends</code> property.
+The configuration options from the base file are loaded first, then overridden by those in the inheriting configuration file.</p>
+<p>For example:</p>
+<div class="docs-code" path="adev/src/content/examples/angular-compiler-options/tsconfig.app.json" visiblelines="1,2,3,4,6,29,30,31,34,35" header="tsconfig.app.json">
+    <div class="docs-code-header"><h3>tsconfig.app.json</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* To learn more about this file see: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "extends"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./tsconfig.json"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "compilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "outDir"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./out-tsc/app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "types"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: []</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    },</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "files"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/main.ts"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ],</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "include"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.d.ts"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ],</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "exclude"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/test.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.spec.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*-specs.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.avoid.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.0.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.1.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.1b.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.2.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.3.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.4.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.5.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.6.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.7.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/testing"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ],</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "angularCompilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "strictTemplates"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "preserveWhitespaces"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "sourceMap"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "declaration"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div><p>For more information, see the <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript Handbook</a>.</p>
+
+  <h2 id="template-options">
+    <a href="#template-options" class="docs-anchor" tabindex="-1" aria-label="Link to Template options">Template options</a>
+  </h2>
+  <p>The following options are available for configuring the Angular AOT compiler.</p>
+
+  <h3 id="annotationsas">
+    <a href="#annotationsas" class="docs-anchor" tabindex="-1" aria-label="Link to <code>annotationsAs</code>"><code>annotationsAs</code></a>
+  </h3>
+  <p>Modifies how Angular-specific annotations are emitted to improve tree-shaking.
+Non-Angular annotations are not affected.
+One of <code>static fields</code> or <code>decorators</code>. The default value is <code>static fields</code>.</p>
+
+  <ul class="docs-list">
+    <li><p>By default, the compiler replaces decorators with a static field in the class, which allows advanced tree-shakers like <a href="https://github.com/google/closure-compiler" target="_blank">Closure compiler</a> to remove unused classes</p>
+</li>
+<li><p>The <code>decorators</code> value leaves the decorators in place, which makes compilation faster.
+  TypeScript emits calls to the <code>__decorate</code> helper.
+  Use <code>--emitDecoratorMetadata</code> for runtime reflection.</p>
+<p>  HELPFUL: That the resulting code cannot tree-shake properly.</p>
+</li>
+
+  </ul>
+  
+  <h3 id="annotateforclosurecompiler">
+    <a href="#annotateforclosurecompiler" class="docs-anchor" tabindex="-1" aria-label="Link to <code>annotateForClosureCompiler</code>"><code>annotateForClosureCompiler</code></a>
+  </h3>
+  <!-- vale Angular.Angular_Spelling = NO -->
+
+<p>When <code>true</code>, use <a href="https://github.com/angular/tsickle" target="_blank">Tsickle</a> to annotate the emitted JavaScript with <a href="https://jsdoc.app" target="_blank">JSDoc</a> comments needed by the <a href="https://github.com/google/closure-compiler" target="_blank">Closure Compiler</a>.
+Default is <code>false</code>.</p>
+<!-- vale Angular.Angular_Spelling = YES -->
+
+
+  <h3 id="compilationmode">
+    <a href="#compilationmode" class="docs-anchor" tabindex="-1" aria-label="Link to <code>compilationMode</code>"><code>compilationMode</code></a>
+  </h3>
+  <p>Specifies the compilation mode to use.
+The following modes are available:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Modes</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>&#39;full&#39;</code></td>
+<td align="left">Generates fully AOT-compiled code according to the version of Angular that is currently being used.</td>
+</tr>
+<tr>
+<td align="left"><code>&#39;partial&#39;</code></td>
+<td align="left">Generates code in a stable, but intermediate form suitable for a published library.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>The default value is <code>&#39;full&#39;</code>.</p>
+<p>For most applications, <code>&#39;full&#39;</code> is the correct compilation mode.</p>
+<p>Use <code>&#39;partial&#39;</code> for independently published libraries, such as NPM packages.
+<code>&#39;partial&#39;</code> compilations output a stable, intermediate format which better supports usage by applications built at different Angular versions from the library.
+Libraries built at "HEAD" alongside their applications and using the same version of Angular such as in a mono-repository can use <code>&#39;full&#39;</code> since there is no risk of version skew.</p>
+
+  <h3 id="disableexpressionlowering">
+    <a href="#disableexpressionlowering" class="docs-anchor" tabindex="-1" aria-label="Link to <code>disableExpressionLowering</code>"><code>disableExpressionLowering</code></a>
+  </h3>
+  <p>When <code>true</code>, the default, transforms code that is or could be used in an annotation, to allow it to be imported from template factory modules.
+See <a href="tools/cli/aot-compiler#metadata-rewriting">metadata rewriting</a> for more information.</p>
+<p>When <code>false</code>, disables this rewriting, requiring the rewriting to be done manually.</p>
+
+  <h3 id="disabletypescriptversioncheck">
+    <a href="#disabletypescriptversioncheck" class="docs-anchor" tabindex="-1" aria-label="Link to <code>disableTypeScriptVersionCheck</code>"><code>disableTypeScriptVersionCheck</code></a>
+  </h3>
+  <p>When <code>true</code>, the compiler does not look at the TypeScript version and does not report an error when an unsupported version of TypeScript is used.
+Not recommended, as unsupported versions of TypeScript might have undefined behavior.
+Default is <code>false</code>.</p>
+
+  <h3 id="enablei18nlegacymessageidformat">
+    <a href="#enablei18nlegacymessageidformat" class="docs-anchor" tabindex="-1" aria-label="Link to <code>enableI18nLegacyMessageIdFormat</code>"><code>enableI18nLegacyMessageIdFormat</code></a>
+  </h3>
+  <p>Instructs the Angular template compiler to create legacy ids for messages that are tagged in templates by the <code>i18n</code> attribute.
+See <a href="guide/i18n/prepare#mark-text-in-component-template" title=Mark text in component template - Prepare component for translation | Angular>Mark text for translations</a> for more information about marking messages for localization.</p>
+<p>Set this option to <code>false</code> unless your project relies upon translations that were created earlier using legacy IDs.
+Default is <code>true</code>.</p>
+<p>The pre-Ivy message extraction tooling created a variety of legacy formats for extracted message IDs.
+These message formats have some issues, such as whitespace handling and reliance upon information inside the original HTML of a template.</p>
+<p>The new message format is more resilient to whitespace changes, is the same across all translation file formats, and can be created directly from calls to <code>$localize</code>.
+This allows <code>$localize</code> messages in application code to use the same ID as identical <code>i18n</code> messages in component templates.</p>
+
+  <h3 id="enableresourceinlining">
+    <a href="#enableresourceinlining" class="docs-anchor" tabindex="-1" aria-label="Link to <code>enableResourceInlining</code>"><code>enableResourceInlining</code></a>
+  </h3>
+  <p>When <code>true</code>, replaces the <code>templateUrl</code> and <code>styleUrls</code> properties in all <code>@Component</code> decorators with inline content in the <code>template</code> and <code>styles</code> properties.</p>
+<p>When enabled, the <code>.js</code> output of <code>ngc</code> does not include any lazy-loaded template or style URLs.</p>
+<p>For library projects created with the Angular CLI, the development configuration default is <code>true</code>.</p>
+
+  <h3 id="enablelegacytemplate">
+    <a href="#enablelegacytemplate" class="docs-anchor" tabindex="-1" aria-label="Link to <code>enableLegacyTemplate</code>"><code>enableLegacyTemplate</code></a>
+  </h3>
+  <p>When <code>true</code>, enables the deprecated <code>&lt;template&gt;</code> element in place of <code>&lt;ng-template&gt;</code>.
+Default is <code>false</code>.
+Might be required by some third-party Angular libraries.</p>
+
+  <h3 id="flatmoduleid">
+    <a href="#flatmoduleid" class="docs-anchor" tabindex="-1" aria-label="Link to <code>flatModuleId</code>"><code>flatModuleId</code></a>
+  </h3>
+  <p>The module ID to use for importing a flat module (when <code>flatModuleOutFile</code> is <code>true</code>).
+References created by the template compiler use this module name when importing symbols from the flat module.
+Ignored if <code>flatModuleOutFile</code> is <code>false</code>.</p>
+
+  <h3 id="flatmoduleoutfile">
+    <a href="#flatmoduleoutfile" class="docs-anchor" tabindex="-1" aria-label="Link to <code>flatModuleOutFile</code>"><code>flatModuleOutFile</code></a>
+  </h3>
+  <p>When <code>true</code>, generates a flat module index of the given filename and the corresponding flat module metadata.
+Use to create flat modules that are packaged similarly to <code>@angular/core</code> and <code>@angular/common</code>.
+When this option is used, the <code>package.json</code> for the library should refer to the created flat module index instead of the library index file.</p>
+<p>Produces only one <code>.metadata.json</code> file, which contains all the metadata necessary for symbols exported from the library index.
+In the created <code>.ngfactory.js</code> files, the flat module index is used to import symbols. Symbols that include both the public API from the library index and shrouded internal symbols.</p>
+<p>By default, the <code>.ts</code> file supplied in the <code>files</code> field is assumed to be the library index.
+If more than one <code>.ts</code> file is specified, <code>libraryIndex</code> is used to select the file to use.
+If more than one <code>.ts</code> file is supplied without a <code>libraryIndex</code>, an error is produced.</p>
+<p>A flat module index <code>.d.ts</code> and <code>.js</code> is created with the given <code>flatModuleOutFile</code> name in the same location as the library index <code>.d.ts</code> file.</p>
+<p>For example, if a library uses the <code>public_api.ts</code> file as the library index of the module, the <code>tsconfig.json</code> <code>files</code> field would be <code>[&quot;public_api.ts&quot;]</code>.
+The <code>flatModuleOutFile</code> option could then be set, for example, to <code>&quot;index.js&quot;</code>, which produces <code>index.d.ts</code> and <code>index.metadata.json</code> files.
+The <code>module</code> field of the library's <code>package.json</code> would be <code>&quot;index.js&quot;</code> and the <code>typings</code> field would be <code>&quot;index.d.ts&quot;</code>.</p>
+
+  <h3 id="fulltemplatetypecheck">
+    <a href="#fulltemplatetypecheck" class="docs-anchor" tabindex="-1" aria-label="Link to <code>fullTemplateTypeCheck</code>"><code>fullTemplateTypeCheck</code></a>
+  </h3>
+  <p>When <code>true</code>, the recommended value, enables the <a href="tools/cli/aot-compiler#binding-expression-validation">binding expression validation</a> phase of the template compiler. This phase uses TypeScript to verify binding expressions.
+For more information, see <a href="tools/cli/template-typecheck">Template type checking</a>.</p>
+<p>Default is <code>false</code>, but when you use the Angular CLI command <code>ng new --strict</code>, it is set to <code>true</code> in the new project's configuration.</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>IMPORTANT:</strong> The <code>fullTemplateTypeCheck</code> option has been deprecated in Angular 13 in favor of the <code>strictTemplates</code> family of compiler options.</p>
+
+    </div>
+    
+  <h3 id="generatecodeforlibraries">
+    <a href="#generatecodeforlibraries" class="docs-anchor" tabindex="-1" aria-label="Link to <code>generateCodeForLibraries</code>"><code>generateCodeForLibraries</code></a>
+  </h3>
+  <p>When <code>true</code>, creates factory files (<code>.ngfactory.js</code> and <code>.ngstyle.js</code>) for <code>.d.ts</code> files with a corresponding <code>.metadata.json</code> file. The default value is <code>true</code>.</p>
+<p>When <code>false</code>, factory files are created only for <code>.ts</code> files.
+Do this when using factory summaries.</p>
+
+  <h3 id="preservewhitespaces">
+    <a href="#preservewhitespaces" class="docs-anchor" tabindex="-1" aria-label="Link to <code>preserveWhitespaces</code>"><code>preserveWhitespaces</code></a>
+  </h3>
+  <p>When <code>false</code>, the default, removes blank text nodes from compiled templates, which results in smaller emitted template factory modules.
+Set to <code>true</code> to preserve blank text nodes.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> When using hydration, it is recommended that you use <code>preserveWhitespaces: false</code>, which is the default value. If you choose to enable preserving whitespaces by adding <code>preserveWhitespaces: true</code> to your tsconfig, it is possible you may encounter issues with hydration. This is not yet a fully supported configuration. Ensure this is also consistently set between the server and client tsconfig files. See the <a href="guide/hydration#preserve-whitespaces">hydration guide</a> for more details.</p>
+
+    </div>
+    
+  <h3 id="skipmetadataemit">
+    <a href="#skipmetadataemit" class="docs-anchor" tabindex="-1" aria-label="Link to <code>skipMetadataEmit</code>"><code>skipMetadataEmit</code></a>
+  </h3>
+  <p>When <code>true</code>, does not produce <code>.metadata.json</code> files.
+Default is <code>false</code>.</p>
+<p>The <code>.metadata.json</code> files contain information needed by the template compiler from a <code>.ts</code> file that is not included in the <code>.d.ts</code> file produced by the TypeScript compiler.
+This information includes, for example, the content of annotations, such as a component's template, which TypeScript emits to the <code>.js</code> file but not to the <code>.d.ts</code> file.</p>
+<p>You can set to <code>true</code> when using factory summaries, because the factory summaries include a copy of the information that is in the <code>.metadata.json</code> file.</p>
+<p>Set to <code>true</code> if you are using TypeScript's <code>--outFile</code> option, because the metadata files are not valid for this style of TypeScript output.
+The Angular community does not recommend using <code>--outFile</code> with Angular.
+Use a bundler, such as <a href="https://webpack.js.org" target="_blank">webpack</a>, instead.</p>
+
+  <h3 id="skiptemplatecodegen">
+    <a href="#skiptemplatecodegen" class="docs-anchor" tabindex="-1" aria-label="Link to <code>skipTemplateCodegen</code>"><code>skipTemplateCodegen</code></a>
+  </h3>
+  <p>When <code>true</code>, does not emit <code>.ngfactory.js</code> and <code>.ngstyle.js</code> files.
+This turns off most of the template compiler and disables the reporting of template diagnostics.</p>
+<p>Can be used to instruct the template compiler to produce <code>.metadata.json</code> files for distribution with an <code>npm</code> package. This avoids the production of <code>.ngfactory.js</code> and <code>.ngstyle.js</code> files that cannot be distributed to <code>npm</code>.</p>
+<p>For library projects created with the Angular CLI, the development configuration default is <code>true</code>.</p>
+
+  <h3 id="strictmetadataemit">
+    <a href="#strictmetadataemit" class="docs-anchor" tabindex="-1" aria-label="Link to <code>strictMetadataEmit</code>"><code>strictMetadataEmit</code></a>
+  </h3>
+  <p>When <code>true</code>, reports an error to the <code>.metadata.json</code> file if <code>&quot;skipMetadataEmit&quot;</code> is <code>false</code>.
+Default is <code>false</code>.
+Use only when <code>&quot;skipMetadataEmit&quot;</code> is <code>false</code> and <code>&quot;skipTemplateCodegen&quot;</code> is <code>true</code>.</p>
+<p>This option is intended to verify the <code>.metadata.json</code> files emitted for bundling with an <code>npm</code> package.
+The validation is strict and can emit errors for metadata that would never produce an error when used by the template compiler.
+You can choose to suppress the error emitted by this option for an exported symbol by including <code>@dynamic</code> in the comment documenting the symbol.</p>
+<p>It is valid for <code>.metadata.json</code> files to contain errors.
+The template compiler reports these errors if the metadata is used to determine the contents of an annotation.
+The metadata collector cannot predict the symbols that are designed for use in an annotation. It preemptively includes error nodes in the metadata for the exported symbols.
+The template compiler can then use the error nodes to report an error if these symbols are used.</p>
+<p>If the client of a library intends to use a symbol in an annotation, the template compiler does not normally report this. It gets reported after the client actually uses the symbol.
+This option allows detection of these errors during the build phase of the library and is used, for example, in producing Angular libraries themselves.</p>
+<p>For library projects created with the Angular CLI, the development configuration default is <code>true</code>.</p>
+
+  <h3 id="strictinjectionparameters">
+    <a href="#strictinjectionparameters" class="docs-anchor" tabindex="-1" aria-label="Link to <code>strictInjectionParameters</code>"><code>strictInjectionParameters</code></a>
+  </h3>
+  <p>When <code>true</code>, reports an error for a supplied parameter whose injection type cannot be determined.
+When <code>false</code>, constructor parameters of classes marked with <code>@Injectable</code> whose type cannot be resolved produce a warning.
+The recommended value is <code>true</code>, but the default value is <code>false</code>.</p>
+<p>When you use the Angular CLI command <code>ng new --strict</code>, it is set to <code>true</code> in the created project's configuration.</p>
+
+  <h3 id="stricttemplates">
+    <a href="#stricttemplates" class="docs-anchor" tabindex="-1" aria-label="Link to <code>strictTemplates</code>"><code>strictTemplates</code></a>
+  </h3>
+  <p>When <code>true</code>, enables <a href="tools/cli/template-typecheck#strict-mode">strict template type checking</a>.</p>
+<p>The strictness flags that this option enables allow you to turn on and off specific types of strict template type checking.
+See <a href="tools/cli/template-typecheck#troubleshooting-template-errors">troubleshooting template errors</a>.</p>
+<p>When you use the Angular CLI command <code>ng new --strict</code>, it is set to <code>true</code> in the new project's configuration.</p>
+
+  <h3 id="strictstandalone">
+    <a href="#strictstandalone" class="docs-anchor" tabindex="-1" aria-label="Link to <code>strictStandalone</code>"><code>strictStandalone</code></a>
+  </h3>
+  <p>When <code>true</code>, reports an error if a component, directive, or pipe is not standalone.</p>
+
+  <h3 id="trace">
+    <a href="#trace" class="docs-anchor" tabindex="-1" aria-label="Link to <code>trace</code>"><code>trace</code></a>
+  </h3>
+  <p>When <code>true</code>, prints extra information while compiling templates.
+Default is <code>false</code>.</p>
+
+  <h2 id="command-line-options">
+    <a href="#command-line-options" class="docs-anchor" tabindex="-1" aria-label="Link to Command line options">Command line options</a>
+  </h2>
+  <p>Most of the time, you interact with the Angular Compiler indirectly using <a href="reference/configs/angular-compiler-options">Angular CLI</a>. When debugging certain issues, you might find it useful to invoke the Angular Compiler directly.
+You can use the <code>ngc</code> command provided by the <code>@angular/compiler-cli</code> npm package to call the compiler from the command line.</p>
+<p>The <code>ngc</code> command is a wrapper around TypeScript's <code>tsc</code> compiler command. The Angular Compiler is primarily configured through <code>tsconfig.json</code> while Angular CLI is primarily configured through <code>angular.json</code>.</p>
+<p>Besides the configuration file, you can also use <a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html" target="_blank"><code>tsc</code> command line options</a> to configure <code>ngc</code>.</p>

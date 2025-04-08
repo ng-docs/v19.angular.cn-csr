@@ -1,0 +1,146 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Usage of Angular libraries published to npm</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/libraries/using-libraries.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>When you build your Angular application, take advantage of sophisticated first-party libraries, as well as a rich ecosystem of third-party libraries.
+<a href="https://material.angular.io" title=Angular Material | Angular target="_blank">Angular Material</a> is an example of a sophisticated first-party library.</p>
+
+  <h2 id="install-libraries">
+    <a href="#install-libraries" class="docs-anchor" tabindex="-1" aria-label="Link to Install libraries">Install libraries</a>
+  </h2>
+  <p>Libraries are published as <a href="reference/configs/npm-packages" title=Workspace npm dependencies | Angular>npm packages</a>, usually together with schematics that integrate them with the Angular CLI.
+To integrate reusable library code into an application, you need to install the package and import the provided functionality in the location you use it.
+For most published Angular libraries, use the <code>ng add &lt;lib_name&gt;</code> Angular CLI command.</p>
+<p>The <code>ng add</code> Angular CLI command uses a package manager to install the library package and invokes schematics that are included in the package to other scaffolding within the project code.
+Examples of package managers include <a href="https://www.npmjs.com" title=npm target="_blank">npm</a> or <a href="https://yarnpkg.com" title= Yarn target="_blank">yarn</a>.
+Additional scaffolding within the project code includes import statements, fonts, and themes.</p>
+<p>A published library typically provides a <code>README</code> file or other documentation on how to add that library to your application.
+For an example, see the <a href="https://material.angular.io" title=Angular Material | Angular target="_blank">Angular Material</a> documentation.</p>
+
+  <h3 id="library-typings">
+    <a href="#library-typings" class="docs-anchor" tabindex="-1" aria-label="Link to Library typings">Library typings</a>
+  </h3>
+  <p>Typically, library packages include typings in <code>.d.ts</code> files; see examples in <code>node_modules/@angular/material</code>.
+If the package of your library does not include typings and your IDE complains, you might need to install the <code>@types/&lt;lib_name&gt;</code> package with the library.</p>
+<p>For example, suppose you have a library named <code>d3</code>:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> d3</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --save</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @types/d3</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --save-dev</span></span></code></pre>
+    </pre>
+  </div><p>Types defined in a <code>@types/</code> package for a library installed into the workspace are automatically added to the TypeScript configuration for the project that uses that library.
+TypeScript looks for types in the <code>node_modules/@types</code> directory by default, so you do not have to add each type package individually.</p>
+<p>If a library does not have typings available at <code>@types/</code>, you may use it by manually adding typings for it.
+To do this:</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>Create a <code>typings.d.ts</code> file in your <code>src/</code> directory.
+ This file is automatically included as global type definition.</p>
+</li>
+<li><p>Add the following code in <code>src/typings.d.ts</code>:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">declare</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> module</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'host'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">   export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> interface</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Host</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">     protocol</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">     hostname</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">     pathname</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">   }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">   export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> parse</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">url</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">queryString</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Host</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>In the component or file that uses the library, add the following code:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> *</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> as</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> host </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'host'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> parsedUrl</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> host.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">parse</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'https://angular.io'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(parsedUrl.hostname);</span></span></code></pre>
+    </pre>
+  </div></li>
+
+    </ol>
+    <p>Define more typings as needed.</p>
+
+  <h2 id="updating-libraries">
+    <a href="#updating-libraries" class="docs-anchor" tabindex="-1" aria-label="Link to Updating libraries">Updating libraries</a>
+  </h2>
+  <p>A library is able to be updated by the publisher, and also has individual dependencies which need to be kept current.
+To check for updates to your installed libraries, use the <a href="cli/update" title=ng update | CLI |Angular><code>ng update</code></a> Angular CLI command.</p>
+<p>Use <code>ng update &lt;lib_name&gt;</code> Angular CLI command to update individual library versions.
+The Angular CLI checks the latest published release of the library, and if the latest version is newer than your installed version, downloads it and updates your <code>package.json</code> to match the latest version.</p>
+<p>When you update Angular to a new version, you need to make sure that any libraries you are using are current.
+If libraries have interdependencies, you might have to update them in a particular order.
+See the <a href="https://angular.dev/update-guide" title=Angular Update Guide | Angular target="_blank">Angular Update Guide</a> for help.</p>
+
+  <h2 id="adding-a-library-to-the-runtime-global-scope">
+    <a href="#adding-a-library-to-the-runtime-global-scope" class="docs-anchor" tabindex="-1" aria-label="Link to Adding a library to the runtime global scope">Adding a library to the runtime global scope</a>
+  </h2>
+  <p>If a legacy JavaScript library is not imported into an application, you may add it to the runtime global scope and load it as if it was added in a script tag.
+Configure the Angular CLI to do this at build time using the <code>scripts</code> and <code>styles</code> options of the build target in the <a href="reference/configs/workspace-config" title=Angular workspace configuration | Angular><code>angular.json</code></a> workspace build configuration file.</p>
+<p>For example, to use the <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction" title=Introduction | Bootstrap target="_blank">Bootstrap 4</a> library</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>Install the library and the associated dependencies using the npm package manager:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> jquery</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --save</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> popper.js</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --save</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> bootstrap</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --save</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>In the <code>angular.json</code> configuration file, add the associated script files to the <code>scripts</code> array:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"scripts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">   "node_modules/jquery/dist/jquery.slim.js"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">   "node_modules/popper.js/dist/umd/popper.js"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">   "node_modules/bootstrap/dist/js/bootstrap.js"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ],</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>Add the <code>bootstrap.css</code> CSS file to the <code>styles</code> array:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">"styles": [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">   "node_modules/bootstrap/dist/css/bootstrap.css"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">   "src/styles.css"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ],</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>Run or restart the <code>ng serve</code> Angular CLI command to see Bootstrap 4 work in your application.</p>
+</li>
+
+    </ol>
+    
+  <h3 id="using-runtime-global-libraries-inside-your-app">
+    <a href="#using-runtime-global-libraries-inside-your-app" class="docs-anchor" tabindex="-1" aria-label="Link to Using runtime-global libraries inside your app">Using runtime-global libraries inside your app</a>
+  </h3>
+  <p>After you import a library using the "scripts" array, do <strong>not</strong> import it using an import statement in your TypeScript code.
+The following code snippet is an example import statement.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> *</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> as</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> $ </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'jquery'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div><p>If you import it using import statements, you have two different copies of the library: one imported as a global library, and one imported as a module.
+This is especially bad for libraries with plugins, like JQuery, because each copy includes different plugins.</p>
+<p>Instead, run the <code>npm install @types/jquery</code> Angular CLI command to download typings for your library and then follow the library installation steps.
+This gives you access to the global variables exposed by that library.</p>
+
+  <h3 id="defining-typings-for-runtime-global-libraries">
+    <a href="#defining-typings-for-runtime-global-libraries" class="docs-anchor" tabindex="-1" aria-label="Link to Defining typings for runtime-global libraries">Defining typings for runtime-global libraries</a>
+  </h3>
+  <p>If the global library you need to use does not have global typings, you can declare them manually as <code>any</code> in <code>src/typings.d.ts</code>.</p>
+<p>For example:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">declare</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> var</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> libraryName</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div><p>Some scripts extend other libraries; for instance with JQuery plugins:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">$</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'.test'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">myPlugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span></code></pre>
+    </pre>
+  </div><p>In this case, the installed <code>@types/jquery</code> does not include <code>myPlugin</code>, so you need to add an interface in <code>src/typings.d.ts</code>.
+For example:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">interface</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JQuery</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  myPlugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">options</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>If you do not add the interface for the script-defined extension, your IDE shows an error:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span>[TS][Error] Property 'myPlugin' does not exist on type 'JQuery'</span></span></code></pre>
+    </pre>
+  </div>

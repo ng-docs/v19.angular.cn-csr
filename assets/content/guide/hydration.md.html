@@ -1,0 +1,218 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Hydration</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/hydration.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+  <h2 id="what-is-hydration">
+    <a href="#what-is-hydration" class="docs-anchor" tabindex="-1" aria-label="Link to What is hydration">What is hydration</a>
+  </h2>
+  <p>Hydration is the process that restores the server-side rendered application on the client. This includes things like reusing the server rendered DOM structures, persisting the application state, transferring application data that was retrieved already by the server, and other processes.</p>
+
+  <h2 id="why-is-hydration-important">
+    <a href="#why-is-hydration-important" class="docs-anchor" tabindex="-1" aria-label="Link to Why is hydration important?">Why is hydration important?</a>
+  </h2>
+  <p>Hydration improves application performance by avoiding extra work to re-create DOM nodes. Instead, Angular tries to match existing DOM elements to the applications structure at runtime and reuses DOM nodes when possible. This results in a performance improvement that can be measured using <a href="https://web.dev/learn-core-web-vitals/" target="_blank">Core Web Vitals (CWV)</a> statistics, such as reducing the First Input Delay (<a href="https://web.dev/fid/" target="_blank">FID</a>) and Largest Contentful Paint (<a href="https://web.dev/lcp/" target="_blank">LCP</a>), as well as Cumulative Layout Shift (<a href="https://web.dev/cls/" target="_blank">CLS</a>). Improving these numbers also affects things like SEO performance.</p>
+<p>Without hydration enabled, server-side rendered Angular applications will destroy and re-render the application's DOM, which may result in a visible UI flicker. This re-rendering can negatively impact <a href="https://web.dev/learn-core-web-vitals/" target="_blank">Core Web Vitals</a> like <a href="https://web.dev/lcp/" target="_blank">LCP</a> and cause a layout shift. Enabling hydration allows the existing DOM to be re-used and prevents a flicker.</p>
+
+  <h2 id="how-do-you-enable-hydration-in-angular">
+    <a href="#how-do-you-enable-hydration-in-angular" class="docs-anchor" tabindex="-1" aria-label="Link to How do you enable hydration in Angular">How do you enable hydration in Angular</a>
+  </h2>
+  <p>Hydration can be enabled for server-side rendered (SSR) applications only. Follow the <a href="guide/ssr">Angular SSR Guide</a> to enable server-side rendering first.</p>
+
+  <h3 id="using-angular-cli">
+    <a href="#using-angular-cli" class="docs-anchor" tabindex="-1" aria-label="Link to Using Angular CLI">Using Angular CLI</a>
+  </h3>
+  <p>If you've used Angular CLI to enable SSR (either by enabling it during application creation or later via <code>ng add @angular/ssr</code>), the code that enables hydration should already be included into your application.</p>
+
+  <h3 id="manual-setup">
+    <a href="#manual-setup" class="docs-anchor" tabindex="-1" aria-label="Link to Manual setup">Manual setup</a>
+  </h3>
+  <p>If you have a custom setup and didn't use Angular CLI to enable SSR, you can enable hydration manually by visiting your main application component or module and importing <code>provideClientHydration</code> from <code>@angular/platform-browser</code>. You'll then add that provider to your app's bootstrapping providers list.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  bootstrapApplication,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  provideClientHydration,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppComponent, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provideClientHydration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>Alternatively if you are using NgModules, you would add <code>provideClientHydration</code> to your root app module's provider list.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {provideClientHydration} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {NgModule} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [AppComponent],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  exports: [AppComponent],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  bootstrap: [AppComponent],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provideClientHydration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-important">
+    <p><strong>IMPORTANT:</strong> Make sure that the <code>provideClientHydration()</code> call is also included into a set of providers that is used to bootstrap an application on the <strong>server</strong>. In applications with the default project structure (generated by the <code>ng new</code> command), adding a call to the root <code>AppModule</code> should be sufficient, since this module is imported by the server module. If you use a custom setup, add the <code>provideClientHydration()</code> call to the providers list in the server bootstrap configuration.</p>
+
+    </div>
+    
+  <h3 id="verify-that-hydration-is-enabled">
+    <a href="#verify-that-hydration-is-enabled" class="docs-anchor" tabindex="-1" aria-label="Link to Verify that hydration is enabled">Verify that hydration is enabled</a>
+  </h3>
+  <p>After you've configured hydration and have started up your server, load your application in the browser.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> You will likely need to fix instances of Direct DOM Manipulation before hydration will fully work either by switching to Angular constructs or by using <code>ngSkipHydration</code>. See <a href="#constraints">Constraints</a>, <a href="#direct-dom-manipulation">Direct DOM Manipulation</a>, and <a href="#how-to-skip-hydration-for-particular-components">How to skip hydration for particular components</a> for more details.</p>
+
+    </div>
+    <p>While running an application in dev mode, you can confirm hydration is enabled by opening the Developer Tools in your browser and viewing the console. You should see a message that includes hydration-related stats, such as the number of components and nodes hydrated. Angular calculates the stats based on all components rendered on a page, including those that come from third-party libraries.</p>
+<p>You can also use <a href="tools/devtools">Angular DevTools browser extension</a> to see hydration status of components on a page. Angular DevTools also allows to enable an overlay to indicate which parts of the page were hydrated. If there is a hydration mismatch error - DevTools would also highlight a component that caused the error.</p>
+
+  <h2 id="capturing-and-replaying-events">
+    <a href="#capturing-and-replaying-events" class="docs-anchor" tabindex="-1" aria-label="Link to Capturing and replaying events">Capturing and replaying events</a>
+  </h2>
+  <p>When an application is rendered on the server, it is visible in a browser as soon as produced HTML loads. Users may assume that they can interact with the page, but event listeners are not attached until hydration completes. Starting from v18, you can enable the Event Replay feature that allows to capture all events that happen before hydration and replay those events once hydration has completed. You can enable it using the <code>withEventReplay()</code> function, for example:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {provideClientHydration, withEventReplay} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(App, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    provideClientHydration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withEventReplay</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="how-event-replay-works">
+    <a href="#how-event-replay-works" class="docs-anchor" tabindex="-1" aria-label="Link to How event replay works">How event replay works</a>
+  </h3>
+  <p>Event Replay is a feature that improves user experience by capturing user events that were triggered before the hydration process is complete. Then those events are replayed, ensuring none of that interaction was lost.</p>
+<p>The Event Replay is divided into three main phases:</p>
+
+  <ul class="docs-list">
+    <li><p><strong>Capturing user interactions</strong><br>
+Prior to <strong>Hydration</strong>, Event Replay captures and stores all interactions that the user may perform, such as clicks and other browser native events.</p>
+</li>
+<li><p><strong>Storing events</strong><br>
+The <strong>Event Contract</strong> keeps in memory all the interactions recorded in the previous step, ensuring that they are not lost for later replay.</p>
+</li>
+<li><p><strong>Relaunch of events</strong><br>
+Once <strong>Hydration</strong> is complete, Angular re-invokes the captured events.</p>
+</li>
+
+  </ul>
+  <p>Event replay supports <em>native browser events</em>, for example <code>click</code>, <code>mouseover</code>, and <code>focusin</code>. If you'd like to learn more about JSAction, the library that powers event replay, you can read more <a href="https://github.com/angular/angular/tree/main/packages/core/primitives/event-dispatch#readme" target="_blank">on the readme</a>.</p>
+<hr>
+<p>This feature ensures a consistent user experience, preventing user actions performed before Hydration from being ignored. Note: if you have <a href="guide/incremental-hydration">incremental hydration</a> enabled, event replay is automatically enabled under the hood.</p>
+
+  <h2 id="constraints">
+    <a href="#constraints" class="docs-anchor" tabindex="-1" aria-label="Link to Constraints">Constraints</a>
+  </h2>
+  <p>Hydration imposes a few constraints on your application that are not present without hydration enabled. Your application must have the same generated DOM structure on both the server and the client. The process of hydration expects the DOM tree to have the same structure in both places. This also includes whitespaces and comment nodes that Angular produces during the rendering on the server. Those whitespaces and nodes must be present in the HTML generated by the server-side rendering process.</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>IMPORTANT:</strong> The HTML produced by the server side rendering operation <strong>must not</strong> be altered between the server and the client.</p>
+
+    </div>
+    <p>If there is a mismatch between server and client DOM tree structures, the hydration process will encounter problems attempting to match up what was expected to what is actually present in the DOM. Components that do direct DOM manipulation using native DOM APIs are the most common culprit.</p>
+
+  <h3 id="direct-dom-manipulation">
+    <a href="#direct-dom-manipulation" class="docs-anchor" tabindex="-1" aria-label="Link to Direct DOM Manipulation">Direct DOM Manipulation</a>
+  </h3>
+  <p>If you have components that manipulate the DOM using native DOM APIs or use <code>innerHTML</code> or <code>outerHTML</code>, the hydration process will encounter errors. Specific cases where DOM manipulation is a problem are situations like accessing the <code>document</code>, querying for specific elements, and injecting additional nodes using <code>appendChild</code>. Detaching DOM nodes and moving them to other locations will also result in errors.</p>
+<p>This is because Angular is unaware of these DOM changes and cannot resolve them during the hydration process. Angular will expect a certain structure, but it will encounter a different structure when attempting to hydrate. This mismatch will result in hydration failure and throw a DOM mismatch error (<a href="#errors">see below</a>).</p>
+<p>It is best to refactor your component to avoid this sort of DOM manipulation. Try to use Angular APIs to do this work, if you can. If you cannot refactor this behavior, use the <code>ngSkipHydration</code> attribute (<a href="#how-to-skip-hydration-for-particular-components">described below</a>) until you can refactor into a hydration friendly solution.</p>
+
+  <h3 id="valid-html-structure">
+    <a href="#valid-html-structure" class="docs-anchor" tabindex="-1" aria-label="Link to Valid HTML structure">Valid HTML structure</a>
+  </h3>
+  <p>There are a few cases where if you have a component template that does not have valid HTML structure, this could result in a DOM mismatch error during hydration.</p>
+<p>As an example, here are some of the most common cases of this issue.</p>
+
+  <ul class="docs-list">
+    <li><code>&lt;table&gt;</code> without a <code>&lt;tbody&gt;</code></li>
+<li><code>&lt;div&gt;</code> inside a <code>&lt;p&gt;</code></li>
+<li><code>&lt;a&gt;</code> inside another <code>&lt;a&gt;</code></li>
+
+  </ul>
+  <p>If you are uncertain about whether your HTML is valid, you can use a <a href="https://validator.w3.org/" target="_blank">syntax validator</a> to check it.</p>
+
+    <div class="docs-alert docs-alert-note">
+    <p><strong>Note:</strong> While the HTML standard does not require the <code>&lt;tbody&gt;</code> element inside tables, modern browsers automatically create a <code>&lt;tbody&gt;</code> element in tables that do not declare one. Because of this inconsistency, always explicitly declare a <code>&lt;tbody&gt;</code> element in tables to avoid hydration errors.</p>
+
+    </div>
+    
+  <h3 id="preserve-whitespaces-configuration">
+    <a href="#preserve-whitespaces-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Preserve Whitespaces Configuration">Preserve Whitespaces Configuration</a>
+  </h3>
+  <p>When using the hydration feature, we recommend using the default setting of <code>false</code> for <code>preserveWhitespaces</code>. If this setting is not in your tsconfig, the value will be <code>false</code> and no changes are required. If you choose to enable preserving whitespaces by adding <code>preserveWhitespaces: true</code> to your tsconfig, it is possible you may encounter issues with hydration. This is not yet a fully supported configuration.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> Make sure that this setting is set <strong>consistently</strong> in <code>tsconfig.server.json</code> for your server and <code>tsconfig.app.json</code> for your browser builds. A mismatched value will cause hydration to break.</p>
+
+    </div>
+    <p>If you choose to set this setting in your tsconfig, we recommend to set it only in <code>tsconfig.app.json</code> which by default the <code>tsconfig.server.json</code> will inherit it from.</p>
+
+  <h3 id="custom-or-noop-zonejs-are-not-yet-supported">
+    <a href="#custom-or-noop-zonejs-are-not-yet-supported" class="docs-anchor" tabindex="-1" aria-label="Link to Custom or Noop Zone.js are not yet supported">Custom or Noop Zone.js are not yet supported</a>
+  </h3>
+  <p>Hydration relies on a signal from Zone.js when it becomes stable inside an application, so that Angular can start the serialization process on the server or post-hydration cleanup on the client to remove DOM nodes that remained unclaimed.</p>
+<p>Providing a custom or a "noop" Zone.js implementation may lead to a different timing of the "stable" event, thus triggering the serialization or the cleanup too early or too late. This is not yet a fully supported configuration and you may need to adjust the timing of the <code>onStable</code> event in the custom Zone.js implementation.</p>
+
+  <h2 id="errors">
+    <a href="#errors" class="docs-anchor" tabindex="-1" aria-label="Link to Errors">Errors</a>
+  </h2>
+  <p>There are several hydration related errors you may encounter ranging from node mismatches to cases when the <code>ngSkipHydration</code> was used on an invalid host node. The most common error case that may occur is due to direct DOM manipulation using native APIs that results in hydration being unable to find or match the expected DOM tree structure on the client that was rendered by the server. The other case you may encounter this type of error was mentioned in the <a href="#valid-html-structure">Valid HTML structure</a> section earlier. So, make sure the HTML in your templates are using valid structure, and you'll avoid that error case.</p>
+<p>For a full reference on hydration related errors, visit the <a href="/errors">Errors Reference Guide</a>.</p>
+
+  <h2 id="how-to-skip-hydration-for-particular-components">
+    <a href="#how-to-skip-hydration-for-particular-components" class="docs-anchor" tabindex="-1" aria-label="Link to How to skip hydration for particular components">How to skip hydration for particular components</a>
+  </h2>
+  <p>Some components may not work properly with hydration enabled due to some of the aforementioned issues, like <a href="#direct-dom-manipulation">Direct DOM Manipulation</a>. As a workaround, you can add the <code>ngSkipHydration</code> attribute to a component's tag in order to skip hydrating the entire component.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-example</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSkipHydration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span></code></pre>
+    </pre>
+  </div><p>Alternatively you can set <code>ngSkipHydration</code> as a host binding.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  host: {ngSkipHydration: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'true'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ExampleComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>The <code>ngSkipHydration</code> attribute will force Angular to skip hydrating the entire component and its children. Using this attribute means that the component will behave as if hydration is not enabled, meaning it will destroy and re-render itself.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> This will fix rendering issues, but it means that for this component (and its children), you don't get the benefits of hydration. You will need to adjust your component's implementation to avoid hydration-breaking patterns (i.e. Direct DOM Manipulation) to be able to remove the skip hydration annotation.</p>
+
+    </div>
+    <p>The <code>ngSkipHydration</code> attribute can only be used on component host nodes. Angular throws an error if this attribute is added to other nodes.</p>
+<p>Keep in mind that adding the <code>ngSkipHydration</code> attribute to your root application component would effectively disable hydration for your entire application. Be careful and thoughtful about using this attribute. It is intended as a last resort workaround. Components that break hydration should be considered bugs that need to be fixed.</p>
+
+  <h2 id="hydration-timing-and-application-stability">
+    <a href="#hydration-timing-and-application-stability" class="docs-anchor" tabindex="-1" aria-label="Link to Hydration Timing and Application Stability">Hydration Timing and Application Stability</a>
+  </h2>
+  <p>Application stability is an important part of the hydration process. Hydration and any post-hydration processes only occur once the application has reported stability. There are a number of ways that stability can be delayed. Examples include setting timeouts and intervals, unresolved promises, and pending microtasks. In those cases, you may encounter the <a href="errors/NG0506">Application remains unstable</a> error, which indicates that your app has not yet reached the stable state after 10 seconds. If you're finding that your application is not hydrating right away, take a look at what is impacting application stability and refactor to avoid causing these delays.</p>
+
+  <h2 id="i18n">
+    <a href="#i18n" class="docs-anchor" tabindex="-1" aria-label="Link to I18N">I18N</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> Support for internationalization with hydration is currently in <a href="/reference/releases#developer-preview">developer preview</a>. By default, Angular will skip hydration for components that use i18n blocks, effectively re-rendering those components from scratch.</p>
+
+    </div>
+    <p>To enable hydration for i18n blocks, you can add <a href="/api/platform-browser/withI18nSupport"><code>withI18nSupport</code></a> to your <code>provideClientHydration</code> call.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  bootstrapApplication,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  provideClientHydration,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  withI18nSupport,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppComponent, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provideClientHydration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withI18nSupport</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="consistent-rendering-across-server-side-and-client-side">
+    <a href="#consistent-rendering-across-server-side-and-client-side" class="docs-anchor" tabindex="-1" aria-label="Link to Consistent rendering across server-side and client-side">Consistent rendering across server-side and client-side</a>
+  </h2>
+  <p>Avoid introducing <code>@if</code> blocks and other conditionals that display different content when server-side rendering than client-side rendering, such as using an <code>@if</code> block with Angular's <code>isPlatformBrowser</code> function. These rendering differences cause layout shifts, negatively impacting end-user experience and core web vitals.</p>
+
+  <h2 id="third-party-libraries-with-dom-manipulation">
+    <a href="#third-party-libraries-with-dom-manipulation" class="docs-anchor" tabindex="-1" aria-label="Link to Third Party Libraries with DOM Manipulation">Third Party Libraries with DOM Manipulation</a>
+  </h2>
+  <p>There are a number of third party libraries that depend on DOM manipulation to be able to render. D3 charts is a prime example. These libraries worked without hydration, but they may cause DOM mismatch errors when hydration is enabled. For now, if you encounter DOM mismatch errors using one of these libraries, you can add the <code>ngSkipHydration</code> attribute to the component that renders using that library.</p>
+
+  <h2 id="third-party-scripts-with-dom-manipulation">
+    <a href="#third-party-scripts-with-dom-manipulation" class="docs-anchor" tabindex="-1" aria-label="Link to Third Party Scripts with DOM Manipulation">Third Party Scripts with DOM Manipulation</a>
+  </h2>
+  <p>Many third party scripts, such as ad trackers and analytics, modify the DOM before hydration can occur. These scripts may cause hydration errors because the page no longer matches the structure expected by Angular. Prefer deferring this type of script until after hydration whenever possible. Consider using <a href="api/core/afterNextRender"><code>AfterNextRender</code></a> to delay the script until post-hydration processes have occured.</p>
+
+  <h2 id="incremental-hydration">
+    <a href="#incremental-hydration" class="docs-anchor" tabindex="-1" aria-label="Link to Incremental Hydration">Incremental Hydration</a>
+  </h2>
+  <p>Incremental hydration is an advanced form of hydration that allows for more granular control over when hydration happens. See the <a href="guide/incremental-hydration">incremental hydration guide</a> for more information.</p>

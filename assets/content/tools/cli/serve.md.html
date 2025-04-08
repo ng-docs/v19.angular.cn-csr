@@ -1,0 +1,64 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Serving Angular apps for development</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/serve.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>You can serve your Angular CLI application with the <code>ng serve</code> command.
+This will compile your application, skip unnecessary optimizations, start a devserver, and automatically rebuild and live reload any subsequent changes.
+You can stop the server by pressing <code>Ctrl+C</code>.</p>
+<p><code>ng serve</code> only executes the builder for the <code>serve</code> target in the default project as specified in <code>angular.json</code>.
+While any builder can be used here, the most common (and default) builder is <code>@angular-devkit/build-angular:dev-server</code>.</p>
+<p>You can determine which builder is being used for a particular project by looking up the <code>serve</code> target for that project.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // `ng serve` invokes the Architect target named `serve`.</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "serve"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:dev-server"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">          // ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* ... */</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        "test"</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* ... */</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>This page discusses usage and options of <code>@angular-devkit/build-angular:dev-server</code>.</p>
+
+  <h2 id="proxying-to-a-backend-server">
+    <a href="#proxying-to-a-backend-server" class="docs-anchor" tabindex="-1" aria-label="Link to Proxying to a backend server">Proxying to a backend server</a>
+  </h2>
+  <p>Use <a href="https://webpack.js.org/configuration/dev-server/#devserverproxy" target="_blank">proxying support</a> to divert certain URLs to a backend server, by passing a file to the <code>--proxy-config</code> build option.
+For example, to divert all calls for <code>http://localhost:4200/api</code> to a server running on <code>http://localhost:3000/api</code>, take the following steps.</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>Create a file <code>proxy.conf.json</code> in your project's <code>src/</code> folder.</p>
+</li>
+<li><p>Add the following content to the new proxy file:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">   "/api"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">     "target"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"http://localhost:3000"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">     "secure"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">   }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>In the CLI configuration file, <code>angular.json</code>, add the <code>proxyConfig</code> option to the <code>serve</code> target:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">   "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">     "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">       "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">         "serve"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">           "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:dev-server"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">           "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">             "proxyConfig"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/proxy.conf.json"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">           }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">         }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">       }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">     }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">   }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>To run the development server with this proxy configuration, call <code>ng serve</code>.</p>
+</li>
+
+    </ol>
+    <p>Edit the proxy configuration file to add configuration options; following are some examples.
+For a detailed description of all options, refer to the <a href="https://webpack.js.org/configuration/dev-server/#devserverproxy" target="_blank">webpack DevServer documentation</a> when using <code>@angular-devkit/build-angular:browser</code>, or the <a href="https://vite.dev/config/server-options#server-proxy" target="_blank">Vite DevServer documentation</a> when using <code>@angular-devkit/build-angular:browser-esbuild</code> or <code>@angular-devkit/build-angular:application</code>.</p>
+<p>NOTE: If you edit the proxy configuration file, you must relaunch the <code>ng serve</code> process to make your changes effective.</p>
+
+  <h2 id="localhost-resolution">
+    <a href="#localhost-resolution" class="docs-anchor" tabindex="-1" aria-label="Link to <code>localhost</code> resolution"><code>localhost</code> resolution</a>
+  </h2>
+  <p>As of Node version 17, Node will <em>not</em> always resolve <code>http://localhost:&lt;port&gt;</code> to <code>http://127.0.0.1:&lt;port&gt;</code>
+depending on each machine's configuration.</p>
+<p>If you get an <code>ECONNREFUSED</code> error using a proxy targeting a <code>localhost</code> URL,
+you can fix this issue by updating the target from <code>http://localhost:&lt;port&gt;</code> to <code>http://127.0.0.1:&lt;port&gt;</code>.</p>
+<p>See <a href="https://github.com/chimurai/http-proxy-middleware#nodejs-17-econnrefused-issue-with-ipv6-and-localhost-705" target="_blank">the <code>http-proxy-middleware</code> documentation</a>
+for more information.</p>

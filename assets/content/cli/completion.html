@@ -1,0 +1,76 @@
+<div class="docs-cli"><div class="docs-reference-cli-content"><header class="docs-reference-header"><span class="docs-reference-category">CLI</span><div class="docs-reference-title"><div><h1> completion</h1><div class="docs-api-item-label type-command full">Command</div></div></div></header><div class="docs-code docs-reference-cli-toc"><pre class="docs-mini-scroll-track"><code><div class="shiki line cli">ng completion<button member-id="Options" class="shiki-ln-line-option">[options]</button></div></code></pre></div><div><p>Setting up autocompletion configures your terminal, so pressing the <code>&lt;TAB&gt;</code> key while in the middle
+of typing will display various commands and options available to you. This makes it very easy to
+discover and use CLI commands without lots of memorization.</p>
+<p>
+    <img src="assets/images/guide/cli/completion.gif" alt="A demo of Angular CLI autocompletion in a terminal. The user types several partial `ng` commands,
+using autocompletion to finish several arguments and list contextual options.
+" title="null" class="docs-image">
+    </p>
+
+      <h2 id="automated-setup" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#automated-setup" aria-label="Link to Automated setup section" tabIndex="-1">
+          Automated setup
+        </a>
+      </h2>
+    <p>The CLI should prompt and ask to set up autocompletion for you the first time you use it (v14+).
+Simply answer &quot;Yes&quot; and the CLI will take care of the rest.</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span>$ ng serve</span></span><span class="line"><span>? Would you like to enable autocompletion? This will set up your terminal so pressing TAB while typing Angular CLI commands will show possible options and autocomplete arguments. (Enabling autocompletion will modify configuration files in your home directory.) Yes</span></span><span class="line"><span>Appended `source &#x3C;(ng completion script)` to `/home/my-username/.bashrc`. Restart your terminal or run:</span></span><span class="line"><span></span></span><span class="line"><span>source &#x3C;(ng completion script)</span></span><span class="line"><span></span></span><span class="line"><span>to autocomplete `ng` commands.</span></span><span class="line"><span></span></span><span class="line"><span># Serve output...</span></span></code></pre>
+        </pre>
+      </div>
+    <p>If you already refused the prompt, it won&#39;t ask again. But you can run <code>ng completion</code> to
+do the same thing automatically.</p>
+<p>This modifies your terminal environment to load Angular CLI autocompletion, but can&#39;t update your
+current terminal session. Either restart it or run <code>source &lt;(ng completion script)</code> directly to
+enable autocompletion in your current session.</p>
+<p>Test it out by typing <code>ng ser&lt;TAB&gt;</code> and it should autocomplete to <code>ng serve</code>. Ambiguous arguments
+will show all possible options and their documentation, such as <code>ng generate &lt;TAB&gt;</code>.</p>
+
+      <h2 id="manual-setup" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#manual-setup" aria-label="Link to Manual setup section" tabIndex="-1">
+          Manual setup
+        </a>
+      </h2>
+    <p>Some users may have highly customized terminal setups, possibly with configuration files checked
+into source control with an opinionated structure. <code>ng completion</code> only ever appends Angular&#39;s setup
+to an existing configuration file for your current shell, or creates one if none exists. If you want
+more control over exactly where this configuration lives, you can manually set it up by having your
+shell run at startup:</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">source</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> &#x3C;(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> completion script)</span></span></code></pre>
+        </pre>
+      </div>
+    <p>This is equivalent to what <code>ng completion</code> will automatically set up, and gives power users more
+flexibility in their environments when desired.</p>
+
+      <h2 id="platform-support" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#platform-support" aria-label="Link to Platform support section" tabIndex="-1">
+          Platform support
+        </a>
+      </h2>
+    <p>Angular CLI supports autocompletion for the Bash and Zsh shells on MacOS and Linux operating
+systems. On Windows, Git Bash and <a href="https://docs.microsoft.com/en-us/windows/wsl/">Windows Subsystem for Linux</a>
+using Bash or Zsh are supported.</p>
+
+      <h2 id="global-install" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#global-install" aria-label="Link to Global install section" tabIndex="-1">
+          Global install
+        </a>
+      </h2>
+    <p>Autocompletion works by configuring your terminal to invoke the Angular CLI on startup to load the
+setup script. This means the terminal must be able to find and execute the Angular CLI, typically
+through a global install that places the binary on the user&#39;s <code>$PATH</code>. If you get
+<code>command not found: ng</code>, make sure the CLI is installed globally which you can do with the <code>-g</code>
+flag:</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -g</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/cli</span></span></code></pre>
+        </pre>
+      </div>
+    </div><h3>Sub-commands</h3><p>This command has the following sub-commands</p><ul><li><a href="cli/completion/script">script</a></li></ul></div><div class="docs-reference-members"><h2 id="options" class="docs-reference-section-heading"><a href="#options" aria-label="Link to Options section" tabindex="-1">Options</a></h2><div class="docs-reference-member-card"><div class="docs-reference-card-body"><div class="docs-ref-content"><div class="docs-ref-option-and-description"><div class="docs-reference-option"><code>help</code></div><div><p>Shows a help message for this command in the console.</p>
+</div></div><div class="docs-reference-type-and-default"><span>Value Type</span><code>boolean</code></div></div></div></div></div></div>

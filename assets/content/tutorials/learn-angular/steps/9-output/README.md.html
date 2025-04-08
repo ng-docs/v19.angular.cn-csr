@@ -1,0 +1,79 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Component Communication with <code>@Output</code></h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/learn-angular/steps/9-output/README.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>When working with components it may be required to notify other components that something has happened. Perhaps a button has been clicked, an item has been added/removed from a list or some other important update has occurred. In this scenario components need to communicate with parent components.</p>
+<p>Angular uses the <code>@Output</code> decorator to enable this type of behavior.</p>
+<p>In this activity, you'll learn how to use the <code>@Output</code> decorator and <code>EventEmitter</code> to communicate with components.</p>
+<hr />
+
+<p>To create the communication path from child to parent components, use the <code>@Output</code> decorator on a class property and assign it a value of type <code>EventEmitter</code>:</p>
+<div class="docs-code" header="child.component.ts">
+    <div class="docs-code-header"><h3>child.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ChildComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Output</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">incrementCountEvent</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> EventEmitter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">number</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;();</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>Now the component can generate events that can be listened to by the parent component. Trigger events by calling the <code>emit</code> method:</p>
+<div class="docs-code" header="child.component.ts">
+    <div class="docs-code-header"><h3>child.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ChildComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    ...</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    onClick</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.count</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">++</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.incrementCountEvent.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">emit</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.count);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>The emit function will generate an event with the same type as the <code>EventEmitter</code> instance.</p>
+<p>Alright, your turn to give this a try. Complete the code by following these tasks:</p>
+
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="add-an-output-property">
+    <a href="#add-an-output-property" class="docs-anchor" tabindex="-1" aria-label="Link to Add an <code>@Output</code> property">Add an <code>@Output</code> property</a>
+  </h3>
+  
+      <p>Update <code>child.component.ts</code> by adding an output property called <code>addItemEvent</code>, be sure to set the EventEmitter type to be <code>string</code>.</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="complete-additem-method">
+    <a href="#complete-additem-method" class="docs-anchor" tabindex="-1" aria-label="Link to Complete <code>addItem</code> method">Complete <code>addItem</code> method</a>
+  </h3>
+  
+      <p>In <code>child.component.ts</code> update the <code>addItem</code> method; use the following code as the logic:</p>
+<div class="docs-code" header="child.component.ts">
+    <div class="docs-code-header"><h3>child.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">addItem</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line highlighted"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.addItemEvent.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">emit</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'🐢'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="update-the-appcomponent-template">
+    <a href="#update-the-appcomponent-template" class="docs-anchor" tabindex="-1" aria-label="Link to Update the <code>AppComponent</code> template">Update the <code>AppComponent</code> template</a>
+  </h3>
+  
+      <p>In <code>app.component.ts</code> update the template to listen to the emitted event by adding the following code:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-child</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> (addItemEvent)</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"addItem($event)"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span></code></pre>
+    </pre>
+  </div><p>Now, the "Add Item" button adds a new item to the list every time the button is clicked.</p>
+
+    </li>
+    
+    </ol>
+    <p><span class="docs-emoji">Wow, at this point you've completed the component fundamentals - impressive 👏</span></p>
+<p>Keep learning to unlock more of Angular's great features.</p>

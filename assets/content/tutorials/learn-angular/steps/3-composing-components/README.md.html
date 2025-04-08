@@ -1,0 +1,57 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Composing Components</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/learn-angular/steps/3-composing-components/README.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>You've learned to update the component template, component logic, and component styles, but how do you use a component in your application?</p>
+<p>The <code>selector</code> property of the component configuration gives you a name to use when referencing the component in another template. You use the <code>selector</code> like an HTML tag, for example <code>app-user</code> would be <code>&lt;app-user /&gt;</code> in the template.</p>
+<p>In this activity, you'll learn how to compose components.</p>
+<hr/>
+
+<p>In this example, there are two components <code>UserComponent</code> and <code>AppComponent</code>.</p>
+
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="add-a-reference-to-usercomponent">
+    <a href="#add-a-reference-to-usercomponent" class="docs-anchor" tabindex="-1" aria-label="Link to Add a reference to <code>UserComponent</code>">Add a reference to <code>UserComponent</code></a>
+  </h3>
+  
+      <p>Update the <code>AppComponent</code> template to include a reference to the <code>UserComponent</code> which uses the selector <code>app-user</code>. Be sure to add <code>UserComponent</code> to the imports array of <code>AppComponent</code>, this makes it available for use in the <code>AppComponent</code> template.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`&lt;app-user /&gt;`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">imports</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [UserComponent]</span></span></code></pre>
+    </pre>
+  </div><p>The component now displays the message <code>Username: youngTech</code>. You can update the template code to include more markup.</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="add-more-markup">
+    <a href="#add-more-markup" class="docs-anchor" tabindex="-1" aria-label="Link to Add more markup">Add more markup</a>
+  </h3>
+  
+      <p>Because you can use any HTML markup that you want in a template, try updating the template for <code>AppComponent</code> to also include more HTML elements. This example will add a <code>&lt;section&gt;</code> element as the parent of the <code>&lt;app-user&gt;</code> element.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`&lt;section&gt;&lt;app-user /&gt;&lt;/section&gt;`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span></code></pre>
+    </pre>
+  </div>
+    </li>
+    
+    </ol>
+    <p>You can use as much HTML markup and as many components as you need to bring your app idea to reality. You can even have multiple copies of your component on the same page.</p>
+<p>That's a great segue, how would you conditionally show a component based on data? Head to the next section to find out.</p>

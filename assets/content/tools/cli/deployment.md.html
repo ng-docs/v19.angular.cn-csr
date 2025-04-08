@@ -1,0 +1,189 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Deployment</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/deployment.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>When you are ready to deploy your Angular application to a remote server, you have various options.</p>
+
+  <h2 id="automatic-deployment-with-the-cli">
+    <a href="#automatic-deployment-with-the-cli" class="docs-anchor" tabindex="-1" aria-label="Link to Automatic deployment with the CLI">Automatic deployment with the CLI</a>
+  </h2>
+  <p>The Angular CLI command <code>ng deploy</code> executes the <code>deploy</code> <a href="tools/cli/cli-builder">CLI builder</a> associated with your project.
+A number of third-party builders implement deployment capabilities to different platforms.
+You can add any of them to your project with <code>ng add</code>.</p>
+<p>When you add a package with deployment capability, it will automatically update your workspace configuration (<code>angular.json</code> file) with a <code>deploy</code> section for the selected project.
+You can then use the <code>ng deploy</code> command to deploy that project.</p>
+<p>For example, the following command automatically deploys a project to <a href="https://firebase.google.com/" target="_blank">Firebase</a>.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/fire</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> deploy</span></span></code></pre>
+    </pre>
+  </div><p>The command is interactive.
+In this case, you must have or create a Firebase account and authenticate using it.
+The command prompts you to select a Firebase project for deployment before building your application and uploading the production assets to Firebase.</p>
+<p>The table below lists tools which implement deployment functionality to different platforms.
+The <code>deploy</code> command for each package may require different command line options.
+You can read more by following the links associated with the package names below:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Deployment to</th>
+<th align="left">Setup Command</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><a href="https://firebase.google.com/docs/hosting" target="_blank">Firebase hosting</a></td>
+<td align="left"><a href="https://npmjs.org/package/@angular/fire" target="_blank"><code>ng add @angular/fire</code></a></td>
+</tr>
+<tr>
+<td align="left"><a href="https://vercel.com/solutions/angular" target="_blank">Vercel</a></td>
+<td align="left"><a href="https://github.com/vercel/vercel/tree/main/examples/angular" target="_blank"><code>vercel init angular</code></a></td>
+</tr>
+<tr>
+<td align="left"><a href="https://www.netlify.com" target="_blank">Netlify</a></td>
+<td align="left"><a href="https://npmjs.org/package/@netlify-builder/deploy" target="_blank"><code>ng add @netlify-builder/deploy</code></a></td>
+</tr>
+<tr>
+<td align="left"><a href="https://pages.github.com" target="_blank">GitHub pages</a></td>
+<td align="left"><a href="https://npmjs.org/package/angular-cli-ghpages" target="_blank"><code>ng add angular-cli-ghpages</code></a></td>
+</tr>
+<tr>
+<td align="left"><a href="https://aws.amazon.com/s3/?nc2=h_ql_prod_st_s3" target="_blank">Amazon Cloud S3</a></td>
+<td align="left"><a href="https://www.npmjs.com/package/@jefiozie/ngx-aws-deploy" target="_blank"><code>ng add @jefiozie/ngx-aws-deploy</code></a></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>If you're deploying to a self-managed server or there's no builder for your favorite cloud platform, you can either <a href="tools/cli/cli-builder">create a builder</a> that allows you to use the <code>ng deploy</code> command, or read through this guide to learn how to manually deploy your application.</p>
+
+  <h2 id="manual-deployment-to-a-remote-server">
+    <a href="#manual-deployment-to-a-remote-server" class="docs-anchor" tabindex="-1" aria-label="Link to Manual deployment to a remote server">Manual deployment to a remote server</a>
+  </h2>
+  <p>To manually deploy your application, create a production build and copy the output directory to a web server or content delivery network (CDN).
+By default, <code>ng build</code> uses the <code>production</code> configuration.
+If you have customized your build configurations, you may want to confirm <a href="tools/cli/deployment#production-optimizations">production optimizations</a> are being applied before deploying.</p>
+<p><code>ng build</code> outputs the built artifacts to <code>dist/my-app/</code> by default, however this path can be configured with the <code>outputPath</code> option in the <code>@angular-devkit/build-angular:browser</code> builder.
+Copy this directory to the server and configure it to serve the directory.</p>
+<p>While this is a minimal deployment solution, there are a few requirements for the server to serve your Angular application correctly.</p>
+
+  <h2 id="server-configuration">
+    <a href="#server-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Server configuration">Server configuration</a>
+  </h2>
+  <p>This section covers changes you may need to configure on the server to run your Angular application.</p>
+
+  <h3 id="routed-apps-must-fall-back-to-indexhtml">
+    <a href="#routed-apps-must-fall-back-to-indexhtml" class="docs-anchor" tabindex="-1" aria-label="Link to Routed apps must fall back to <code>index.html</code>">Routed apps must fall back to <code>index.html</code></a>
+  </h3>
+  <p>Client-side rendered Angular applications are perfect candidates for serving with a static HTML server because all the content is static and generated at build time.</p>
+<p>If the application uses the Angular router, you must configure the server to return the application's host page (<code>index.html</code>) when asked for a file that it does not have.</p>
+<p>A routed application should support "deep links".
+A <em>deep link</em> is a URL that specifies a path to a component inside the application.
+For example, <code>http://my-app.test/users/42</code> is a <em>deep link</em> to the user detail page that displays the user with <code>id</code> 42.</p>
+<p>There is no issue when the user initially loads the index page and then navigates to that URL from within a running client.
+The Angular router performs the navigation <em>client-side</em> and does not request a new HTML page.</p>
+<p>But clicking a deep link in an email, entering it in the browser address bar, or even refreshing the browser while already on the deep linked page will all be handled by the browser itself, <em>outside</em> the running application.
+The browser makes a direct request to the server for <code>/users/42</code>, bypassing Angular's router.</p>
+<p>A static server routinely returns <code>index.html</code> when it receives a request for <code>http://my-app.test/</code>.
+But most servers by default will reject <code>http://my-app.test/users/42</code> and returns a <code>404 - Not Found</code> error <em>unless</em> it is configured to return <code>index.html</code> instead.
+Configure the fallback route or 404 page to <code>index.html</code> for your server, so Angular is served for deep links and can display the correct route.
+Some servers call this fallback behavior "Single-Page Application" (SPA) mode.</p>
+<p>Once the browser loads the application, Angular router will read the URL to determine which page it is on and display <code>/users/42</code> correctly.</p>
+<p>For "real" 404 pages such as <code>http://my-app.test/does-not-exist</code>, the server does not require any additional configuration.
+<a href="guide/routing/common-router-tasks#displaying-a-404-page">404 pages implemented in the Angular router</a> will be displayed correctly.</p>
+
+  <h3 id="requesting-data-from-a-different-server-cors">
+    <a href="#requesting-data-from-a-different-server-cors" class="docs-anchor" tabindex="-1" aria-label="Link to Requesting data from a different server (CORS)">Requesting data from a different server (CORS)</a>
+  </h3>
+  <p>Web developers may encounter a <a href="https://developer.mozilla.org/docs/Web/HTTP/CORS" title=Cross-origin resource sharing target="_blank"><em>cross-origin resource sharing</em></a> error when making a network request to a server other than the application's own host server.
+Browsers forbid such requests unless the server explicitly permits them.</p>
+<p>There isn't anything Angular or the client application can do about these errors.
+The <em>server</em> must be configured to accept the application's requests.
+Read about how to enable CORS for specific servers at <a href="https://enable-cors.org/server.html" title=Enabling CORS server target="_blank">enable-cors.org</a>.</p>
+
+  <h2 id="production-optimizations">
+    <a href="#production-optimizations" class="docs-anchor" tabindex="-1" aria-label="Link to Production optimizations">Production optimizations</a>
+  </h2>
+  <p><code>ng build</code> uses the <code>production</code> configuration unless configured otherwise. This configuration enables the following build optimization features.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Features</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><a href="tools/cli/aot-compiler">Ahead-of-Time (AOT) Compilation</a></td>
+<td align="left">Pre-compiles Angular component templates.</td>
+</tr>
+<tr>
+<td align="left"><a href="tools/cli/deployment#development-only-features">Production mode</a></td>
+<td align="left">Optimizes the application for the best runtime performance</td>
+</tr>
+<tr>
+<td align="left">Bundling</td>
+<td align="left">Concatenates your many application and library files into a minimum number of deployed files.</td>
+</tr>
+<tr>
+<td align="left">Minification</td>
+<td align="left">Removes excess whitespace, comments, and optional tokens.</td>
+</tr>
+<tr>
+<td align="left">Mangling</td>
+<td align="left">Renames functions, classes, and variables to use shorter, arbitrary identifiers.</td>
+</tr>
+<tr>
+<td align="left">Dead code elimination</td>
+<td align="left">Removes unreferenced modules and unused code.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>See <a href="cli/build"><code>ng build</code></a> for more about CLI build options and their effects.</p>
+
+  <h3 id="development-only-features">
+    <a href="#development-only-features" class="docs-anchor" tabindex="-1" aria-label="Link to Development-only features">Development-only features</a>
+  </h3>
+  <p>When you run an application locally using <code>ng serve</code>, Angular uses the development configuration
+at runtime which enables:</p>
+
+  <ul class="docs-list">
+    <li>Extra safety checks such as <a href="errors/NG0100"><code>expression-changed-after-checked</code></a> detection.</li>
+<li>More detailed error messages.</li>
+<li>Additional debugging utilities such as the global <code>ng</code> variable with <a href="api#core-global">debugging functions</a> and <a href="tools/devtools">Angular DevTools</a> support.</li>
+
+  </ul>
+  <p>These features are helpful during development, but they require extra code in the app, which is
+undesirable in production. To ensure these features do not negatively impact bundle size for end users, Angular CLI
+removes development-only code from the bundle when building for production.</p>
+<p>Building your application with <code>ng build</code> by default uses the <code>production</code> configuration which removes these features from the output for optimal bundle size.</p>
+
+  <h2 id="--deploy-url">
+    <a href="#--deploy-url" class="docs-anchor" tabindex="-1" aria-label="Link to <code>--deploy-url</code>"><code>--deploy-url</code></a>
+  </h2>
+  <p><code>--deploy-url</code> is a command line option used to specify the base path for resolving relative URLs for assets such as images, scripts, and style sheets at <em>compile</em> time.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --deploy-url</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> /my/assets</span></span></code></pre>
+    </pre>
+  </div><p>The effect and purpose of <code>--deploy-url</code> overlaps with <a href="guide/routing/common-router-tasks"><code>&lt;base href&gt;</code></a>. Both can be used for initial scripts, stylesheets, lazy scripts, and css resources.</p>
+<p>Unlike <code>&lt;base href&gt;</code> which can be defined in a single place at runtime, the <code>--deploy-url</code> needs to be hard-coded into an application at build time.
+Prefer <code>&lt;base href&gt;</code> where possible.</p>

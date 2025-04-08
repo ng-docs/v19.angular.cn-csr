@@ -1,0 +1,809 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular workspace configuration</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/configs/workspace-config.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>The <code>angular.json</code> file at the root level of an Angular workspace provides workspace-wide and project-specific configuration defaults. These are used for build and development tools provided by the Angular CLI.
+Path values given in the configuration are relative to the root workspace directory.</p>
+
+  <h2 id="general-json-structure">
+    <a href="#general-json-structure" class="docs-anchor" tabindex="-1" aria-label="Link to General JSON structure">General JSON structure</a>
+  </h2>
+  <p>At the top-level of <code>angular.json</code>, a few properties configure the workspace and a <code>projects</code> section contains the remaining per-project configuration options.
+You can override Angular CLI defaults set at the workspace level through defaults set at the project level.
+You can also override defaults set at the project level using the command line.</p>
+<p>The following properties, at the top-level of the file, configure the workspace.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Properties</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>version</code></td>
+<td align="left">The configuration-file version.</td>
+</tr>
+<tr>
+<td align="left"><code>newProjectRoot</code></td>
+<td align="left">Path where new projects are created through tools like <code>ng generate application</code> or <code>ng generate library</code>. Path can be absolute or relative to the workspace directory. Defaults to <code>projects</code></td>
+</tr>
+<tr>
+<td align="left"><code>cli</code></td>
+<td align="left">A set of options that customize the <a href="tools/cli">Angular CLI</a>. See <a href="#angular-cli-configuration-options">Angular CLI configuration options</a> below.</td>
+</tr>
+<tr>
+<td align="left"><code>schematics</code></td>
+<td align="left">A set of <a href="tools/cli/schematics">schematics</a> that customize the <code>ng generate</code> sub-command option defaults for this workspace. See <a href="#schematics">schematics</a> below.</td>
+</tr>
+<tr>
+<td align="left"><code>projects</code></td>
+<td align="left">Contains a subsection for each application or library in the workspace, with project-specific configuration options.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>The initial application that you create with <code>ng new app-name</code> is listed under "projects":</p>
+<p>When you create a library project with <code>ng generate library</code>, the library project is also added to the <code>projects</code> section.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> The <code>projects</code> section of the configuration file does not correspond exactly to the workspace file structure.</p>
+<!-- markdownlint-disable-next-line MD032 -->
+
+  <ul class="docs-list">
+    <li>The initial application created by <code>ng new</code> is at the top level of the workspace file structure.</li>
+<li>Other applications and libraries are under the <code>projects</code> directory by default.</li>
+
+  </ul>
+  
+    </div>
+    <p>For more information, see <a href="reference/configs/file-structure">Workspace and project file structure</a>.</p>
+
+  <h2 id="angular-cli-configuration-options">
+    <a href="#angular-cli-configuration-options" class="docs-anchor" tabindex="-1" aria-label="Link to Angular CLI configuration options">Angular CLI configuration options</a>
+  </h2>
+  <p>The following properties are a set of options that customize the Angular CLI.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Property</th>
+<th align="left">Details</th>
+<th align="left">Value type</th>
+<th align="left">Default value</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>analytics</code></td>
+<td align="left">Share anonymous usage data with the Angular Team. A boolean value indicates whether or not to share data, while a UUID string shares data using a pseudonymous identifier.</td>
+<td align="left"><code>boolean</code> | <code>string</code></td>
+<td align="left"><code>false</code></td>
+</tr>
+<tr>
+<td align="left"><code>cache</code></td>
+<td align="left">Control <a href="cli/cache">persistent disk cache</a> used by <a href="tools/cli/cli-builder">Angular CLI Builders</a>.</td>
+<td align="left"><a href="#cache-options">Cache options</a></td>
+<td align="left"><code>{}</code></td>
+</tr>
+<tr>
+<td align="left"><code>schematicCollections</code></td>
+<td align="left">List schematics collections to use in <code>ng generate</code>.</td>
+<td align="left"><code>string[]</code></td>
+<td align="left"><code>[]</code></td>
+</tr>
+<tr>
+<td align="left"><code>packageManager</code></td>
+<td align="left">The preferred package manager tool to use.</td>
+<td align="left"><code>npm</code> | <code>cnpm</code> | <code>pnpm</code> | <code>yarn</code></td>
+<td align="left"><code>npm</code></td>
+</tr>
+<tr>
+<td align="left"><code>warnings</code></td>
+<td align="left">Control Angular CLI specific console warnings.</td>
+<td align="left"><a href="#warnings-options">Warnings options</a></td>
+<td align="left"><code>{}</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="cache-options">
+    <a href="#cache-options" class="docs-anchor" tabindex="-1" aria-label="Link to Cache options">Cache options</a>
+  </h3>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Property</th>
+<th align="left">Details</th>
+<th align="left">Value type</th>
+<th align="left">Default value</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>enabled</code></td>
+<td align="left">Configure whether disk caching is enabled for builds.</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>environment</code></td>
+<td align="left">Configure in which environment disk cache is enabled.<br><br>* <code>ci</code> enables caching only in continuous integration (CI) environments.<br>* <code>local</code> enables caching only <em>outside</em> of CI environments.<br>* <code>all</code> enables caching everywhere.</td>
+<td align="left"><code>local</code> | <code>ci</code> | <code>all</code></td>
+<td align="left"><code>local</code></td>
+</tr>
+<tr>
+<td align="left"><code>path</code></td>
+<td align="left">The directory used to stored cache results.</td>
+<td align="left"><code>string</code></td>
+<td align="left"><code>.angular/cache</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="warnings-options">
+    <a href="#warnings-options" class="docs-anchor" tabindex="-1" aria-label="Link to Warnings options">Warnings options</a>
+  </h3>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Property</th>
+<th align="left">Details</th>
+<th align="left">Value type</th>
+<th align="left">Default value</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>versionMismatch</code></td>
+<td align="left">Show a warning when the global Angular CLI version is newer than the local one.</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="project-configuration-options">
+    <a href="#project-configuration-options" class="docs-anchor" tabindex="-1" aria-label="Link to Project configuration options">Project configuration options</a>
+  </h2>
+  <p>The following top-level configuration properties are available for each project, under <code>projects[&#39;project-name&#39;]</code>.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Property</th>
+<th align="left">Details</th>
+<th align="left">Value type</th>
+<th align="left">Default value</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>root</code></td>
+<td align="left">The root directory for this project's files, relative to the workspace directory. Empty for the initial application, which resides at the top level of the workspace.</td>
+<td align="left"><code>string</code></td>
+<td align="left">None (required)</td>
+</tr>
+<tr>
+<td align="left"><code>projectType</code></td>
+<td align="left">One of "application" or "library" An application can run independently in a browser, while a library cannot.</td>
+<td align="left"><code>application</code> | <code>library</code></td>
+<td align="left">None (required)</td>
+</tr>
+<tr>
+<td align="left"><code>sourceRoot</code></td>
+<td align="left">The root directory for this project's source files.</td>
+<td align="left"><code>string</code></td>
+<td align="left"><code>&#39;&#39;</code></td>
+</tr>
+<tr>
+<td align="left"><code>prefix</code></td>
+<td align="left">A string that Angular prepends to selectors when generating new components, directives, and pipes using <code>ng generate</code>. Can be customized to identify an application or feature area.</td>
+<td align="left"><code>string</code></td>
+<td align="left"><code>&#39;app&#39;</code></td>
+</tr>
+<tr>
+<td align="left"><code>schematics</code></td>
+<td align="left">A set of schematics that customize the <code>ng generate</code> sub-command option defaults for this project. See the <a href="#schematics">Generation schematics</a> section.</td>
+<td align="left">See <a href="#schematics">schematics</a></td>
+<td align="left"><code>{}</code></td>
+</tr>
+<tr>
+<td align="left"><code>architect</code></td>
+<td align="left">Configuration defaults for Architect builder targets for this project.</td>
+<td align="left">See <a href="#configuring-builder-targets">Configuring builder targets</a></td>
+<td align="left"><code>{}</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="schematics">
+    <a href="#schematics" class="docs-anchor" tabindex="-1" aria-label="Link to Schematics">Schematics</a>
+  </h2>
+  <p><a href="tools/cli/schematics">Angular schematics</a> are instructions for modifying a project by adding new files or modifying existing files.
+These can be configured by mapping the schematic name to a set of default options.</p>
+<p>The "name" of a schematic is in the format: <code>&lt;schematic-package&gt;:&lt;schematic-name&gt;</code>.
+Schematics for the default Angular CLI <code>ng generate</code> sub-commands are collected in the package <a href="https://github.com/angular/angular-cli/blob/main/packages/schematics/angular/application/schema.json" target="_blank"><code>@schematics/angular</code></a>.
+For example, the schematic for generating a component with <code>ng generate component</code> is <code>@schematics/angular:component</code>.</p>
+<p>The fields given in the schematic's schema correspond to the allowed command-line argument values and defaults for the Angular CLI sub-command options.
+You can update your workspace schema file to set a different default for a sub-command option. For example, to disable <code>standalone</code> in <code>ng generate component</code> by default:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "schematics"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "@schematics/angular:component"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "standalone"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="configuring-cli-builders">
+    <a href="#configuring-cli-builders" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring CLI builders">Configuring CLI builders</a>
+  </h2>
+  <p>Architect is the tool that the Angular CLI uses to perform complex tasks, such as compilation and test running.
+Architect is a shell that runs a specified builder to perform a given task, according to a target configuration.
+You can define and configure new builders and targets to extend the Angular CLI.
+See <a href="tools/cli/cli-builder">Angular CLI Builders</a>.</p>
+
+  <h3 id="default-architect-builders-and-targets">
+    <a href="#default-architect-builders-and-targets" class="docs-anchor" tabindex="-1" aria-label="Link to Default Architect builders and targets">Default Architect builders and targets</a>
+  </h3>
+  <p>Angular defines default builders for use with specific commands, or with the general <code>ng run</code> command.
+The JSON schemas that define the options and defaults for each of these builders are collected in the <a href="https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/builders.json" target="_blank"><code>@angular-devkit/build-angular</code></a> package.
+The schemas configure options for the following builders.</p>
+
+  <h3 id="configuring-builder-targets">
+    <a href="#configuring-builder-targets" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring builder targets">Configuring builder targets</a>
+  </h3>
+  <p>The <code>architect</code> section of <code>angular.json</code> contains a set of Architect targets.
+Many of the targets correspond to the Angular CLI commands that run them.
+Other targets can be executed using the <code>ng run</code> command, and you can define your own targets.</p>
+<p>Each target object specifies the <code>builder</code> for that target, which is the npm package for the tool that Architect runs.
+Each target also has an <code>options</code> section that configures default options for the target, and a <code>configurations</code> section that names and specifies alternative configurations for the target.
+See the example in <a href="#build-target">Build target</a> below.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Property</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>build</code></td>
+<td align="left">Configures defaults for options of the <code>ng build</code> command. See the <a href="#build-target">Build target</a> section for more information.</td>
+</tr>
+<tr>
+<td align="left"><code>serve</code></td>
+<td align="left">Overrides build defaults and supplies extra serve defaults for the <code>ng serve</code> command. Besides the options available for the <code>ng build</code> command, it adds options related to serving the application.</td>
+</tr>
+<tr>
+<td align="left"><code>e2e</code></td>
+<td align="left">Overrides build defaults for building end-to-end testing applications using the <code>ng e2e</code> command.</td>
+</tr>
+<tr>
+<td align="left"><code>test</code></td>
+<td align="left">Overrides build defaults for test builds and supplies extra test-running defaults for the <code>ng test</code> command.</td>
+</tr>
+<tr>
+<td align="left"><code>lint</code></td>
+<td align="left">Configures defaults for options of the <code>ng lint</code> command, which performs static code analysis on project source files.</td>
+</tr>
+<tr>
+<td align="left"><code>extract-i18n</code></td>
+<td align="left">Configures defaults for options of the <code>ng extract-i18n</code> command, which extracts localized message strings from source code and outputs translation files for internationalization.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> All options in the configuration file must use <code>camelCase</code>, rather than <code>dash-case</code> as used on the command line.</p>
+
+    </div>
+    
+  <h2 id="build-target">
+    <a href="#build-target" class="docs-anchor" tabindex="-1" aria-label="Link to Build target">Build target</a>
+  </h2>
+  <p>Each target under <code>architect</code> has the following properties:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Property</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>builder</code></td>
+<td align="left">The CLI builder used to create this target in the form of <code>&lt;package-name&gt;:&lt;builder-name&gt;</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>options</code></td>
+<td align="left">Build target default options.</td>
+</tr>
+<tr>
+<td align="left"><code>configurations</code></td>
+<td align="left">Alternative configurations for executing the target. Each configuration sets the default options for that intended environment, overriding the associated value under <code>options</code>. See <a href="#alternate-build-configurations">Alternate build configurations</a> below.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>For example, to configure a build with optimizations disabled:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "optimization"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="alternate-build-configurations">
+    <a href="#alternate-build-configurations" class="docs-anchor" tabindex="-1" aria-label="Link to Alternate build configurations">Alternate build configurations</a>
+  </h3>
+  <p>Angular CLI comes with two build configurations: <code>production</code> and <code>development</code>.
+By default, the <code>ng build</code> command uses the <code>production</code> configuration, which applies several build optimizations, including:</p>
+
+  <ul class="docs-list">
+    <li>Bundling files</li>
+<li>Minimizing excess whitespace</li>
+<li>Removing comments and dead code</li>
+<li>Minifying code to use short, mangled names</li>
+
+  </ul>
+  <p>You can define and name extra alternate configurations (such as <code>staging</code>, for instance) appropriate to your development process.
+You can select an alternate configuration by passing its name to the <code>--configuration</code> command line flag.</p>
+<p>For example, to configure a build where optimization is enabled only for production builds (<code>ng build --configuration production</code>):</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "optimization"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "configurations"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "production"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "optimization"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>You can also pass in more than one configuration name as a comma-separated list.
+For example, to apply both <code>staging</code> and <code>french</code> build configurations, use the command <code>ng build --configuration staging,french</code>.
+In this case, the command parses the named configurations from left to right.
+If multiple configurations change the same setting, the last-set value is the final one.
+In this example, if both <code>staging</code> and <code>french</code> configurations set the output path, the value in <code>french</code> would get used.</p>
+
+  <h3 id="extra-build-and-test-options">
+    <a href="#extra-build-and-test-options" class="docs-anchor" tabindex="-1" aria-label="Link to Extra build and test options">Extra build and test options</a>
+  </h3>
+  <p>The configurable options for a default or targeted build generally correspond to the options available for the <a href="cli/build"><code>ng build</code></a>, <a href="cli/serve"><code>ng serve</code></a>, and <a href="cli/test"><code>ng test</code></a> commands.
+For details of those options and their possible values, see the <a href="cli">Angular CLI Reference</a>.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Options properties</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>assets</code></td>
+<td align="left">An object containing paths to static assets to serve with the application. The default paths point to the project's <code>public</code> directory. See more in the <a href="#assets-configuration">Assets configuration</a> section.</td>
+</tr>
+<tr>
+<td align="left"><code>styles</code></td>
+<td align="left">An array of CSS files to add to the global context of the project. Angular CLI supports CSS imports and all major CSS preprocessors. See more in the <a href="#styles-and-scripts-configuration">Styles and scripts configuration</a> section.</td>
+</tr>
+<tr>
+<td align="left"><code>stylePreprocessorOptions</code></td>
+<td align="left">An object containing option-value pairs to pass to style preprocessors. See more in the <a href="#styles-and-scripts-configuration">Styles and scripts configuration</a> section.</td>
+</tr>
+<tr>
+<td align="left"><code>scripts</code></td>
+<td align="left">An object containing JavaScript files to add to the application. The scripts are loaded exactly as if you had added them in a <code>&lt;script&gt;</code> tag inside <code>index.html</code>. See more in the <a href="#styles-and-scripts-configuration">Styles and scripts configuration</a> section.</td>
+</tr>
+<tr>
+<td align="left"><code>budgets</code></td>
+<td align="left">Default size-budget type and thresholds for all or parts of your application. You can configure the builder to report a warning or an error when the output reaches or exceeds a threshold size. See <a href="tools/cli/build#configure-size-budgets">Configure size budgets</a>.</td>
+</tr>
+<tr>
+<td align="left"><code>fileReplacements</code></td>
+<td align="left">An object containing files and their compile-time replacements. See more in <a href="tools/cli/build#configure-target-specific-file-replacements">Configure target-specific file replacements</a>.</td>
+</tr>
+<tr>
+<td align="left"><code>index</code></td>
+<td align="left">A base HTML document which loads the application. See more in <a href="#index-configuration">Index configuration</a>.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="complex-configuration-values">
+    <a href="#complex-configuration-values" class="docs-anchor" tabindex="-1" aria-label="Link to Complex configuration values">Complex configuration values</a>
+  </h2>
+  <p>The <code>assets</code>, <code>index</code>, <code>outputPath</code>, <code>styles</code>, and <code>scripts</code> options can have either simple path string values, or object values with specific fields.
+The <code>sourceMap</code> and <code>optimization</code> options can be set to a simple boolean value. They can also be given a complex value using the configuration file.</p>
+<p>The following sections provide more details of how these complex values are used in each case.</p>
+
+  <h3 id="assets-configuration">
+    <a href="#assets-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Assets configuration">Assets configuration</a>
+  </h3>
+  <p>Each <code>build</code> target configuration can include an <code>assets</code> array that lists files or folders you want to copy as-is when building your project.
+By default, the contents of the <code>public/</code> directory are copied over.</p>
+<p>To exclude an asset, you can remove it from the assets configuration.</p>
+<p>You can further configure assets to be copied by specifying assets as objects, rather than as simple paths relative to the workspace root.
+An asset specification object can have the following fields.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Fields</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>glob</code></td>
+<td align="left">A <a href="https://github.com/isaacs/node-glob/blob/master/README.md" target="_blank">node-glob</a> using <code>input</code> as base directory.</td>
+</tr>
+<tr>
+<td align="left"><code>input</code></td>
+<td align="left">A path relative to the workspace root.</td>
+</tr>
+<tr>
+<td align="left"><code>output</code></td>
+<td align="left">A path relative to <code>outDir</code>. Because of the security implications, the Angular CLI never writes files outside of the project output path.</td>
+</tr>
+<tr>
+<td align="left"><code>ignore</code></td>
+<td align="left">A list of globs to exclude.</td>
+</tr>
+<tr>
+<td align="left"><code>followSymlinks</code></td>
+<td align="left">Allow glob patterns to follow symlink directories. This allows subdirectories of the symlink to be searched. Defaults to <code>false</code>.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>For example, the default asset paths can be represented in more detail using the following objects.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "assets"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "glob"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"**/*"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "input"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/assets/"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "output"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/assets/"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "glob"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"favicon.ico"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "input"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "output"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>The following example uses the <code>ignore</code> field to exclude certain files in the assets directory from being copied into the build:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "assets"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "glob"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"**/*"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "input"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/assets/"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "ignore"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"**/*.svg"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "output"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/assets/"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="styles-and-scripts-configuration">
+    <a href="#styles-and-scripts-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Styles and scripts configuration">Styles and scripts configuration</a>
+  </h3>
+  <p>An array entry for the <code>styles</code> and <code>scripts</code> options can be a simple path string, or an object that points to an extra entry-point file.
+The associated builder loads that file and its dependencies as a separate bundle during the build.
+With a configuration object, you have the option of naming the bundle for the entry point, using a <code>bundleName</code> field.</p>
+<p>The bundle is injected by default, but you can set <code>inject</code> to <code>false</code> to exclude the bundle from injection.
+For example, the following object values create and name a bundle that contains styles and scripts, and excludes it from injection:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "styles"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "input"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/external-module/styles.scss"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "inject"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "bundleName"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"external-module"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            ],</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "scripts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "input"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/external-module/main.js"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "inject"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "bundleName"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"external-module"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="style-preprocessor-options">
+    <a href="#style-preprocessor-options" class="docs-anchor" tabindex="-1" aria-label="Link to Style preprocessor options">Style preprocessor options</a>
+  </h4>
+  <p>In Sass, you can make use of the <code>includePaths</code> feature for both component and global styles. This allows you to add extra base paths that are checked for imports.</p>
+<p>To add paths, use the <code>stylePreprocessorOptions</code> option:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "stylePreprocessorOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "includePaths"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                "src/style-paths"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>Files in that directory, such as <code>src/style-paths/_variables.scss</code>, can be imported from anywhere in your project without the need for a relative path:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// src/app/app.component.scss</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// A relative path works</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@import</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '../style-paths/variables'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// But now this works as well</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@import</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'variables'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> You also need to add any styles or scripts to the <code>test</code> builder if you need them for unit tests.
+See also <a href="tools/libraries/using-libraries#using-runtime-global-libraries-inside-your-app">Using runtime-global libraries inside your application</a>.</p>
+
+    </div>
+    
+  <h3 id="optimization-configuration">
+    <a href="#optimization-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Optimization configuration">Optimization configuration</a>
+  </h3>
+  <p>The <code>optimization</code> option can be either a boolean or an object for more fine-tune configuration.
+This option enables various optimizations of the build output, including:</p>
+
+  <ul class="docs-list">
+    <li>Minification of scripts and styles</li>
+<li>Tree-shaking</li>
+<li>Dead-code elimination</li>
+<li>Inlining of critical CSS</li>
+<li>Fonts inlining</li>
+
+  </ul>
+  <p>Several options can be used to fine-tune the optimization of an application.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Options</th>
+<th align="left">Details</th>
+<th align="left">Value type</th>
+<th align="left">Default value</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>scripts</code></td>
+<td align="left">Enables optimization of the scripts output.</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>styles</code></td>
+<td align="left">Enables optimization of the styles output.</td>
+<td align="left"><code>boolean</code> | <a href="#styles-optimization-options">Styles optimization options</a></td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>fonts</code></td>
+<td align="left">Enables optimization for fonts. This requires internet access.</td>
+<td align="left"><code>boolean</code> | <a href="#fonts-optimization-options">Fonts optimization options</a></td>
+<td align="left"><code>true</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h4 id="styles-optimization-options">
+    <a href="#styles-optimization-options" class="docs-anchor" tabindex="-1" aria-label="Link to Styles optimization options">Styles optimization options</a>
+  </h4>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Options</th>
+<th align="left">Details</th>
+<th align="left">Value type</th>
+<th align="left">Default value</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>minify</code></td>
+<td align="left">Minify CSS definitions by removing extraneous whitespace and comments, merging identifiers, and minimizing values.</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>inlineCritical</code></td>
+<td align="left">Extract and inline critical CSS definitions to improve <a href="https://web.dev/first-contentful-paint" target="_blank">First Contentful Paint</a>.</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>removeSpecialComments</code></td>
+<td align="left">Remove comments in global CSS that contains <code>@license</code> or <code>@preserve</code> or that starts with <code>//!</code> or <code>/*!</code>.</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h4 id="fonts-optimization-options">
+    <a href="#fonts-optimization-options" class="docs-anchor" tabindex="-1" aria-label="Link to Fonts optimization options">Fonts optimization options</a>
+  </h4>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Options</th>
+<th align="left">Details</th>
+<th align="left">Value type</th>
+<th align="left">Default value</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>inline</code></td>
+<td align="left">Reduce <a href="https://web.dev/render-blocking-resources" target="_blank">render blocking requests</a> by inlining external Google Fonts and Adobe Fonts CSS definitions in the application's HTML index file. This requires internet access.</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>You can supply a value such as the following to apply optimization to one or the other:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "optimization"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "scripts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "styles"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "minify"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "inlineCritical"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "fonts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="source-map-configuration">
+    <a href="#source-map-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Source map configuration">Source map configuration</a>
+  </h3>
+  <p>The <code>sourceMap</code> builder option can be either a boolean or an object for more fine-tune configuration to control the source maps of an application.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Options</th>
+<th align="left">Details</th>
+<th align="left">Value type</th>
+<th align="left">Default value</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>scripts</code></td>
+<td align="left">Output source maps for all scripts.</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>styles</code></td>
+<td align="left">Output source maps for all styles.</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>vendor</code></td>
+<td align="left">Resolve vendor packages source maps.</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>false</code></td>
+</tr>
+<tr>
+<td align="left"><code>hidden</code></td>
+<td align="left">Omit link to sourcemaps from the output JavaScript.</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>false</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>The example below shows how to toggle one or more values to configure the source map outputs:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "sourceMap"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "scripts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "styles"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "hidden"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "vendor"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> When using hidden source maps, source maps are not referenced in the bundle.
+These are useful if you only want source maps to map stack traces in error reporting tools without showing up in browser developer tools.
+Note that even though <code>hidden</code> prevents the source map from being linked in the output bundle, your deployment process must take care not to serve the generated sourcemaps in production, or else the information is still leaked.</p>
+
+    </div>
+    
+  <h3 id="index-configuration">
+    <a href="#index-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Index configuration">Index configuration</a>
+  </h3>
+  <p>Configures generation of the application's HTML index.</p>
+<p>The <code>index</code> option can be either a string or an object for more fine-tune configuration.</p>
+<p>When supplying the value as a string the filename of the specified path will be used for the generated file and will be created in the root of the application's configured output path.</p>
+
+  <h4 id="index-options">
+    <a href="#index-options" class="docs-anchor" tabindex="-1" aria-label="Link to Index options">Index options</a>
+  </h4>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Options</th>
+<th align="left">Details</th>
+<th align="left">Value type</th>
+<th align="left">Default value</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>input</code></td>
+<td align="left">The path of a file to use for the application's generated HTML index.</td>
+<td align="left"><code>string</code></td>
+<td align="left">None (required)</td>
+</tr>
+<tr>
+<td align="left"><code>output</code></td>
+<td align="left">The output path of the application's generated HTML index file. The full provided path will be used and will be considered relative to the application's configured output path.</td>
+<td align="left"><code>string</code></td>
+<td align="left"><code>index.html</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="output-path-configuration">
+    <a href="#output-path-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Output path configuration">Output path configuration</a>
+  </h3>
+  <p>The <code>outputPath</code> option can be either a String which will be used as the <code>base</code> value or an Object for more fine-tune configuration.</p>
+<p>Several options can be used to fine-tune the output structure of an application.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Options</th>
+<th align="left">Details</th>
+<th align="left">Value type</th>
+<th align="left">Default value</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>base</code></td>
+<td align="left">Specify the output path relative to workspace root.</td>
+<td align="left"><code>string</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>browser</code></td>
+<td align="left">The output directory name for your browser build is within the base output path. This can be safely served to users.</td>
+<td align="left"><code>string</code></td>
+<td align="left"><code>browser</code></td>
+</tr>
+<tr>
+<td align="left"><code>server</code></td>
+<td align="left">The output directory name of your server build within the output path base.</td>
+<td align="left"><code>string</code></td>
+<td align="left"><code>server</code></td>
+</tr>
+<tr>
+<td align="left"><code>media</code></td>
+<td align="left">The output directory name for your media files located within the output browser directory. These media files are commonly referred to as resources in CSS files.</td>
+<td align="left"><code>string</code></td>
+<td align="left"><code>media</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  

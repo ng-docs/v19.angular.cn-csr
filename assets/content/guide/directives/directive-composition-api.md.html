@@ -1,0 +1,140 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Directive composition API</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/directives/directive-composition-api.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular directives offer a great way to encapsulate reusable behaviors— directives can apply
+attributes, CSS classes, and event listeners to an element.</p>
+<p>The <em>directive composition API</em> lets you apply directives to a component's host element from
+<em>within</em> the component TypeScript class.</p>
+
+  <h2 id="adding-directives-to-a-component">
+    <a href="#adding-directives-to-a-component" class="docs-anchor" tabindex="-1" aria-label="Link to Adding directives to a component">Adding directives to a component</a>
+  </h2>
+  <p>You apply directives to a component by adding a <code>hostDirectives</code> property to a component's
+decorator. We call such directives <em>host directives</em>.</p>
+<p>In this example, we apply the directive <code>MenuBehavior</code> to the host element of <code>AdminMenu</code>. This
+works similarly to applying the <code>MenuBehavior</code> to the <code>&lt;admin-menu&gt;</code> element in a template.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu.html'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [MenuBehavior],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AdminMenu</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>When the framework renders a component, Angular also creates an instance of each host directive. The
+directives' host bindings apply to the component's host element. By default, host directive inputs
+and outputs are not exposed as part of the component's public API. See
+<a href="#including-inputs-and-outputs">Including inputs and outputs</a> below for more information.</p>
+<p><strong>Angular applies host directives statically at compile time.</strong> You cannot dynamically add
+directives at runtime.</p>
+<p><strong>Directives used in <code>hostDirectives</code> may not specify <code>standalone: false</code>.</strong></p>
+<p><strong>Angular ignores the <code>selector</code> of directives applied in the <code>hostDirectives</code> property.</strong></p>
+
+  <h2 id="including-inputs-and-outputs">
+    <a href="#including-inputs-and-outputs" class="docs-anchor" tabindex="-1" aria-label="Link to Including inputs and outputs">Including inputs and outputs</a>
+  </h2>
+  <p>When you apply <code>hostDirectives</code> to your component, the inputs and outputs from the host directives
+are not included in your component's API by default. You can explicitly include inputs and outputs
+in your component's API by expanding the entry in <code>hostDirectives</code>:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu.html'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [{</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    directive: MenuBehavior,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    inputs: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'menuId'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    outputs: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'menuClosed'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AdminMenu</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>By explicitly specifying the inputs and outputs, consumers of the component with <code>hostDirective</code> can
+bind them in a template:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">admin-menu</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> menuId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"top-menu"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> (menuClosed)</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"logMenuClosed()"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div><p>Furthermore, you can alias inputs and outputs from <code>hostDirective</code> to customize the API of your
+component:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu.html'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [{</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    directive: MenuBehavior,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    inputs: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'menuId: id'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    outputs: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'menuClosed: closed'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AdminMenu</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">admin-menu</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"top-menu"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> (closed)</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"logMenuClosed()"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="adding-directives-to-another-directive">
+    <a href="#adding-directives-to-another-directive" class="docs-anchor" tabindex="-1" aria-label="Link to Adding directives to another directive">Adding directives to another directive</a>
+  </h2>
+  <p>You can also add <code>hostDirectives</code> to other directives, in addition to components. This enables the
+transitive aggregation of multiple behaviors.</p>
+<p>In the following example, we define two directives, <code>Menu</code> and <code>Tooltip</code>. We then compose the behavior
+of these two directives in <code>MenuWithTooltip</code>. Finally, we apply <code>MenuWithTooltip</code>
+to <code>SpecializedMenuWithTooltip</code>.</p>
+<p>When <code>SpecializedMenuWithTooltip</code> is used in a template, it creates instances of all of <code>Menu</code>
+, <code>Tooltip</code>, and <code>MenuWithTooltip</code>. Each of these directives' host bindings apply to the host
+element of <code>SpecializedMenuWithTooltip</code>.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Directive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Menu</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Directive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Tooltip</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// MenuWithTooltip can compose behaviors from multiple other directives</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Directive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [Tooltip, Menu],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MenuWithTooltip</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CustomWidget can apply the already-composed behaviors from MenuWithTooltip</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Directive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [MenuWithTooltip],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SpecializedMenuWithTooltip</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="host-directive-semantics">
+    <a href="#host-directive-semantics" class="docs-anchor" tabindex="-1" aria-label="Link to Host directive semantics">Host directive semantics</a>
+  </h2>
+  
+  <h3 id="directive-execution-order">
+    <a href="#directive-execution-order" class="docs-anchor" tabindex="-1" aria-label="Link to Directive execution order">Directive execution order</a>
+  </h3>
+  <p>Host directives go through the same lifecycle as components and directives used directly in a
+template. However, host directives always execute their constructor, lifecycle hooks, and bindings <em>before</em> the component or directive on which they are applied.</p>
+<p>The following example shows minimal use of a host directive:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu.html'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [MenuBehavior],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AdminMenu</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>The order of execution here is:</p>
+
+    <ol class="docs-ordered-list">
+      <li><code>MenuBehavior</code> instantiated</li>
+<li><code>AdminMenu</code> instantiated</li>
+<li><code>MenuBehavior</code> receives inputs (<code>ngOnInit</code>)</li>
+<li><code>AdminMenu</code> receives inputs (<code>ngOnInit</code>)</li>
+<li><code>MenuBehavior</code> applies host bindings</li>
+<li><code>AdminMenu</code> applies host bindings</li>
+
+    </ol>
+    <p>This order of operations means that components with <code>hostDirectives</code> can override any host bindings
+specified by a host directive.</p>
+<p>This order of operations extends to nested chains of host directives, as shown in the following
+example.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Directive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Tooltip</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Directive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [Tooltip],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomTooltip</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Directive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [CustomTooltip],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> EvenMoreCustomTooltip</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>In the example above, the order of execution is:</p>
+
+    <ol class="docs-ordered-list">
+      <li><code>Tooltip</code> instantiated</li>
+<li><code>CustomTooltip</code> instantiated</li>
+<li><code>EvenMoreCustomTooltip</code> instantiated</li>
+<li><code>Tooltip</code> receives inputs (<code>ngOnInit</code>)</li>
+<li><code>CustomTooltip</code> receives inputs (<code>ngOnInit</code>)</li>
+<li><code>EvenMoreCustomTooltip</code> receives inputs (<code>ngOnInit</code>)</li>
+<li><code>Tooltip</code> applies host bindings</li>
+<li><code>CustomTooltip</code> applies host bindings</li>
+<li><code>EvenMoreCustomTooltip</code> applies host bindings</li>
+
+    </ol>
+    
+  <h3 id="dependency-injection">
+    <a href="#dependency-injection" class="docs-anchor" tabindex="-1" aria-label="Link to Dependency injection">Dependency injection</a>
+  </h3>
+  <p>A component or directive that specifies <code>hostDirectives</code> can inject the instances of those host
+directives and vice versa.</p>
+<p>When applying host directives to a component, both the component and host directives can define
+providers.</p>
+<p>If a component or directive with <code>hostDirectives</code> and those host directives both provide the same
+injection token, the providers defined by class with <code>hostDirectives</code> take precedence over providers
+defined by the host directives.</p>

@@ -1,0 +1,304 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Workspace and project file structure</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/configs/file-structure.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>You develop applications in the context of an Angular workspace.
+A workspace contains the files for one or more projects.
+A project is the set of files that comprise an application or a shareable library.</p>
+<p>The Angular CLI <code>ng new</code> command creates a workspace.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> new</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-project</span></span></code></pre>
+    </pre>
+  </div><p>When you run this command, the CLI installs the necessary Angular npm packages and other dependencies in a new workspace, with a root-level application named <em>my-project</em>.</p>
+<p>By default, <code>ng new</code> creates an initial skeleton application at the root level of the workspace, along with its end-to-end tests.
+The skeleton is for a simple welcome application that is ready to run and easy to modify.
+The root-level application has the same name as the workspace, and the source files reside in the <code>src/</code> subfolder of the workspace.</p>
+<p>This default behavior is suitable for a typical "multi-repo" development style where each application resides in its own workspace.
+Beginners and intermediate users are encouraged to use <code>ng new</code> to create a separate workspace for each application.</p>
+<p>Angular also supports workspaces with <a href="#multiple-projects">multiple projects</a>.
+This type of development environment is suitable for advanced users who are developing shareable libraries,
+and for enterprises that use a "monorepo" development style, with a single repository and global configuration for all Angular projects.</p>
+<p>To set up a monorepo workspace, you should skip creating the root application.
+See <a href="#multiple-projects">Setting up for a multi-project workspace</a> below.</p>
+
+  <h2 id="workspace-configuration-files">
+    <a href="#workspace-configuration-files" class="docs-anchor" tabindex="-1" aria-label="Link to Workspace configuration files">Workspace configuration files</a>
+  </h2>
+  <p>All projects within a workspace share a <a href="reference/configs/workspace-config">configuration</a>.
+The top level of the workspace contains workspace-wide configuration files, configuration files for the root-level application, and subfolders for the root-level application source and test files.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Workspace configuration files</th>
+<th align="left">Purpose</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>.editorconfig</code></td>
+<td align="left">Configuration for code editors. See <a href="https://editorconfig.org" target="_blank">EditorConfig</a>.</td>
+</tr>
+<tr>
+<td align="left"><code>.gitignore</code></td>
+<td align="left">Specifies intentionally untracked files that <a href="https://git-scm.com" target="_blank">Git</a> should ignore.</td>
+</tr>
+<tr>
+<td align="left"><code>README.md</code></td>
+<td align="left">Documentation for the workspace.</td>
+</tr>
+<tr>
+<td align="left"><code>angular.json</code></td>
+<td align="left">CLI configuration for all projects in the workspace, including configuration options for how to build, serve, and test each project. For details, see <a href="reference/configs/workspace-config">Angular Workspace Configuration</a>.</td>
+</tr>
+<tr>
+<td align="left"><code>package.json</code></td>
+<td align="left">Configures <a href="reference/configs/npm-packages">npm package dependencies</a> that are available to all projects in the workspace. See <a href="https://docs.npmjs.com/files/package.json" target="_blank">npm documentation</a> for the specific format and contents of this file.</td>
+</tr>
+<tr>
+<td align="left"><code>package-lock.json</code></td>
+<td align="left">Provides version information for all packages installed into <code>node_modules</code> by the npm client. See <a href="https://docs.npmjs.com/files/package-lock.json" target="_blank">npm documentation</a> for details.</td>
+</tr>
+<tr>
+<td align="left"><code>src/</code></td>
+<td align="left">Source files for the root-level application project.</td>
+</tr>
+<tr>
+<td align="left"><code>public/</code></td>
+<td align="left">Contains image and other asset files to be served as static files by the dev server and copied as-is when you build your application.</td>
+</tr>
+<tr>
+<td align="left"><code>node_modules/</code></td>
+<td align="left">Installed <a href="reference/configs/npm-packages">npm packages</a> for the entire workspace. Workspace-wide <code>node_modules</code> dependencies are visible to all projects.</td>
+</tr>
+<tr>
+<td align="left"><code>tsconfig.json</code></td>
+<td align="left">The base <a href="https://www.typescriptlang.org" target="_blank">TypeScript</a> configuration for projects in the workspace. All other configuration files inherit from this base file. For more information, see the <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#tsconfig-bases" target="_blank">relevant TypeScript documentation</a>.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="application-project-files">
+    <a href="#application-project-files" class="docs-anchor" tabindex="-1" aria-label="Link to Application project files">Application project files</a>
+  </h2>
+  <p>By default, the CLI command <code>ng new my-app</code> creates a workspace folder named "my-app" and generates a new application skeleton in a <code>src/</code> folder at the top level of the workspace.
+A newly generated application contains source files for a root module, with a root component and template.</p>
+<p>When the workspace file structure is in place, you can use the <code>ng generate</code> command on the command line to add functionality and data to the application.
+This initial root-level application is the <em>default app</em> for CLI commands (unless you change the default after creating <a href="#multiple-projects">additional apps</a>).</p>
+<p>For a single-application workspace, the <code>src</code> subfolder of the workspace contains the source files (application logic, data, and assets) for the root application.
+For a multi-project workspace, additional projects in the <code>projects</code> folder contain a <code>project-name/src/</code> subfolder with the same structure.</p>
+
+  <h3 id="application-source-files">
+    <a href="#application-source-files" class="docs-anchor" tabindex="-1" aria-label="Link to Application source files">Application source files</a>
+  </h3>
+  <p>Files at the top level of <code>src/</code> support running your application.
+Subfolders contain the application source and application-specific configuration.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Application support files</th>
+<th align="left">Purpose</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>app/</code></td>
+<td align="left">Contains the component files in which your application logic and data are defined. See details <a href="#app-src">below</a>.</td>
+</tr>
+<tr>
+<td align="left"><code>favicon.ico</code></td>
+<td align="left">An icon to use for this application in the bookmark bar.</td>
+</tr>
+<tr>
+<td align="left"><code>index.html</code></td>
+<td align="left">The main HTML page that is served when someone visits your site. The CLI automatically adds all JavaScript and CSS files when building your app, so you typically don't need to add any <code>&lt;script&gt;</code> or<code>&lt;link&gt;</code> tags here manually.</td>
+</tr>
+<tr>
+<td align="left"><code>main.ts</code></td>
+<td align="left">The main entry point for your application.</td>
+</tr>
+<tr>
+<td align="left"><code>styles.css</code></td>
+<td align="left">Global CSS styles applied to the entire application.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>Inside the <code>src</code> folder, the <code>app</code> folder contains your project's logic and data.
+Angular components, templates, and styles go here.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left"><code>src/app/</code> files</th>
+<th align="left">Purpose</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>app.config.ts</code></td>
+<td align="left">Defines the application configuration that tells Angular how to assemble the application. As you add more providers to the app, they should be declared here.<br><br><em>Only generated when using the <code>--standalone</code> option.</em></td>
+</tr>
+<tr>
+<td align="left"><code>app.component.ts</code></td>
+<td align="left">Defines the application's root component, named <code>AppComponent</code>. The view associated with this root component becomes the root of the view hierarchy as you add components and services to your application.</td>
+</tr>
+<tr>
+<td align="left"><code>app.component.html</code></td>
+<td align="left">Defines the HTML template associated with <code>AppComponent</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>app.component.css</code></td>
+<td align="left">Defines the CSS stylesheet for <code>AppComponent</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>app.component.spec.ts</code></td>
+<td align="left">Defines a unit test for <code>AppComponent</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>app.module.ts</code></td>
+<td align="left">Defines the root module, named <code>AppModule</code>, that tells Angular how to assemble the application. Initially declares only the <code>AppComponent</code>. As you add more components to the app, they must be declared here.<br><br><em>Only generated when using the <code>--standalone false</code> option.</em></td>
+</tr>
+<tr>
+<td align="left"><code>app.routes.ts</code></td>
+<td align="left">Defines the application's routing configuration.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="application-configuration-files">
+    <a href="#application-configuration-files" class="docs-anchor" tabindex="-1" aria-label="Link to Application configuration files">Application configuration files</a>
+  </h3>
+  <p>Application-specific configuration files for the root application reside at the workspace root level.
+For a multi-project workspace, project-specific configuration files are in the project root, under <code>projects/project-name/</code>.</p>
+<p>Project-specific <a href="https://www.typescriptlang.org" target="_blank">TypeScript</a> configuration files inherit from the workspace-wide <code>tsconfig.json</code>.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Application-specific configuration files</th>
+<th align="left">Purpose</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>tsconfig.app.json</code></td>
+<td align="left">Application-specific <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript configuration</a>, including <a href="reference/configs/angular-compiler-options">Angular compiler options</a>.</td>
+</tr>
+<tr>
+<td align="left"><code>tsconfig.spec.json</code></td>
+<td align="left"><a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript configuration</a> for application tests.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="multiple-projects">
+    <a href="#multiple-projects" class="docs-anchor" tabindex="-1" aria-label="Link to Multiple projects">Multiple projects</a>
+  </h2>
+  <p>A multi-project workspace is suitable for an organization that uses a single repository and global configuration for multiple Angular projects (the "monorepo" model).
+A multi-project workspace also supports library development.</p>
+
+  <h3 id="setting-up-for-a-multi-project-workspace">
+    <a href="#setting-up-for-a-multi-project-workspace" class="docs-anchor" tabindex="-1" aria-label="Link to Setting up for a multi-project workspace">Setting up for a multi-project workspace</a>
+  </h3>
+  <p>If you intend to have multiple projects in a workspace, you can skip the initial application generation when you create the workspace, and give the workspace a unique name.
+The following command creates a workspace with all of the workspace-wide configuration files, but no root-level application.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> new</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-workspace</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --no-create-application</span></span></code></pre>
+    </pre>
+  </div><p>You can then generate applications and libraries with names that are unique within the workspace.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">cd</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-workspace</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> application</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-app</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> library</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-lib</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="multiple-project-file-structure">
+    <a href="#multiple-project-file-structure" class="docs-anchor" tabindex="-1" aria-label="Link to Multiple project file structure">Multiple project file structure</a>
+  </h3>
+  <p>The first explicitly generated application goes into the <code>projects</code> folder along with all other projects in the workspace.
+Newly generated libraries are also added under <code>projects</code>.
+When you create projects this way, the file structure of the workspace is entirely consistent with the structure of the <a href="reference/configs/workspace-config">workspace configuration file</a>, <code>angular.json</code>.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">my-workspace/</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ├── …                (workspace-wide configuration files)</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  └── projects/        (applications and libraries)</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      ├── my-app/      (an explicitly generated application)</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      │   └── …        (application-specific code and configuration)</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      └── my-lib/      (a generated library)</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          └── …        (library-specific code and configuration)</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="library-project-files">
+    <a href="#library-project-files" class="docs-anchor" tabindex="-1" aria-label="Link to Library project files">Library project files</a>
+  </h2>
+  <p>When you generate a library using the CLI (with a command such as <code>ng generate library my-lib</code>), the generated files go into the <code>projects/</code> folder of the workspace.
+For more information about creating your own libraries, see  <a href="tools/libraries/creating-libraries">Creating Libraries</a>.</p>
+<p>Unlike an application, a library has its own <code>package.json</code> configuration file.</p>
+<p>Under the <code>projects/</code> folder, the <code>my-lib</code> folder contains your library code.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Library source files</th>
+<th align="left">Purpose</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>src/lib</code></td>
+<td align="left">Contains your library project's logic and data. Like an application project, a library project can contain components, services, modules, directives, and pipes.</td>
+</tr>
+<tr>
+<td align="left"><code>src/public-api.ts</code></td>
+<td align="left">Specifies all files that are exported from your library.</td>
+</tr>
+<tr>
+<td align="left"><code>ng-package.json</code></td>
+<td align="left">Configuration file used by <a href="https://github.com/ng-packagr/ng-packagr" target="_blank">ng-packagr</a> for building your library.</td>
+</tr>
+<tr>
+<td align="left"><code>package.json</code></td>
+<td align="left">Configures <a href="reference/configs/npm-packages">npm package dependencies</a> that are required for this library.</td>
+</tr>
+<tr>
+<td align="left"><code>tsconfig.lib.json</code></td>
+<td align="left">Library-specific <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript Configuration</a>, including <a href="reference/configs/angular-compiler-options">Angular compiler options</a>.</td>
+</tr>
+<tr>
+<td align="left"><code>tsconfig.lib.prod.json</code></td>
+<td align="left">Library-specific <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript Configuration</a> that is used when building the library in production mode.</td>
+</tr>
+<tr>
+<td align="left"><code>tsconfig.spec.json</code></td>
+<td align="left"><a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript Configuration</a> for the library's unit tests.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  

@@ -1,0 +1,32 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Runtime performance optimization</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/best-practices/runtime-performance/overview.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Fast rendering is critical for Angular and we've built the framework with a lot of optimizations in mind to help you develop performant apps. To better understand the performance of your app we offer <a href="tools/devtools">Angular DevTools</a> and a <a href="https://www.youtube.com/watch?v=FjyX_hkscII" target="_blank">video guide</a> on how to use Chrome DevTools for profiling. In this section we cover the most common performance optimization techniques.</p>
+<p><strong>Change detection</strong> is the process through which Angular checks to see whether your application state has changed, and if any DOM needs to be updated. At a high level, Angular walks your components from top to bottom, looking for changes. Angular runs its change detection mechanism periodically so that changes to the data model are reflected in an application’s view. Change detection can be triggered either manually or through an asynchronous event (for example, a user interaction or an XMLHttpRequest completion).</p>
+<p>Change detection is highly optimized and performant, but it can still cause slowdowns if the application runs it too frequently.</p>
+<p>In this guide, you’ll learn how to control and optimize the change detection mechanism by skipping parts of your application and running change detection only when necessary.</p>
+<p>Watch this video if you prefer to learn more about performance optimizations in a media format:</p>
+
+    <div class="docs-video-container">
+      <iframe
+      class="docs-video"
+      src="https://www.youtube.com/embed/f8sA-i6gkGQ"
+      
+      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      credentialless
+      title="Video player"
+      ></iframe>
+    </div>
+    

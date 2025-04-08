@@ -1,0 +1,62 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Migration to lazy-loaded routes</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/migrations/route-lazy-loading.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>This schematic helps developers to convert eagerly loaded component routes to lazy loaded routes. This allows the build process to split the production bundle into smaller chunks, to avoid big JS bundle that includes all routes, which negatively affects initial page load of an application.</p>
+<p>Run the schematic using the following command:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/core:route-lazy-loading</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="path-config-option">
+    <a href="#path-config-option" class="docs-anchor" tabindex="-1" aria-label="Link to <code>path</code> config option"><code>path</code> config option</a>
+  </h3>
+  <p>By default, migration will go over the entire application. If you want to apply this migration to a subset of the files, you can pass the path argument as shown below:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/core:route-lazy-loading</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --path</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> src/app/sub-component</span></span></code></pre>
+    </pre>
+  </div><p>The value of the path parameter is a relative path within the project.</p>
+
+  <h3 id="how-does-it-work">
+    <a href="#how-does-it-work" class="docs-anchor" tabindex="-1" aria-label="Link to How does it work?">How does it work?</a>
+  </h3>
+  <p>The schematic will attempt to find all the places where the application routes as defined:</p>
+
+  <ul class="docs-list">
+    <li><code>RouterModule.forRoot</code> and <code>RouterModule.forChild</code></li>
+<li><code>Router.resetConfig</code></li>
+<li><code>provideRouter</code></li>
+<li><code>provideRoutes</code></li>
+<li>variables of type <code>Routes</code> or <code>Route[]</code> (e.g. <code>const routes: Routes = [{...}]</code>)</li>
+
+  </ul>
+  <p>The migration will check all the components in the routes, check if they are standalone and eagerly loaded, and if so, it will convert them to lazy loaded routes.</p>
+
+  <h4 id="before">
+    <a href="#before" class="docs-anchor" tabindex="-1" aria-label="Link to Before">Before</a>
+  </h4>
+  <div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// app.module.ts</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { HomeComponent } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './home/home.component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    RouterModule.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forRoot</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">([</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        path: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'home'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // HomeComponent is standalone and eagerly loaded</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        component: HomeComponent,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ]),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="after">
+    <a href="#after" class="docs-anchor" tabindex="-1" aria-label="Link to After">After</a>
+  </h4>
+  <div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// app.module.ts</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    RouterModule.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forRoot</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">([</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        path: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'home'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // ↓ HomeComponent is now lazy loaded</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">        loadComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'./home/home.component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">then</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">m</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> m.HomeComponent),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ]),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>This migration will also collect information about all the components declared in NgModules and output the list of routes that use them (including corresponding location of the file). Consider making those components standalone and run this migration again. You can use an existing migration (see <a href="https://angular.dev/reference/migrations/standalone" target="_blank">https://angular.dev/reference/migrations/standalone</a>) to convert those components to standalone.</p>

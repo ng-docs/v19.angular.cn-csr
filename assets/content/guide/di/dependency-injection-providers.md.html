@@ -1,0 +1,171 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Configuring dependency providers</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/di/dependency-injection-providers.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>The previous sections described how to use class instances as dependencies.
+Aside from classes, you can also use values such as <code>boolean</code>, <code>string</code>, <code>Date</code>, and objects as dependencies.
+Angular provides the necessary APIs to make the dependency configuration flexible, so you can make those values available in DI.</p>
+
+  <h2 id="specifying-a-provider-token">
+    <a href="#specifying-a-provider-token" class="docs-anchor" tabindex="-1" aria-label="Link to Specifying a provider token">Specifying a provider token</a>
+  </h2>
+  <p>If you specify the service class as the provider token, the default behavior is for the injector to instantiate that class using the <code>new</code> operator.</p>
+<p>In the following example, the app component provides a <code>Logger</code> instance:</p>
+<div class="docs-code" header="src/app/app.component.ts">
+    <div class="docs-code-header"><h3>src/app/app.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [Logger],</span></span></code></pre>
+    </pre>
+  </div><p>You can, however, configure DI to associate the <code>Logger</code> provider token with a different class or any other value.
+So when the <code>Logger</code> is injected, the configured value is used instead.</p>
+<p>In fact, the class provider syntax is a shorthand expression that expands into a provider configuration, defined by the <code>Provider</code> interface.
+Angular expands the <code>providers</code> value in this case into a full provider object as follows:</p>
+<div class="docs-code" header="src/app/app.component.ts">
+    <div class="docs-code-header"><h3>src/app/app.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[{ provide: Logger, useClass: Logger }]</span></span></code></pre>
+    </pre>
+  </div><p>The expanded provider configuration is an object literal with two properties:</p>
+
+  <ul class="docs-list">
+    <li>The <code>provide</code> property holds the token that serves as the key for consuming the dependency value.</li>
+<li>The second property is a provider definition object, which tells the injector <strong>how</strong> to create the dependency value. The provider-definition can be one of the following:
+  <ul class="docs-list">
+    <li><code>useClass</code> - this option tells Angular DI to instantiate a provided class when a dependency is injected</li>
+<li><code>useExisting</code> - allows you to alias a token and reference any existing one.</li>
+<li><code>useFactory</code> - allows you to define a function that constructs a dependency.</li>
+<li><code>useValue</code> - provides a static value that should be used as a dependency.</li>
+
+  </ul>
+  </li>
+
+  </ul>
+  <p>The sections below describe how to use the different provider definitions.</p>
+
+  <h3 id="class-providers-useclass">
+    <a href="#class-providers-useclass" class="docs-anchor" tabindex="-1" aria-label="Link to Class providers: useClass">Class providers: useClass</a>
+  </h3>
+  <p>The <code>useClass</code> provider key lets you create and return a new instance of the specified class.</p>
+<p>You can use this type of provider to substitute an alternative implementation for a common or default class.
+The alternative implementation can, for example, implement a different strategy, extend the default class, or emulate the behavior of the real class in a test case.</p>
+<p>In the following example, <code>BetterLogger</code> would be instantiated when the <code>Logger</code> dependency is requested in a component or any other class:</p>
+<div class="docs-code" header="src/app/app.component.ts">
+    <div class="docs-code-header"><h3>src/app/app.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[{ provide: Logger, useClass: BetterLogger }]</span></span></code></pre>
+    </pre>
+  </div><p>If the alternative class providers have their own dependencies, specify both providers in the providers metadata property of the parent module or component:</p>
+<div class="docs-code" header="src/app/app.component.ts">
+    <div class="docs-code-header"><h3>src/app/app.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  UserService, </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// dependency needed in `EvenBetterLogger`.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  { provide: Logger, useClass: EvenBetterLogger },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]</span></span></code></pre>
+    </pre>
+  </div><p>In this example, <code>EvenBetterLogger</code> displays the user name in the log message. This logger gets the user from an injected <code>UserService</code> instance:</p>
+<div class="docs-code" header="src/app/even-better-logger.component.ts">
+    <div class="docs-code-header"><h3>src/app/even-better-logger.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Injectable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> EvenBetterLogger</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> extends</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Logger</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> userService</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(UserService);</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  override</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">message</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line highlighted"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> name</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.userService.user.name;</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    super</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`Message to ${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">name</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}: ${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">message</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>Angular DI knows how to construct the <code>UserService</code> dependency, since it has been configured above and is available in the injector.</p>
+
+  <h3 id="alias-providers-useexisting">
+    <a href="#alias-providers-useexisting" class="docs-anchor" tabindex="-1" aria-label="Link to Alias providers: useExisting">Alias providers: useExisting</a>
+  </h3>
+  <p>The <code>useExisting</code> provider key lets you map one token to another.
+In effect, the first token is an alias for the service associated with the second token, creating two ways to access the same service object.</p>
+<p>In the following example, the injector injects the singleton instance of <code>NewLogger</code> when the component asks for either the new or the old logger:
+In this way, <code>OldLogger</code> is an alias for <code>NewLogger</code>.</p>
+<div class="docs-code" header="src/app/app.component.ts">
+    <div class="docs-code-header"><h3>src/app/app.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  NewLogger,</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Alias OldLogger w/ reference to NewLogger</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  { provide: OldLogger, useExisting: NewLogger},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-note">
+    <p><strong>Note:</strong> Ensure you do not alias <code>OldLogger</code> to <code>NewLogger</code> with <code>useClass</code>, as this creates two different <code>NewLogger</code> instances.</p>
+
+    </div>
+    
+  <h3 id="factory-providers-usefactory">
+    <a href="#factory-providers-usefactory" class="docs-anchor" tabindex="-1" aria-label="Link to Factory providers: useFactory">Factory providers: useFactory</a>
+  </h3>
+  <p>The <code>useFactory</code> provider key lets you create a dependency object by calling a factory function.
+With this approach, you can create a dynamic value based on information available in the DI and elsewhere in the app.</p>
+<p>In the following example, only authorized users should see secret heroes in the <code>HeroService</code>.
+Authorization can change during the course of a single application session, as when a different user logs in .</p>
+<p>To keep security-sensitive information in <code>UserService</code> and out of <code>HeroService</code>, give the <code>HeroService</code> constructor a boolean flag to control display of secret heroes:</p>
+<div class="docs-code" header="src/app/heroes/hero.service.ts">
+    <div class="docs-code-header"><h3>src/app/heroes/hero.service.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HeroService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> logger</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Logger</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line highlighted"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> isAuthorized</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  getHeroes</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line highlighted"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> auth</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.isAuthorized </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'authorized'</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> :</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'unauthorized'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.logger.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`Getting heroes for ${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">auth</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">} user.`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    return</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> HEROES</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">filter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">hero</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.isAuthorized </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">||</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> !</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">hero.isSecret);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>To implement the <code>isAuthorized</code> flag, use a factory provider to create a new logger instance for <code>HeroService</code>.
+This is necessary as we need to manually pass <code>Logger</code> when constructing the hero service:</p>
+<div class="docs-code" header="src/app/heroes/hero.service.provider.ts">
+    <div class="docs-code-header"><h3>src/app/heroes/hero.service.provider.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> heroServiceFactory</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">logger</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Logger</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">userService</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UserService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HeroService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(logger, userService.user.isAuthorized);</span></span></code></pre>
+    </pre>
+  </div><p>The factory function has access to <code>UserService</code>.
+You inject both <code>Logger</code> and <code>UserService</code> into the factory provider so the injector can pass them along to the factory function:</p>
+<div class="docs-code" header="src/app/heroes/hero.service.provider.ts">
+    <div class="docs-code-header"><h3>src/app/heroes/hero.service.provider.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> heroServiceProvider</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  provide: HeroService,</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  useFactory: heroServiceFactory,</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  deps: [Logger, UserService]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre>
+    </pre>
+  </div>
+  <ul class="docs-list">
+    <li>The <code>useFactory</code> field specifies that the provider is a factory function whose implementation is <code>heroServiceFactory</code>.</li>
+<li>The <code>deps</code> property is an array of provider tokens.
+The <code>Logger</code> and <code>UserService</code> classes serve as tokens for their own class providers.
+The injector resolves these tokens and injects the corresponding services into the matching <code>heroServiceFactory</code> factory function parameters, based on the order specified.</li>
+
+  </ul>
+  <p>Capturing the factory provider in the exported variable, <code>heroServiceProvider</code>, makes the factory provider reusable.</p>
+
+  <h3 id="value-providers-usevalue">
+    <a href="#value-providers-usevalue" class="docs-anchor" tabindex="-1" aria-label="Link to Value providers: useValue">Value providers: useValue</a>
+  </h3>
+  <p>The <code>useValue</code> key lets you associate a static value with a DI token.</p>
+<p>Use this technique to provide runtime configuration constants such as website base addresses and feature flags.
+You can also use a value provider in a unit test to provide mock data in place of a production data service.</p>
+<p>The next section provides more information about the <code>useValue</code> key.</p>
+
+  <h2 id="using-an-injectiontoken-object">
+    <a href="#using-an-injectiontoken-object" class="docs-anchor" tabindex="-1" aria-label="Link to Using an <code>InjectionToken</code> object">Using an <code>InjectionToken</code> object</a>
+  </h2>
+  <p>Use an <code>InjectionToken</code> object as provider token for non-class dependencies.
+The following example defines a token, <code>APP_CONFIG</code>. of the type <code>InjectionToken</code>:</p>
+<div class="docs-code" header="src/app/app.config.ts">
+    <div class="docs-code-header"><h3>src/app/app.config.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { InjectionToken } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line highlighted"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> interface</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppConfig</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  title</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> APP_CONFIG</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> InjectionToken</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">AppConfig</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app.config description'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre>
+    </pre>
+  </div><p>The optional type parameter, <code>&lt;AppConfig&gt;</code>, and the token description, <code>app.config description</code>, specify the token's purpose.</p>
+<p>Next, register the dependency provider in the component using the <code>InjectionToken</code> object of <code>APP_CONFIG</code>:</p>
+<div class="docs-code" header="src/app/app.component.ts">
+    <div class="docs-code-header"><h3>src/app/app.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> MY_APP_CONFIG_VARIABLE</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  title: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Hello'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">};</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [{ provide: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">APP_CONFIG</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, useValue: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">MY_APP_CONFIG_VARIABLE</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }]</span></span></code></pre>
+    </pre>
+  </div><p>Now, inject the configuration object in the constructor body with the <code>inject</code> function:</p>
+<div class="docs-code" header="src/app/app.component.ts">
+    <div class="docs-code-header"><h3>src/app/app.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> config</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">APP_CONFIG</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.title </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> config.title;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="interfaces-and-di">
+    <a href="#interfaces-and-di" class="docs-anchor" tabindex="-1" aria-label="Link to Interfaces and DI">Interfaces and DI</a>
+  </h3>
+  <p>Though the TypeScript <code>AppConfig</code> interface supports typing within the class, the <code>AppConfig</code> interface plays no role in DI.
+In TypeScript, an interface is a design-time artifact, and does not have a runtime representation, or token, that the DI framework can use.</p>
+<p>When the TypeScript transpiles to JavaScript, the interface disappears because JavaScript doesn't have interfaces.
+Because there is no interface for Angular to find at runtime, the interface cannot be a token, nor can you inject it:</p>
+<div class="docs-code" header="src/app/app.component.ts">
+    <div class="docs-code-header"><h3>src/app/app.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Can't use interface as provider token</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[{ provide: AppConfig, useValue: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">MY_APP_CONFIG_VARIABLE</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> })]</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code" header="src/app/app.component.ts">
+    <div class="docs-code-header"><h3>src/app/app.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Can't inject using the interface as the parameter type</span></span><span class="line highlighted"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> config</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppConfig);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>

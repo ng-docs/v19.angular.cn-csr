@@ -1,0 +1,36 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Missing value accessor</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG01203.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>For all custom form controls, you must register a value accessor.</p>
+<p>Here's an example of how to provide one:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    provide: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">NG_VALUE_ACCESSOR</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    useExisting: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forwardRef</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> MyInputField),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    multi: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="debugging-the-error">
+    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">Debugging the error</a>
+  </h2>
+  <p>As described above, your control was expected to have a value accessor, but was missing one. However, there are many different reasons this can happen in practice. Here's a listing of some known problems leading to this error.</p>
+
+    <ol class="docs-ordered-list">
+      <li>If you <strong>defined</strong> a custom form control, did you remember to provide a value accessor?</li>
+<li>Did you put <code>ngModel</code> on an element with no value, or an <strong>invalid element</strong> (e.g. <code>&lt;div [(ngModel)]=&quot;foo&quot;&gt;</code>)?</li>
+<li>Are you using a custom form control declared inside an <code>NgModule</code>? if so, make sure you are <strong>importing</strong> the <code>NgModule</code>.</li>
+<li>Are you using <code>ngModel</code> with a third-party custom form control? Check whether that control provides a value accessor. If not, use <strong><code>ngDefaultControl</code></strong> on the control's element.</li>
+<li>Are you <strong>testing</strong> a custom form control? Be sure to configure your testbed to know about the control. You can do so with <code>Testbed.configureTestingModule</code>.</li>
+<li>Are you using <strong>Nx and Module Federation</strong> with webpack? Your <code>webpack.config.js</code> may require <a href="https://github.com/angular/angular/issues/43821#issuecomment-1054845431" target="_blank">extra configuration</a> to ensure the forms package is shared.</li>
+
+    </ol>
+    

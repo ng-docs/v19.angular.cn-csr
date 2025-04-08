@@ -1,0 +1,93 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">The Angular CLI</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/overview.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>The Angular CLI is a command-line interface tool which allows you to scaffold, develop, test, deploy, and maintain Angular applications directly from a command shell.</p>
+<p>Angular CLI is published on npm as the <code>@angular/cli</code> package and includes a binary named <code>ng</code>. Commands invoking <code>ng</code> are using the Angular CLI.</p>
+
+    <div class="docs-callout docs-callout-helpful">
+      <h3>Try Angular without local setup</h3>
+      <p>If you are new to Angular, you might want to start with <a href="tutorials/learn-angular">Try it now!</a>, which introduces the essentials of Angular in the context of a ready-made basic online store app for you to examine and modify.
+This standalone tutorial takes advantage of the interactive <a href="https://stackblitz.com" target="_blank">StackBlitz</a> environment for online development.
+You don't need to set up your local environment until you're ready.</p>
+
+    </div>
+    
+    <div class="docs-card-grid">
+      
+    <a href="tools/cli/setup-local"  class="docs-card">
+      <div>
+        <h3>Getting Started</h3>
+        <p>Install Angular CLI to create and build your first app.</p>
+
+      </div>
+      <span>Get Started</span>
+    </a>
+    
+    <a href="cli"  class="docs-card">
+      <div>
+        <h3>Command Reference</h3>
+        <p>Discover CLI commands to make you more productive with Angular.</p>
+
+      </div>
+      <span>Learn More</span>
+    </a>
+    
+    <a href="tools/cli/schematics"  class="docs-card">
+      <div>
+        <h3>Schematics</h3>
+        <p>Create and run schematics to generate and modify source files in your application automatically.</p>
+
+      </div>
+      <span>Learn More</span>
+    </a>
+    
+    <a href="tools/cli/cli-builder"  class="docs-card">
+      <div>
+        <h3>Builders</h3>
+        <p>Create and run builders to perform complex transformations from your source code to generated build outputs.</p>
+
+      </div>
+      <span>Learn More</span>
+    </a>
+    
+    </div>
+    
+  <h2 id="cli-command-language-syntax">
+    <a href="#cli-command-language-syntax" class="docs-anchor" tabindex="-1" aria-label="Link to CLI command-language syntax">CLI command-language syntax</a>
+  </h2>
+  <p>Angular CLI roughly follows Unix/POSIX conventions for option syntax.</p>
+
+  <h3 id="boolean-options">
+    <a href="#boolean-options" class="docs-anchor" tabindex="-1" aria-label="Link to Boolean options">Boolean options</a>
+  </h3>
+  <p>Boolean options have two forms: <code>--this-option</code> sets the flag to <code>true</code>, <code>--no-this-option</code> sets it to <code>false</code>.
+You can also use <code>--this-option=false</code> or <code>--this-option=true</code>.
+If neither option is supplied, the flag remains in its default state, as listed in the reference documentation.</p>
+
+  <h3 id="array-options">
+    <a href="#array-options" class="docs-anchor" tabindex="-1" aria-label="Link to Array options">Array options</a>
+  </h3>
+  <p>Array options can be provided in two forms: <code>--option value1 value2</code> or <code>--option value1 --option value2</code>.</p>
+
+  <h3 id="key-value-options">
+    <a href="#key-value-options" class="docs-anchor" tabindex="-1" aria-label="Link to Key/value options">Key/value options</a>
+  </h3>
+  <p>Some options like <code>--define</code> expect an array of <code>key=value</code> pairs as their values.
+Just like array options, key/value options can be provided in two forms:
+<code>--define &#39;KEY_1=&quot;value1&quot;&#39; KEY_2=true</code> or <code>--define &#39;KEY_1=&quot;value1&quot;&#39; --define KEY_2=true</code>.</p>
+
+  <h3 id="relative-paths">
+    <a href="#relative-paths" class="docs-anchor" tabindex="-1" aria-label="Link to Relative paths">Relative paths</a>
+  </h3>
+  <p>Options that specify files can be given as absolute paths, or as paths relative to the current working directory, which is generally either the workspace or project root.</p>

@@ -1,0 +1,22 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Missing Token</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG2003.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>There is no injection token for a constructor parameter at compile time. <a href="api/core/InjectionToken">InjectionTokens</a> are tokens that can be used in a Dependency Injection Provider.</p>
+
+  <h2 id="debugging-the-error">
+    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">Debugging the error</a>
+  </h2>
+  <p>Look at the parameter that throws the error, and all uses of the class.
+This error is commonly thrown when a constructor defines parameters with primitive types such as <code>string</code>, <code>number</code>, <code>boolean</code>, and <code>Object</code>.</p>
+<p>Use the <code>@Injectable</code> method or <code>@Inject</code> decorator from <code>@angular/core</code> to ensure that the type you are injecting is reified (has a runtime representation). Make sure to add a provider to this decorator so that you do not throw <a href="errors/NG0201">NG0201: No Provider Found</a>.</p>

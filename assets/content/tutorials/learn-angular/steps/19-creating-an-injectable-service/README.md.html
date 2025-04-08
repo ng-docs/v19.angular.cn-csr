@@ -1,0 +1,57 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Creating an injectable service</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/learn-angular/steps/19-creating-an-injectable-service/README.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Dependency injection (DI) in Angular is one of the framework's most powerful features. Consider dependency injection to be the ability for Angular to <em>provide</em> resources you need for your application at runtime. A dependency could be a service or some other resources.</p>
+<p>You can learn more about <a href="guide/di">dependency injection in the Angular docs</a>. For now, you will get practice creating <code>injectable</code> resources.</p>
+<p>In this activity, you'll learn how to create an injectable service.</p>
+<hr>
+
+<p>One way to use a service is to act as a way to interact with data and APIs. To make a service reusable you should keep the logic in the service and share it throughout the application when it is needed.</p>
+<p>To make a service eligible to be injected by the DI system use the <code>@Injectable</code> decorator. For example:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Injectable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    providedIn: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'root'</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UserService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // methods to retrieve and return data</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>The <code>@Injectable</code> decorator notifies the DI system that the <code>UserService</code> is available to be requested in a class. <code>providedIn</code> sets the scope in which this resource is available. For now, it is good enough to understand that <code>providedIn: &#39;root&#39;</code> means that the <code>UserService</code> is available to the entire application.</p>
+<p>Alright, you try:</p>
+
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="add-the-injectable-decorator">
+    <a href="#add-the-injectable-decorator" class="docs-anchor" tabindex="-1" aria-label="Link to Add the <code>@Injectable</code> decorator">Add the <code>@Injectable</code> decorator</a>
+  </h3>
+  
+      <p>Update the code in <code>car.service.ts</code> by adding the <code>@Injectable</code> decorator.</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="configure-the-decorator">
+    <a href="#configure-the-decorator" class="docs-anchor" tabindex="-1" aria-label="Link to Configure the decorator">Configure the decorator</a>
+  </h3>
+  
+      <p>The values in the object passed to the decorator are considered to be the configuration for the decorator.
+<br>
+Update the <code>@Injectable</code> decorator in <code>car.service.ts</code> to include the configuration for <code>providedIn: &#39;root&#39;</code>.</p>
+<p>Tip: Use the above example to find the correct syntax.</p>
+
+    </li>
+    
+    </ol>
+    <p><span class="docs-emoji">Well, done 👍 that service is now </span><code>injectable</code> and can participate in the fun. Now that the service is <code>injectable</code><span class="docs-emoji">, let's try injecting it into a component 👉</span></p>

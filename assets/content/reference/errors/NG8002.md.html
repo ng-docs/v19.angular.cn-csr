@@ -1,0 +1,42 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Invalid Attribute</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG8002.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+    <div class="docs-video-container">
+      <iframe
+      class="docs-video"
+      src="https://www.youtube.com/embed/wfLkB3RsSJM"
+      
+      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      credentialless
+      title="Video player"
+      ></iframe>
+    </div>
+    <p>An attribute or property cannot be resolved during compilation.</p>
+<p>This error arises when attempting to bind to a property that does not exist.
+Any property binding must correspond to either:</p>
+
+  <ul class="docs-list">
+    <li>A native property on the HTML element, or</li>
+<li>An <code>@Input()</code> property of a component or directive applied to the element.</li>
+
+  </ul>
+  <p>The runtime error for this is <code>NG0304: &#39;${tagName}&#39; is not a known element: …&#39;</code>.</p>
+
+  <h2 id="debugging-the-error">
+    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">Debugging the error</a>
+  </h2>
+  <p>Look at documentation for the specific <a href="guide/templates">binding syntax</a> used. This is usually a typo or incorrect import.
+There may also be a missing direction with property selector 'name' or missing input.</p>

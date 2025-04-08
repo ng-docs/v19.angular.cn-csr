@@ -1,0 +1,19 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Hydration with unsupported Zone.js instance</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG05000.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>This warning means that the hydration was enabled for an application that was configured to use an unsupported version of Zone.js: either a custom or a "noop" one (see more info <a href="api/core/BootstrapOptions#ngZone">here</a>).</p>
+<p>Hydration relies on a signal from Zone.js when it becomes stable inside an application, so that Angular can start the serialization process on the server or post-hydration cleanup on the client (to remove DOM nodes that remained unclaimed).</p>
+<p>Providing a custom or a "noop" Zone.js implementation may lead to a different timing of the "stable" event, thus triggering the serialization or the cleanup too early or too late. This is not yet a fully supported configuration.</p>
+<p>If you use a custom Zone.js implementation, make sure that the "onStable" event is emitted at the right time and does not result in incorrect application behavior with hydration.</p>
+<p>More information about hydration can be found in the <a href="guide/hydration">hydration guide</a>.</p>

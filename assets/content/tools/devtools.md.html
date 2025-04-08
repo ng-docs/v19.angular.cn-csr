@@ -1,0 +1,243 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">DevTools Overview</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/devtools.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular DevTools is a browser extension that provides debugging and profiling capabilities for Angular applications.</p>
+
+    <div class="docs-video-container">
+      <iframe
+      class="docs-video"
+      src="https://www.youtube.com/embed/bavWOHZM6zE"
+      
+      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      credentialless
+      title="Video player"
+      ></iframe>
+    </div>
+    <p>Install Angular DevTools from the <a href="https://chrome.google.com/webstore/detail/angular-developer-tools/ienfalfjdbdpebioblfackkekamfmbnh" target="_blank">Chrome Web Store</a> or from <a href="https://addons.mozilla.org/firefox/addon/angular-devtools/" target="_blank">Firefox Addons</a>.</p>
+<p>You can open Chrome or Firefox DevTools on any web page by pressing <kbd>F12</kbd> or <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd></kbd> (Windows or Linux) and <kbd><kbd>Fn</kbd>+<kbd>F12</kbd></kbd> or <kbd><kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>I</kbd></kbd> (Mac).
+Once browser DevTools is open and Angular DevTools is installed, you can find it under the "Angular" tab.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> Chrome's new tab page does not run installed extensions, so the Angular tab will not appear in DevTools. Visit any other page to see it.</p>
+
+    </div>
+    <img src="assets/images/guide/devtools/devtools.png" alt="An overview of Angular DevTools showing a tree of components for an application.">
+
+
+  <h2 id="open-your-application">
+    <a href="#open-your-application" class="docs-anchor" tabindex="-1" aria-label="Link to Open your application">Open your application</a>
+  </h2>
+  <p>When you open the extension, you'll see two additional tabs:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Tabs</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><a href="tools/devtools#debug-your-application">Components</a></td>
+<td align="left">Lets you explore the components and directives in your application and preview or edit their state.</td>
+</tr>
+<tr>
+<td align="left"><a href="tools/devtools#profile-your-application">Profiler</a></td>
+<td align="left">Lets you profile your application and understand what the performance bottleneck is during change detection execution.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <img src="assets/images/guide/devtools/devtools-tabs.png" alt="A screenshot of the top of Angular DevTools illustrating two tabs in the upper-left corner, one labeled 'Components' and another labeled 'Profiler'.">
+
+<p>In the top-right corner of Angular DevTools you'll find which version of Angular is running on the page as well as the latest commit hash for the extension.</p>
+
+  <h3 id="angular-application-not-detected">
+    <a href="#angular-application-not-detected" class="docs-anchor" tabindex="-1" aria-label="Link to Angular application not detected">Angular application not detected</a>
+  </h3>
+  <p>If you see an error message "Angular application not detected" when opening Angular DevTools, this means it is not able to communicate with an Angular app on the page.
+The most common reason for this is because the web page you are inspecting does not contain an Angular application.
+Double check that you are inspecting the right web page and that the Angular app is running.</p>
+
+  <h3 id="we-detected-an-application-built-with-production-configuration">
+    <a href="#we-detected-an-application-built-with-production-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to We detected an application built with production configuration">We detected an application built with production configuration</a>
+  </h3>
+  <p>If you see an error message "We detected an application built with production configuration. Angular DevTools only supports development builds.", this means that an Angular application was found on the page, but it was compiled with production optimizations.
+When compiling for production, Angular CLI removes various debug features to minimize the amount of the JavaScript on the page to improve performance. This includes features needed to communicate with DevTools.</p>
+<p>To run DevTools, you need to compile your application with optimizations disabled. <code>ng serve</code> does this by default.
+If you need to debug a deployed application, disable optimizations in your build with the <a href="reference/configs/workspace-config#optimization-configuration"><code>optimization</code> configuration option</a> (<code>{&quot;optimization&quot;: false}</code>).</p>
+
+  <h2 id="debug-your-application">
+    <a href="#debug-your-application" class="docs-anchor" tabindex="-1" aria-label="Link to Debug your application">Debug your application</a>
+  </h2>
+  <p>The <strong>Components</strong> tab lets you explore the structure of your application.
+You can visualize the component and directive instances in the DOM and inspect or modify their state.</p>
+
+  <h3 id="explore-the-application-structure">
+    <a href="#explore-the-application-structure" class="docs-anchor" tabindex="-1" aria-label="Link to Explore the application structure">Explore the application structure</a>
+  </h3>
+  <p>The component tree displays a hierarchical relationship of the <em>components and directives</em> within your application.</p>
+<img src="assets/images/guide/devtools/component-explorer.png" alt="A screenshot of the 'Components' tab showing a tree of Angular components and directives starting the root of the application.">
+
+<p>Click the individual components or directives in the component explorer to select them and preview their properties.
+Angular DevTools displays properties and metadata on the right side of the component tree.</p>
+<p>To look up a component or directive by name use the search box above the component tree.</p>
+<img src="assets/images/guide/devtools/search.png" alt="A screenshot of the 'Components' tab. The filter bar immediately underneath the tab is searching for 'todo' and all components with 'todo' in the name are highlighted in the tree. `app-todos` is currently selected and a sidebar to the right displays information about the component's properties. This includes a section of `@Output` fields and another section for other properties.">
+
+
+  <h3 id="navigate-to-the-host-node">
+    <a href="#navigate-to-the-host-node" class="docs-anchor" tabindex="-1" aria-label="Link to Navigate to the host node">Navigate to the host node</a>
+  </h3>
+  <p>To go to the host element of a particular component or directive, double-click it in the component explorer.
+Angular DevTools will open the Elements tab in Chrome or the Inspector tab in Firefox, and select the associated DOM node.</p>
+
+  <h3 id="navigate-to-source">
+    <a href="#navigate-to-source" class="docs-anchor" tabindex="-1" aria-label="Link to Navigate to source">Navigate to source</a>
+  </h3>
+  <p>For components, Angular DevTools lets you navigate to the component definition in the Sources tab (Chrome) and Debugger tab (Firefox).
+After you select a particular component, click the icon at the top-right of the properties view:</p>
+<img src="assets/images/guide/devtools/navigate-source.png" alt="A screenshot of the 'Components' tab. The properties view on the right is visible for a component and the mouse rests in the upper right corner of that view on top of a `<>` icon. An adjacent tooltip reads 'Open component source'.">
+
+
+  <h3 id="update-property-value">
+    <a href="#update-property-value" class="docs-anchor" tabindex="-1" aria-label="Link to Update property value">Update property value</a>
+  </h3>
+  <p>Like browsers' DevTools, the properties view lets you edit the value of an input, output, or other properties.
+Right-click on the property value and if edit functionality is available for this value type, a text input will appear.
+Type the new value and press <code>Enter</code> to apply this value to the property.</p>
+<img src="assets/images/guide/devtools/update-property.png" alt="A screenshot of the 'Components' tab with the properties view open for a component. An `@Input` named `todo` contains a `label` property which is currently selected and has been manually updated to the value 'Buy milk'.">
+
+
+  <h3 id="access-selected-component-or-directive-in-console">
+    <a href="#access-selected-component-or-directive-in-console" class="docs-anchor" tabindex="-1" aria-label="Link to Access selected component or directive in console">Access selected component or directive in console</a>
+  </h3>
+  <p>As a shortcut in the console, Angular DevTools provides access to instances of recently selected components or directives.
+Type <code>$ng0</code> to get a reference to the instance of the currently selected component or directive, and type <code>$ng1</code> for the previously selected instance, <code>$ng2</code> for the instance selected before that, and so on.</p>
+<img src="assets/images/guide/devtools/access-console.png" alt="A screenshot of the 'Components' tab with the browser console underneath. In the console, the user has typed three commands, `$ng0`, `$ng1`, and `$ng2` to view the three most recently selected elements. After each statement, the console prints a different component reference.">
+
+
+  <h3 id="select-a-directive-or-component">
+    <a href="#select-a-directive-or-component" class="docs-anchor" tabindex="-1" aria-label="Link to Select a directive or component">Select a directive or component</a>
+  </h3>
+  <p>Similar to browsers' DevTools, you can inspect the page to select a particular component or directive.
+Click the <em><strong>Inspect element</strong></em> icon in the top left corner within Angular DevTools and hover over a DOM element on the page.
+The extension recognizes the associated directives and/or components and lets you select the corresponding element in the Component tree.</p>
+<img src="assets/images/guide/devtools/inspect-element.png" alt="A screenshot of the 'Components' tab with an Angular todo application visible. In the very top-left corner of Angular DevTools, an icon of a screen with a mouse icon inside it is selected. The mouse rests on a todo element in the Angular application UI. The element is highlighted with a `<TodoComponent>` label displayed in an adjacent tooltip.">
+
+
+  <h2 id="profile-your-application">
+    <a href="#profile-your-application" class="docs-anchor" tabindex="-1" aria-label="Link to Profile your application">Profile your application</a>
+  </h2>
+  <p>The <strong>Profiler</strong> tab lets you visualize the execution of Angular's change detection.
+This is useful for determining when and how change detection impacts your application's performance.</p>
+<img src="assets/images/guide/devtools/profiler.png" alt="A screenshot of the 'Profiler' tab which reads 'Click the play button to start a new recording, or upload a json file containing profiler data.' Next to this is a record button to being recording a new profile as well as a file picker to select an existing profile.">
+
+<p>The Profiler tab lets you start profiling the current application or import an existing profile from a previous run.
+To start profiling your application, hover over the circle in the top-left corner within the <strong>Profiler</strong> tab and click <strong>Start recording</strong>.</p>
+<p>During profiling, Angular DevTools captures execution events, such as change detection and lifecycle hook execution.
+Interact with your application to trigger change detection and generate data Angular DevTools can use.
+To finish recording, click the circle again to <strong>Stop recording</strong>.</p>
+<p>You can also import an existing recording.
+Read more about this feature in the <a href="tools/devtools#import-and-export-recordings">Import recording</a> section.</p>
+
+  <h3 id="understand-your-applications-execution">
+    <a href="#understand-your-applications-execution" class="docs-anchor" tabindex="-1" aria-label="Link to Understand your application's execution">Understand your application's execution</a>
+  </h3>
+  <p>After recording or importing a profile, Angular DevTools displays a visualization of change detection cycles.</p>
+<img src="assets/images/guide/devtools/default-profiler-view.png" alt="A screenshot of the 'Profiler' tab after a profile has been recorded or uploaded. It displays a bar chart illustrating various change detection cycles with some text which reads 'Select a bar to preview a particular change detection cycle'.">
+
+<p>Each bar in the sequence represents a change detection cycle in your app.
+The taller a bar is, the longer the application spent running change detection in this cycle.
+When you select a bar, DevTools displays useful information about it including:</p>
+
+  <ul class="docs-list">
+    <li>A bar chart with all the components and directives that it captured during this cycle</li>
+<li>How much time Angular spent running change detection in this cycle.</li>
+<li>An estimated frame rate as experienced by the user.</li>
+<li>The source which triggered change detection.</li>
+
+  </ul>
+  <img src="assets/images/guide/devtools/profiler-selected-bar.png" alt="A screenshot of the 'Profiler' tab. A single bar has been selected by the user and a nearby dropdown menu displays 'Bar chart`, showing a second bar chart underneath it. The new chart has two bars which take up the majority of the space, one labeled `TodosComponent` and the other labeled `NgForOf`. The other bars are small enough to be negligible in comparison.">
+
+
+  <h3 id="understand-component-execution">
+    <a href="#understand-component-execution" class="docs-anchor" tabindex="-1" aria-label="Link to Understand component execution">Understand component execution</a>
+  </h3>
+  <p>The bar chart displayed after clicking on a change detection cycle displays a detailed view about how much time your application spent running change detection in that particular component or directive.</p>
+<p>This example shows the total time spent by the <code>NgForOf</code> directive and which method was called on it.</p>
+<img src="assets/images/guide/devtools/directive-details.png" alt="A screenshot of the 'Profiler' tab where the `NgForOf` bar is selected. A detailed view of `NgForOf` is visible to the right where it lists 'Total time spent: 1.76 ms'. It includes a with exactly one row, listing `NgForOf` as a directives with an `ngDoCheck` method which took 1.76 ms. It also includes a list labeled 'Parent Hierarchy' containing the parent components of this directive.">
+
+
+  <h3 id="hierarchical-views">
+    <a href="#hierarchical-views" class="docs-anchor" tabindex="-1" aria-label="Link to Hierarchical views">Hierarchical views</a>
+  </h3>
+  <img src="assets/images/guide/devtools/flame-graph-view.png" alt="A screenshot of the 'Profiler' tab. A single bar has been selected by the user and a nearby dropdown menu now displays 'Flame graph', showing a flame graph underneath it. The flame graph starts with a row called 'Entire application' and another row called 'AppComponent'. Beneath those, the rows start to break up into multiple items, starting with `[RouterOutlet]` and `DemoAppComponent` on the third row. A few layers deep, one cell is highlighted red.">
+
+<p>You can also visualize the change detection execution in a flame graph-like view.</p>
+<p>Each tile in the graph represents an element on the screen at a specific position in the render tree.
+For example, consider a change detection cycle where a <code>LoggedOutUserComponent</code> is removed and in its place Angular rendered a <code>LoggedInUserComponent</code>. In this scenario both components will be displayed in the same tile.</p>
+<p>The x-axis represents the full time it took to render this change detection cycle.
+The y-axis represents the element hierarchy. Running change detection for an element requires render its directives and child components.
+Together, this graph visualizes which components are taking the longest time to render and where that time is going.</p>
+<p>Each tile is colored depending on how much time Angular spent there.
+Angular DevTools determines the intensity of the color by the time spent relative to the tile where rendering took the most time.</p>
+<p>When you click on a certain tile, you'll see details about it in the panel on the right.
+Double-clicking the tile zooms it in so you can more easily view its nested children.</p>
+
+  <h3 id="debug-change-detection-and-onpush-components">
+    <a href="#debug-change-detection-and-onpush-components" class="docs-anchor" tabindex="-1" aria-label="Link to Debug change detection and <code>OnPush</code> components">Debug change detection and <code>OnPush</code> components</a>
+  </h3>
+  <p>Normally, the graph visualizes the time it takes to <em>render</em> an application, for any given change detection frame. However some components such as <code>OnPush</code> components will only re-render if their input properties change. It can be useful to visualize the flame graph without these components for particular frames.</p>
+<p>To visualize only the components in a change detection frame that went through the change detection process, select the <strong>Change detection</strong> checkbox at the top, above the flame graph.</p>
+<p>This view highlights all the components that went through change detection and displays those that did not in gray, such as <code>OnPush</code> components that did not re-render.</p>
+<img src="assets/images/guide/devtools/debugging-onpush.png" alt="A screenshot of the 'Profiler' tab displaying a flame chart visualization of a change detection cycle. A checkbox labeled 'Show only change detection' is now checked. The flame graph looks very similar to before, however the color of components has changed from orange to blue. Several tiles labeled `[RouterOutlet]` are no longer highlighted with any color.">
+
+
+  <h3 id="import-and-export-recordings">
+    <a href="#import-and-export-recordings" class="docs-anchor" tabindex="-1" aria-label="Link to Import and export recordings">Import and export recordings</a>
+  </h3>
+  <p>Click the <strong>Save Profile</strong> button at the top-right of a recorded profiling session to export it as a JSON file and save it to the disk.
+Later, import the file in the initial view of the profiler by clicking the <strong>Choose file</strong> input.</p>
+<img src="assets/images/guide/devtools/save-profile.png" alt="A screenshot of the 'Profiler' tab displaying change detection cycles. On the right side a 'Save Profile' button is visible.">
+
+
+  <h2 id="inspect-your-injectors">
+    <a href="#inspect-your-injectors" class="docs-anchor" tabindex="-1" aria-label="Link to Inspect your injectors">Inspect your injectors</a>
+  </h2>
+  <p> Note: The Injector Tree is available for Angular Applications built with version 17 or higher.</p>
+
+  <h3 id="view-the-injector-hierarchy-of-your-application">
+    <a href="#view-the-injector-hierarchy-of-your-application" class="docs-anchor" tabindex="-1" aria-label="Link to View the injector hierarchy of your application">View the injector hierarchy of your application</a>
+  </h3>
+  <p> The <strong>Injector Tree</strong> tab lets you explore the structure of the Injectors configured in your application. Here you will see two trees representing the <a href="guide/di/hierarchical-dependency-injection">injector hierarchy</a> of your application. One tree is your environment hierarchy, the other is your element hierarchy.</p>
+<img src="assets/images/guide/devtools/di-injector-tree.png" alt="A screenshot of the 'Profiler' tab displaying the injector tree tab in Angular Devtools visualizing the injector graph for an example application.">
+
+
+  <h3 id="visualize-resolution-paths">
+    <a href="#visualize-resolution-paths" class="docs-anchor" tabindex="-1" aria-label="Link to Visualize resolution paths">Visualize resolution paths</a>
+  </h3>
+  <p> When a specific injector is selected, the path that Angular's dependency injection algorithm traverses from that injector to the root is highlighted. For element injectors, this includes highlighting the environment injectors that the dependency injection algorithm jumps to when a dependency cannot be resolved in the element hierarchy.</p>
+<p>See <a href="guide/di/hierarchical-dependency-injection#resolution-rules">resolution rules</a> for more details about how Angular resolves resolution paths. </p>
+<img src="assets/images/guide/devtools/di-injector-tree-selected.png" alt="A screenshot of the 'Profiler' tab displaying how the injector tree visualize highlights resolution paths when an injector is selected.">
+
+
+  <h3 id="view-injector-providers">
+    <a href="#view-injector-providers" class="docs-anchor" tabindex="-1" aria-label="Link to View injector providers">View injector providers</a>
+  </h3>
+  <p> Clicking an injector that has configured providers will display those providers in a list on the right of the injector tree view. Here you can view the provided token and it's type.</p>
+<img src="assets/images/guide/devtools/di-injector-tree-providers.png" alt="A screenshot of the 'Profiler' tab displaying how providers are made visible when an injector is selected.">

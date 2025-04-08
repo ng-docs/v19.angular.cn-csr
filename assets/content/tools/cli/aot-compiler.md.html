@@ -1,0 +1,597 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Ahead-of-time (AOT) compilation</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/aot-compiler.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>An Angular application consists mainly of components and their HTML templates.
+Because the components and templates provided by Angular cannot be understood by the browser directly, Angular applications require a compilation process before they can run in a browser.</p>
+<p>The Angular ahead-of-time (AOT) compiler converts your Angular HTML and TypeScript code into efficient JavaScript code during the build phase <em>before</em> the browser downloads and runs that code.
+Compiling your application during the build process provides a faster rendering in the browser.</p>
+<p>This guide explains how to specify metadata and apply available compiler options to compile your applications efficiently using the AOT compiler.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> <a href="https://www.youtube.com/watch?v=anphffaCZrQ" target="_blank">Watch Alex Rickabaugh explain the Angular compiler</a> at AngularConnect 2019.</p>
+
+    </div>
+    <p>Here are some reasons you might want to use AOT.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Reasons</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">Faster rendering</td>
+<td align="left">With AOT, the browser downloads a pre-compiled version of the application. The browser loads executable code so it can render the application immediately, without waiting to compile the application first.</td>
+</tr>
+<tr>
+<td align="left">Fewer asynchronous requests</td>
+<td align="left">The compiler <em>inlines</em> external HTML templates and CSS style sheets within the application JavaScript, eliminating separate ajax requests for those source files.</td>
+</tr>
+<tr>
+<td align="left">Smaller Angular framework download size</td>
+<td align="left">There's no need to download the Angular compiler if the application is already compiled. The compiler is roughly half of Angular itself, so omitting it dramatically reduces the application payload.</td>
+</tr>
+<tr>
+<td align="left">Detect template errors earlier</td>
+<td align="left">The AOT compiler detects and reports template binding errors during the build step before users can see them.</td>
+</tr>
+<tr>
+<td align="left">Better security</td>
+<td align="left">AOT compiles HTML templates and components into JavaScript files long before they are served to the client. With no templates to read and no risky client-side HTML or JavaScript evaluation, there are fewer opportunities for injection attacks.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="choosing-a-compiler">
+    <a href="#choosing-a-compiler" class="docs-anchor" tabindex="-1" aria-label="Link to Choosing a compiler">Choosing a compiler</a>
+  </h2>
+  <p>Angular offers two ways to compile your application:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Angular compile</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">Just-in-Time (JIT)</td>
+<td align="left">Compiles your application in the browser at runtime. This was the default until Angular 8.</td>
+</tr>
+<tr>
+<td align="left">Ahead-of-Time (AOT)</td>
+<td align="left">Compiles your application and libraries at build time. This is the default starting in Angular 9.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>When you run the <a href="cli/build"><code>ng build</code></a> (build only) or <a href="cli/serve"><code>ng serve</code></a> (build and serve locally) CLI commands, the type of compilation (JIT or AOT) depends on the value of the <code>aot</code> property in your build configuration specified in <code>angular.json</code>.
+By default, <code>aot</code> is set to <code>true</code> for new CLI applications.</p>
+<p>See the <a href="cli">CLI command reference</a> and <a href="tools/cli/build">Building and serving Angular apps</a> for more information.</p>
+
+  <h2 id="how-aot-works">
+    <a href="#how-aot-works" class="docs-anchor" tabindex="-1" aria-label="Link to How AOT works">How AOT works</a>
+  </h2>
+  <p>The Angular AOT compiler extracts <strong>metadata</strong> to interpret the parts of the application that Angular is supposed to manage.
+You can specify the metadata explicitly in <strong>decorators</strong> such as <code>@Component()</code> and <code>@Input()</code>, or implicitly in the constructor declarations of the decorated classes.
+The metadata tells Angular how to construct instances of your application classes and interact with them at runtime.</p>
+<p>In the following example, the <code>@Component()</code> metadata object and the class constructor tell Angular how to create and display an instance of <code>TypicalComponent</code>.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app-typical'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;div&gt;A typical component for {{data.name}}&lt;/div&gt;'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">data</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalData</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> someService</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(SomeService);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>The Angular compiler extracts the metadata <em>once</em> and generates a <em>factory</em> for <code>TypicalComponent</code>.
+When it needs to create a <code>TypicalComponent</code> instance, Angular calls the factory, which produces a new visual element, bound to a new instance of the component class with its injected dependency.</p>
+
+  <h3 id="compilation-phases">
+    <a href="#compilation-phases" class="docs-anchor" tabindex="-1" aria-label="Link to Compilation phases">Compilation phases</a>
+  </h3>
+  <p>There are three phases of AOT compilation.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left"></th>
+<th align="left">Phase</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">1</td>
+<td align="left">code analysis</td>
+<td align="left">In this phase, the TypeScript compiler and <em>AOT collector</em> create a representation of the source. The collector does not attempt to interpret the metadata it collects. It represents the metadata as best it can and records errors when it detects a metadata syntax violation.</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">code generation</td>
+<td align="left">In this phase, the compiler's <code>StaticReflector</code> interprets the metadata collected in phase 1, performs additional validation of the metadata, and throws an error if it detects a metadata restriction violation.</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">template type checking</td>
+<td align="left">In this optional phase, the Angular <em>template compiler</em> uses the TypeScript compiler to validate the binding expressions in templates. You can enable this phase explicitly by setting the <code>strictTemplates</code> configuration option; see <a href="reference/configs/angular-compiler-options">Angular compiler options</a>.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="metadata-restrictions">
+    <a href="#metadata-restrictions" class="docs-anchor" tabindex="-1" aria-label="Link to Metadata restrictions">Metadata restrictions</a>
+  </h3>
+  <p>You write metadata in a <em>subset</em> of TypeScript that must conform to the following general constraints:</p>
+
+  <ul class="docs-list">
+    <li>Limit <a href="#expression-syntax-limitations">expression syntax</a> to the supported subset of JavaScript</li>
+<li>Only reference exported symbols after <a href="#code-folding">code folding</a></li>
+<li>Only call <a href="#supported-classes-and-functions">functions supported</a> by the compiler</li>
+<li>Input/Outputs and data-bound class members must be public or protected.For additional guidelines and instructions on preparing an application for AOT compilation, see <a href="https://medium.com/sparkles-blog/angular-writing-aot-friendly-applications-7b64c8afbe3f" target="_blank">Angular: Writing AOT-friendly applications</a>.</li>
+
+  </ul>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> Errors in AOT compilation commonly occur because of metadata that does not conform to the compiler's requirements (as described more fully below).
+For help in understanding and resolving these problems, see <a href="tools/cli/aot-metadata-errors">AOT Metadata Errors</a>.</p>
+
+    </div>
+    
+  <h3 id="configuring-aot-compilation">
+    <a href="#configuring-aot-compilation" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring AOT compilation">Configuring AOT compilation</a>
+  </h3>
+  <p>You can provide options in the <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript configuration file</a> that controls the compilation process.
+See <a href="reference/configs/angular-compiler-options">Angular compiler options</a> for a complete list of available options.</p>
+
+  <h2 id="phase-1-code-analysis">
+    <a href="#phase-1-code-analysis" class="docs-anchor" tabindex="-1" aria-label="Link to Phase 1: Code analysis">Phase 1: Code analysis</a>
+  </h2>
+  <p>The TypeScript compiler does some of the analytic work of the first phase.
+It emits the <code>.d.ts</code> <em>type definition files</em> with type information that the AOT compiler needs to generate application code.
+At the same time, the AOT <strong>collector</strong> analyzes the metadata recorded in the Angular decorators and outputs metadata information in <strong><code>.metadata.json</code></strong> files, one per <code>.d.ts</code> file.</p>
+<p>You can think of <code>.metadata.json</code> as a diagram of the overall structure of a decorator's metadata, represented as an <a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree" target="_blank">abstract syntax tree (AST)</a>.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> Angular's <a href="https://github.com/angular/angular/blob/main/packages/compiler-cli/src/metadata/schema.ts" target="_blank">schema.ts</a> describes the JSON format as a collection of TypeScript interfaces.</p>
+
+    </div>
+    
+  <h3 id="expression-syntax-limitations">
+    <a href="#expression-syntax-limitations" class="docs-anchor" tabindex="-1" aria-label="Link to Expression syntax limitations">Expression syntax limitations</a>
+  </h3>
+  <p>The AOT collector only understands a subset of JavaScript.
+Define metadata objects with the following limited syntax:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Syntax</th>
+<th align="left">Example</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">Literal object</td>
+<td align="left"><code>{cherry: true, apple: true, mincemeat: false}</code></td>
+</tr>
+<tr>
+<td align="left">Literal array</td>
+<td align="left"><code>[&#39;cherries&#39;, &#39;flour&#39;, &#39;sugar&#39;]</code></td>
+</tr>
+<tr>
+<td align="left">Spread in literal array</td>
+<td align="left"><code>[&#39;apples&#39;, &#39;flour&#39;, …]</code></td>
+</tr>
+<tr>
+<td align="left">Calls</td>
+<td align="left"><code>bake(ingredients)</code></td>
+</tr>
+<tr>
+<td align="left">New</td>
+<td align="left"><code>new Oven()</code></td>
+</tr>
+<tr>
+<td align="left">Property access</td>
+<td align="left"><code>pie.slice</code></td>
+</tr>
+<tr>
+<td align="left">Array index</td>
+<td align="left"><code>ingredients[0]</code></td>
+</tr>
+<tr>
+<td align="left">Identity reference</td>
+<td align="left"><code>Component</code></td>
+</tr>
+<tr>
+<td align="left">A template string</td>
+<td align="left"><code><code>pie is ${multiplier} times better than cake</code></code></td>
+</tr>
+<tr>
+<td align="left">Literal string</td>
+<td align="left"><code>&#39;pi&#39;</code></td>
+</tr>
+<tr>
+<td align="left">Literal number</td>
+<td align="left"><code>3.14153265</code></td>
+</tr>
+<tr>
+<td align="left">Literal boolean</td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left">Literal null</td>
+<td align="left"><code>null</code></td>
+</tr>
+<tr>
+<td align="left">Supported prefix operator</td>
+<td align="left"><code>!cake</code></td>
+</tr>
+<tr>
+<td align="left">Supported binary operator</td>
+<td align="left"><code>a+b</code></td>
+</tr>
+<tr>
+<td align="left">Conditional operator</td>
+<td align="left"><code>a ? b : c</code></td>
+</tr>
+<tr>
+<td align="left">Parentheses</td>
+<td align="left"><code>(a+b)</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>If an expression uses unsupported syntax, the collector writes an error node to the <code>.metadata.json</code> file.
+The compiler later reports the error if it needs that piece of metadata to generate the application code.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> If you want <code>ngc</code> to report syntax errors immediately rather than produce a <code>.metadata.json</code> file with errors, set the <code>strictMetadataEmit</code> option in the TypeScript configuration file.</p>
+
+    </div>
+    <div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"angularCompilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">  …</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "strictMetadataEmit"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> : </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>Angular libraries have this option to ensure that all Angular <code>.metadata.json</code> files are clean and it is a best practice to do the same when building your own libraries.</p>
+
+  <h3 id="no-arrow-functions">
+    <a href="#no-arrow-functions" class="docs-anchor" tabindex="-1" aria-label="Link to No arrow functions">No arrow functions</a>
+  </h3>
+  <p>The AOT compiler does not support <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/function" target="_blank">function expressions</a>
+and <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Functions/Arrow_functions" target="_blank">arrow functions</a>, also called <em>lambda</em> functions.</p>
+<p>Consider the following component decorator:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [{provide: server, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">useFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Server</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()}]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span></code></pre>
+    </pre>
+  </div><p>The AOT collector does not support the arrow function, <code>() =&gt; new Server()</code>, in a metadata expression.
+It generates an error node in place of the function.
+When the compiler later interprets this node, it reports an error that invites you to turn the arrow function into an <em>exported function</em>.</p>
+<p>You can fix the error by converting to this:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> serverFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  return</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Server</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [{provide: server, useFactory: serverFactory}]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span></code></pre>
+    </pre>
+  </div><p>In version 5 and later, the compiler automatically performs this rewriting while emitting the <code>.js</code> file.</p>
+
+  <h3 id="code-folding">
+    <a href="#code-folding" class="docs-anchor" tabindex="-1" aria-label="Link to Code folding">Code folding</a>
+  </h3>
+  <p>The compiler can only resolve references to <em><strong>exported</strong></em> symbols.
+The collector, however, can evaluate an expression during collection and record the result in the <code>.metadata.json</code>, rather than the original expression.
+This allows you to make limited use of non-exported symbols within expressions.</p>
+<p>For example, the collector can evaluate the expression <code>1 + 2 + 3 + 4</code> and replace it with the result, <code>10</code>.
+This process is called <em>folding</em>.
+An expression that can be reduced in this manner is <em>foldable</em>.</p>
+<p>The collector can evaluate references to module-local <code>const</code> declarations and initialized <code>var</code> and <code>let</code> declarations, effectively removing them from the <code>.metadata.json</code> file.</p>
+<p>Consider the following component definition:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> template</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '&lt;div&gt;{{hero.name}}&lt;/div&gt;'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app-hero'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: template</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HeroComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">hero</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Hero</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>The compiler could not refer to the <code>template</code> constant because it isn't exported.
+The collector, however, can fold the <code>template</code> constant into the metadata definition by in-lining its contents.
+The effect is the same as if you had written:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app-hero'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;div&gt;{{hero.name}}&lt;/div&gt;'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HeroComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">hero</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Hero</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>There is no longer a reference to <code>template</code> and, therefore, nothing to trouble the compiler when it later interprets the <em>collector's</em> output in <code>.metadata.json</code>.</p>
+<p>You can take this example a step further by including the <code>template</code> constant in another expression:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> template</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '&lt;div&gt;{{hero.name}}&lt;/div&gt;'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app-hero'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: template </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '&lt;div&gt;{{hero.title}}&lt;/div&gt;'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HeroComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">hero</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Hero</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>The collector reduces this expression to its equivalent <em>folded</em> string:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;div&gt;{{hero.name}}&lt;/div&gt;&lt;div&gt;{{hero.title}}&lt;/div&gt;'</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="foldable-syntax">
+    <a href="#foldable-syntax" class="docs-anchor" tabindex="-1" aria-label="Link to Foldable syntax">Foldable syntax</a>
+  </h4>
+  <p>The following table describes which expressions the collector can and cannot fold:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Syntax</th>
+<th align="left">Foldable</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">Literal object</td>
+<td align="left">yes</td>
+</tr>
+<tr>
+<td align="left">Literal array</td>
+<td align="left">yes</td>
+</tr>
+<tr>
+<td align="left">Spread in literal array</td>
+<td align="left">no</td>
+</tr>
+<tr>
+<td align="left">Calls</td>
+<td align="left">no</td>
+</tr>
+<tr>
+<td align="left">New</td>
+<td align="left">no</td>
+</tr>
+<tr>
+<td align="left">Property access</td>
+<td align="left">yes, if target is foldable</td>
+</tr>
+<tr>
+<td align="left">Array index</td>
+<td align="left">yes, if target and index are foldable</td>
+</tr>
+<tr>
+<td align="left">Identity reference</td>
+<td align="left">yes, if it is a reference to a local</td>
+</tr>
+<tr>
+<td align="left">A template with no substitutions</td>
+<td align="left">yes</td>
+</tr>
+<tr>
+<td align="left">A template with substitutions</td>
+<td align="left">yes, if the substitutions are foldable</td>
+</tr>
+<tr>
+<td align="left">Literal string</td>
+<td align="left">yes</td>
+</tr>
+<tr>
+<td align="left">Literal number</td>
+<td align="left">yes</td>
+</tr>
+<tr>
+<td align="left">Literal boolean</td>
+<td align="left">yes</td>
+</tr>
+<tr>
+<td align="left">Literal null</td>
+<td align="left">yes</td>
+</tr>
+<tr>
+<td align="left">Supported prefix operator</td>
+<td align="left">yes, if operand is foldable</td>
+</tr>
+<tr>
+<td align="left">Supported binary operator</td>
+<td align="left">yes, if both left and right are foldable</td>
+</tr>
+<tr>
+<td align="left">Conditional operator</td>
+<td align="left">yes, if condition is foldable</td>
+</tr>
+<tr>
+<td align="left">Parentheses</td>
+<td align="left">yes, if the expression is foldable</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>If an expression is not foldable, the collector writes it to <code>.metadata.json</code> as an <a href="https://en.wikipedia.org/wiki/Abstract*syntax*tree" target="_blank">AST</a> for the compiler to resolve.</p>
+
+  <h2 id="phase-2-code-generation">
+    <a href="#phase-2-code-generation" class="docs-anchor" tabindex="-1" aria-label="Link to Phase 2: code generation">Phase 2: code generation</a>
+  </h2>
+  <p>The collector makes no attempt to understand the metadata that it collects and outputs to <code>.metadata.json</code>.
+It represents the metadata as best it can and records errors when it detects a metadata syntax violation.
+It's the compiler's job to interpret the <code>.metadata.json</code> in the code generation phase.</p>
+<p>The compiler understands all syntax forms that the collector supports, but it may reject <em>syntactically</em> correct metadata if the <em>semantics</em> violate compiler rules.</p>
+
+  <h3 id="public-or-protected-symbols">
+    <a href="#public-or-protected-symbols" class="docs-anchor" tabindex="-1" aria-label="Link to Public or protected symbols">Public or protected symbols</a>
+  </h3>
+  <p>The compiler can only reference <em>exported symbols</em>.</p>
+
+  <ul class="docs-list">
+    <li><p>Decorated component class members must be public or protected.
+  You cannot make an <code>@Input()</code> property private.</p>
+</li>
+<li><p>Data bound properties must also be public or protected</p>
+</li>
+
+  </ul>
+  
+  <h3 id="supported-classes-and-functions">
+    <a href="#supported-classes-and-functions" class="docs-anchor" tabindex="-1" aria-label="Link to Supported classes and functions">Supported classes and functions</a>
+  </h3>
+  <p>The collector can represent a function call or object creation with <code>new</code> as long as the syntax is valid.
+The compiler, however, can later refuse to generate a call to a <em>particular</em> function or creation of a <em>particular</em> object.</p>
+<p>The compiler can only create instances of certain classes, supports only core decorators, and only supports calls to macros (functions or static methods) that return expressions.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Compiler action</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">New instances</td>
+<td align="left">The compiler only allows metadata that create instances of the class <code>InjectionToken</code> from <code>@angular/core</code>.</td>
+</tr>
+<tr>
+<td align="left">Supported decorators</td>
+<td align="left">The compiler only supports metadata for the <a href="api/core#decorators">Angular decorators in the <code>@angular/core</code> module</a>.</td>
+</tr>
+<tr>
+<td align="left">Function calls</td>
+<td align="left">Factory functions must be exported, named functions. The AOT compiler does not support lambda expressions ("arrow functions") for factory functions.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="functions-and-static-method-calls">
+    <a href="#functions-and-static-method-calls" class="docs-anchor" tabindex="-1" aria-label="Link to Functions and static method calls">Functions and static method calls</a>
+  </h3>
+  <p>The collector accepts any function or static method that contains a single <code>return</code> statement.
+The compiler, however, only supports macros in the form of functions or static methods that return an <em>expression</em>.</p>
+<p>For example, consider the following function:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> wrapInArray</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">T</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">value</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> T</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> T</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [value];</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>You can call the <code>wrapInArray</code> in a metadata definition because it returns the value of an expression that conforms to the compiler's restrictive JavaScript subset.</p>
+<p>You might use  <code>wrapInArray()</code> like this:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">wrapInArray</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(TypicalComponent)</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>The compiler treats this usage as if you had written:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [TypicalComponent]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>The Angular <a href="api/router/RouterModule"><code>RouterModule</code></a> exports two macro static methods, <code>forRoot</code> and <code>forChild</code>, to help declare root and child routes.
+Review the <a href="https://github.com/angular/angular/blob/main/packages/router/src/router_module.ts#L139" title=RouterModule.forRoot source code target="_blank">source code</a>
+for these methods to see how macros can simplify configuration of complex <a href="guide/ngmodules">NgModules</a>.</p>
+
+  <h3 id="metadata-rewriting">
+    <a href="#metadata-rewriting" class="docs-anchor" tabindex="-1" aria-label="Link to Metadata rewriting">Metadata rewriting</a>
+  </h3>
+  <p>The compiler treats object literals containing the fields <code>useClass</code>, <code>useValue</code>, <code>useFactory</code>, and <code>data</code> specially, converting the expression initializing one of these fields into an exported variable that replaces the expression.
+This process of rewriting these expressions removes all the restrictions on what can be in them because
+the compiler doesn't need to know the expression's value — it just needs to be able to generate a reference to the value.</p>
+<p>You might write something like:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalServer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [{provide: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">SERVER</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">useFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> TypicalServer}]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>Without rewriting, this would be invalid because lambdas are not supported and <code>TypicalServer</code> is not exported.
+To allow this, the compiler automatically rewrites this to something like:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalServer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> θ0</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalServer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [{provide: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">SERVER</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, useFactory: θ0}]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>This allows the compiler to generate a reference to <code>θ0</code> in the factory without having to know what the value of <code>θ0</code> contains.</p>
+<p>The compiler does the rewriting during the emit of the <code>.js</code> file.
+It does not, however, rewrite the <code>.d.ts</code> file, so TypeScript doesn't recognize it as being an export.
+And it does not interfere with the ES module's exported API.</p>
+
+  <h2 id="phase-3-template-type-checking">
+    <a href="#phase-3-template-type-checking" class="docs-anchor" tabindex="-1" aria-label="Link to Phase 3: Template type checking">Phase 3: Template type checking</a>
+  </h2>
+  <p>One of the Angular compiler's most helpful features is the ability to type-check expressions within templates, and catch any errors before they cause crashes at runtime.
+In the template type-checking phase, the Angular template compiler uses the TypeScript compiler to validate the binding expressions in templates.</p>
+<p>Enable this phase explicitly by adding the compiler option <code>&quot;fullTemplateTypeCheck&quot;</code> in the <code>&quot;angularCompilerOptions&quot;</code> of the project's TypeScript configuration file
+(see <a href="reference/configs/angular-compiler-options">Angular Compiler Options</a>).</p>
+<p>Template validation produces error messages when a type error is detected in a template binding
+expression, similar to how type errors are reported by the TypeScript compiler against code in a <code>.ts</code>
+file.</p>
+<p>For example, consider the following component:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'{{person.addresss.street}}'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  person</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>This produces the following error:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">my.component.ts.MyComponent.html(1,1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">): </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Property </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'addresss'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> does not exist on type </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Person'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">. Did you mean </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'address'</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?</span></span></code></pre>
+    </pre>
+  </div><p>The file name reported in the error message, <code>my.component.ts.MyComponent.html</code>, is a synthetic file
+generated by the template compiler that holds contents of the <code>MyComponent</code> class template.
+The compiler never writes this file to disk.
+The line and column numbers are relative to the template string in the <code>@Component</code> annotation of the class, <code>MyComponent</code> in this case.
+If a component uses <code>templateUrl</code> instead of <code>template</code>, the errors are reported in the HTML file referenced by the <code>templateUrl</code> instead of a synthetic file.</p>
+<p>The error location is the beginning of the text node that contains the interpolation expression with the error.
+If the error is in an attribute binding such as <code>[value]=&quot;person.address.street&quot;</code>, the error
+location is the location of the attribute that contains the error.</p>
+<p>The validation uses the TypeScript type checker and the options supplied to the TypeScript compiler to control how detailed the type validation is.
+For example, if the <code>strictTypeChecks</code> is specified, the error</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">my.component.ts.MyComponent.html(1,1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">): </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Object is possibly </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'undefined'</span></span></code></pre>
+    </pre>
+  </div><p>is reported as well as the above error message.</p>
+
+  <h3 id="type-narrowing">
+    <a href="#type-narrowing" class="docs-anchor" tabindex="-1" aria-label="Link to Type narrowing">Type narrowing</a>
+  </h3>
+  <p>The expression used in an <code>ngIf</code> directive is used to narrow type unions in the Angular
+template compiler, the same way the <code>if</code> expression does in TypeScript.
+For example, to avoid <code>Object is possibly &#39;undefined&#39;</code> error in the template above, modify it to only emit the interpolation if the value of <code>person</code> is initialized as shown below:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;span *ngIf="person"&gt; {{person.address.street}} &lt;/span&gt;'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  person</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>Using <code>*ngIf</code> allows the TypeScript compiler to infer that the <code>person</code> used in the binding expression will never be <code>undefined</code>.</p>
+<p>For more information about input type narrowing, see <a href="guide/directives/structural-directives#directive-type-checks">Improving template type checking for custom directives</a>.</p>
+
+  <h3 id="non-null-type-assertion-operator">
+    <a href="#non-null-type-assertion-operator" class="docs-anchor" tabindex="-1" aria-label="Link to Non-null type assertion operator">Non-null type assertion operator</a>
+  </h3>
+  <p>Use the non-null type assertion operator to suppress the <code>Object is possibly &#39;undefined&#39;</code> error when it is inconvenient to use <code>*ngIf</code> or when some constraint in the component ensures that the expression is always non-null when the binding expression is interpolated.</p>
+<p>In the following example, the <code>person</code> and <code>address</code> properties are always set together, implying that <code>address</code> is always non-null if <code>person</code> is non-null.
+There is no convenient way to describe this constraint to TypeScript and the template compiler, but the error is suppressed in the example by using <code>address!.street</code>.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;span *ngIf="person"&gt; {{person.name}} lives on {{address!.street}} &lt;/span&gt;'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  person</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  address</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Address</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  setData</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">person</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">address</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Address</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.person </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> person;</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.address </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> address;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>The non-null assertion operator should be used sparingly as refactoring of the component might break this constraint.</p>
+<p>In this example it is recommended to include the checking of <code>address</code> in the <code>*ngIf</code> as shown below:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;span *ngIf="person &amp;&amp; address"&gt; {{person.name}} lives on {{address.street}} &lt;/span&gt;'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  person</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  address</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Address</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  setData</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">person</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">address</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Address</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.person </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> person;</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.address </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> address;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>

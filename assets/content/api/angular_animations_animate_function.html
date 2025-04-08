@@ -1,0 +1,62 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/animations</span><div class="docs-reference-title"><div><h1>animate</h1><div class="docs-api-item-label type-function full">function</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/animations/src/animation_metadata.ts#L672-L677" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">code</i></a></div><section class="docs-reference-description"><p>Defines an animation step that combines styling information with timing information.</p></section></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">
+  <code>
+    <span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/animations/animate">animate</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line "><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  timings</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line "><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  styles</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/animations/AnimationStyleMetadata">AnimationStyleMetadata</a></span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/animations/AnimationKeyframesSequenceMetadata">AnimationKeyframesSequenceMetadata</a></span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span></span><span class="line "><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/animations/AnimationAnimateMetadata">AnimationAnimateMetadata</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-members"><div id="animate_0" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>animate</h3><div><code><a href="/api/animations/AnimationAnimateMetadata">AnimationAnimateMetadata</a></code></div></header><div class="docs-reference-card-body"><div class="docs-reference-card-item "><div class="docs-function-definition"><p>Defines an animation step that combines styling information with timing information.</p></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">timings</span><code>string | number</code><div class="docs-parameter-description"><p>Sets <code><a href="/api/animations/AnimateTimings">AnimateTimings</a></code> for the parent animation.
+A string in the format &quot;duration [delay] [easing]&quot;.</p>
+
+    <ul class="docs-list">
+      <li>Duration and delay are expressed as a number and optional time unit,
+such as &quot;1s&quot; or &quot;10ms&quot; for one second and 10 milliseconds, respectively.
+The default unit is milliseconds.</li>
+<li>The easing value controls how the animation accelerates and decelerates
+during its runtime. Value is one of  <code>ease</code>, <code>ease-in</code>, <code>ease-out</code>,
+<code>ease-in-out</code>, or a <code>cubic-bezier()</code> function call.
+If not supplied, no easing is applied.</li>
+
+    </ul>
+    <p>For example, the string &quot;1s 100ms ease-out&quot; specifies a duration of
+1000 milliseconds, and delay of 100 ms, and the &quot;ease-out&quot; easing style,
+which decelerates near the end of the duration.</p></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">styles</span><code><a href="/api/animations/AnimationStyleMetadata">AnimationStyleMetadata</a> | <a href="/api/animations/AnimationKeyframesSequenceMetadata">AnimationKeyframesSequenceMetadata</a> | null</code><div class="docs-parameter-description"><p>Sets AnimationStyles for the parent animation.
+A function call to either <code><a href="/api/animations/style()">style()</a></code> or <code><a href="/api/animations/keyframes()">keyframes()</a></code>
+that returns a collection of CSS style entries to be applied to the parent animation.
+When null, uses the styles from the destination state.
+This is useful when describing an animation step that will complete an animation;
+see &quot;Animating to the final state&quot; in <code>transitions()</code>.</p></div></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code><a href="/api/animations/AnimationAnimateMetadata">AnimationAnimateMetadata</a></code></div></div></div></div></div><div class="docs-reference-section"><h2 id="usage-notes" class="docs-reference-section-heading"><a href="#usage-notes" aria-label="Link to Usage Notes section" tabindex="-1">Usage Notes</a></h2><div><p>Call within an animation <code><a href="/api/animations/sequence()">sequence()</a></code>, <a href="/api/animations/group"><code>group()</code></a>, or
+<code><a href="/api/animations/transition()">transition()</a></code> call to specify an animation step
+that applies given style data to the parent animation for a given amount of time.</p>
+
+      <h3 id="syntax-examples" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#syntax-examples" aria-label="Link to Syntax Examples section" tabIndex="-1">
+          Syntax Examples
+        </a>
+      </h3>
+    <p><strong>Timing examples</strong></p>
+<p>The following examples show various <code>timings</code> specifications.</p>
+
+    <ul class="docs-list">
+      <li><code><a href="/api/animations/animate(500)">animate(500)</a></code> : Duration is 500 milliseconds.</li>
+<li><code><a href="/api/animations/animate(&quot;1s&quot;)">animate(&quot;1s&quot;)</a></code> : Duration is 1000 milliseconds.</li>
+<li><code>animate(&quot;100ms 0.5s&quot;)</code> : Duration is 100 milliseconds, delay is 500 milliseconds.</li>
+<li><code><a href="/api/animations/animate(&quot;5s ease-in&quot;)">animate(&quot;5s ease-in&quot;)</a></code> : Duration is 5000 milliseconds, easing in.</li>
+<li><code>animate(&quot;5s 10ms cubic-bezier(.17,.67,.88,.1)&quot;)</code> : Duration is 5000 milliseconds, delay is 10
+milliseconds, easing according to a bezier curve.</li>
+
+    </ul>
+    <p><strong>Style examples</strong></p>
+<p>The following example calls <code><a href="/api/animations/style()">style()</a></code> to set a single CSS style.</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/animations/animate">animate</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">500</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/animations/style">style</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({ background: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"red"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }))</span></span></code></pre>
+        </pre>
+      </div>
+    <p>The following example calls <code><a href="/api/animations/keyframes()">keyframes()</a></code> to set a CSS style
+to different values for successive keyframes.</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/animations/animate">animate</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">500</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/animations/keyframes">keyframes</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  <a href="/api/animations/style">style</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({ background: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"blue"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }),</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  <a href="/api/animations/style">style</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({ background: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"red"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> })</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ])</span></span></code></pre>
+        </pre>
+      </div>
+    </div></div></div>

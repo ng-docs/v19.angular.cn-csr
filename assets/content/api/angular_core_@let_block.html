@@ -1,0 +1,52 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/core</span><div class="docs-reference-title"><div><h1>@let</h1><div class="docs-api-item-label type-block full">block</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/tools/manual_api_docs/blocks/let.md#L0-L0" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">code</i></a></div><section class="docs-reference-description"><p><code>@let</code> allows you to define a local variable and re-use it across the template.</p>
+
+      <h2 id="syntax" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#syntax" aria-label="Link to Syntax section" tabIndex="-1">
+          Syntax
+        </a>
+      </h2>
+    
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">= </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">user.name;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> data </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">= </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">data$ </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> async</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+        </pre>
+      </div>
+    
+      <h2 id="description" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#description" aria-label="Link to Description section" tabIndex="-1">
+          Description
+        </a>
+      </h2>
+    <p><code>@let</code> declarations are similar to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let">JavaScript&#39;s <code>let</code></a> and
+their values can be any valid Angular expression. The expressions will be re-evaluated everytime the template is executed.</p>
+<p>Similarly to JavaScript variables, variables declared with <code>@let</code>, can be used:</p>
+
+    <ul class="docs-list">
+      <li>After they have been declared</li>
+<li>Within the bound of the same scope and nested scopes</li>
+
+    </ul>
+    
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> user </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">= </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">user$ </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> async</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (user) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>Hello, {{user.name}}&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">user-avatar</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> [photo]</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"user.photo"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">/></span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">ul</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    @for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (snack </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">of</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> user.favoriteSnacks; track snack.id) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">li</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>{{snack.name}}&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">li</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">ul</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">button</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> (click)</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"update(user)"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>Update profile&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">button</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+        </pre>
+      </div>
+    
+      <h2 id="syntax-definition" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#syntax-definition" aria-label="Link to Syntax definition section" tabIndex="-1">
+          Syntax definition
+        </a>
+      </h2>
+    <p>The <code>@let</code> syntax is formally defined as:</p>
+
+    <ul class="docs-list">
+      <li>The <code>@let</code> keyword.</li>
+<li>Followed by one or more whitespaces, not including new lines.</li>
+<li>Followed by a valid JavaScript name and zero or more whitespaces.</li>
+<li>Followed by the = symbol and zero or more whitespaces.</li>
+<li>Followed by an Angular expression which can be multi-line.</li>
+<li>Terminated by the <code>;</code> symbol.</li>
+
+    </ul>
+    <p>HELPFUL: A comprehensive description of the feature is available on <a href="guide/templates/variables#local-template-variables-with-let">the templates guide</a></p></section></header></div>

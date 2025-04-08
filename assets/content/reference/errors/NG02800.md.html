@@ -1,0 +1,24 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">JSONP support in HttpClient configuration</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG02800.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular produces this error when you attempt a <code>JSONP</code> request without providing the necessary support for it in the <code>HttpClient</code> configuration.
+To enable <code>JSONP</code> support, you can do one of the following:</p>
+
+  <ul class="docs-list">
+    <li>add the <code>withJsonpSupport()</code> as an argument during the <code>provideHttpClient</code> function call (e.g. <code>provideHttpClient(withJsonpSupport())</code>) when <code>bootstrapApplication</code> is used</li>
+<li>import the <code>HttpClientJsonpModule</code> in your root AppModule, when NgModule-based bootstrap is used.## Debugging the error
+Make sure that the JSONP support is added into your application either by calling the <code>withJsonpSupport</code> function (when <code>provideHttpClient</code> is used) or importing the <code>HttpClientJsonpModule</code> module as described above.</li>
+
+  </ul>
+  

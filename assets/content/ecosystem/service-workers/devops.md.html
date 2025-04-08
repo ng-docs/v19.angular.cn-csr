@@ -1,0 +1,346 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Service worker devops</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/ecosystem/service-workers/devops.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>This page is a reference for deploying and supporting production applications that use the Angular service worker.
+It explains how the Angular service worker fits into the larger production environment, the service worker's behavior under various conditions, and available resources and fail-safes.</p>
+
+  <h2 id="service-worker-and-caching-of-application-resources">
+    <a href="#service-worker-and-caching-of-application-resources" class="docs-anchor" tabindex="-1" aria-label="Link to Service worker and caching of application resources">Service worker and caching of application resources</a>
+  </h2>
+  <p>Imagine the Angular service worker as a forward cache or a Content Delivery Network (CDN) edge that is installed in the end user's web browser.
+The service worker responds to requests made by the Angular application for resources or data from a local cache, without needing to wait for the network.
+Like any cache, it has rules for how content is expired and updated.</p>
+
+  <h3 id="application-versions">
+    <a href="#application-versions" class="docs-anchor" tabindex="-1" aria-label="Link to Application versions">Application versions</a>
+  </h3>
+  <p>In the context of an Angular service worker, a "version" is a collection of resources that represent a specific build of the Angular application.
+Whenever a new build of the application is deployed, the service worker treats that build as a new version of the application.
+This is true even if only a single file is updated.
+At any given time, the service worker might have multiple versions of the application in its cache and it might be serving them simultaneously.
+For more information, see the <a href="#application-tabs">Application tabs</a> section.</p>
+<p>To preserve application integrity, the Angular service worker groups all files into a version together.
+The files grouped into a version usually include HTML, JS, and CSS files.
+Grouping of these files is essential for integrity because HTML, JS, and CSS files frequently refer to each other and depend on specific content.
+For example, an <code>index.html</code> file might have a <code>&lt;script&gt;</code> tag that references <code>bundle.js</code> and it might attempt to call a function <code>startApp()</code> from within that script.
+Any time this version of <code>index.html</code> is served, the corresponding <code>bundle.js</code> must be served with it.
+For example, assume that the <code>startApp()</code> function is renamed to <code>runApp()</code> in both files.
+In this scenario, it is not valid to serve the old <code>index.html</code>, which calls <code>startApp()</code>, along with the new bundle, which defines <code>runApp()</code>.</p>
+<p>This file integrity is especially important when lazy loading.
+A JS bundle might reference many lazy chunks, and the filenames of the lazy chunks are unique to the particular build of the application.
+If a running application at version <code>X</code> attempts to load a lazy chunk, but the server has already updated to version <code>X + 1</code>, the lazy loading operation fails.</p>
+<p>The version identifier of the application is determined by the contents of all resources, and it changes if any of them change.
+In practice, the version is determined by the contents of the <code>ngsw.json</code> file, which includes hashes for all known content.
+If any of the cached files change, the file's hash changes in <code>ngsw.json</code>. This change causes the Angular service worker to treat the active set of files as a new version.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> The build process creates the manifest file, <code>ngsw.json</code>, using information from <code>ngsw-config.json</code>.</p>
+
+    </div>
+    <p>With the versioning behavior of the Angular service worker, an application server can ensure that the Angular application always has a consistent set of files.</p>
+
+  <h4 id="update-checks">
+    <a href="#update-checks" class="docs-anchor" tabindex="-1" aria-label="Link to Update checks">Update checks</a>
+  </h4>
+  <p>Every time the user opens or refreshes the application, the Angular service worker checks for updates to the application by looking for updates to the <code>ngsw.json</code> manifest.
+If an update is found, it is downloaded and cached automatically, and is served the next time the application is loaded.</p>
+
+  <h3 id="resource-integrity">
+    <a href="#resource-integrity" class="docs-anchor" tabindex="-1" aria-label="Link to Resource integrity">Resource integrity</a>
+  </h3>
+  <p>One of the potential side effects of long caching is inadvertently caching a resource that's not valid.
+In a normal HTTP cache, a hard refresh or the cache expiring limits the negative effects of caching a file that's not valid.
+A service worker ignores such constraints and effectively long-caches the entire application.
+It's important that the service worker gets the correct content, so it keeps hashes of the resources to maintain their integrity.</p>
+
+  <h4 id="hashed-content">
+    <a href="#hashed-content" class="docs-anchor" tabindex="-1" aria-label="Link to Hashed content">Hashed content</a>
+  </h4>
+  <p>To ensure resource integrity, the Angular service worker validates the hashes of all resources for which it has a hash.
+For an application created with the <a href="tools/cli">Angular CLI</a>, this is everything in the <code>dist</code> directory covered by the user's <code>src/ngsw-config.json</code> configuration.</p>
+<p>If a particular file fails validation, the Angular service worker attempts to re-fetch the content using a "cache-busting" URL parameter to prevent browser or intermediate caching.
+If that content also fails validation, the service worker considers the entire version of the application to not be valid and stops serving the application.
+If necessary, the service worker enters a safe mode where requests fall back on the network. The service worker doesn't use its cache if there's a high risk of serving content that is broken, outdated, or not valid.</p>
+<p>Hash mismatches can occur for a variety of reasons:</p>
+
+  <ul class="docs-list">
+    <li>Caching layers between the origin server and the end user could serve stale content</li>
+<li>A non-atomic deployment could result in the Angular service worker having visibility of partially updated content</li>
+<li>Errors during the build process could result in updated resources without <code>ngsw.json</code> being updated.
+  The reverse could also happen resulting in an updated <code>ngsw.json</code> without updated resources.</li>
+
+  </ul>
+  
+  <h4 id="unhashed-content">
+    <a href="#unhashed-content" class="docs-anchor" tabindex="-1" aria-label="Link to Unhashed content">Unhashed content</a>
+  </h4>
+  <p>The only resources that have hashes in the <code>ngsw.json</code> manifest are resources that were present in the <code>dist</code> directory at the time the manifest was built.
+Other resources, especially those loaded from CDNs, have content that is unknown at build time or are updated more frequently than the application is deployed.</p>
+<p>If the Angular service worker does not have a hash to verify a resource is valid, it still caches its contents. At the same time, it honors the HTTP caching headers by using a policy of <em>stale while revalidate</em>.
+The Angular service worker continues to serve a resource even after its HTTP caching headers indicate
+that it is no longer valid. At the same time, it attempts to refresh the expired resource in the background.
+This way, broken unhashed resources do not remain in the cache beyond their configured lifetimes.</p>
+
+  <h3 id="application-tabs">
+    <a href="#application-tabs" class="docs-anchor" tabindex="-1" aria-label="Link to Application tabs">Application tabs</a>
+  </h3>
+  <p>It can be problematic for an application if the version of resources it's receiving changes suddenly or without warning.
+See the <a href="#application-versions">Application versions</a> section for a description of such issues.</p>
+<p>The Angular service worker provides a guarantee: a running application continues to run the same version of the application.
+If another instance of the application is opened in a new web browser tab, then the most current version of the application is served.
+As a result, that new tab can be running a different version of the application than the original tab.</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>IMPORTANT:</strong> This guarantee is <strong>stronger</strong> than that provided by the normal web deployment model. Without a service worker, there is no guarantee that lazily loaded code is from the same version as the application's initial code.</p>
+
+    </div>
+    <p>The Angular service worker might change the version of a running application under error conditions such as:</p>
+
+  <ul class="docs-list">
+    <li>The current version becomes non-valid due to a failed hash.</li>
+<li>An unrelated error causes the service worker to enter safe mode and deactivates it temporarily.</li>
+
+  </ul>
+  <p>The Angular service worker cleans up application versions when no tab is using them.</p>
+<p>Other reasons the Angular service worker might change the version of a running application are normal events:</p>
+
+  <ul class="docs-list">
+    <li>The page is reloaded/refreshed.</li>
+<li>The page requests an update be immediately activated using the <code>SwUpdate</code> service.</li>
+
+  </ul>
+  
+  <h3 id="service-worker-updates">
+    <a href="#service-worker-updates" class="docs-anchor" tabindex="-1" aria-label="Link to Service worker updates">Service worker updates</a>
+  </h3>
+  <p>The Angular service worker is a small script that runs in web browsers.
+From time to time, the service worker is updated with bug fixes and feature improvements.</p>
+<p>The Angular service worker is downloaded when the application is first opened and when the application is accessed after a period of inactivity.
+If the service worker changes, it's updated in the background.</p>
+<p>Most updates to the Angular service worker are transparent to the application. The old caches are still valid and content is still served normally.
+Occasionally, a bug fix or feature in the Angular service worker might require the invalidation of old caches.
+In this case, the service worker transparently refreshes the application from the network.</p>
+
+  <h3 id="bypassing-the-service-worker">
+    <a href="#bypassing-the-service-worker" class="docs-anchor" tabindex="-1" aria-label="Link to Bypassing the service worker">Bypassing the service worker</a>
+  </h3>
+  <p>In some cases, you might want to bypass the service worker entirely and let the browser handle the request.
+An example is when you rely on a feature that is currently not supported in service workers, such as <a href="https://github.com/w3c/ServiceWorker/issues/1141" target="_blank">reporting progress on uploaded files</a>.</p>
+<p>To bypass the service worker, set <code>ngsw-bypass</code> as a request header, or as a query parameter.
+The value of the header or query parameter is ignored and can be empty or omitted.</p>
+
+  <h3 id="service-worker-requests-when-the-server-cant-be-reached">
+    <a href="#service-worker-requests-when-the-server-cant-be-reached" class="docs-anchor" tabindex="-1" aria-label="Link to Service worker requests when the server can't be reached">Service worker requests when the server can't be reached</a>
+  </h3>
+  <p>The service worker processes all requests unless the <a href="#bypassing-the-service-worker">service worker is explicitly bypassed</a>.
+The service worker either returns a cached response or sends the request to the server, depending on the state and configuration of the cache.
+The service worker only caches responses to non-mutating requests, such as <code>GET</code> and <code>HEAD</code>.</p>
+<p>If the service worker receives an error from the server or it doesn't receive a response, it returns an error status that indicates the result of the call.
+For example, if the service worker doesn't receive a response, it creates a <a href="https://developer.mozilla.org/docs/Web/HTTP/Status/504" target="_blank">504 Gateway Timeout</a> status to return. The <code>504</code> status in this example could be returned because the server is offline or the client is disconnected.</p>
+
+  <h2 id="debugging-the-angular-service-worker">
+    <a href="#debugging-the-angular-service-worker" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the Angular service worker">Debugging the Angular service worker</a>
+  </h2>
+  <p>Occasionally, it might be necessary to examine the Angular service worker in a running state to investigate issues or whether it's operating as designed.
+Browsers provide built-in tools for debugging service workers and the Angular service worker itself includes useful debugging features.</p>
+
+  <h3 id="locating-and-analyzing-debugging-information">
+    <a href="#locating-and-analyzing-debugging-information" class="docs-anchor" tabindex="-1" aria-label="Link to Locating and analyzing debugging information">Locating and analyzing debugging information</a>
+  </h3>
+  <p>The Angular service worker exposes debugging information under the <code>ngsw/</code> virtual directory.
+Currently, the single exposed URL is <code>ngsw/state</code>.
+Here is an example of this debug page's contents:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NGSW</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Debug</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Info:</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Driver</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> version:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 13.3.7</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Driver</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> state:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> NORMAL</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ((nominal))</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Latest</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> manifest</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> hash:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> eea7f5f464f90789b621170af5a569d6be077e5c</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Last</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> check:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> never</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">===</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Version</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> eea7f5f464f90789b621170af5a569d6be077e5c</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ===</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Clients:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 7b79a015-69af-4d3d-9ae6-95ba90c79486,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 5bc08295-aaf2-42f3-a4cc-9e4ef9100f65</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">===</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Idle</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Task</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Queue</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ===</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Last</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> tick:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 1s496u</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Last</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> run:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> never</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Task</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> queue:</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> *</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> init</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> post-load</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (update, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">cleanup</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Debug</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> log:</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="driver-state">
+    <a href="#driver-state" class="docs-anchor" tabindex="-1" aria-label="Link to Driver state">Driver state</a>
+  </h4>
+  <p>The first line indicates the driver state:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Driver</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> state:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> NORMAL</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ((nominal))</span></span></code></pre>
+    </pre>
+  </div><p><code>NORMAL</code> indicates that the service worker is operating normally and is not in a degraded state.</p>
+<p>There are two possible degraded states:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Degraded states</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>EXISTING_CLIENTS_ONLY</code></td>
+<td align="left">The service worker does not have a clean copy of the latest known version of the application. Older cached versions are safe to use, so existing tabs continue to run from cache, but new loads of the application will be served from the network. The service worker will try to recover from this state when a new version of the application is detected and installed. This happens when a new <code>ngsw.json</code> is available.</td>
+</tr>
+<tr>
+<td align="left"><code>SAFE_MODE</code></td>
+<td align="left">The service worker cannot guarantee the safety of using cached data. Either an unexpected error occurred or all cached versions are invalid. All traffic will be served from the network, running as little service worker code as possible.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>In both cases, the parenthetical annotation provides the
+error that caused the service worker to enter the degraded state.</p>
+<p>Both states are temporary; they are saved only for the lifetime of the <a href="https://developer.mozilla.org/docs/Web/API/ServiceWorkerGlobalScope" target="_blank">ServiceWorker instance</a>.
+The browser sometimes terminates an idle service worker to conserve memory and processor power, and creates a new service worker instance in response to network events.
+The new instance starts in the <code>NORMAL</code> mode, regardless of the state of the previous instance.</p>
+
+  <h4 id="latest-manifest-hash">
+    <a href="#latest-manifest-hash" class="docs-anchor" tabindex="-1" aria-label="Link to Latest manifest hash">Latest manifest hash</a>
+  </h4>
+  <div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Latest</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> manifest</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> hash:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> eea7f5f464f90789b621170af5a569d6be077e5c</span></span></code></pre>
+    </pre>
+  </div><p>This is the SHA1 hash of the most up-to-date version of the application that the service worker knows about.</p>
+
+  <h4 id="last-update-check">
+    <a href="#last-update-check" class="docs-anchor" tabindex="-1" aria-label="Link to Last update check">Last update check</a>
+  </h4>
+  <div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Last</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> check:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> never</span></span></code></pre>
+    </pre>
+  </div><p>This indicates the last time the service worker checked for a new version, or update, of the application.
+<code>never</code> indicates that the service worker has never checked for an update.</p>
+<p>In this example debug file, the update check is currently scheduled, as explained the next section.</p>
+
+  <h4 id="version">
+    <a href="#version" class="docs-anchor" tabindex="-1" aria-label="Link to Version">Version</a>
+  </h4>
+  <div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">===</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Version</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> eea7f5f464f90789b621170af5a569d6be077e5c</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ===</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Clients:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 7b79a015-69af-4d3d-9ae6-95ba90c79486,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 5bc08295-aaf2-42f3-a4cc-9e4ef9100f65</span></span></code></pre>
+    </pre>
+  </div><p>In this example, the service worker has one version of the application cached and being used to serve two different tabs.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> This version hash is the "latest manifest hash" listed above. Both clients are on the latest version. Each client is listed by its ID from the <code>Clients</code> API in the browser.</p>
+
+    </div>
+    
+  <h4 id="idle-task-queue">
+    <a href="#idle-task-queue" class="docs-anchor" tabindex="-1" aria-label="Link to Idle task queue">Idle task queue</a>
+  </h4>
+  <div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">===</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Idle</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Task</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Queue</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ===</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Last</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> tick:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 1s496u</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Last</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> run:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> never</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Task</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> queue:</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> *</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> init</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> post-load</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (update, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">cleanup</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span></code></pre>
+    </pre>
+  </div><p>The Idle Task Queue is the queue of all pending tasks that happen in the background in the service worker.
+If there are any tasks in the queue, they are listed with a description.
+In this example, the service worker has one such task scheduled, a post-initialization operation involving an update check and cleanup of stale caches.</p>
+<p>The last update tick/run counters give the time since specific events happened related to the idle queue.
+The "Last update run" counter shows the last time idle tasks were actually executed.
+"Last update tick" shows the time since the last event after which the queue might be processed.</p>
+
+  <h4 id="debug-log">
+    <a href="#debug-log" class="docs-anchor" tabindex="-1" aria-label="Link to Debug log">Debug log</a>
+  </h4>
+  <div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Debug</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> log:</span></span></code></pre>
+    </pre>
+  </div><p>Errors that occur within the service worker are logged here.</p>
+
+  <h3 id="developer-tools">
+    <a href="#developer-tools" class="docs-anchor" tabindex="-1" aria-label="Link to Developer tools">Developer tools</a>
+  </h3>
+  <p>Browsers such as Chrome provide developer tools for interacting with service workers.
+Such tools can be powerful when used properly, but there are a few things to keep in mind.</p>
+
+  <ul class="docs-list">
+    <li><p>When using developer tools, the service worker is kept running in the background and never restarts.
+  This can cause behavior with Dev Tools open to differ from behavior a user might experience.</p>
+</li>
+<li><p>If you look in the Cache Storage viewer, the cache is frequently out of date.
+  Right-click the Cache Storage title and refresh the caches.</p>
+</li>
+<li><p>Stopping and starting the service worker in the Service Worker pane checks for updates</p>
+</li>
+
+  </ul>
+  
+  <h2 id="service-worker-safety">
+    <a href="#service-worker-safety" class="docs-anchor" tabindex="-1" aria-label="Link to Service worker safety">Service worker safety</a>
+  </h2>
+  <p>Bugs or broken configurations could cause the Angular service worker to act in unexpected ways.
+If this happens, the Angular service worker contains several failsafe mechanisms in case an administrator needs to deactivate the service worker quickly.</p>
+
+  <h3 id="fail-safe">
+    <a href="#fail-safe" class="docs-anchor" tabindex="-1" aria-label="Link to Fail-safe">Fail-safe</a>
+  </h3>
+  <p>To deactivate the service worker, rename the <code>ngsw.json</code> file or delete it.
+When the service worker's request for <code>ngsw.json</code> returns a <code>404</code>, then the service worker removes all its caches and de-registers itself, essentially self-destructing.</p>
+
+  <h3 id="safety-worker">
+    <a href="#safety-worker" class="docs-anchor" tabindex="-1" aria-label="Link to Safety worker">Safety worker</a>
+  </h3>
+  <!-- vale Angular.Google_Acronyms = NO -->
+
+<p>A small script, <code>safety-worker.js</code>, is also included in the <code>@angular/service-worker</code> NPM package.
+When loaded, it un-registers itself from the browser and removes the service worker caches.
+This script can be used as a last resort to get rid of unwanted service workers already installed on client pages.</p>
+<!-- vale Angular.Google_Acronyms = YES -->
+
+
+    <div class="docs-alert docs-alert-critical">
+    <p><strong>CRITICAL:</strong> You cannot register this worker directly, as old clients with cached state might not see a new <code>index.html</code> which installs the different worker script.</p>
+
+    </div>
+    <p>Instead, you must serve the contents of <code>safety-worker.js</code> at the URL of the Service Worker script you are trying to unregister. You must continue to do so until you are certain all users have successfully unregistered the old worker.
+For most sites, this means that you should serve the safety worker at the old Service Worker URL forever.
+This script can be used to deactivate <code>@angular/service-worker</code> and remove the corresponding caches. It also removes any other Service Workers which might have been served in the past on your site.</p>
+
+  <h3 id="changing-your-applications-location">
+    <a href="#changing-your-applications-location" class="docs-anchor" tabindex="-1" aria-label="Link to Changing your application's location">Changing your application's location</a>
+  </h3>
+  
+    <div class="docs-alert docs-alert-important">
+    <p><strong>IMPORTANT:</strong> Service workers don't work behind redirect.
+You might have already encountered the error <code>The script resource is behind a redirect, which is disallowed</code>.</p>
+
+    </div>
+    <p>This can be a problem if you have to change your application's location.
+If you set up a redirect from the old location, such as <code>example.com</code>, to the new location, <code>www.example.com</code> in this example, the worker stops working.
+Also, the redirect won't even trigger for users who are loading the site entirely from Service Worker.
+The old worker, which was registered at <code>example.com</code>, tries to update and sends a request to the old location <code>example.com</code>. This request is redirected to the new location <code>www.example.com</code> and creates the error: <code>The script resource is behind a redirect, which is disallowed</code>.</p>
+<p>To remedy this, you might need to deactivate the old worker using one of the preceding techniques: <a href="#fail-safe">Fail-safe</a> or <a href="#safety-worker">Safety Worker</a>.</p>
+
+  <h2 id="more-on-angular-service-workers">
+    <a href="#more-on-angular-service-workers" class="docs-anchor" tabindex="-1" aria-label="Link to More on Angular service workers">More on Angular service workers</a>
+  </h2>
+  <p>You might also be interested in the following:</p>
+
+    <nav class="docs-pill-row">
+      
+    <a class="docs-pill" href="ecosystem/service-workers/config">
+      Configuration file
+    </a>
+    
+    <a class="docs-pill" href="ecosystem/service-workers/communications">
+      Communicating with the Service Worker
+    </a>
+    
+
+    </nav>
+    

@@ -1,0 +1,80 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/localize/init</span><div class="docs-reference-title"><div><h1>$localize</h1><div class="docs-api-item-label type-constant full">constant</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/localize/src/localize/src/localize.ts#L146-L161" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">code</i></a></div><section class="docs-reference-description"><p>Tag a template literal string for localization.</p></section></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">
+  <code>
+    <span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> <a href="/api/localize/init/$localize">$localize</a></span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LocalizeFn</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-section"><h2 id="description" class="docs-reference-section-heading"><a href="#description" aria-label="Link to Description section" tabindex="-1">Description</a></h2><div><p>Tag a template literal string for localization.</p>
+<p>For example:</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"><a href="/api/localize/init/$localize">$localize</a> </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`some string to localize`</span></span></code></pre>
+        </pre>
+      </div>
+    <p><strong>Providing meaning, description and id</strong></p>
+<p>You can optionally specify one or more of <code>meaning</code>, <code>description</code> and <code>id</code> for a localized
+string by pre-pending it with a colon delimited block of the form:</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/localize/init/$localize">$localize</a></span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`:meaning|description@@id:source message text`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/localize/init/$localize">$localize</a></span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`:meaning|:source message text`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/localize/init/$localize">$localize</a></span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`:description:source message text`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/localize/init/$localize">$localize</a></span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`:@@id:source message text`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+        </pre>
+      </div>
+    <p>This format is the same as that used for <code>i18n</code> markers in Angular templates. See the
+<a href="guide/i18n/prepare#mark-text-in-component-template">Angular i18n guide</a>.</p>
+<p><strong>Naming placeholders</strong></p>
+<p>If the template literal string contains expressions, then the expressions will be automatically
+associated with placeholder names for you.</p>
+<p>For example:</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"><a href="/api/localize/init/$localize">$localize</a> </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`Hi ${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">name</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}! There are ${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">items</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">length</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">} items.`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+        </pre>
+      </div>
+    <p>will generate a message-source of <code>Hi {$PH}! There are {$PH_1} items</code>.</p>
+<p>The recommended practice is to name the placeholder associated with each expression though.</p>
+<p>Do this by providing the placeholder name wrapped in <code>:</code> characters directly after the
+expression. These placeholder names are stripped out of the rendered localized string.</p>
+<p>For example, to name the <code>items.length</code> expression placeholder <code>itemCount</code> you write:</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"><a href="/api/localize/init/$localize">$localize</a> </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`There are ${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">items</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">length</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}:itemCount: items`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+        </pre>
+      </div>
+    <p><strong>Escaping colon markers</strong></p>
+<p>If you need to use a <code>:</code> character directly at the start of a tagged string that has no
+metadata block, or directly after a substitution expression that has no name you must escape
+the <code>:</code> by preceding it with a backslash:</p>
+<p>For example:</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// message has a metadata block so no need to escape colon</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"><a href="/api/localize/init/$localize">$localize</a> </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`:some description::this message starts with a colon (:)`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// no metadata block so the colon must be escaped</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"><a href="/api/localize/init/$localize">$localize</a> </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">this message starts with a colon (:)`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+        </pre>
+      </div>
+    
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// named substitution so no need to escape colon</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"><a href="/api/localize/init/$localize">$localize</a> </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">label</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}:label:: ${}`</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// anonymous substitution so colon must be escaped</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"><a href="/api/localize/init/$localize">$localize</a> </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">label</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ${}`</span></span></code></pre>
+        </pre>
+      </div>
+    <p><strong>Processing localized strings:</strong></p>
+<p>There are three scenarios:</p>
+
+    <ul class="docs-list">
+      <li><p><strong>compile-time inlining</strong>: the <code><a href="/api/localize/init/$localize">$localize</a></code> tag is transformed at compile time by a
+transpiler, removing the tag and replacing the template literal string with a translated
+literal string from a collection of translations provided to the transpilation tool.</p>
+</li>
+<li><p><strong>run-time evaluation</strong>: the <code><a href="/api/localize/init/$localize">$localize</a></code> tag is a run-time function that replaces and
+reorders the parts (static strings and expressions) of the template literal string with strings
+from a collection of translations loaded at run-time.</p>
+</li>
+<li><p><strong>pass-through evaluation</strong>: the <code><a href="/api/localize/init/$localize">$localize</a></code> tag is a run-time function that simply evaluates
+the original template literal string without applying any translations to the parts. This
+version is used during development or where there is no need to translate the localized
+template literals.</p>
+</li>
+
+    </ul></div></div></div>

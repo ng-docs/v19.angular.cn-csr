@@ -1,0 +1,44 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Import global variants of the locale data</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/i18n/import-global-variants.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>The <a href="cli" title=CLI Overview and Command Reference | Angular>Angular CLI</a> automatically includes locale data if you run the <a href="cli/build" title=ng build | CLI | Angular><code>ng build</code></a> command with the <code>--localize</code> option.</p>
+<!--todo: replace with docs-code -->
+
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --localize</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> The initial installation of Angular already contains locale data for English in the United States (<code>en-US</code>).
+The <a href="cli" title=CLI Overview and Command Reference | Angular>Angular CLI</a> automatically includes the locale data and sets the <code>LOCALE_ID</code> value when you use the <code>--localize</code> option with <a href="cli/build" title=ng build | CLI | Angular><code>ng build</code></a> command.</p>
+
+    </div>
+    <p>The <code>@angular/common</code> package on npm contains the locale data files.
+Global variants of the locale data are available in <code>@angular/common/locales/global</code>.</p>
+
+  <h2 id="import-example-for-french">
+    <a href="#import-example-for-french" class="docs-anchor" tabindex="-1" aria-label="Link to <code>import</code> example for French"><code>import</code> example for French</a>
+  </h2>
+  <p>For example, you could import the global variants for French (<code>fr</code>) in <code>main.ts</code> where you bootstrap the application.</p>
+<div class="docs-code" path="adev/src/content/examples/i18n/src/main.ts" visiblelines="0" header="src/main.ts (import locale)">
+    <div class="docs-code-header"><h3>src/main.ts (import locale)</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/common/locales/global/fr'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {provideProtractorTestingSupport} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {bootstrapApplication} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {AppComponent} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './app/app.component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppComponent, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    provideProtractorTestingSupport</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(), </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// essential for e2e testing</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> In an <code>NgModules</code> application, you would import it in your <code>app.module</code>.</p>
+
+    </div>
+    

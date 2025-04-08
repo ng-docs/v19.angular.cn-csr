@@ -1,0 +1,295 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">AOT metadata errors</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/aot-metadata-errors.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>The following are metadata errors you may encounter, with explanations and suggested corrections.</p>
+
+  <h2 id="expression-form-not-supported">
+    <a href="#expression-form-not-supported" class="docs-anchor" tabindex="-1" aria-label="Link to Expression form not supported">Expression form not supported</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> The compiler encountered an expression it didn't understand while evaluating Angular metadata.</p>
+
+    </div>
+    <p>Language features outside of the compiler's <a href="tools/cli/aot-compiler#expression-syntax">restricted expression syntax</a>
+can produce this error, as seen in the following example:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Fooish</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { … }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">…</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> prop</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> typeof</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Fooish; </span><span style="--shiki-light:#24292E;--shiki-dark:#6A737D">// typeof is not valid in metadata</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // bracket notation is not valid in metadata</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  { </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provide</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'token'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">useValue</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { [prop]: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'value'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> } };</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div><p>You can use <code>typeof</code> and bracket notation in normal application code.
+You just can't use those features within expressions that define Angular metadata.</p>
+<p>Avoid this error by sticking to the compiler's <a href="tools/cli/aot-compiler#expression-syntax">restricted expression syntax</a>
+when writing Angular metadata
+and be wary of new or unusual TypeScript features.</p>
+
+  <h2 id="reference-to-a-local-non-exported-symbol">
+    <a href="#reference-to-a-local-non-exported-symbol" class="docs-anchor" tabindex="-1" aria-label="Link to Reference to a local (non-exported) symbol">Reference to a local (non-exported) symbol</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> Reference to a local (non-exported) symbol 'symbol name'. Consider exporting the symbol.</p>
+
+    </div>
+    <p>The compiler encountered a reference to a locally defined symbol that either wasn't exported or wasn't initialized.</p>
+<p>Here's a <code>provider</code> example of the problem.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> foo</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// neither exported nor initialized</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: … ,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: Foo, useValue: foo }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>The compiler generates the component factory, which includes the <code>useValue</code> provider code, in a separate module. <em>That</em> factory module can't reach back to <em>this</em> source module to access the local (non-exported) <code>foo</code> variable.</p>
+<p>You could fix the problem by initializing <code>foo</code>.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> foo </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 42</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// initialized</span></span></code></pre>
+    </pre>
+  </div><p>The compiler will <a href="tools/cli/aot-compiler#code-folding">fold</a> the expression into the provider as if you had written this.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  { provide: Foo, useValue: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">42</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]</span></span></code></pre>
+    </pre>
+  </div><p>Alternatively, you can fix it by exporting <code>foo</code> with the expectation that <code>foo</code> will be assigned at runtime when you actually know its value.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> foo</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// exported</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: … ,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: Foo, useValue: foo }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>Adding <code>export</code> often works for variables referenced in metadata such as <code>providers</code> and <code>animations</code> because the compiler can generate <em>references</em> to the exported variables in these expressions. It doesn't need the <em>values</em> of those variables.</p>
+<p>Adding <code>export</code> doesn't work when the compiler needs the <em>actual value</em>
+in order to generate code.
+For example, it doesn't work for the <code>template</code> property.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> someTemplate</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// exported but not initialized</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: someTemplate</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>The compiler needs the value of the <code>template</code> property <em>right now</em> to generate the component factory.
+The variable reference alone is insufficient.
+Prefixing the declaration with <code>export</code> merely produces a new error, "<a href="#only-initialized-variables"><code>Only initialized variables and constants can be referenced</code></a>".</p>
+
+  <h2 id="only-initialized-variables-and-constants">
+    <a href="#only-initialized-variables-and-constants" class="docs-anchor" tabindex="-1" aria-label="Link to Only initialized variables and constants">Only initialized variables and constants</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> <em>Only initialized variables and constants can be referenced because the value of this variable is needed by the template compiler.</em></p>
+
+    </div>
+    <p>The compiler found a reference to an exported variable or static field that wasn't initialized.
+It needs the value of that variable to generate code.</p>
+<p>The following example tries to set the component's <code>template</code> property to the value of the exported <code>someTemplate</code> variable which is declared but <em>unassigned</em>.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> someTemplate</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: someTemplate</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>You'd also get this error if you imported <code>someTemplate</code> from some other module and neglected to initialize it there.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR - not initialized there either</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { someTemplate } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './config'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: someTemplate</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>The compiler cannot wait until runtime to get the template information.
+It must statically derive the value of the <code>someTemplate</code> variable from the source code so that it can generate the component factory, which includes instructions for building the element based on the template.</p>
+<p>To correct this error, provide the initial value of the variable in an initializer clause <em>on the same line</em>.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> someTemplate </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '&lt;h1&gt;Greetings from Angular&lt;/h1&gt;'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: someTemplate</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="reference-to-a-non-exported-class">
+    <a href="#reference-to-a-non-exported-class" class="docs-anchor" tabindex="-1" aria-label="Link to Reference to a non-exported class">Reference to a non-exported class</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> <em>Reference to a non-exported class <code>&lt;class name&gt;</code>.</em>
+<em>Consider exporting the class.</em></p>
+
+    </div>
+    <p>Metadata referenced a class that wasn't exported.</p>
+<p>For example, you may have defined a class and used it as an injection token in a providers array but neglected to export that class.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">abstract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyStrategy</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: MyStrategy, useValue: … }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div><p>Angular generates a class factory in a separate module and that factory <a href="tools/cli/aot-compiler#exported-symbols">can only access exported classes</a>.
+To correct this error, export the referenced class.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> abstract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyStrategy</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: MyStrategy, useValue: … }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="reference-to-a-non-exported-function">
+    <a href="#reference-to-a-non-exported-function" class="docs-anchor" tabindex="-1" aria-label="Link to Reference to a non-exported function">Reference to a non-exported function</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> <em>Metadata referenced a function that wasn't exported.</em></p>
+
+    </div>
+    <p>For example, you may have set a providers <code>useFactory</code> property to a locally defined function that you neglected to export.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> myStrategy</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() { … }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: MyStrategy, useFactory: myStrategy }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div><p>Angular generates a class factory in a separate module and that factory <a href="tools/cli/aot-compiler#exported-symbols">can only access exported functions</a>.
+To correct this error, export the function.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> myStrategy</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() { … }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: MyStrategy, useFactory: myStrategy }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="function-calls-are-not-supported">
+    <a href="#function-calls-are-not-supported" class="docs-anchor" tabindex="-1" aria-label="Link to Function calls are not supported">Function calls are not supported</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> <em>Function calls are not supported. Consider replacing the function or lambda with a reference to an exported function.</em></p>
+
+    </div>
+    <p>The compiler does not currently support <a href="tools/cli/aot-compiler#function-expression">function expressions or lambda functions</a>.
+For example, you cannot set a provider's <code>useFactory</code> to an anonymous function or arrow function like this.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: MyStrategy, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">useFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">function</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() { … } },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: OtherStrategy, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">useFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { … } }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div><p>You also get this error if you call a function or method in a provider's <code>useValue</code>.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { calculateValue } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './utilities'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: SomeValue, useValue: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">calculateValue</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div><p>To correct this error, export a function from the module and refer to the function in a <code>useFactory</code> provider instead.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { calculateValue } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './utilities'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> myStrategy</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() { … }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> otherStrategy</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() { … }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> someValueFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  return</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> calculateValue</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: MyStrategy, useFactory: myStrategy },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: OtherStrategy, useFactory: otherStrategy },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: SomeValue, useFactory: someValueFactory }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="destructured-variable-or-constant-not-supported">
+    <a href="#destructured-variable-or-constant-not-supported" class="docs-anchor" tabindex="-1" aria-label="Link to Destructured variable or constant not supported">Destructured variable or constant not supported</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> <em>Referencing an exported destructured variable or constant is not supported by the template compiler. Consider simplifying this to avoid destructuring.</em></p>
+
+    </div>
+    <p>The compiler does not support references to variables assigned by <a href="https://www.typescriptlang.org/docs/handbook/variable-declarations.html#destructuring" target="_blank">destructuring</a>.</p>
+<p>For example, you cannot write something like this:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { configuration } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './configuration'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// destructured assignment to foo and bar</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">foo</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">bar</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> configuration;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    {provide: Foo, useValue: foo},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    {provide: Bar, useValue: bar},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div><p>To correct this error, refer to non-destructured values.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { configuration } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './configuration'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    {provide: Foo, useValue: configuration.foo},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    {provide: Bar, useValue: configuration.bar},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="could-not-resolve-type">
+    <a href="#could-not-resolve-type" class="docs-anchor" tabindex="-1" aria-label="Link to Could not resolve type">Could not resolve type</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> <em>The compiler encountered a type and can't determine which module exports that type.</em></p>
+
+    </div>
+    <p>This can happen if you refer to an ambient type.
+For example, the <code>Window</code> type is an ambient type declared in the global <code>.d.ts</code> file.</p>
+<p>You'll get an error if you reference it in the component constructor, which the compiler must statically analyze.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({ })</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> win</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Window</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) { … }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>TypeScript understands ambient types so you don't import them.
+The Angular compiler does not understand a type that you neglect to export or import.</p>
+<p>In this case, the compiler doesn't understand how to inject something with the <code>Window</code> token.</p>
+<p>Do not refer to ambient types in metadata expressions.</p>
+<p>If you must inject an instance of an ambient type,
+you can finesse the problem in four steps:</p>
+
+    <ol class="docs-ordered-list">
+      <li>Create an injection token for an instance of the ambient type.</li>
+<li>Create a factory function that returns that instance.</li>
+<li>Add a <code>useFactory</code> provider with that factory function.</li>
+<li>Use <code>@Inject</code> to inject the instance.</li>
+
+    </ol>
+    <p>Here's an illustrative example.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { Inject } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> WINDOW</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> InjectionToken</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Window'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> _window</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() { </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> window; }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">WINDOW</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, useFactory: _window }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">WINDOW</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> win</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Window</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) { … }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>The <code>Window</code> type in the constructor is no longer a problem for the compiler because it
+uses the <code>@Inject(WINDOW)</code> to generate the injection code.</p>
+<p>Angular does something similar with the <code>DOCUMENT</code> token so you can inject the browser's <code>document</code> object (or an abstraction of it, depending upon the platform in which the application runs).</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { Inject }   </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { DOCUMENT } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/common'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({ … })</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">DOCUMENT</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> doc</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Document</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) { … }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="name-expected">
+    <a href="#name-expected" class="docs-anchor" tabindex="-1" aria-label="Link to Name expected">Name expected</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> <em>The compiler expected a name in an expression it was evaluating.</em></p>
+
+    </div>
+    <p>This can happen if you use a number as a property name as in the following example.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provider</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [{ provide: Foo, useValue: { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'test'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> } }]</span></span></code></pre>
+    </pre>
+  </div><p>Change the name of the property to something non-numeric.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provider</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [{ provide: Foo, useValue: { </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'0'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'test'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> } }]</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="unsupported-enum-member-name">
+    <a href="#unsupported-enum-member-name" class="docs-anchor" tabindex="-1" aria-label="Link to Unsupported enum member name">Unsupported enum member name</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> <em>Angular couldn't determine the value of the <a href="https://www.typescriptlang.org/docs/handbook/enums.html" target="_blank">enum member</a> that you referenced in metadata.</em></p>
+
+    </div>
+    <p>The compiler can understand simple enum values but not complex values such as those derived from computed properties.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">enum</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Colors</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  Red</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  White</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  Blue</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "Blue"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">length</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> // computed</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: BaseColor,   useValue: Colors.White } </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ok</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: DangerColor, useValue: Colors.Red }   </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ok</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: StrongColor, useValue: Colors.Blue }  </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// bad</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div><p>Avoid referring to enums with complicated initializers or computed properties.</p>
+
+  <h2 id="tagged-template-expressions-are-not-supported">
+    <a href="#tagged-template-expressions-are-not-supported" class="docs-anchor" tabindex="-1" aria-label="Link to Tagged template expressions are not supported">Tagged template expressions are not supported</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> <em>Tagged template expressions are not supported in metadata.</em></p>
+
+    </div>
+    <p>The compiler encountered a JavaScript ES2015 <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals" target="_blank">tagged template expression</a> such as the following.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> expression</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'funky'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> raw</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">raw</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`A tagged template ${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">expression</span><span style="--shiki-light:#24292E;--shiki-dark:#9ECBFF">} string`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#E1E4E8"> …</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#B392F0"> template</span><span style="--shiki-light:#032F62;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;div&gt;'</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> raw</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '&lt;/div&gt;'</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#E1E4E8"> …</span></span></code></pre>
+    </pre>
+  </div><p><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String/raw" target="_blank"><code>String.raw()</code></a> is a <em>tag function</em> native to JavaScript ES2015.</p>
+<p>The AOT compiler does not support tagged template expressions; avoid them in metadata expressions.</p>
+
+  <h2 id="symbol-reference-expected">
+    <a href="#symbol-reference-expected" class="docs-anchor" tabindex="-1" aria-label="Link to Symbol reference expected">Symbol reference expected</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> <em>The compiler expected a reference to a symbol at the location specified in the error message.</em></p>
+
+    </div>
+    <p>This error can occur if you use an expression in the <code>extends</code> clause of a class.</p>
+<!--todo: Chuck: After reviewing your PR comment I'm still at a loss. See [comment there](https://github.com/angular/angular/pull/17712#discussion_r132025495). -->

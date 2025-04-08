@@ -1,0 +1,37 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Child query result is required but no value is available.</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0951.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Required child query (<code>contentChild.required</code> or <code>viewChild.required</code>) result was accessed before query results were calculated or query has no matches.</p>
+<p>This can happen in two distinct situations:</p>
+
+  <ul class="docs-list">
+    <li>query results were accessed before a given query could collect results;</li>
+<li>a query was executed but didn't match any nodes and has no results as a consequence.</li>
+
+  </ul>
+  <p>Content queries and view queries each calculate their results at different points in time:</p>
+
+  <ul class="docs-list">
+    <li><code>contentChild</code> results are available after a <em>host</em> view (template where a directive declaring a query is used) is created;</li>
+<li><code>viewChild</code> results are available after a template of a component declaring a query is created.</li>
+
+  </ul>
+  <p>Accessing query results before they're available results in the error described on this page. Most notably, query results are <em>never</em> available in a constructor of the component or directive declaring a query.</p>
+
+  <h2 id="fixing-the-error">
+    <a href="#fixing-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Fixing the error">Fixing the error</a>
+  </h2>
+  <p><code>contentChild</code> query results can be accessed in the <code>AfterContentChecked</code> lifecycle hook, or later.
+<code>viewChild</code> query results can be accessed in the <code>AfterViewChecked</code> lifecycle hook, or later.</p>
+<p>Make sure that a required query matches at least one node and has results at all. You can verify this by accessing query results in the lifecycle hooks listed above.</p>

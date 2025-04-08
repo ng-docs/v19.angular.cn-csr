@@ -1,0 +1,23 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">@defer behavior when HMR is enabled</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0751.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Hot Module Replacement (HMR) is a technique used by development servers to avoid reloading the entire page when only part of an application is changed.</p>
+<p>When the HMR is enabled in Angular, all <code>@defer</code> block dependencies are loaded
+eagerly, instead of waiting for configured trigger conditions (both for client-only and incremental hydration triggers). This is needed
+for the HMR to function properly, replacing components in an application at runtime
+without the need to reload the entire page. Note: the actual rendering of defer
+blocks respects trigger conditions in the HMR mode.</p>
+<p>If you want to test <code>@defer</code> block behavior in development mode and ensure that
+the necessary dependencies are loaded when a triggering condition is met, you can
+disable the HMR mode as described in <a href="/tools/cli/build-system-migration#hot-module-replacement"><code>this document</code></a>.</p>

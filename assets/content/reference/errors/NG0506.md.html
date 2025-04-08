@@ -1,0 +1,64 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Application remains unstable</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0506.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>This warning only appears in the browser during the hydration process when it's enabled on the client but the application remains unstable for an extended period of time (over 10 seconds).</p>
+<p>Typically that happens when there are some pending microtasks or macrotasks on a page.</p>
+<p>Angular Hydration relies on a signal from <code>ApplicationRef.isStable</code> when it becomes stable inside an application:</p>
+
+  <ul class="docs-list">
+    <li>during the server-side rendering (SSR) to start the serialization process</li>
+<li>in a browser this signal is used to start the post-hydration cleanup to remove DOM nodes that remained unclaimed</li>
+
+  </ul>
+  <p>This warning is displayed when <code>ApplicationRef.isStable</code> does not emit <code>true</code> within 10 seconds. If this behavior is intentional and your application stabilizes later, you could choose to ignore this warning.</p>
+
+  <h2 id="applications-that-use-zonejs">
+    <a href="#applications-that-use-zonejs" class="docs-anchor" tabindex="-1" aria-label="Link to Applications that use zone.js">Applications that use zone.js</a>
+  </h2>
+  <p>Applications that use zone.js may have various factors contributing to delays in stability. These may include pending HTTP requests, timers (<code>setInterval</code>, <code>setTimeout</code>) or some logic that continuously invokes <code>requestAnimationFrame</code>.</p>
+
+  <h3 id="macrotasks">
+    <a href="#macrotasks" class="docs-anchor" tabindex="-1" aria-label="Link to Macrotasks">Macrotasks</a>
+  </h3>
+  <p>Macrotasks include functions like <code>setInterval</code>, <code>setTimeout</code>, <code>requestAnimationFrame</code>, etc.
+If one of these functions is called during the initialization phase of the application or in bootstrapped components, it may delay the moment when the application becomes stable.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">``</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SimpleComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    setInterval</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // or</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    setTimeout</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">10_000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>If these functions must be called during the initialization phase, invoking them outside the Angular zone resolves the problem:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SimpleComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> ngZone</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(NgZone);</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ngZone.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">runOutsideAngular</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">      setInterval</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    });</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="third-party-libraries">
+    <a href="#third-party-libraries" class="docs-anchor" tabindex="-1" aria-label="Link to Third-party libraries">Third-party libraries</a>
+  </h3>
+  <p>Some third-party libraries can also produce long-running asynchronous tasks, which may delay application stability. The recommendation is to invoke relevant library code outside of the zone as described above.</p>
+
+  <h3 id="running-code-after-an-application-becomes-stable">
+    <a href="#running-code-after-an-application-becomes-stable" class="docs-anchor" tabindex="-1" aria-label="Link to Running code after an application becomes stable">Running code after an application becomes stable</a>
+  </h3>
+  <p>You can run a code that sets up asynchronous tasks once an application becomes stable:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SimpleComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> applicationRef</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(ApplicationRef);</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    applicationRef.isStable.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">pipe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">( </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">first</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">((</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">isStable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> isStable) ).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">subscribe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      // Note that we don't need to use `runOutsideAngular` because `isStable`</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      // emits events outside of the Angular zone when it's truthy (falsy values</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      // are emitted inside the Angular zone).</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">      setTimeout</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> });</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    });</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="zoneless-applications">
+    <a href="#zoneless-applications" class="docs-anchor" tabindex="-1" aria-label="Link to Zoneless applications">Zoneless applications</a>
+  </h2>
+  <p>In zoneless scenarios, stability might be delayed by an application code inside of an <code>effect</code> running in an infinite loop (potentially because signals used in effect functions keep changing) or a pending HTTP request.</p>
+<p>Developers may also explicitly contribute to indicating the application's stability by using the <a href="/api/core/PendingTasks"><code>PendingTasks</code></a> service. If you use the mentioned APIs in your application, make sure you invoke a function to mark the task as completed.</p>

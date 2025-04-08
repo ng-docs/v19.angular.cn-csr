@@ -1,0 +1,72 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">App shell pattern</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/ecosystem/service-workers/app-shell.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>The <a href="https://developer.chrome.com/blog/app-shell" target="_blank">App shell pattern</a> is a way to render a portion of your application using a route at build time.
+It can improve the user experience by quickly launching a static rendered page (a skeleton common to all pages) while the browser downloads the full client version and switches to it automatically after the code loads.</p>
+<p>This gives users a meaningful first paint of your application that appears quickly because the browser can render the HTML and CSS without the need to initialize any JavaScript.</p>
+
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="prepare-the-application">
+    <a href="#prepare-the-application" class="docs-anchor" tabindex="-1" aria-label="Link to Prepare the application">Prepare the application</a>
+  </h3>
+  
+      <p>Do this with the following Angular CLI command:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> new</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-app</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --routing</span></span></code></pre>
+    </pre>
+  </div><p>For an existing application, you have to manually add the <code>Router</code> and defining a <code>&lt;router-outlet&gt;</code> within your application.</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="create-the-application-shell">
+    <a href="#create-the-application-shell" class="docs-anchor" tabindex="-1" aria-label="Link to Create the application shell">Create the application shell</a>
+  </h3>
+  
+      <p>Use the Angular CLI to automatically create the application shell.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> app-shell</span></span></code></pre>
+    </pre>
+  </div><p>For more information about this command, see <a href="cli/generate/app-shell">App shell command</a>.</p>
+<p>The command updates the application code and adds extra files to the project structure.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span>src</span></span><span class="line"><span>├── app</span></span><span class="line"><span>│ ├── app.config.server.ts # server application configuration</span></span><span class="line"><span>│ └── app-shell # app-shell component</span></span><span class="line"><span>│   ├── app-shell.component.html</span></span><span class="line"><span>│   ├── app-shell.component.scss</span></span><span class="line"><span>│   ├── app-shell.component.spec.ts</span></span><span class="line"><span>│   └── app-shell.component.ts</span></span><span class="line"><span>└── main.server.ts # main server application bootstrapping</span></span></code></pre>
+    </pre>
+  </div><docs-step title="Verify the application is built with the shell content">
+
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --configuration=development</span></span></code></pre>
+    </pre>
+  </div><p>Or to use the production configuration.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span></span></code></pre>
+    </pre>
+  </div><p>To verify the build output, open <code class="no-auto-link">dist/my-app/browser/index.html</code>.
+Look for default text <code>app-shell works!</code> to show that the application shell route was rendered as part of the output.</p>
+
+    </li>
+    
+    </ol>
+    

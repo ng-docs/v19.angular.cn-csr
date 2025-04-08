@@ -1,0 +1,364 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Authoring schematics</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/schematics-authoring.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>You can create your own schematics to operate on Angular projects.
+Library developers typically package schematics with their libraries to integrate them with the Angular CLI.
+You can also create stand-alone schematics to manipulate the files and constructs in Angular applications as a way of customizing them for your development environment and making them conform to your standards and constraints.
+Schematics can be chained, running other schematics to perform complex operations.</p>
+<p>Manipulating the code in an application has the potential to be both very powerful and correspondingly dangerous.
+For example, creating a file that already exists would be an error, and if it was applied immediately, it would discard all the other changes applied so far.
+The Angular Schematics tooling guards against side effects and errors by creating a virtual file system.
+A schematic describes a pipeline of transformations that can be applied to the virtual file system.
+When a schematic runs, the transformations are recorded in memory, and only applied in the real file system once they're confirmed to be valid.</p>
+
+  <h2 id="schematics-concepts">
+    <a href="#schematics-concepts" class="docs-anchor" tabindex="-1" aria-label="Link to Schematics concepts">Schematics concepts</a>
+  </h2>
+  <p>The public API for schematics defines classes that represent the basic concepts.</p>
+
+  <ul class="docs-list">
+    <li><p>The virtual file system is represented by a <code>Tree</code>.
+  The <code>Tree</code> data structure contains a <em>base</em> (a set of files that already exists) and a <em>staging area</em> (a list of changes to be applied to the base).
+  When making modifications, you don't actually change the base, but add those modifications to the staging area.</p>
+</li>
+<li><p>A <code>Rule</code> object defines a function that takes a <code>Tree</code>, applies transformations, and returns a new <code>Tree</code>.
+  The main file for a schematic, <code>index.ts</code>, defines a set of rules that implement the schematic's logic.</p>
+</li>
+<li><p>A transformation is represented by an <code>Action</code>.
+  There are four action types: <code>Create</code>, <code>Rename</code>, <code>Overwrite</code>, and <code>Delete</code>.</p>
+</li>
+<li><p>Each schematic runs in a context, represented by a <code>SchematicContext</code> object.</p>
+</li>
+
+  </ul>
+  <p>The context object passed into a rule provides access to utility functions and metadata that the schematic might need to work with, including a logging API to help with debugging.
+The context also defines a <em>merge strategy</em> that determines how changes are merged from the staged tree into the base tree.
+A change can be accepted or ignored, or throw an exception.</p>
+
+  <h3 id="defining-rules-and-actions">
+    <a href="#defining-rules-and-actions" class="docs-anchor" tabindex="-1" aria-label="Link to Defining rules and actions">Defining rules and actions</a>
+  </h3>
+  <p>When you create a new blank schematic with the <a href="#schematics-cli">Schematics CLI</a>, the generated entry function is a <em>rule factory</em>.
+A <code>RuleFactory</code> object defines a higher-order function that creates a <code>Rule</code>.</p>
+<div class="docs-code" header="index.ts">
+    <div class="docs-code-header"><h3>index.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { Rule, SchematicContext, Tree } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular-devkit/schematics'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// You don't have to export the function as default.</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// You can also have more than one rule factory per file.</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> helloWorld</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">_options</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Rule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">tree</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Tree</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">_context</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SchematicContext</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">   return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> tree;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> };</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>Your rules can make changes to your projects by calling external tools and implementing logic.
+You need a rule, for example, to define how a template in the schematic is to be merged into the hosting project.</p>
+<p>Rules can make use of utilities provided with the <code>@schematics/angular</code> package.
+Look for helper functions for working with modules, dependencies, TypeScript, AST, JSON, Angular CLI workspaces and projects, and more.</p>
+<div class="docs-code" header="index.ts">
+    <div class="docs-code-header"><h3>index.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  JsonAstObject,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  JsonObject,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  JsonValue,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  Path,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  normalize,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  parseJsonAst,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  strings,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular-devkit/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="defining-input-options-with-a-schema-and-interfaces">
+    <a href="#defining-input-options-with-a-schema-and-interfaces" class="docs-anchor" tabindex="-1" aria-label="Link to Defining input options with a schema and interfaces">Defining input options with a schema and interfaces</a>
+  </h3>
+  <p>Rules can collect option values from the caller and inject them into templates.
+The options available to your rules, with their allowed values and defaults, are defined in the schematic's JSON schema file, <code>&lt;schematic&gt;/schema.json</code>.
+Define variable or enumerated data types for the schema using TypeScript interfaces.</p>
+<p>The schema defines the types and default values of variables used in the schematic.
+For example, the hypothetical "Hello World" schematic might have the following schema.</p>
+<div class="docs-code" header="src/hello-world/schema.json">
+    <div class="docs-code-header"><h3>src/hello-world/schema.json</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "properties"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "name"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "minLength"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"world"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "useColor"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"boolean"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>See examples of schema files for the Angular CLI command schematics in <a href="https://github.com/angular/angular-cli/blob/main/packages/schematics/angular/application/schema.json" target="_blank"><code>@schematics/angular</code></a>.</p>
+
+  <h3 id="schematic-prompts">
+    <a href="#schematic-prompts" class="docs-anchor" tabindex="-1" aria-label="Link to Schematic prompts">Schematic prompts</a>
+  </h3>
+  <p>Schematic <em>prompts</em> introduce user interaction into schematic execution.
+Configure schematic options to display a customizable question to the user.
+The prompts are displayed before the execution of the schematic, which then uses the response as the value for the option.
+This lets users direct the operation of the schematic without requiring in-depth knowledge of the full spectrum of available options.</p>
+<p>The "Hello World" schematic might, for example, ask the user for their name, and display that name in place of the default name "world".
+To define such a prompt, add an <code>x-prompt</code> property to the schema for the <code>name</code> variable.</p>
+<p>Similarly, you can add a prompt to let the user decide whether the schematic uses color when executing its hello action.
+The schema with both prompts would be as follows.</p>
+<div class="docs-code" header="src/hello-world/schema.json">
+    <div class="docs-code-header"><h3>src/hello-world/schema.json</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "properties"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "name"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "minLength"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"world"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "x-prompt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"What is your name?"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "useColor"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"boolean"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "x-prompt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Would you like the response in color?"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="prompt-short-form-syntax">
+    <a href="#prompt-short-form-syntax" class="docs-anchor" tabindex="-1" aria-label="Link to Prompt short-form syntax">Prompt short-form syntax</a>
+  </h4>
+  <p>These examples use a shorthand form of the prompt syntax, supplying only the text of the question.
+In most cases, this is all that is required.
+Notice however, that the two prompts expect different types of input.
+When using the shorthand form, the most appropriate type is automatically selected based on the property's schema.
+In the example, the <code>name</code> prompt uses the <code>input</code> type because it is a string property.
+The <code>useColor</code> prompt uses a <code>confirmation</code> type because it is a Boolean property.
+In this case, "yes" corresponds to <code>true</code> and "no" corresponds to <code>false</code>.</p>
+<p>There are three supported input types.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Input type</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">confirmation</td>
+<td align="left">A yes or no question; ideal for Boolean options.</td>
+</tr>
+<tr>
+<td align="left">input</td>
+<td align="left">Textual input; ideal for string or number options.</td>
+</tr>
+<tr>
+<td align="left">list</td>
+<td align="left">A predefined set of allowed values.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>In the short form, the type is inferred from the property's type and constraints.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Property schema</th>
+<th align="left">Prompt type</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">"type": "boolean"</td>
+<td align="left">confirmation ("yes"=<code>true</code>, "no"=<code>false</code>)</td>
+</tr>
+<tr>
+<td align="left">"type": "string"</td>
+<td align="left">input</td>
+</tr>
+<tr>
+<td align="left">"type": "number"</td>
+<td align="left">input (only valid numbers accepted)</td>
+</tr>
+<tr>
+<td align="left">"type": "integer"</td>
+<td align="left">input (only valid numbers accepted)</td>
+</tr>
+<tr>
+<td align="left">"enum": […]</td>
+<td align="left">list (enum members become list selections)</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>In the following example, the property takes an enumerated value, so the schematic automatically chooses the list type, and creates a menu from the possible values.</p>
+<div class="docs-code" header="schema.json">
+    <div class="docs-code-header"><h3>schema.json</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"style"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "description"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"The file extension or preprocessor to use for style files."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"css"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "enum"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "css"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "scss"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "sass"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "less"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "styl"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "x-prompt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Which stylesheet format would you like to use?"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>The prompt runtime automatically validates the provided response against the constraints provided in the JSON schema.
+If the value is not acceptable, the user is prompted for a new value.
+This ensures that any values passed to the schematic meet the expectations of the schematic's implementation, so that you do not need to add additional checks within the schematic's code.</p>
+
+  <h4 id="prompt-long-form-syntax">
+    <a href="#prompt-long-form-syntax" class="docs-anchor" tabindex="-1" aria-label="Link to Prompt long-form syntax">Prompt long-form syntax</a>
+  </h4>
+  <p>The <code>x-prompt</code> field syntax supports a long form for cases where you require additional customization and control over the prompt.
+In this form, the <code>x-prompt</code> field value is a JSON object with subfields that customize the behavior of the prompt.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Field</th>
+<th align="left">Data value</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">type</td>
+<td align="left"><code>confirmation</code>, <code>input</code>, or <code>list</code> (selected automatically in short form)</td>
+</tr>
+<tr>
+<td align="left">message</td>
+<td align="left">string (required)</td>
+</tr>
+<tr>
+<td align="left">items</td>
+<td align="left">string and/or label/value object pair (only valid with type <code>list</code>)</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>The following example of the long form is from the JSON schema for the schematic that the CLI uses to <a href="https://github.com/angular/angular-cli/blob/ba8a6ea59983bb52a6f1e66d105c5a77517f062e/packages/schematics/angular/application/schema.json#L56" target="_blank">generate applications</a>.
+It defines the prompt that lets users choose which style preprocessor they want to use for the application being created.
+By using the long form, the schematic can provide more explicit formatting of the menu choices.</p>
+<div class="docs-code" header="package/schematics/angular/application/schema.json">
+    <div class="docs-code-header"><h3>package/schematics/angular/application/schema.json</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"style"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "description"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"The file extension or preprocessor to use for style files."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"css"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "enum"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "css"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "scss"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "sass"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "less"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "x-prompt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "message"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Which stylesheet format would you like to use?"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"list"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "items"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"value"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"css"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,  </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"label"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"CSS"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"value"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"scss"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"label"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"value"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"sass"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"label"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Sass   [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"value"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"less"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"label"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Less   [ https://lesscss.org/                                            ]"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="x-prompt-schema">
+    <a href="#x-prompt-schema" class="docs-anchor" tabindex="-1" aria-label="Link to x-prompt schema">x-prompt schema</a>
+  </h4>
+  <p>The JSON schema that defines a schematic's options supports extensions to allow the declarative definition of prompts and their respective behavior.
+No additional logic or changes are required to the code of a schematic to support the prompts.
+The following JSON schema is a complete description of the long-form syntax for the <code>x-prompt</code> field.</p>
+<div class="docs-code" header="x-prompt schema">
+    <div class="docs-code-header"><h3>x-prompt schema</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "oneOf"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"object"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "properties"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "message"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "items"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                    "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"array"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                    "items"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                        "oneOf"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                            { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                            {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                                "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"object"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                                "properties"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                                    "label"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                                    "value"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                                },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                                "required"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [ </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"value"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                            }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                        ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "required"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [ </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"message"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="schematics-cli">
+    <a href="#schematics-cli" class="docs-anchor" tabindex="-1" aria-label="Link to Schematics CLI">Schematics CLI</a>
+  </h2>
+  <p>Schematics come with their own command-line tool.
+Using Node 6.9 or later, install the Schematics command line tool globally:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -g</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular-devkit/schematics-cli</span></span></code></pre>
+    </pre>
+  </div><p>This installs the <code>schematics</code> executable, which you can use to create a new schematics collection in its own project folder, add a new schematic to an existing collection, or extend an existing schematic.</p>
+<p>In the following sections, you will create a new schematics collection using the CLI to introduce the files and file structure, and some of the basic concepts.</p>
+<p>The most common use of schematics, however, is to integrate an Angular library with the Angular CLI.
+Do this by creating the schematic files directly within the library project in an Angular workspace, without using the Schematics CLI.
+See <a href="tools/cli/schematics-for-libraries">Schematics for Libraries</a>.</p>
+
+  <h3 id="creating-a-schematics-collection">
+    <a href="#creating-a-schematics-collection" class="docs-anchor" tabindex="-1" aria-label="Link to Creating a schematics collection">Creating a schematics collection</a>
+  </h3>
+  <p>The following command creates a new schematic named <code>hello-world</code> in a new project folder of the same name.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schematics</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> blank</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --name=hello-world</span></span></code></pre>
+    </pre>
+  </div><p>The <code>blank</code> schematic is provided by the Schematics CLI.
+The command creates a new project folder (the root folder for the collection) and an initial named schematic in the collection.</p>
+<p>Go to the collection folder, install your npm dependencies, and open your new collection in your favorite editor to see the generated files.
+For example, if you are using VS Code:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">cd</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> hello-world</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> run</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">code</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> .</span></span></code></pre>
+    </pre>
+  </div><p>The initial schematic gets the same name as the project folder, and is generated in <code>src/hello-world</code>.
+Add related schematics to this collection, and modify the generated skeleton code to define your schematic's functionality.
+Each schematic name must be unique within the collection.</p>
+
+  <h3 id="running-a-schematic">
+    <a href="#running-a-schematic" class="docs-anchor" tabindex="-1" aria-label="Link to Running a schematic">Running a schematic</a>
+  </h3>
+  <p>Use the <code>schematics</code> command to run a named schematic.
+Provide the path to the project folder, the schematic name, and any mandatory options, in the following format.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schematics</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">path-to-schematics-projec</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">t</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">:</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">schematics-nam</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">e</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">required-option</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">value</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span></span></code></pre>
+    </pre>
+  </div><p>The path can be absolute or relative to the current working directory where the command is executed.
+For example, to run the schematic you just generated (which has no required options), use the following command.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schematics</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> .:hello-world</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="adding-a-schematic-to-a-collection">
+    <a href="#adding-a-schematic-to-a-collection" class="docs-anchor" tabindex="-1" aria-label="Link to Adding a schematic to a collection">Adding a schematic to a collection</a>
+  </h3>
+  <p>To add a schematic to an existing collection, use the same command you use to start a new schematics project, but run the command inside the project folder.</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">cd</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> hello-world</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schematics</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> blank</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --name=goodbye-world</span></span></code></pre>
+    </pre>
+  </div><p>The command generates the new named schematic inside your collection, with a main <code>index.ts</code> file and its associated test spec.
+It also adds the name, description, and factory function for the new schematic to the collection's schema in the <code>collection.json</code> file.</p>
+
+  <h2 id="collection-contents">
+    <a href="#collection-contents" class="docs-anchor" tabindex="-1" aria-label="Link to Collection contents">Collection contents</a>
+  </h2>
+  <p>The top level of the root project folder for a collection contains configuration files, a <code>node_modules</code> folder, and a <code>src/</code> folder.
+The <code>src/</code> folder contains subfolders for named schematics in the collection, and a schema, <code>collection.json</code>, which describes the collected schematics.
+Each schematic is created with a name, description, and factory function.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "$schema"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">     "../node_modules/@angular-devkit/schematics/collection-schema.json"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "schematics"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "hello-world"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "description"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"A blank schematic."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "factory"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./hello-world/index#helloWorld"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <ul class="docs-list">
+    <li><p>The <code>$schema</code> property specifies the schema that the CLI uses for validation.</p>
+</li>
+<li><p>The <code>schematics</code> property lists named schematics that belong to this collection.
+  Each schematic has a plain-text description, and points to the generated entry function in the main file.</p>
+</li>
+<li><p>The <code>factory</code> property points to the generated entry function.
+  In this example, you invoke the <code>hello-world</code> schematic by calling the <code>helloWorld()</code> factory function.</p>
+</li>
+<li><p>The optional  <code>schema</code> property points to a JSON schema file that defines the command-line options available to the schematic.</p>
+</li>
+<li><p>The optional <code>aliases</code> array specifies one or more strings that can be used to invoke the schematic.
+  For example, the schematic for the Angular CLI "generate" command has an alias "g", that lets you use the command <code>ng g</code>.</p>
+</li>
+
+  </ul>
+  
+  <h3 id="named-schematics">
+    <a href="#named-schematics" class="docs-anchor" tabindex="-1" aria-label="Link to Named schematics">Named schematics</a>
+  </h3>
+  <p>When you use the Schematics CLI to create a blank schematics project, the new blank schematic is the first member of the collection, and has the same name as the collection.
+When you add a new named schematic to this collection, it is automatically added to the  <code>collection.json</code>  schema.</p>
+<p>In addition to the name and description, each schematic has a <code>factory</code> property that identifies the schematic's entry point.
+In the example, you invoke the schematic's defined functionality by calling the <code>helloWorld()</code> function in the main file,  <code>hello-world/index.ts</code>.</p>
+<img alt="overview" src="assets/images/guide/schematics/collection-files.gif">
+
+<p>Each named schematic in the collection has the following main parts.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Parts</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>index.ts</code></td>
+<td align="left">Code that defines the transformation logic for a named schematic.</td>
+</tr>
+<tr>
+<td align="left"><code>schema.json</code></td>
+<td align="left">Schematic variable definition.</td>
+</tr>
+<tr>
+<td align="left"><code>schema.d.ts</code></td>
+<td align="left">Schematic variables.</td>
+</tr>
+<tr>
+<td align="left"><code>files/</code></td>
+<td align="left">Optional component/template files to replicate.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>It is possible for a schematic to provide all of its logic in the <code>index.ts</code> file, without additional templates.
+You can create dynamic schematics for Angular, however, by providing components and templates in the <code>files</code> folder, like those in standalone Angular projects.
+The logic in the index file configures these templates by defining rules that inject data and modify variables.</p>

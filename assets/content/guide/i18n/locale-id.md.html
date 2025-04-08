@@ -1,0 +1,117 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Refer to locales by ID</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/i18n/locale-id.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular uses the Unicode <em>locale identifier</em> (Unicode locale ID) to find the correct locale data for internationalization of text strings.</p>
+
+    <div class="docs-callout docs-callout-helpful">
+      <h3>Unicode locale ID</h3>
+      
+  <ul class="docs-list">
+    <li><p>A locale ID conforms to the <a href="https://cldr.unicode.org/index/cldr-spec" title=Core Specification | Unicode CLDR Project target="_blank">Unicode Common Locale Data Repository (CLDR) core specification</a>.
+  For more information about locale IDs, see [Unicode Language and Locale Identifiers][UnicodeCldrDevelopmentCoreSpecificationLocaleIDs].</p>
+</li>
+<li><p>CLDR and Angular use <a href="https://www.rfc-editor.org/info/bcp47" title=BCP 47 | RFC Editor target="_blank">BCP 47 tags</a> as the base for the locale ID</p>
+</li>
+
+  </ul>
+  
+    </div>
+    <p>A locale ID specifies the language, country, and an optional code for further variants or subdivisions.
+A locale ID consists of the language identifier, a hyphen (<code>-</code>) character, and the locale extension.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{language_id}-{locale_extension}</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> To accurately translate your Angular project, you must decide which languages and locales you are targeting for internationalization.</p>
+
+    </div>
+    <p>Many countries share the same language, but differ in usage.
+The differences include grammar, punctuation, formats for currency, decimal numbers, dates, and so on.</p>
+<p>For the examples in this guide, use the following languages and locales.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Language</th>
+<th align="left">Locale</th>
+<th align="left">Unicode locale ID</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">English</td>
+<td align="left">Canada</td>
+<td align="left"><code>en-CA</code></td>
+</tr>
+<tr>
+<td align="left">English</td>
+<td align="left">United States of America</td>
+<td align="left"><code>en-US</code></td>
+</tr>
+<tr>
+<td align="left">French</td>
+<td align="left">Canada</td>
+<td align="left"><code>fr-CA</code></td>
+</tr>
+<tr>
+<td align="left">French</td>
+<td align="left">France</td>
+<td align="left"><code>fr-FR</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>The <a href="https://github.com/angular/angular/tree/main/packages/common/locales" title=angular/packages/common/locales | angular/angular | GitHub target="_blank">Angular repository</a> includes common locales.</p>
+
+    <div class="docs-callout docs-callout-helpful">
+      <h3></h3>
+      <p>For a list of language codes, see <a href="https://www.loc.gov/standards/iso639-2" target="_blank">ISO 639-2</a>.</p>
+
+    </div>
+    
+  <h2 id="set-the-source-locale-id">
+    <a href="#set-the-source-locale-id" class="docs-anchor" tabindex="-1" aria-label="Link to Set the source locale ID">Set the source locale ID</a>
+  </h2>
+  <p>Use the Angular CLI to set the source language in which you are writing the component template and code.</p>
+<p>By default, Angular uses <code>en-US</code> as the source locale of your project.</p>
+<p>To change the source locale of your project for the build, complete the following actions.</p>
+
+    <ol class="docs-ordered-list">
+      <li>Open the <a href="reference/configs/workspace-config" title=Angular workspace configuration | Angular><code>angular.json</code></a> workspace build configuration file.</li>
+<li>Add or modify the <code>sourceLocale</code> field inside the <code>i18n</code> section:</li>
+
+    </ol>
+    <div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "your-project"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "i18n"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "sourceLocale"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"ca"</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Use your desired locale code</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="whats-next">
+    <a href="#whats-next" class="docs-anchor" tabindex="-1" aria-label="Link to What's next">What's next</a>
+  </h2>
+  
+    <nav class="docs-pill-row">
+      
+    <a class="docs-pill" href="guide/i18n/format-data-locale">
+      Format data based on locale
+    </a>
+    
+
+    </nav>
+    

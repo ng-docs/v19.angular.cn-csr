@@ -1,0 +1,67 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Injection context</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/di/dependency-injection-context.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>The dependency injection (DI) system relies internally on a runtime context where the current injector is available.
+This means that injectors can only work when code is executed in such a context.</p>
+<p>The injection context is available in these situations:</p>
+
+  <ul class="docs-list">
+    <li>During construction (via the <code>constructor</code>) of a class being instantiated by the DI system, such as an <code>@Injectable</code> or <code>@Component</code>.</li>
+<li>In the initializer for fields of such classes.</li>
+<li>In the factory function specified for <code>useFactory</code> of a <code>Provider</code> or an <code>@Injectable</code>.</li>
+<li>In the <code>factory</code> function specified for an <code>InjectionToken</code>.</li>
+<li>Within a stack frame that runs in an injection context.</li>
+
+  </ul>
+  <p>Knowing when you are in an injection context will allow you to use the <a href="api/core/inject"><code>inject</code></a> function to inject instances.</p>
+
+  <h2 id="class-constructors">
+    <a href="#class-constructors" class="docs-anchor" tabindex="-1" aria-label="Link to Class constructors">Class constructors</a>
+  </h2>
+  <p>Every time the DI system instantiates a class, it does so in an injection context. This is handled by the framework itself. The constructor of the class is executed in that runtime context, which also allows injection of a token using the <a href="api/core/inject"><code>inject</code></a> function.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> service1</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Service1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line highlighted"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> service2</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Service2</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Service2); </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// In context</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line highlighted"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.service1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Service1) </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// In context</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="stack-frame-in-context">
+    <a href="#stack-frame-in-context" class="docs-anchor" tabindex="-1" aria-label="Link to Stack frame in context">Stack frame in context</a>
+  </h2>
+  <p>Some APIs are designed to be run in an injection context. This is the case, for example, with router guards. This allows the use of <a href="api/core/inject"><code>inject</code></a> within the guard function to access a service.</p>
+<p>Here is an example for <code>CanActivateFn</code></p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> canActivateTeam</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CanActivateFn</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    (</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">route</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ActivatedRouteSnapshot</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">state</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> RouterStateSnapshot</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">      return</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(PermissionsService).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">canActivate</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(UserToken), route.params.id);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    };</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="run-within-an-injection-context">
+    <a href="#run-within-an-injection-context" class="docs-anchor" tabindex="-1" aria-label="Link to Run within an injection context">Run within an injection context</a>
+  </h2>
+  <p>When you want to run a given function in an injection context without already being in one, you can do so with <code>runInInjectionContext</code>.
+This requires access to a given injector, like the <code>EnvironmentInjector</code>, for example:</p>
+<div class="docs-code" header="src/app/heroes/hero.service.ts">
+    <div class="docs-code-header"><h3>src/app/heroes/hero.service.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Injectable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providedIn: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'root'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HeroService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> environmentInjector</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(EnvironmentInjector);</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  someMethod</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    runInInjectionContext</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.environmentInjector, () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">      inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(SomeService); </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Do what you need with the injected service</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    });</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>Note that <code>inject</code> will return an instance only if the injector can resolve the required token.</p>
+
+  <h2 id="asserts-the-context">
+    <a href="#asserts-the-context" class="docs-anchor" tabindex="-1" aria-label="Link to Asserts the context">Asserts the context</a>
+  </h2>
+  <p>Angular provides the <code>assertInInjectionContext</code> helper function to assert that the current context is an injection context.</p>
+
+  <h2 id="using-di-outside-of-a-context">
+    <a href="#using-di-outside-of-a-context" class="docs-anchor" tabindex="-1" aria-label="Link to Using DI outside of a context">Using DI outside of a context</a>
+  </h2>
+  <p>Calling <a href="api/core/inject"><code>inject</code></a> or calling <code>assertInInjectionContext</code> outside of an injection context will throw <a href="/errors/NG0203">error NG0203</a>.</p>

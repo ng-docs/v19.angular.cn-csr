@@ -1,0 +1,111 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Workspace npm dependencies</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/configs/npm-packages.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>The Angular Framework, Angular CLI, and components used by Angular applications are packaged as <a href="https://docs.npmjs.com/getting-started/what-is-npm" title=What is npm? target="_blank">npm packages</a> and distributed using the <a href="https://docs.npmjs.com" target="_blank">npm registry</a>.</p>
+<p>You can download and install these npm packages by using the <a href="https://docs.npmjs.com/cli/install" target="_blank">npm CLI client</a>.
+By default, Angular CLI uses the npm client.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> See <a href="tools/cli/setup-local" title=Setting up for Local Development>Local Environment Setup</a> for information about the required versions and installation of <code>Node.js</code> and <code>npm</code>.</p>
+
+    </div>
+    <p>If you already have projects running on your machine that use other versions of Node.js and npm, consider using <a href="https://github.com/creationix/nvm" target="_blank">nvm</a> to manage the multiple versions of Node.js and npm.</p>
+
+  <h2 id="packagejson">
+    <a href="#packagejson" class="docs-anchor" tabindex="-1" aria-label="Link to <code>package.json</code>"><code>package.json</code></a>
+  </h2>
+  <p><code>npm</code> installs the packages identified in a <a href="https://docs.npmjs.com/files/package.json" target="_blank"><code>package.json</code></a> file.</p>
+<p>The CLI command <code>ng new</code> creates a <code>package.json</code> file when it creates the new workspace.
+This <code>package.json</code> is used by all projects in the workspace, including the initial application project that is created by the CLI when it creates the workspace.
+Libraries created with <code>ng generate library</code> will include their own <code>package.json</code> file.</p>
+<p>Initially, this <code>package.json</code> includes <em>a starter set of packages</em>, some of which are required by Angular and others that support common application scenarios.
+You add packages to <code>package.json</code> as your application evolves.</p>
+
+  <h2 id="default-dependencies">
+    <a href="#default-dependencies" class="docs-anchor" tabindex="-1" aria-label="Link to Default Dependencies">Default Dependencies</a>
+  </h2>
+  <p>The following Angular packages are included as dependencies in the default <code>package.json</code> file for a new Angular workspace.
+For a complete list of Angular packages, see the <a href="api">API reference</a>.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Package name</th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><a href="api#animations"><code>@angular/animations</code></a></td>
+<td align="left">Angular's animations library makes it easy to define and apply animation effects such as page and list transitions. For more information, see the <a href="guide/animations">Animations guide</a>.</td>
+</tr>
+<tr>
+<td align="left"><a href="api#common"><code>@angular/common</code></a></td>
+<td align="left">The commonly-needed services, pipes, and directives provided by the Angular team.</td>
+</tr>
+<tr>
+<td align="left"><code>@angular/compiler</code></td>
+<td align="left">Angular's template compiler. It understands Angular templates and can convert them to code that makes the application run.</td>
+</tr>
+<tr>
+<td align="left"><code>@angular/compiler-cli</code></td>
+<td align="left">Angular's compiler which is invoked by the Angular CLI's <code>ng build</code> and <code>ng serve</code> commands. It processes Angular templates with <code>@angular/compiler</code> inside a standard TypeScript compilation.</td>
+</tr>
+<tr>
+<td align="left"><a href="api#core"><code>@angular/core</code></a></td>
+<td align="left">Critical runtime parts of the framework that are needed by every application. Includes all metadata decorators such as <code>@Component</code>, dependency injection, and component lifecycle hooks.</td>
+</tr>
+<tr>
+<td align="left"><a href="api#forms"><code>@angular/forms</code></a></td>
+<td align="left">Support for both <a href="guide/forms">template-driven</a> and <a href="guide/forms/reactive-forms">reactive forms</a>. See <a href="guide/forms">Introduction to forms</a>.</td>
+</tr>
+<tr>
+<td align="left"><a href="api#platform-browser"><code>@angular/platform-browser</code></a></td>
+<td align="left">Everything DOM and browser related, especially the pieces that help render into the DOM.</td>
+</tr>
+<tr>
+<td align="left"><a href="api#platform-browser-dynamic"><code>@angular/platform-browser-dynamic</code></a></td>
+<td align="left">Includes <a href="api/core/Provider">providers</a> and methods to compile and run the application on the client using the <a href="tools/cli/aot-compiler#choosing-a-compiler">JIT compiler</a>.</td>
+</tr>
+<tr>
+<td align="left"><a href="api#router"><code>@angular/router</code></a></td>
+<td align="left">The router module navigates among your application pages when the browser URL changes. For more information, see <a href="guide/routing">Routing and Navigation</a>.</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/angular/angular-cli" target="_blank"><code>@angular/cli</code></a></td>
+<td align="left">Contains the Angular CLI binary for running <code>ng</code> commands.</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/angular/angular-cli" target="_blank"><code>@angular-devkit/build-angular</code></a></td>
+<td align="left">Contains default CLI builders for bundling, testing, and serving Angular applications and libraries.</td>
+</tr>
+<tr>
+<td align="left"><code>rxjs</code></td>
+<td align="left">A library for reactive programming using <code>Observables</code>.</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/angular/zone.js" target="_blank"><code>zone.js</code></a></td>
+<td align="left">Angular relies on `zone.js`` to run Angular's change detection processes when native JavaScript operations raise events.</td>
+</tr>
+<tr>
+<td align="left"><a href="https://www.npmjs.com/package/typescript" target="_blank"><code>typescript</code></a></td>
+<td align="left">The TypeScript compiler, language server, and built-in type definitions.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  

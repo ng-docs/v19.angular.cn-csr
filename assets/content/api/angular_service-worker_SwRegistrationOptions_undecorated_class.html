@@ -1,0 +1,41 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/service-worker</span><div class="docs-reference-title"><div><h1>SwRegistrationOptions</h1><div class="docs-api-item-label type-undecorated_class full">Class</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/service-worker/src/provider.ts#L126-L172" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">code</i></a></div><section class="docs-reference-description"><p>Token that can be used to provide options for <code><a href="/api/service-worker/ServiceWorkerModule">ServiceWorkerModule</a></code> outside of
+<code><a href="/api/service-worker/ServiceWorkerModule#register()">ServiceWorkerModule.register()</a></code>.</p></section></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">
+  <code>
+    <span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">abstract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/service-worker/SwRegistrationOptions">SwRegistrationOptions</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><button aria-describedby="jump-msg" type="button" class="line " member-id="enabled"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  enabled</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button><button aria-describedby="jump-msg" type="button" class="line " member-id="scope"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  scope</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button><button aria-describedby="jump-msg" type="button" class="line " member-id="registrationStrategy"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  registrationStrategy</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=></span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Observable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">unknown</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button><span class="line "><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-members"><div class="docs-reference-members"><div id="enabled" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>enabled</h3><code>boolean | undefined</code></header><div class="docs-reference-card-body"><div class="docs-reference-card-item"><div><p>Whether the ServiceWorker will be registered and the related services (such as <code><a href="/api/service-worker/SwPush">SwPush</a></code> and
+<code><a href="/api/service-worker/SwUpdate">SwUpdate</a></code>) will attempt to communicate and interact with it.</p>
+<p>Default: true</p></div></div></div></div><div id="scope" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>scope</h3><code>string | undefined</code></header><div class="docs-reference-card-body"><div class="docs-reference-card-item"><div><p>A URL that defines the ServiceWorker&#39;s registration scope; that is, what range of URLs it can
+control. It will be used when calling
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register">ServiceWorkerContainer#register()</a>.</p></div></div></div></div><div id="registrationStrategy" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>registrationStrategy</h3><code>string | (() => Observable&lt;unknown>) | undefined</code></header><div class="docs-reference-card-body"><div class="docs-reference-card-item"><div><p>Defines the ServiceWorker registration strategy, which determines when it will be registered
+with the browser.</p>
+<p>The default behavior of registering once the application stabilizes (i.e. as soon as there are
+no pending micro- and macro-tasks) is designed to register the ServiceWorker as soon as
+possible but without affecting the application&#39;s first time load.</p>
+<p>Still, there might be cases where you want more control over when the ServiceWorker is
+registered (for example, there might be a long-running timeout or polling interval, preventing
+the app from stabilizing). The available option are:</p>
+
+    <ul class="docs-list">
+      <li><code>registerWhenStable:&lt;timeout&gt;</code>: Register as soon as the application stabilizes (no pending
+  micro-/macro-tasks) but no later than <code>&lt;timeout&gt;</code> milliseconds. If the app hasn&#39;t
+  stabilized after <code>&lt;timeout&gt;</code> milliseconds (for example, due to a recurrent asynchronous
+  task), the ServiceWorker will be registered anyway.
+  If <code>&lt;timeout&gt;</code> is omitted, the ServiceWorker will only be registered once the app
+  stabilizes.</li>
+<li><code>registerImmediately</code>: Register immediately.</li>
+<li><code>registerWithDelay:&lt;timeout&gt;</code>: Register with a delay of <code>&lt;timeout&gt;</code> milliseconds. For
+  example, use <code>registerWithDelay:5000</code> to register the ServiceWorker after 5 seconds. If
+  <code>&lt;timeout&gt;</code> is omitted, is defaults to <code>0</code>, which will register the ServiceWorker as soon
+  as possible but still asynchronously, once all pending micro-tasks are completed.</li>
+<li>An Observable factory function: A function that returns an <code>Observable</code>.
+  The function will be used at runtime to obtain and subscribe to the <code>Observable</code> and the
+  ServiceWorker will be registered as soon as the first value is emitted.</li>
+
+    </ul>
+    <p>Default: &#39;registerWhenStable:30000&#39;</p></div></div></div></div></div></div><div class="docs-reference-section"><h2 id="description" class="docs-reference-section-heading"><a href="#description" aria-label="Link to Description section" tabindex="-1">Description</a></h2><div><p>Token that can be used to provide options for <code><a href="/api/service-worker/ServiceWorkerModule">ServiceWorkerModule</a></code> outside of
+<code><a href="/api/service-worker/ServiceWorkerModule#register()">ServiceWorkerModule.register()</a></code>.</p>
+<p>You can use this token to define a provider that generates the registration options at runtime,
+for example via a function call:</p>
+<p>{@example service-worker/registration-options/module.ts region=&quot;registration-options&quot;
+    header=&quot;app.module.ts&quot;}</p></div></div></div>

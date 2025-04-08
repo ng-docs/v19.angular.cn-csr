@@ -1,0 +1,25 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Required input is accessed before a value is set.</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0950.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>A required input was accessed but no value was bound.</p>
+<p>This can happen when a required input is accessed too early in your directive or component.
+This is commonly happening when the input is read as part of class construction.</p>
+<p>Inputs are guaranteed to be available in the <code>ngOnInit</code> lifecycle hook and afterwards.</p>
+
+  <h2 id="fixing-the-error">
+    <a href="#fixing-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Fixing the error">Fixing the error</a>
+  </h2>
+  <p>Access the required input in reactive contexts.
+For example, in the template itself, inside a <code>computed</code>, or inside an effect.</p>
+<p>Alternatively, access the input inside the <code>ngOnInit</code> lifecycle hook, or later.</p>

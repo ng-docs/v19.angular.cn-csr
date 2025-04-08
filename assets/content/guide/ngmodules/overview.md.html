@@ -1,0 +1,137 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">NgModules</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/ngmodules/overview.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+    <div class="docs-alert docs-alert-important">
+    <p><strong>IMPORTANT:</strong> The Angular team recommends using <a href="guide/components/anatomy-of-components#-imports-in-the-component-decorator">standalone components</a> instead of <code>NgModule</code> for all new code. Use this guide to understand existing code built with <code>@NgModule</code>.</p>
+
+    </div>
+    <p>An NgModule is a class marked by the <code>@NgModule</code> decorator. This decorator accepts <em>metadata</em> that tells Angular how to compile component templates and configure dependency injection.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {NgModule} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Metadata goes here</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenuModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>An NgModule has two main responsibilities:</p>
+
+  <ul class="docs-list">
+    <li>Declaring components, directives, and pipes that belong to the NgModule</li>
+<li>Add providers to the injector for components, directives, and pipes that import the NgModule</li>
+
+  </ul>
+  
+  <h2 id="declarations">
+    <a href="#declarations" class="docs-anchor" tabindex="-1" aria-label="Link to Declarations">Declarations</a>
+  </h2>
+  <p>The <code>declarations</code> property of the <code>@NgModule</code> metadata declares the components, directives, and pipes that belong to the NgModule.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  /* ... */</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // CustomMenu and CustomMenuItem are components.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [CustomMenu, CustomMenuItem],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenuModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>In the example above, the components <code>CustomMenu</code> and <code>CustomMenuItem</code> belong to <code>CustomMenuModule</code>.</p>
+<p>The <code>declarations</code> property additionally accepts <em>arrays</em> of components, directives, and pipes. These arrays, in turn, may also contain other arrays.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> MENU_COMPONENTS</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [CustomMenu, CustomMenuItem];</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> WIDGETS</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">MENU_COMPONENTS</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, CustomSlider];</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  /* ... */</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // This NgModule declares all of CustomMenu, CustomMenuItem,</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // CustomSlider, and CustomCheckbox.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">WIDGETS</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, CustomCheckbox],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenuModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>If Angular discovers any components, directives, or pipes declared in more than one NgModule, it reports an error.</p>
+<p>Any components, directives, or pipes must be explicitly marked as <code>standalone: false</code> in order to be declared in an NgModule.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Mark this component as `standalone: false` so that it can be declared in an NgModule.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  standalone: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  /* ... */</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenu</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* ... */</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="imports">
+    <a href="#imports" class="docs-anchor" tabindex="-1" aria-label="Link to imports">imports</a>
+  </h3>
+  <p>Components declared in an NgModule may depend on other components, directives, and pipes. Add these dependencies to the <code>imports</code> property of the <code>@NgModule</code> metadata.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  /* ... */</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // CustomMenu and CustomMenuItem depend on the PopupTrigger and SelectorIndicator components.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [PopupTrigger, SelectionIndicator],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [CustomMenu, CustomMenuItem],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenuModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>The <code>imports</code> array accepts other NgModules, as well as standalone components, directives, and pipes.</p>
+
+  <h3 id="exports">
+    <a href="#exports" class="docs-anchor" tabindex="-1" aria-label="Link to exports">exports</a>
+  </h3>
+  <p>An NgModule can <em>export</em> its declared components, directives, and pipes such that they're available to other components and NgModules.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [PopupTrigger, SelectionIndicator],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [CustomMenu, CustomMenuItem],</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Make CustomMenu and CustomMenuItem available to</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // components and NgModules that import CustomMenuModule.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  exports: [CustomMenu, CustomMenuItem],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenuModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>The <code>exports</code> property is not limited to declarations, however. An NgModule can also export any other components, directives, pipes, and NgModules that it imports.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [PopupTrigger, SelectionIndicator],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [CustomMenu, CustomMenuItem],</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Also make PopupTrigger available to any component or NgModule that imports CustomMenuModule.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  exports: [CustomMenu, CustomMenuItem, PopupTrigger],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenuModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="ngmodule-providers">
+    <a href="#ngmodule-providers" class="docs-anchor" tabindex="-1" aria-label="Link to <code>NgModule</code> providers"><code>NgModule</code> providers</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-tip">
+    <p><strong>Tip:</strong> See the <a href="guide/di">Dependency Injection guide</a> for information on dependency injection and providers.</p>
+
+    </div>
+    <p>An <code>NgModule</code> can specify <code>providers</code> for injected dependencies. These providers are available to:</p>
+
+  <ul class="docs-list">
+    <li>Any standalone component, directive, or pipe that imports the NgModule, and</li>
+<li>The <code>declarations</code> and <code>providers</code> of any <em>other</em> NgModule that imports the NgModule.</li>
+
+  </ul>
+  <div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [PopupTrigger, SelectionIndicator],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [CustomMenu, CustomMenuItem],</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Provide the OverlayManager service</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [OverlayManager],</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  /* ... */</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenuModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [CustomMenuModule],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [UserProfile],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [UserDataClient],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UserProfileModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>In the example above:</p>
+
+  <ul class="docs-list">
+    <li>The <code>CustomMenuModule</code> provides <code>OverlayManager</code>.</li>
+<li>The <code>CustomMenu</code> and <code>CustomMenuItem</code> components can inject <code>OverlayManager</code> because they're declared in <code>CustomMenuModule</code>.</li>
+<li><code>UserProfile</code> can inject <code>OverlayManager</code> because its NgModule imports <code>CustomMenuModule</code>.</li>
+<li><code>UserDataClient</code> can inject <code>OverlayManager</code> because its NgModule imports <code>CustomMenuModule</code>.</li>
+
+  </ul>
+  
+  <h3 id="the-forroot-and-forchild-pattern">
+    <a href="#the-forroot-and-forchild-pattern" class="docs-anchor" tabindex="-1" aria-label="Link to The <code>forRoot</code> and <code>forChild</code> pattern">The <code>forRoot</code> and <code>forChild</code> pattern</a>
+  </h3>
+  <p>Some NgModules define a static <code>forRoot</code> method that accepts some configuration and returns an array of providers. The name "<code>forRoot</code>" is a convention that indicates that these providers are intended to be added exclusively to the <em>root</em> of your application during bootstrap.</p>
+<p>Any providers included in this way are eagerly loaded, increasing the JavaScript bundle size of your initial page load.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">boorstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(MyApplicationRoot, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    CustomMenuModule.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forRoot</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* some config */</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>Similarly, some NgModules may define a static <code>forChild</code> that indicates the providers are intended to be added to components within your application hierarchy.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  /* ... */</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    CustomMenuModule.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forChild</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* some config */</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UserProfile</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* ... */</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="bootstrapping-an-application">
+    <a href="#bootstrapping-an-application" class="docs-anchor" tabindex="-1" aria-label="Link to Bootstrapping an application">Bootstrapping an application</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-important">
+    <p><strong>IMPORTANT:</strong> The Angular team recommends using <a href="api/platform-browser/bootstrapApplication">bootstrapApplication</a> instead of <code>bootstrapModule</code> for all new code. Use this guide to understand existing applications bootstrapped with <code>@NgModule</code>.</p>
+
+    </div>
+    <p>The <code>@NgModule</code> decorator accepts an optional <code>bootstrap</code> array that may contain one or more components.</p>
+<p>You can use the <a href="https://angular.dev/api/core/PlatformRef#bootstrapModule" target="_blank"><code>bootstrapModule</code></a> method from either <a href="api/platform-browser/platformBrowser"><code>platformBrowser</code></a> or <a href="api/platform-server/platformServer"><code>platformServer</code></a> to start an Angular application. When run, this function locates any elements on the page with a CSS selector that matches the listed componet(s) and renders those components on the page.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {platformBrowser} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  bootstrap: [MyApplication],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyApplicationModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">platformBrowser</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(MyApplicationModule);</span></span></code></pre>
+    </pre>
+  </div><p>Components listed in <code>bootstrap</code> are automatically included in the NgModule's declarations.</p>
+<p>When you bootstrap an application from an NgModule, the collected <code>providers</code> of this module and all of the <code>providers</code> of its <code>imports</code> are eagerly loaded and available to inject for the entire application.</p>

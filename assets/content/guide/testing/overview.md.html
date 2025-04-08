@@ -1,0 +1,165 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Testing</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/testing/overview.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Testing your Angular application helps you check that your application is working as you expect.</p>
+
+  <h2 id="set-up-testing">
+    <a href="#set-up-testing" class="docs-anchor" tabindex="-1" aria-label="Link to Set up testing">Set up testing</a>
+  </h2>
+  <p>The Angular CLI downloads and installs everything you need to test an Angular application with <a href="https://jasmine.github.io" target="_blank">Jasmine testing framework</a>.</p>
+<p>The project you create with the CLI is immediately ready to test.
+Just run the <a href="cli/test"><code>ng test</code></a> CLI command:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> test</span></span></code></pre>
+    </pre>
+  </div><p>The <code>ng test</code> command builds the application in <em>watch mode</em>,
+and launches the <a href="https://karma-runner.github.io" target="_blank">Karma test runner</a>.</p>
+<p>The console output looks like below:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">02</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 11</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 2022</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 09:08:28.605:INFO</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [karma-server]: Karma v6.4.1 server started at http://localhost:9876/</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">02</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 11</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 2022</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 09:08:28.607:INFO</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [launcher]: Launching browsers Chrome with concurrency unlimited</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">02</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 11</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 2022</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 09:08:28.620:INFO</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [launcher]: Starting browser Chrome</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">02</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 11</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 2022</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 09:08:31.312:INFO</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [Chrome]: Connected on socket -LaEYvD2R7MdcS0-AAAB with id 31534482</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Chrome:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Executed</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 3</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> of</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 3</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> SUCCESS</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (0.193 </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">secs</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> /</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 0.172</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> secs</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">TOTAL:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 3</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> SUCCESS</span></span></code></pre>
+    </pre>
+  </div><p>The last line of the log shows that Karma ran three tests that all passed.</p>
+<p>The test output is displayed in the browser using <a href="https://github.com/dfederm/karma-jasmine-html-reporter" target="_blank">Karma Jasmine HTML Reporter</a>.</p>
+<img alt="Jasmine HTML Reporter in the browser" src="assets/images/guide/testing/initial-jasmine-html-reporter.png">
+
+<p>Click on a test row to re-run just that test or click on a description to re-run the tests in the selected test group ("test suite").</p>
+<p>Meanwhile, the <code>ng test</code> command is watching for changes.</p>
+<p>To see this in action, make a small change to <code>app.component.ts</code> and save.
+The tests run again, the browser refreshes, and the new test results appear.</p>
+
+  <h2 id="configuration">
+    <a href="#configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Configuration">Configuration</a>
+  </h2>
+  <p>The Angular CLI takes care of Jasmine and Karma configuration for you. It constructs the full configuration in memory, based on options specified in the <code>angular.json</code> file.</p>
+<p>If you want to customize Karma, you can create a <code>karma.conf.js</code> by running the following command:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> config</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> karma</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> Read more about Karma configuration in the <a href="http://karma-runner.github.io/6.4/config/configuration-file.html" target="_blank">Karma configuration guide</a>.</p>
+
+    </div>
+    
+  <h3 id="other-test-frameworks">
+    <a href="#other-test-frameworks" class="docs-anchor" tabindex="-1" aria-label="Link to Other test frameworks">Other test frameworks</a>
+  </h3>
+  <p>You can also unit test an Angular application with other testing libraries and test runners.
+Each library and runner has its own distinctive installation procedures, configuration, and syntax.</p>
+
+  <h3 id="test-file-name-and-location">
+    <a href="#test-file-name-and-location" class="docs-anchor" tabindex="-1" aria-label="Link to Test file name and location">Test file name and location</a>
+  </h3>
+  <p>Inside the <code>src/app</code> folder the Angular CLI generated a test file for the <code>AppComponent</code> named <code>app.component.spec.ts</code>.</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>IMPORTANT:</strong> The test file extension <strong>must be <code>.spec.ts</code></strong> so that tooling can identify it as a file with tests (also known as a <em>spec</em> file).</p>
+
+    </div>
+    <p>The <code>app.component.ts</code> and <code>app.component.spec.ts</code> files are siblings in the same folder.
+The root file names (<code>app.component</code>) are the same for both files.</p>
+<p>Adopt these two conventions in your own projects for <em>every kind</em> of test file.</p>
+
+  <h4 id="place-your-spec-file-next-to-the-file-it-tests">
+    <a href="#place-your-spec-file-next-to-the-file-it-tests" class="docs-anchor" tabindex="-1" aria-label="Link to Place your spec file next to the file it tests">Place your spec file next to the file it tests</a>
+  </h4>
+  <p>It's a good idea to put unit test spec files in the same folder
+as the application source code files that they test:</p>
+
+  <ul class="docs-list">
+    <li>Such tests are painless to find</li>
+<li>You see at a glance if a part of your application lacks tests</li>
+<li>Nearby tests can reveal how a part works in context</li>
+<li>When you move the source (inevitable), you remember to move the test</li>
+<li>When you rename the source file (inevitable), you remember to rename the test file</li>
+
+  </ul>
+  
+  <h4 id="place-your-spec-files-in-a-test-folder">
+    <a href="#place-your-spec-files-in-a-test-folder" class="docs-anchor" tabindex="-1" aria-label="Link to Place your spec files in a test folder">Place your spec files in a test folder</a>
+  </h4>
+  <p>Application integration specs can test the interactions of multiple parts
+spread across folders and modules.
+They don't really belong to any part in particular, so they don't have a
+natural home next to any one file.</p>
+<p>It's often better to create an appropriate folder for them in the <code>tests</code> directory.</p>
+<p>Of course specs that test the test helpers belong in the <code>test</code> folder,
+next to their corresponding helper files.</p>
+
+  <h2 id="testing-in-continuous-integration">
+    <a href="#testing-in-continuous-integration" class="docs-anchor" tabindex="-1" aria-label="Link to Testing in continuous integration">Testing in continuous integration</a>
+  </h2>
+  <p>One of the best ways to keep your project bug-free is through a test suite, but you might forget to run tests all the time.</p>
+<p>Continuous integration (CI) servers let you set up your project repository so that your tests run on every commit and pull request.</p>
+<p>To test your Angular CLI application in Continuous integration (CI) run the following command:</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> test</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --no-watch</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --no-progress</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --browsers=ChromeHeadless</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="more-information-on-testing">
+    <a href="#more-information-on-testing" class="docs-anchor" tabindex="-1" aria-label="Link to More information on testing">More information on testing</a>
+  </h2>
+  <p>After you've set up your application for testing, you might find the following testing guides useful.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left"></th>
+<th align="left">Details</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><a href="guide/testing/code-coverage">Code coverage</a></td>
+<td align="left">How much of your app your tests are covering and how to specify required amounts.</td>
+</tr>
+<tr>
+<td align="left"><a href="guide/testing/services">Testing services</a></td>
+<td align="left">How to test the services your application uses.</td>
+</tr>
+<tr>
+<td align="left"><a href="guide/testing/components-basics">Basics of testing components</a></td>
+<td align="left">Basics of testing Angular components.</td>
+</tr>
+<tr>
+<td align="left"><a href="guide/testing/components-scenarios">Component testing scenarios</a></td>
+<td align="left">Various kinds of component testing scenarios and use cases.</td>
+</tr>
+<tr>
+<td align="left"><a href="guide/testing/attribute-directives">Testing attribute directives</a></td>
+<td align="left">How to test your attribute directives.</td>
+</tr>
+<tr>
+<td align="left"><a href="guide/testing/pipes">Testing pipes</a></td>
+<td align="left">How to test pipes.</td>
+</tr>
+<tr>
+<td align="left"><a href="guide/testing/debugging">Debugging tests</a></td>
+<td align="left">Common testing bugs.</td>
+</tr>
+<tr>
+<td align="left"><a href="guide/testing/utility-apis">Testing utility APIs</a></td>
+<td align="left">Angular testing features.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  

@@ -1,0 +1,74 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Updating the Component Class</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/learn-angular/steps/2-updating-the-component-class/README.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>In Angular, the component's logic and behavior are defined in the component's TypeScript class.</p>
+<p>In this activity, you'll learn how to update the component class and how to use <a href="/guide/templates/binding#render-dynamic-text-with-text-interpolation">interpolation</a>.</p>
+<hr />
+
+
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="add-a-property-called-city">
+    <a href="#add-a-property-called-city" class="docs-anchor" tabindex="-1" aria-label="Link to Add a property called <code>city</code>">Add a property called <code>city</code></a>
+  </h3>
+  
+      <p>Update the component class by adding a property called <code>city</code> to the <code>AppComponent</code> class.</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  city</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'San Francisco'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>The <code>city</code> property is of type <code>string</code> but you can omit the type because of <a href="https://www.typescriptlang.org/docs/handbook/type-inference.html" target="_blank">type inference in TypeScript</a>. The <code>city</code> property can be used in the <code>AppComponent</code> class and can be referenced in the component template.</p>
+<br>
+
+<p>To use a class property in a template, you have to use the <code>{{ }}</code> syntax.</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="update-the-component-template">
+    <a href="#update-the-component-template" class="docs-anchor" tabindex="-1" aria-label="Link to Update the component template">Update the component template</a>
+  </h3>
+  
+      <p>Update the <code>template</code> property to match the following HTML:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`Hello {{ city }}`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span></code></pre>
+    </pre>
+  </div><p>This is an example of interpolation and is a part of Angular template syntax. It enables you to do much more than put dynamic text in a template. You can also use this syntax to call functions, write expressions and more.</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="more-practice-with-interpolation">
+    <a href="#more-practice-with-interpolation" class="docs-anchor" tabindex="-1" aria-label="Link to More practice with interpolation">More practice with interpolation</a>
+  </h3>
+  
+      <p>Try this - add another set of <code>{{ }}</code> with the contents being <code>1 + 1</code>:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`Hello {{ city }}, {{ 1 + 1 }}`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span></code></pre>
+    </pre>
+  </div><p>Angular evaluates the contents of the <code>{{ }}</code> and renders the output in the template.</p>
+
+    </li>
+    
+    </ol>
+    <p>This is just the beginning of what's possible with Angular templates, keep on learning to find out more.</p>

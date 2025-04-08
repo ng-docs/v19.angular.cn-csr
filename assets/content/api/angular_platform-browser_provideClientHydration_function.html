@@ -1,0 +1,59 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/platform-browser</span><div class="docs-reference-title"><div><h1>provideClientHydration</h1><div class="docs-api-item-label type-function full">function</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/platform-browser/src/hydration.ts#L223-L261" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">code</i></a></div><section class="docs-reference-description"><p>Sets up providers necessary to enable hydration functionality for the application.</p></section><nav class="docs-pill-row"><a class="docs-pill" href="/api/platform-browser/withNoHttpTransferCache">withNoHttpTransferCache</a><a class="docs-pill" href="/api/platform-browser/withHttpTransferCacheOptions">withHttpTransferCacheOptions</a><a class="docs-pill" href="/api/platform-browser/withI18nSupport">withI18nSupport</a><a class="docs-pill" href="/api/platform-browser/withEventReplay">withEventReplay</a></nav></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">
+  <code>
+    <span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/platform-browser/provideClientHydration">provideClientHydration</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">features</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/platform-browser/HydrationFeature">HydrationFeature</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/platform-browser/HydrationFeatureKind">HydrationFeatureKind</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>[]</span></span><span class="line "><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/core/EnvironmentProviders">EnvironmentProviders</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-members"><div id="provideClientHydration_0" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>provideClientHydration</h3><div><code><a href="/api/core/EnvironmentProviders">EnvironmentProviders</a></code></div></header><div class="docs-reference-card-body"><div class="docs-reference-card-item "><div class="docs-function-definition"><p>Sets up providers necessary to enable hydration functionality for the application.</p>
+<p>By default, the function enables the recommended set of features for the optimal
+performance for most of the applications. It includes the following features:</p>
+
+    <ul class="docs-list">
+      <li>Reconciling DOM hydration. Learn more about it <a href="guide/hydration">here</a>.</li>
+<li><a href="api/common/http/HttpClient"><code>HttpClient</code></a> response caching while running on the server and
+transferring this cache to the client to avoid extra HTTP requests. Learn more about data caching
+<a href="guide/ssr#caching-data-when-using-httpclient">here</a>.</li>
+
+    </ul>
+    <p>These functions allow you to disable some of the default features or enable new ones:</p>
+
+    <ul class="docs-list">
+      <li><a href="/api/platform-browser/withNoHttpTransferCache"><code>withNoHttpTransferCache</code></a> to disable HTTP transfer cache</li>
+<li><a href="/api/platform-browser/withHttpTransferCacheOptions"><code>withHttpTransferCacheOptions</code></a> to configure some HTTP transfer cache options</li>
+<li><a href="/api/platform-browser/withI18nSupport"><code>withI18nSupport</code></a> to enable hydration support for i18n blocks</li>
+<li><a href="/api/platform-browser/withEventReplay"><code>withEventReplay</code></a> to enable support for replaying user events</li>
+
+    </ul></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">features</span><code><a href="/api/platform-browser/HydrationFeature">HydrationFeature</a>&lt;<a href="/api/platform-browser/HydrationFeatureKind">HydrationFeatureKind</a>>[]</code><div class="docs-parameter-description"><p>Optional features to configure additional hydration behaviors.</p></div></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code><a href="/api/core/EnvironmentProviders">EnvironmentProviders</a></code></div></div></div></div></div><div class="docs-reference-section"><h2 id="description" class="docs-reference-section-heading"><a href="#description" aria-label="Link to Description section" tabindex="-1">Description</a></h2><div><p>Sets up providers necessary to enable hydration functionality for the application.</p>
+<p>By default, the function enables the recommended set of features for the optimal
+performance for most of the applications. It includes the following features:</p>
+
+    <ul class="docs-list">
+      <li>Reconciling DOM hydration. Learn more about it <a href="guide/hydration">here</a>.</li>
+<li><a href="api/common/http/HttpClient"><code>HttpClient</code></a> response caching while running on the server and
+transferring this cache to the client to avoid extra HTTP requests. Learn more about data caching
+<a href="guide/ssr#caching-data-when-using-httpclient">here</a>.</li>
+
+    </ul>
+    <p>These functions allow you to disable some of the default features or enable new ones:</p>
+
+    <ul class="docs-list">
+      <li><a href="/api/platform-browser/withNoHttpTransferCache"><code>withNoHttpTransferCache</code></a> to disable HTTP transfer cache</li>
+<li><a href="/api/platform-browser/withHttpTransferCacheOptions"><code>withHttpTransferCacheOptions</code></a> to configure some HTTP transfer cache options</li>
+<li><a href="/api/platform-browser/withI18nSupport"><code>withI18nSupport</code></a> to enable hydration support for i18n blocks</li>
+<li><a href="/api/platform-browser/withEventReplay"><code>withEventReplay</code></a> to enable support for replaying user events</li>
+
+    </ul></div></div><div class="docs-reference-section"><h2 id="usage-notes" class="docs-reference-section-heading"><a href="#usage-notes" aria-label="Link to Usage Notes section" tabindex="-1">Usage Notes</a></h2><div><p>Basic example of how you can enable hydration in your application when
+<code><a href="/api/platform-browser/bootstrapApplication">bootstrapApplication</a></code> function is used:</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/platform-browser/bootstrapApplication">bootstrapApplication</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppComponent, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/platform-browser/provideClientHydration">provideClientHydration</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+        </pre>
+      </div>
+    <p>Alternatively if you are using NgModules, you would add <code><a href="/api/platform-browser/provideClientHydration">provideClientHydration</a></code>
+to your root app module&#39;s provider list.</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/core/NgModule">NgModule</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [RootCmp],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  bootstrap: [RootCmp],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/platform-browser/provideClientHydration">provideClientHydration</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+        </pre>
+      </div>
+    </div></div></div>

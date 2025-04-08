@@ -1,0 +1,34 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Circular Dependency in DI</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0200.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+    <div class="docs-video-container">
+      <iframe
+      class="docs-video"
+      src="https://www.youtube.com/embed/CpLOm4o_FzM"
+      
+      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      credentialless
+      title="Video player"
+      ></iframe>
+    </div>
+    <p>A cyclic dependency exists when a <a href="guide/di/hierarchical-dependency-injection">dependency of a service</a> directly or indirectly depends on the service itself. For example, if <code>UserService</code> depends on <code>EmployeeService</code>, which also depends on <code>UserService</code>. Angular will have to instantiate <code>EmployeeService</code> to create <code>UserService</code>, which depends on <code>UserService</code>, itself.</p>
+
+  <h2 id="debugging-the-error">
+    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">Debugging the error</a>
+  </h2>
+  <p>Use the call stack to determine where the cyclical dependency exists.
+You will be able to see if any child dependencies rely on the original file by <a href="guide/di/di-in-action">mapping out</a> the component, module, or service's dependencies, and identifying the loop causing the problem.</p>
+<p>Break this loop (or circle) of dependency to resolve this error. This most commonly means removing or refactoring the dependencies to not be reliant on one another.</p>

@@ -1,0 +1,76 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/core</span><div class="docs-reference-title"><div><h1>ng-template</h1><div class="docs-api-item-label type-element full">element</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/tools/manual_api_docs/elements/ng-template.md#L0-L0" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">code</i></a></div><section class="docs-reference-description"><p>Angular&#39;s <code>&lt;ng-template&gt;</code> element defines a template that is not rendered by default.</p>
+<p>With <code>&lt;ng-template&gt;</code>, you can define template content that is only being rendered by Angular when
+you, whether directly or indirectly, specifically instruct it to do so, allowing you to have full
+control over how and when the content is displayed.</p>
+<div class="alter is-helpful">
+
+<p>Note that if you wrap content inside an <code>&lt;ng-template&gt;</code> without instructing Angular to render it,
+such content will not appear on a page. For example, see the following HTML code, when handling it
+Angular won&#39;t render the middle &quot;Hip!&quot; in the phrase &quot;Hip! Hip! Hooray!&quot; because of the
+surrounding <code>&lt;ng-template&gt;</code>.</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>Hip!&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">ng-template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>Hip!&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">ng-template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>Hooray!&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+        </pre>
+      </div>
+    </div>
+
+
+      <h2 id="usage-notes" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#usage-notes" aria-label="Link to Usage notes section" tabIndex="-1">
+          Usage notes
+        </a>
+      </h2>
+    
+      <h3 id="structural-directives" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#structural-directives" aria-label="Link to Structural Directives section" tabIndex="-1">
+          Structural Directives
+        </a>
+      </h3>
+    <p>One of the main uses for <code>&lt;ng-template&gt;</code> is to hold template content that will be used
+by <a href="guide/directives/structural-directives">Structural directives</a>. Those directives can add and remove copies
+of the template content based on their own logic.</p>
+<p>When using
+the <a href="guide/directives/structural-directives#structural-directive-shorthand">structural directive shorthand</a>,
+Angular creates an <code>&lt;ng-template&gt;</code> element behind the scenes.</p>
+
+      <h3 id="templateref" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#templateref" aria-label="Link to TemplateRef section" tabIndex="-1">
+          TemplateRef
+        </a>
+      </h3>
+    <p><code>&lt;ng-template&gt;</code> elements are represented as instances of the <code>TemplateRef</code> class.</p>
+<p>To add copies of the template to the DOM, pass this object to the <code>ViewContainerRef</code>
+method <code>createEmbeddedView()</code>.</p>
+
+      <h3 id="template-variables" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#template-variables" aria-label="Link to Template Variables section" tabIndex="-1">
+          Template Variables
+        </a>
+      </h3>
+    <p><code>&lt;ng-template&gt;</code> elements can be referenced in templates
+using <a href="guide/templates/variables#template-reference-variables#how-angular-assigns-values-to-template-variables">standard template variables</a>.</p>
+<p><em>This is how <code>&lt;ng-template&gt;</code> elements are used as <code>ngIf</code> else clauses.</em></p>
+<p>Such template variables can be used in conjunction with <code>ngTemplateOutlet</code> directives to render the
+content defined inside <code>&lt;ng-template&gt;</code> tags.</p>
+
+      <h3 id="querying" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#querying" aria-label="Link to Querying section" tabIndex="-1">
+          Querying
+        </a>
+      </h3>
+    <p>A <a href="api/core/Query">Query</a> (such as <code>ViewChild</code>) can find the <code>TemplateRef</code> associated to
+an <code>&lt;ng-template&gt;</code> element so that it can be used programmatically; for instance, to pass it to
+the <code>ViewContainerRef</code> method <code>createEmbeddedView()</code>.</p>
+
+      <h3 id="context" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#context" aria-label="Link to Context section" tabIndex="-1">
+          Context
+        </a>
+      </h3>
+    <p>Inside the <code>&lt;ng-template&gt;</code> tags you can reference variables present in the surrounding outer
+template.
+Additionally, a context object can be associated with <code>&lt;ng-template&gt;</code> elements.
+Such an object contains variables that can be accessed from within the template contents via
+template (<code>let</code> and <code>as</code>) declarations.</p></section></header></div>

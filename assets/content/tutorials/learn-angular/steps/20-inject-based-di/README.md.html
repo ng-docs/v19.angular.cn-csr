@@ -1,0 +1,76 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Inject-based dependency injection</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/learn-angular/steps/20-inject-based-di/README.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Creating an injectable service is the first part of the dependency injection (DI) system in Angular. How do you inject a service into a component? Angular has a convenient function called <code>inject()</code> that can be used in the proper context.</p>
+
+    <div class="docs-alert docs-alert-note">
+    <p><strong>Note:</strong> Injection contexts are beyond the scope of this tutorial, but you can find more information in the <a href="guide/di/dependency-injection-context">Angular Docs</a> if you would like to learn more.</p>
+
+    </div>
+    <p>In this activity, you'll learn how to inject a service and use it in a component.</p>
+<hr>
+
+<p>It is often helpful to initialize class properties with values provided by the DI system. Here's an example:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> PetCareDashboardComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">    petRosterService</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(PetRosterService);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="inject-the-carservice">
+    <a href="#inject-the-carservice" class="docs-anchor" tabindex="-1" aria-label="Link to Inject the <code>CarService</code>">Inject the <code>CarService</code></a>
+  </h3>
+  
+      <p>In <code>app.component.ts</code>, using the <code>inject()</code> function inject the <code>CarService</code> and assign it to a property called <code>carService</code></p>
+<p>Note: Notice the difference between the property <code>carService</code> and the class <code>CarService</code>.</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="use-the-carservice-instance">
+    <a href="#use-the-carservice-instance" class="docs-anchor" tabindex="-1" aria-label="Link to Use the <code>carService</code> instance">Use the <code>carService</code> instance</a>
+  </h3>
+  
+      <p>Calling <code>inject(CarService)</code> gave you an instance of the <code>CarService</code> that you can use in your application, stored in the <code>carService</code> property.</p>
+<p>In the <code>constructor</code> function of the <code>AppComponent</code>, add the following implementation:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.display </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.carService.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getCars</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">join</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">' ⭐️ '</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="update-the-appcomponent-template">
+    <a href="#update-the-appcomponent-template" class="docs-anchor" tabindex="-1" aria-label="Link to Update the <code>AppComponent</code> template">Update the <code>AppComponent</code> template</a>
+  </h3>
+  
+      <p>Update the component template in <code>app.component.ts</code> with the following code:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`&lt;p&gt;Car Listing: {{ display }}&lt;/p&gt;`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span></code></pre>
+    </pre>
+  </div>
+    </li>
+    
+    </ol>
+    <p>You've just injected your first service into a component - fantastic effort. Before you finish this section on DI, you'll learn an alternative syntax to inject resources into your components.</p>

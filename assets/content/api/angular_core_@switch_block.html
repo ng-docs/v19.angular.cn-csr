@@ -1,0 +1,26 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/core</span><div class="docs-reference-title"><div><h1>@switch</h1><div class="docs-api-item-label type-block full">block</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/tools/manual_api_docs/blocks/switch.md#L0-L0" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">code</i></a></div><section class="docs-reference-description"><p>The <code>@switch</code> block is inspired by the JavaScript <code>switch</code> statement:</p>
+
+      <h2 id="syntax" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#syntax" aria-label="Link to Syntax section" tabIndex="-1">
+          Syntax
+        </a>
+      </h2>
+    
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">
+          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@switch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (condition) {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  @case</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (caseA) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Case A.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  @case</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (caseB) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Case B.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  @default</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Default case.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+        </pre>
+      </div>
+    
+      <h2 id="description" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#description" aria-label="Link to Description section" tabIndex="-1">
+          Description
+        </a>
+      </h2>
+    <p>The <code>@switch</code> blocks displays content selected by one of the cases matching against the conditional
+expression. The value of the conditional expression is compared to the case expression using
+the <code>===</code> operator.</p>
+<p>The <code>@default</code> block is optional and can be omitted. If no <code>@case</code> matches the expression and there
+is no <code>@default</code> block, nothing is shown.</p>
+<p><strong><code>@switch</code> does not have fallthrough</strong>, so you do not need an equivalent to a <code>break</code> or <code>return</code>
+statement.</p></section></header></div>

@@ -1,0 +1,20 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">@defer dependencies failed to load</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0750.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>This error occurs when loading dependencies for a <code>@defer</code> block fails (typically due to poor network conditions) and no <code>@error</code> block has been configured to handle the failure state. Having no <code>@error</code> block in this scenario may create a poor user experience.</p>
+
+  <h2 id="debugging-the-error">
+    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">Debugging the error</a>
+  </h2>
+  <p>Verify that you added <code>@error</code> blocks to your <code>@defer</code> blocks to handle failure states.</p>

@@ -1,0 +1,154 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Extended Diagnostics</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/extended-diagnostics/overview.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>There are many coding patterns that are technically valid to the compiler or runtime, but which may have complex nuances or caveats.
+These patterns may not have the intended effect expected by a developer, which often leads to bugs.
+The Angular compiler includes "extended diagnostics" which identify many of these patterns, in order to warn developers about the potential issues and enforce common best practices within a codebase.</p>
+
+  <h2 id="diagnostics">
+    <a href="#diagnostics" class="docs-anchor" tabindex="-1" aria-label="Link to Diagnostics">Diagnostics</a>
+  </h2>
+  <p>Currently, Angular supports the following extended diagnostics:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Code</th>
+<th align="left">Name</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>NG8101</code></td>
+<td align="left"><a href="extended-diagnostics/NG8101"><code>invalidBananaInBox</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8102</code></td>
+<td align="left"><a href="extended-diagnostics/NG8102"><code>nullishCoalescingNotNullable</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8103</code></td>
+<td align="left"><a href="extended-diagnostics/NG8103"><code>missingControlFlowDirective</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8104</code></td>
+<td align="left"><a href="extended-diagnostics/NG8104"><code>textAttributeNotBinding</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8105</code></td>
+<td align="left"><a href="extended-diagnostics/NG8105"><code>missingNgForOfLet</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8106</code></td>
+<td align="left"><a href="extended-diagnostics/NG8106"><code>suffixNotSupported</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8107</code></td>
+<td align="left"><a href="extended-diagnostics/NG8107"><code>optionalChainNotNullable</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8108</code></td>
+<td align="left"><a href="extended-diagnostics/NG8108"><code>skipHydrationNotStatic</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8109</code></td>
+<td align="left"><a href="extended-diagnostics/NG8109"><code>interpolatedSignalNotInvoked</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8111</code></td>
+<td align="left"><a href="extended-diagnostics/NG8111"><code>uninvokedFunctionInEventBinding</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8113</code></td>
+<td align="left"><a href="extended-diagnostics/NG8113"><code>unusedStandaloneImports</code></a></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="configuration">
+    <a href="#configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Configuration">Configuration</a>
+  </h2>
+  <p>Extended diagnostics are warnings by default and do not block compilation.
+Each diagnostic can be configured as either:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Error category</th>
+<th align="left">Effect</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>warning</code></td>
+<td align="left">Default - The compiler emits the diagnostic as a warning but does not block compilation. The compiler will still exist with status code 0, even if warnings are emitted.</td>
+</tr>
+<tr>
+<td align="left"><code>error</code></td>
+<td align="left">The compiler emits the diagnostic as an error and fails the compilation. The compiler will exit with a non-zero status code if one or more errors are emitted.</td>
+</tr>
+<tr>
+<td align="left"><code>suppress</code></td>
+<td align="left">The compiler does <em>not</em> emit the diagnostic at all.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>Check severity can be configured as an <a href="reference/configs/angular-compiler-options">Angular compiler option</a>:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "angularCompilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "extendedDiagnostics"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      // The categories to use for specific diagnostics.</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "checks"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // Maps check name to its category.</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "invalidBananaInBox"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"suppress"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      },</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      // The category to use for any diagnostics not listed in `checks` above.</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "defaultCategory"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"error"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>The <code>checks</code> field maps the name of individual diagnostics to their associated category.
+See <a href="#diagnostics">Diagnostics</a> for a complete list of extended diagnostics and the name to use for configuring them.</p>
+<p>The <code>defaultCategory</code> field is used for any diagnostics that are not explicitly listed under <code>checks</code>.
+If not set, such diagnostics will be treated as <code>warning</code>.</p>
+<p>Extended diagnostics will emit when <a href="tools/cli/template-typecheck#strict-mode"><code>strictTemplates</code></a> is enabled.
+This is required to allow the compiler to better understand Angular template types and provide accurate and meaningful diagnostics.</p>
+
+  <h2 id="semantic-versioning">
+    <a href="#semantic-versioning" class="docs-anchor" tabindex="-1" aria-label="Link to Semantic Versioning">Semantic Versioning</a>
+  </h2>
+  <p>The Angular team intends to add or enable new extended diagnostics in <strong>minor</strong> versions of Angular (see <a href="https://docs.npmjs.com/about-semantic-versioning" target="_blank">semver</a>).
+This means that upgrading Angular may show new warnings in your existing codebase.
+This enables the team to deliver features more quickly and to make extended diagnostics more accessible to developers.</p>
+<p>However, setting <code>&quot;defaultCategory&quot;: &quot;error&quot;</code> will promote such warnings to hard errors.
+This can cause a minor version upgrade to introduce compilation errors, which may be seen as a semver non-compliant breaking change.
+Any new diagnostics can be suppressed or demoted to warnings via the above <a href="#configuration">configuration</a>, so the impact of a new diagnostic should be minimal to
+projects that treat extended diagnostics as errors by default.
+Defaulting to error is a very powerful tool; just be aware of this semver caveat when deciding if <code>error</code> is the right default for your project.</p>
+
+  <h2 id="new-diagnostics">
+    <a href="#new-diagnostics" class="docs-anchor" tabindex="-1" aria-label="Link to New Diagnostics">New Diagnostics</a>
+  </h2>
+  <p>The Angular team is always open to suggestions about new diagnostics that could be added.
+Extended diagnostics should generally:</p>
+
+  <ul class="docs-list">
+    <li>Detect a common, non-obvious developer mistake with Angular templates</li>
+<li>Clearly articulate why this pattern can lead to bugs or unintended behavior</li>
+<li>Suggest one or more clear solutions</li>
+<li>Have a low, preferably zero, false-positive rate</li>
+<li>Apply to the vast majority of Angular applications (not specific to an unofficial library)</li>
+<li>Improve program correctness or performance (not style, that responsibility falls to a linter)</li>
+
+  </ul>
+  <p>If you have an idea for an extended diagnostic which fits these criteria, consider filing a <a href="https://github.com/angular/angular/issues/new?template=2-feature-request.yaml" target="_blank">feature request</a>.</p>

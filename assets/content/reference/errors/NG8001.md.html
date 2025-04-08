@@ -1,0 +1,29 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Invalid Element</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG8001.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>One or more elements cannot be resolved during compilation because the element is not defined by the HTML spec, or there is no component or directive with such element selector.</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>HELPFUL:</strong> This is the compiler equivalent of a common runtime error <code>NG0304: &#39;${tagName}&#39; is not a known element: ...</code>.</p>
+
+    </div>
+    
+  <h2 id="debugging-the-error">
+    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">Debugging the error</a>
+  </h2>
+  <p>Use the element name in the error to find the file(s) where the element is being used.</p>
+<p>Check that the name and selector are correct.</p>
+<p>Make sure that the component is correctly imported inside your NgModule or standalone component, by checking its presence in the <code>imports</code> field. If the component is declared in an NgModule (meaning that it is not standalone) make sure that it is exported correctly from it, by checking its presence in the <code>exports</code> field.</p>
+<p>When using custom elements or web components, ensure that you add <a href="api/core/CUSTOM_ELEMENTS_SCHEMA"><code>CUSTOM_ELEMENTS_SCHEMA</code></a> to the application module.</p>
+<p>If this does not resolve the error, check the imported libraries for any recent changes to the exports and properties you are using, and restart your server.</p>

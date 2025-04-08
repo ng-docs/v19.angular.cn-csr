@@ -1,0 +1,307 @@
+
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Making HTTP requests</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/http/making-requests.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p><code>HttpClient</code> has methods corresponding to the different HTTP verbs used to make requests, both to load data and to apply mutations on the server. Each method returns an <a href="https://rxjs.dev/guide/observable" target="_blank">RxJS <code>Observable</code></a> which, when subscribed, sends the request and then emits the results when the server responds.</p>
+
+    <div class="docs-alert docs-alert-note">
+    <p><strong>Note:</strong> <code>Observable</code>s created by <code>HttpClient</code> may be subscribed any number of times and will make a new backend request for each subscription.</p>
+
+    </div>
+    <p>Through an options object passed to the request method, various properties of the request and the returned response type can be adjusted.</p>
+
+  <h2 id="fetching-json-data">
+    <a href="#fetching-json-data" class="docs-anchor" tabindex="-1" aria-label="Link to Fetching JSON data">Fetching JSON data</a>
+  </h2>
+  <p>Fetching data from a backend often requires making a GET request using the <a href="api/common/http/HttpClient#get"><code>HttpClient.get()</code></a> method. This method takes two arguments: the string endpoint URL from which to fetch, and an <em>optional options</em> object to configure the request.</p>
+<p>For example, to fetch configuration data from a hypothetical API using the <code>HttpClient.get()</code> method:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">http.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Config</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/api/config'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">subscribe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">config</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // process the configuration.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>Note the generic type argument which specifies that the data returned by the server will be of type <code>Config</code>. This argument is optional, and if you omit it then the returned data will have type <code>Object</code>.</p>
+
+    <div class="docs-alert docs-alert-tip">
+    <p><strong>Tip:</strong> When dealing with data of uncertain structure and potential <code>undefined</code> or <code>null</code> values, consider using the <code>unknown</code> type instead of <code>Object</code> as the response type.</p>
+
+    </div>
+    
+    <div class="docs-alert docs-alert-critical">
+    <p><strong>CRITICAL:</strong> The generic type of request methods is a type <strong>assertion</strong> about the data returned by the server. <code>HttpClient</code> does not verify that the actual return data matches this type.</p>
+
+    </div>
+    
+  <h2 id="fetching-other-types-of-data">
+    <a href="#fetching-other-types-of-data" class="docs-anchor" tabindex="-1" aria-label="Link to Fetching other types of data">Fetching other types of data</a>
+  </h2>
+  <p>By default, <code>HttpClient</code> assumes that servers will return JSON data. When interacting with a non-JSON API, you can tell <code>HttpClient</code> what response type to expect and return when making the request. This is done with the <code>responseType</code> option.</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th><strong><code>responseType</code> value</strong></th>
+<th><strong>Returned response type</strong></th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td><code>&#39;json&#39;</code> (default)</td>
+<td>JSON data of the given generic type</td>
+</tr>
+<tr>
+<td><code>&#39;text&#39;</code></td>
+<td>string data</td>
+</tr>
+<tr>
+<td><code>&#39;arraybuffer&#39;</code></td>
+<td><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer" target="_blank"><code>ArrayBuffer</code></a> containing the raw response bytes</td>
+</tr>
+<tr>
+<td><code>&#39;blob&#39;</code></td>
+<td><a href="https://developer.mozilla.org/docs/Web/API/Blob" target="_blank"><code>Blob</code></a> instance</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>For example, you can ask <code>HttpClient</code> to download the raw bytes of a <code>.jpeg</code> image into an <code>ArrayBuffer</code>:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">http.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/images/dog.jpg'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, {responseType: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'arraybuffer'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">subscribe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">buffer</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'The image is '</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> buffer.byteLength </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ' bytes large'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-callout docs-callout-important">
+      <h3>Literal value for <code>responseType</code></h3>
+      <p>Because the value of <code>responseType</code> affects the type returned by <code>HttpClient</code>, it must have a literal type and not a <code>string</code> type.</p>
+<p>This happens automatically if the options object passed to the request method is a literal object, but if you're extracting the request options out into a variable or helper method you might need to explicitly specify it as a literal, such as <code>responseType: &#39;text&#39; as const</code>.</p>
+
+    </div>
+    
+  <h2 id="mutating-server-state">
+    <a href="#mutating-server-state" class="docs-anchor" tabindex="-1" aria-label="Link to Mutating server state">Mutating server state</a>
+  </h2>
+  <p>Server APIs which perform mutations often require making POST requests with a request body specifying the new state or the change to be made.</p>
+<p>The <a href="api/common/http/HttpClient#post"><code>HttpClient.post()</code></a> method behaves similarly to <code>get()</code>, and accepts an additional <code>body</code> argument before its options:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">http.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">post</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Config</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/api/config'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, newConfig).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">subscribe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">config</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Updated config:'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, config);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>Many different types of values can be provided as the request's <code>body</code>, and <code>HttpClient</code> will serialize them accordingly:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th><strong><code>body</code> type</strong></th>
+<th><strong>Serialized as</strong></th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>string</td>
+<td>Plain text</td>
+</tr>
+<tr>
+<td>number, boolean, array, or plain object</td>
+<td>JSON</td>
+</tr>
+<tr>
+<td><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer" target="_blank"><code>ArrayBuffer</code></a></td>
+<td>raw data from the buffer</td>
+</tr>
+<tr>
+<td><a href="https://developer.mozilla.org/docs/Web/API/Blob" target="_blank"><code>Blob</code></a></td>
+<td>raw data with the <code>Blob</code>'s content type</td>
+</tr>
+<tr>
+<td><a href="https://developer.mozilla.org/docs/Web/API/FormData" target="_blank"><code>FormData</code></a></td>
+<td><code>multipart/form-data</code> encoded data</td>
+</tr>
+<tr>
+<td><a href="api/common/http/HttpParams"><code>HttpParams</code></a> or <a href="https://developer.mozilla.org/docs/Web/API/URLSearchParams" target="_blank"><code>URLSearchParams</code></a></td>
+<td><code>application/x-www-form-urlencoded</code> formatted string</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+    <div class="docs-alert docs-alert-important">
+    <p><strong>IMPORTANT:</strong> Remember to <code>.subscribe()</code> to mutation request <code>Observable</code>s in order to actually fire the request.</p>
+
+    </div>
+    
+  <h2 id="setting-url-parameters">
+    <a href="#setting-url-parameters" class="docs-anchor" tabindex="-1" aria-label="Link to Setting URL parameters">Setting URL parameters</a>
+  </h2>
+  <p>Specify request parameters that should be included in the request URL using the <code>params</code> option.</p>
+<p>Passing an object literal is the simplest way of configuring URL parameters:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">http.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/api/config'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  params: {filter: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'all'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">subscribe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">config</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>Alternatively, pass an instance of <code>HttpParams</code> if you need more control over the construction or serialization of the parameters.</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>IMPORTANT:</strong> Instances of <code>HttpParams</code> are <em>immutable</em> and cannot be directly changed. Instead, mutation methods such as <code>append()</code> return a new instance of <code>HttpParams</code> with the mutation applied.</p>
+
+    </div>
+    <div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> baseParams</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpParams</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'filter'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'all'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">http.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/api/config'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  params: baseParams.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'details'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'enabled'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">subscribe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">config</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>You can instantiate <code>HttpParams</code> with a custom <code>HttpParameterCodec</code> that determines how <code>HttpClient</code> will encode the parameters into the URL.</p>
+
+  <h2 id="setting-request-headers">
+    <a href="#setting-request-headers" class="docs-anchor" tabindex="-1" aria-label="Link to Setting request headers">Setting request headers</a>
+  </h2>
+  <p>Specify request headers that should be included in the request using the <code>headers</code> option.</p>
+<p>Passing an object literal is the simplest way of configuring request headers:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">http.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/api/config'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  headers: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    'X-Debug-Level'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'verbose'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">subscribe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">config</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>Alternatively, pass an instance of <code>HttpHeaders</code> if you need more control over the construction of headers</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>IMPORTANT:</strong> Instances of <code>HttpHeaders</code> are <em>immutable</em> and cannot be directly changed. Instead, mutation methods such as <code>append()</code> return a new instance of <code>HttpHeaders</code> with the mutation applied.</p>
+
+    </div>
+    <div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> baseHeaders</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpHeaders</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'X-Debug-Level'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'minimal'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">http.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Config</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/api/config'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  headers: baseHeaders.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'X-Debug-Level'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'verbose'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">subscribe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">config</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="interacting-with-the-server-response-events">
+    <a href="#interacting-with-the-server-response-events" class="docs-anchor" tabindex="-1" aria-label="Link to Interacting with the server response events">Interacting with the server response events</a>
+  </h2>
+  <p>For convenience, <code>HttpClient</code> by default returns an <code>Observable</code> of the data returned by the server (the response body). Occasionally it's desirable to examine the actual response, for example to retrieve specific response headers.</p>
+<p>To access the entire response, set the <code>observe</code> option to <code>&#39;response&#39;</code>:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">http.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Config</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/api/config'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, {observe: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'response'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">subscribe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">res</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Response status:'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, res.status);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Body:'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, res.body);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-callout docs-callout-important">
+      <h3>Literal value for <code>observe</code></h3>
+      <p>Because the value of <code>observe</code> affects the type returned by <code>HttpClient</code>, it must have a literal type and not a <code>string</code> type.</p>
+<p>This happens automatically if the options object passed to the request method is a literal object, but if you're extracting the request options out into a variable or helper method you might need to explicitly specify it as a literal, such as <code>observe: &#39;response&#39; as const</code>.</p>
+
+    </div>
+    
+  <h2 id="receiving-raw-progress-events">
+    <a href="#receiving-raw-progress-events" class="docs-anchor" tabindex="-1" aria-label="Link to Receiving raw progress events">Receiving raw progress events</a>
+  </h2>
+  <p>In addition to the response body or response object, <code>HttpClient</code> can also return a stream of raw <em>events</em> corresponding to specific moments in the request lifecycle. These events include when the request is sent, when the response header is returned, and when the body is complete. These events can also include <em>progress events</em> which report upload and download status for large request or response bodies.</p>
+<p>Progress events are disabled by default (as they have a performance cost) but can be enabled with the <code>reportProgress</code> option.</p>
+
+    <div class="docs-alert docs-alert-note">
+    <p><strong>Note:</strong> The optional <code>fetch</code> implementation of <code>HttpClient</code> does not report <em>upload</em> progress events.</p>
+
+    </div>
+    <p>To observe the event stream, set the <code>observe</code> option to <code>&#39;events&#39;</code>:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">http.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">post</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/api/upload'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, myData, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  reportProgress: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  observe: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'events'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">subscribe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">event</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  switch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (event.type) {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    case</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> HttpEventType.UploadProgress:</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Uploaded '</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> event.loaded </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ' out of '</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> event.total </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ' bytes'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">      break</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    case</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> HttpEventType.Response:</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Finished uploading!'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">      break</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-callout docs-callout-important">
+      <h3>Literal value for <code>observe</code></h3>
+      <p>Because the value of <code>observe</code> affects the type returned by <code>HttpClient</code>, it must have a literal type and not a <code>string</code> type.</p>
+<p>This happens automatically if the options object passed to the request method is a literal object, but if you're extracting the request options out into a variable or helper method you might need to explicitly specify it as a literal, such as <code>observe: &#39;events&#39; as const</code>.</p>
+
+    </div>
+    <p>Each <code>HttpEvent</code> reported in the event stream has a <code>type</code> which distinguishes what the event represents:</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th><strong><code>type</code> value</strong></th>
+<th><strong>Event meaning</strong></th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td><code>HttpEventType.Sent</code></td>
+<td>The request has been dispatched to the server</td>
+</tr>
+<tr>
+<td><code>HttpEventType.UploadProgress</code></td>
+<td>An <code>HttpUploadProgressEvent</code> reporting progress on uploading the request body</td>
+</tr>
+<tr>
+<td><code>HttpEventType.ResponseHeader</code></td>
+<td>The head of the response has been received, including status and headers</td>
+</tr>
+<tr>
+<td><code>HttpEventType.DownloadProgress</code></td>
+<td>An <code>HttpDownloadProgressEvent</code> reporting progress on downloading the response body</td>
+</tr>
+<tr>
+<td><code>HttpEventType.Response</code></td>
+<td>The entire response has been received, including the response body</td>
+</tr>
+<tr>
+<td><code>HttpEventType.User</code></td>
+<td>A custom event from an Http interceptor.</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="handling-request-failure">
+    <a href="#handling-request-failure" class="docs-anchor" tabindex="-1" aria-label="Link to Handling request failure">Handling request failure</a>
+  </h2>
+  <p>There are two ways an HTTP request can fail:</p>
+
+  <ul class="docs-list">
+    <li>A network or connection error can prevent the request from reaching the backend server.</li>
+<li>The backend can receive the request but fail to process it, and return an error response.</li>
+
+  </ul>
+  <p><code>HttpClient</code> captures both kinds of errors in an <code>HttpErrorResponse</code> which it returns through the <code>Observable</code>'s error channel. Network errors have a <code>status</code> code of <code>0</code> and an <code>error</code> which is an instance of <a href="https://developer.mozilla.org/docs/Web/API/ProgressEvent" target="_blank"><code>ProgressEvent</code></a>. Backend errors have the failing <code>status</code> code returned by the backend, and the error response as the <code>error</code>. Inspect the response to identify the error's cause and the appropriate action to handle the error.</p>
+<p>The <a href="https://rxjs.dev/" target="_blank">RxJS library</a> offers several operators which can be useful for error handling.</p>
+<p>You can use the <code>catchError</code> operator to transform an error response into a value for the UI. This value can tell the UI to display an error page or value, and capture the error's cause if necessary.</p>
+<p>Sometimes transient errors such as network interruptions can cause a request to fail unexpectedly, and simply retrying the request will allow it to succeed. RxJS provides several <em>retry</em> operators which automatically re-subscribe to a failed <code>Observable</code> under certain conditions. For example, the <code>retry()</code> operator will automatically attempt to re-subscribe a specified number of times.</p>
+
+  <h2 id="http-observables">
+    <a href="#http-observables" class="docs-anchor" tabindex="-1" aria-label="Link to Http <code>Observable</code>s">Http <code>Observable</code>s</a>
+  </h2>
+  <p>Each request method on <code>HttpClient</code> constructs and returns an <code>Observable</code> of the requested response type. Understanding how these <code>Observable</code>s work is important when using <code>HttpClient</code>.</p>
+<p><code>HttpClient</code> produces what RxJS calls "cold" <code>Observable</code>s, meaning that no actual request happens until the <code>Observable</code> is subscribed. Only then is the request actually dispatched to the server. Subscribing to the same <code>Observable</code> multiple times will trigger multiple backend requests. Each subscription is independent.</p>
+<p>TIP: You can think of <code>HttpClient</code> <code>Observable</code>s as <em>blueprints</em> for actual server requests.</p>
+<p>Once subscribed, unsubscribing will abort the in-progress request. This is very useful if the <code>Observable</code> is subscribed via the <code>async</code> pipe, as it will automatically cancel the request if the user navigates away from the current page. Additionally, if you use the <code>Observable</code> with an RxJS combinator like <code>switchMap</code>, this cancellation will clean up any stale requests.</p>
+<p>Once the response returns, <code>Observable</code>s from <code>HttpClient</code> usually complete (although interceptors can influence this).</p>
+<p>Because of the automatic completion, there is usually no risk of memory leaks if <code>HttpClient</code> subscriptions are not cleaned up. However, as with any async operation, we strongly recommend that you clean up subscriptions when the component using them is destroyed, as the subscription callback may otherwise run and encounter errors when it attempts to interact with the destroyed component.</p>
+<p>TIP: Using the <code>async</code> pipe or the <code>toSignal</code> operation to subscribe to <code>Observable</code>s ensures that subscriptions are disposed properly.</p>
+
+  <h2 id="best-practices">
+    <a href="#best-practices" class="docs-anchor" tabindex="-1" aria-label="Link to Best practices">Best practices</a>
+  </h2>
+  <p>While <code>HttpClient</code> can be injected and used directly from components, generally we recommend you create reusable, injectable services which isolate and encapsulate data access logic. For example, this <code>UserService</code> encapsulates the logic to request data for a user by their id:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Injectable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({providedIn: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'root'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UserService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> http</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(HttpClient);</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  getUser</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">id</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Observable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">User</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    return</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.http.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">User</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`/api/user/${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">id</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>Within a component, you can combine <code>@if</code> with the <code>async</code> pipe to render the UI for the data only after it's finished loading:</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { AsyncPipe } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/common'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [AsyncPipe],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    @if (user$ | async; as user) {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      &lt;p&gt;Name: {{ user.name }}&lt;/p&gt;</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      &lt;p&gt;Biography: {{ user.biography }}&lt;/p&gt;</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    }</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  `</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UserProfileComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">userId</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">!:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  user$</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">!:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Observable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">User</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> userService</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(UserService);</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.user$ </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.userService.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getUser</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.userId);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
