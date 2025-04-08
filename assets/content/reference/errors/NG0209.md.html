@@ -1,17 +1,14 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">Invalid multi provider</h1>
+    <h1 tabindex="-1">无效的多重提供者</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0209.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>The Angular runtime will throw this error when it injects a token intended to be used with <code>multi: true</code> but
-a non-Array was found instead. For example, <code>ENVIRONMENT_INITIALIZER</code> should be provided
-like <code>{provide: ENVIRONMENT_INITIALIZER, multi: true, useValue: () =&gt; {...}}</code>.</p>
+    <p>当 Angular 运行时注入一个令牌（token）时，如果该令牌旨在与 <code>multi: true</code> 一起使用，但却找到了一个非数组，就会抛出此错误。例如，<code>ENVIRONMENT_INITIALIZER</code> 应该像这样提供：<code>{provide: ENVIRONMENT_INITIALIZER, multi: true, useValue: () =&gt; {...}}</code>。</p>

@@ -1,5 +1,4 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
@@ -12,28 +11,20 @@
     </a>
   </div>
     </header>
-    <p>This first lesson serves as the starting point from which each lesson in this tutorial adds new features to build a complete Angular app. In this lesson, we'll update the application to display the famous text, "Hello World".</p>
+    <p>本节课是本教程的起点，本教程的后续课程都会在本节课的基础上增加新特性，以构建一个完整的 Angular 应用。在本节课中，我们将更新这个应用，以显示著名的文本 “Hello World”。</p>
 
     <div class="docs-video-container">
-      <iframe
-      class="docs-video"
-      src="https://www.youtube.com/embed/UnOwDuliqZA?si=uML-cDRbrxmYdD_9"
-      
-      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-      credentialless
-      title="Video player"
-      ></iframe>
+      <iframe class="docs-video" src="https://www.youtube.com/embed/UnOwDuliqZA?si=uML-cDRbrxmYdD_9" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen credentialless title="Video player"></iframe>
     </div>
     
   <h2 id="what-youll-learn">
-    <a href="#what-youll-learn" class="docs-anchor" tabindex="-1" aria-label="Link to What you'll learn">What you'll learn</a>
+    <a href="#what-youll-learn" class="docs-anchor" tabindex="-1" aria-label="Link to What you'll learn">你将学到什么</a>
   </h2>
-  <p>The updated app you have after this lesson confirms that you and your IDE are ready to begin creating an Angular app.</p>
+  <p>本节课之后，更新后的应用会确认你和你的 IDE 已准备就绪，可以开始创建 Angular 应用了。</p>
 
     <div class="docs-alert docs-alert-note">
-    <p><strong>Note:</strong> If you are working with the embedded editor, skip to <a href="#create-%60hello-world%60">step three</a>.
-When working in the browser playground, you do not need to <code>ng serve</code> to run the app. Other commands like <code>ng generate</code> can be done in the console window to your right.</p>
+    <p><strong>注意：</strong> 如果你正在使用嵌入式编辑器，请跳到<a href="#create-%60hello-world%60">第三步</a>。
+在浏览器 Playground 中工作时，你不需要使用 <code>ng serve</code> 来运行应用。其他命令（如 <code>ng generate</code>）可以在右侧的控制台窗口中完成。</p>
 
     </div>
     
@@ -43,11 +34,11 @@ When working in the browser playground, you do not need to <code>ng serve</code>
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="download-the-default-app">
-    <a href="#download-the-default-app" class="docs-anchor" tabindex="-1" aria-label="Link to Download the default app">Download the default app</a>
+    <a href="#download-the-default-app" class="docs-anchor" tabindex="-1" aria-label="Link to Download the default app">下载默认应用</a>
   </h3>
   
-      <p>Start by clicking the "Download" icon in the top right pan of the code editor. This will download a <code>.zip</code> file containing the source code for this tutorial. Open this in your local Terminal and IDE then move on to testing the default app.</p>
-<p>At any step in the tutorial, you can click this icon to download the step's source code and start from there.</p>
+      <p>首先，单击代码编辑器右上窗格中的 “下载” 图标。这将下载一个 <code>.zip</code> 文件，其中包含本教程的源码。在本地终端和 IDE 中打开它，然后继续测试默认应用。</p>
+<p>在本教程的任何步骤中，你都可以单击此图标来下载该步骤的源码并从那里开始。</p>
 
     </li>
     
@@ -55,34 +46,34 @@ When working in the browser playground, you do not need to <code>ng serve</code>
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="test-the-default-app">
-    <a href="#test-the-default-app" class="docs-anchor" tabindex="-1" aria-label="Link to Test the default app">Test the default app</a>
+    <a href="#test-the-default-app" class="docs-anchor" tabindex="-1" aria-label="Link to Test the default app">测试默认应用</a>
   </h3>
   
-      <p>In this step, after you download the default starting app, you build the default Angular app.
-This confirms that your development environment has what you need to continue the tutorial.</p>
-<p>In the <strong>Terminal</strong> pane of your IDE:</p>
+      <p>在此步骤中，下载默认起始应用后，你将构建默认的 Angular 应用。
+这确认你的开发环境具备继续本教程所需的条件。</p>
+<p>在 IDE 的 <strong>终端</strong> 窗格中：</p>
 
     <ol class="docs-ordered-list">
-      <li><p>In your project directory, navigate to the <code>first-app</code> directory.</p>
+      <li><p>在你的项目目录中，导航到 <code>first-app</code> 目录。</p>
 </li>
-<li><p>Run this command to install the dependencies needed to run the app.</p>
+<li><p>运行此命令以安装运行应用所需的依赖项。</p>
 <div class="docs-code shell">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span></span></code></pre>
     </pre>
   </div></li>
-<li><p>Run this command to build and serve the default app.</p>
+<li><p>运行此命令以构建并为默认应用启动服务器。</p>
 <div class="docs-code shell">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> serve</span></span></code></pre>
     </pre>
-  </div><p> The app should build without errors.</p>
+  </div><p>应用应该可以成功构建，且不报错。</p>
 </li>
-<li><p>In a web browser on your development computer, open <code>http://localhost:4200</code>.</p>
+<li><p>在开发计算机的 Web 浏览器中，打开 <code>http://localhost:4200</code>。</p>
 </li>
-<li><p>Confirm that the default web site appears in the browser.</p>
+<li><p>确认默认网站出现在浏览器中。</p>
 </li>
-<li><p>You can leave <code>ng serve</code> running as you complete the next steps.</p>
+<li><p>在完成后续步骤时，你可以保持 <code>ng serve</code> 运行。</p>
 </li>
 
     </ol>
@@ -93,48 +84,44 @@ This confirms that your development environment has what you need to continue th
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="review-the-files-in-the-project">
-    <a href="#review-the-files-in-the-project" class="docs-anchor" tabindex="-1" aria-label="Link to Review the files in the project">Review the files in the project</a>
+    <a href="#review-the-files-in-the-project" class="docs-anchor" tabindex="-1" aria-label="Link to Review the files in the project">审阅项目中的文件</a>
   </h3>
   
-      <p>In this step, you get to know the files that make up a default Angular app.</p>
-<p>In the <strong>Explorer</strong> pane of your IDE:</p>
+      <p>在此步骤中，你将了解构成默认 Angular 应用的文件。</p>
+<p>在 IDE 的 <strong>资源管理器</strong> 窗格中：</p>
 
     <ol class="docs-ordered-list">
-      <li>In your project directory, navigate to the <code>first-app</code> directory.</li>
-<li>Open the <code>src</code> directory to see these files.
-    <ol class="docs-ordered-list">
-      <li>In the file explorer, find the Angular app files (<code>/src</code>).
-    <ol class="docs-ordered-list">
-      <li><code>index.html</code> is the app's top level HTML template.</li>
-<li><code>styles.css</code> is the app's top level style sheet.</li>
-<li><code>main.ts</code> is where the app starts running.</li>
-<li><code>favicon.ico</code> is the app's icon, just as you would find in any web site.</li>
+      <li>在你的项目目录中，导航到 <code>first-app</code> 目录。</li>
+<li>打开 <code>src</code> 目录以查看这些文件。<ol class="docs-ordered-list">
+      <li>在文件资源管理器中，找到 Angular 应用文件 (<code>/src</code>)。<ol class="docs-ordered-list">
+      <li><code>index.html</code> 是应用的顶层 HTML 模板。</li>
+<li><code>styles.css</code> 是应用的顶层样式表。</li>
+<li><code>main.ts</code> 是应用开始运行的地方。</li>
+<li><code>favicon.ico</code> 是应用的图标，就像你在任何网站中找到的那样。</li>
 
     </ol>
     </li>
-<li>In the file explorer, find the Angular app's component files (<code>/app</code>).
-    <ol class="docs-ordered-list">
-      <li><p><code>app.component.ts</code> is the source file that describes the <code>app-root</code> component.
- This is the top-level Angular component in the app. A component is the basic building block of an Angular application.
- The component description includes the component's code, HTML template, and styles, which can be described in this file, or in separate files.</p>
-<p> In this app, the styles are in a separate file while the component's code and HTML template are in this file.</p>
+<li>在文件资源管理器中，找到 Angular 应用的组件文件 (<code>/app</code>)。<ol class="docs-ordered-list">
+      <li><p><code>app.component.ts</code> 是描述 <code>app-root</code> 组件的源文件。
+ 这是应用中的顶层 Angular 组件。组件是 Angular 应用的基本构建块。
+ 组件描述包括组件的代码、HTML 模板和样式，这些可以在此文件中描述，也可以在单独的文件中描述。</p>
+<p>在本应用中，样式位于单独的文件中，而组件的代码和 HTML 模板则位于此文件中。</p>
 </li>
-<li><p><code>app.component.css</code> is the style sheet for this component.</p>
+<li><p><code>app.component.css</code> 是此组件的样式表。</p>
 </li>
-<li><p>New components are added to this directory.</p>
+<li><p>新组件会添加到此目录中。</p>
 </li>
 
     </ol>
     </li>
-<li>In the file explorer, find the image directory (<code>/assets</code>) that contains images used by the app.</li>
-<li>In the file explorer, find the files and directories that an Angular app needs to build and run, but they are not files that you normally interact with.
-    <ol class="docs-ordered-list">
-      <li><code>.angular</code> has files required to build the Angular app.</li>
-<li><code>.e2e</code> has files used to test the app.</li>
-<li><code>.node_modules</code> has the node.js packages that the app uses.</li>
-<li><code>angular.json</code> describes the Angular app to the app building tools.</li>
-<li><code>package.json</code> is used by <code>npm</code> (the node package manager) to run the finished app.</li>
-<li><code>tsconfig.*</code> are the files that describe the app's configuration to the TypeScript compiler.</li>
+<li>在文件资源管理器中，找到图像目录 (<code>/assets</code>)，其中包含应用使用的图像。</li>
+<li>在文件资源管理器中，找到 Angular 应用构建和运行所需的文件和目录，但它们不是你通常会交互的文件。<ol class="docs-ordered-list">
+      <li><code>.angular</code> 包含构建 Angular 应用所需的文件。</li>
+<li><code>.e2e</code> 包含用于测试应用的文件。</li>
+<li><code>.node_modules</code> 包含应用使用的 node.js 包。</li>
+<li><code>angular.json</code> 向应用构建工具描述 Angular 应用。</li>
+<li><code>package.json</code> 供 <code>npm</code>（node 包管理器）用来运行已完成的应用。</li>
+<li><code>tsconfig.*</code> 是向 TypeScript 编译器描述应用配置的文件。</li>
 
     </ol>
     </li>
@@ -143,7 +130,7 @@ This confirms that your development environment has what you need to continue th
     </li>
 
     </ol>
-    <p>After you have reviewed the files that make up an Angular app project, continue to the next step.</p>
+    <p>审阅构成 Angular 应用项目的文件后，继续下一步。</p>
 
     </li>
     
@@ -151,41 +138,41 @@ This confirms that your development environment has what you need to continue th
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="create-hello-world">
-    <a href="#create-hello-world" class="docs-anchor" tabindex="-1" aria-label="Link to Create <code>Hello World</code>">Create <code>Hello World</code></a>
+    <a href="#create-hello-world" class="docs-anchor" tabindex="-1" aria-label="Link to Create <code>Hello World</code>">创建 <code>Hello World</code></a>
   </h3>
   
-      <p>In this step, you update the Angular project files to change the displayed content.</p>
-<p>In your IDE:</p>
+      <p>在此步骤中，你将更新 Angular 项目文件以更改显示的内容。</p>
+<p>在你的 IDE 中：</p>
 
     <ol class="docs-ordered-list">
-      <li><p>Open <code>first-app/src/index.html</code>.
- Note: This step and the next are only for your local environment!</p>
+      <li><p>打开 <code>first-app/src/index.html</code>。
+ 注意：此步骤和下一步仅适用于你的本地环境！</p>
 </li>
-<li><p>In <code>index.html</code>, replace the <code>&lt;title&gt;</code> element with this code to update the title of the app.</p>
+<li><p>在 <code>index.html</code> 中，将 <code>&lt;title&gt;</code> 元素替换为以下代码以更新应用的标题。</p>
 <div class="docs-code" path="adev/src/content/tutorials/first-app/steps/02-HomeComponent/src/index.html" visiblelines="4" header="Replace in src/index.html">
-    <div class="docs-code-header"><h3>Replace in src/index.html</h3></div>
+    <div class="docs-code-header"><h3>在 src/index.html 中替换</h3></div>
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;!</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">DOCTYPE</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> html</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">html</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> lang</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"en"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">head</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">meta</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> charset</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"utf-8"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">title</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Homes&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">title</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">base</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> href</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">meta</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"viewport"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> content</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"width=device-width, initial-scale=1"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">link</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> rel</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"icon"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> type</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"image/x-icon"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> href</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"favicon.ico"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">link</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> href</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/assets/css/be-vietnam-pro.css"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> rel</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"stylesheet"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">head</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">body</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-root</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-root</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">body</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">html</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span></code></pre>
     </pre>
-  </div><p> Then, save the changes you just made to <code>index.html</code>.</p>
+  </div><p>然后，保存你刚刚对 <code>index.html</code> 所做的更改。</p>
 </li>
-<li><p>Next, open  <code>first-app/src/app/app.component.ts</code>.</p>
+<li><p>接下来，打开 <code>first-app/src/app/app.component.ts</code>。</p>
 </li>
-<li><p>In <code>app.component.ts</code>, in the <code>@Component</code> definition, replace the <code>template</code> line with this code to change the text in the app component.</p>
+<li><p>在 <code>app.component.ts</code> 的 <code>@Component</code> 定义中，将 <code>template</code> 行替换为以下代码以更改应用组件中的文本。</p>
 <div class="docs-code" path="adev/src/content/tutorials/first-app/steps/02-HomeComponent/src/app/app.component.ts" visiblelines="6,7,8" header="Replace in src/app/app.component.ts">
-    <div class="docs-code-header"><h3>Replace in src/app/app.component.ts</h3></div>
+    <div class="docs-code-header"><h3>在 src/app/app.component.ts 中替换</h3></div>
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {Component} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app-root'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Hello world!&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  `</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  styleUrls: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'./app.component.css'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  title</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'homes'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span></code></pre>
     </pre>
   </div></li>
-<li><p>In <code>app.component.ts</code>, in the <code>AppComponent</code> class definition, replace the <code>title</code> line with this code to change the component title.</p>
+<li><p>在 <code>app.component.ts</code> 的 <code>AppComponent</code> 类定义中，将 <code>title</code> 行替换为以下代码以更改组件标题。</p>
 <div class="docs-code" path="adev/src/content/tutorials/first-app/steps/02-HomeComponent/src/app/app.component.ts" visiblelines="11,12,13" header="Replace in src/app/app.component.ts">
-    <div class="docs-code-header"><h3>Replace in src/app/app.component.ts</h3></div>
+    <div class="docs-code-header"><h3>在 src/app/app.component.ts 中替换</h3></div>
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {Component} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app-root'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Hello world!&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  `</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  styleUrls: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'./app.component.css'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  title</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'homes'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span></code></pre>
     </pre>
-  </div><p> Then, save the changes you made to <code>app.component.ts</code>.</p>
+  </div><p>然后，保存你对 <code>app.component.ts</code> 所做的更改。</p>
 </li>
-<li><p>If you stopped the <code>ng serve</code> command from step 1, in the <strong>Terminal</strong> window of your IDE, run <code>ng serve</code> again.</p>
+<li><p>如果你在步骤 1 中停止了 <code>ng serve</code> 命令，在你的 IDE 的 <strong>Terminal</strong> 窗口中，再次运行 <code>ng serve</code>。</p>
 </li>
-<li><p>Open your browser and navigate to <code>localhost:4200</code> and confirm that the app builds without error and displays <em>Hello world</em> in the title and body of your app:</p>
+<li><p>打开你的浏览器并导航到 <code>localhost:4200</code>，确认该应用构建时没有错误，并在应用的标题和正文中显示 <em>Hello world</em>：</p>
  <img alt="browser frame of page displaying the text 'Hello World'" src="assets/images/tutorials/first-app/homes-app-lesson-01-browser.png"></li>
 
     </ol>
@@ -195,20 +182,20 @@ This confirms that your development environment has what you need to continue th
     </ol>
     
     <div class="docs-alert docs-alert-summary">
-    <p><strong>Summary:</strong> In this lesson, you updated a default Angular app to display <em>Hello world</em>.
-In the process, you learned about the <code>ng serve</code> command to serve your app locally for testing.</p>
+    <p><strong>总结：</strong> 在本课程中，你更新了一个默认的 Angular 应用以显示 <em>Hello world</em>。
+在此过程中，你学习了使用 <code>ng serve</code> 命令在本地为你的应用启动服务器以进行测试。</p>
 
     </div>
-    <p>For more information about the topics covered in this lesson, visit:</p>
+    <p>有关本课程涵盖主题的更多信息，请访问：</p>
 
     <nav class="docs-pill-row">
       
     <a class="docs-pill" href="guide/components">
-      Angular Components
+      Angular 组件
     </a>
     
     <a class="docs-pill" href="tools/cli">
-      Creating applications with the Angular CLI
+      使用 Angular CLI 创建应用
     </a>
     
 

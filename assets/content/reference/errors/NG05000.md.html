@@ -1,19 +1,18 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">Hydration with unsupported Zone.js instance</h1>
+    <h1 tabindex="-1">水合作用使用了不受支持的 Zone.js 实例</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG05000.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>This warning means that the hydration was enabled for an application that was configured to use an unsupported version of Zone.js: either a custom or a "noop" one (see more info <a href="api/core/BootstrapOptions#ngZone">here</a>).</p>
-<p>Hydration relies on a signal from Zone.js when it becomes stable inside an application, so that Angular can start the serialization process on the server or post-hydration cleanup on the client (to remove DOM nodes that remained unclaimed).</p>
-<p>Providing a custom or a "noop" Zone.js implementation may lead to a different timing of the "stable" event, thus triggering the serialization or the cleanup too early or too late. This is not yet a fully supported configuration.</p>
-<p>If you use a custom Zone.js implementation, make sure that the "onStable" event is emitted at the right time and does not result in incorrect application behavior with hydration.</p>
-<p>More information about hydration can be found in the <a href="guide/hydration">hydration guide</a>.</p>
+    <p>此警告意味着水合作用已为你所配置的应用启用，但该应用要使用不受支持的 Zone.js 版本：自定义版本或 “noop” 版本（要了解更多信息，请<a href="api/core/BootstrapOptions#ngZone">点击此处</a>）。</p>
+<p>水合作用依赖于来自 Zone.js 的信号，当 Zone.js 在应用内部变得稳定时，Angular 就可以在服务器端启动序列化过程，或者在客户端启动水合作用后的清理（以移除那些未被认领的 DOM 节点）。</p>
+<p>提供自定义或 “noop” Zone.js 实现可能会导致 “stable” 事件的时序不同，从而过早或过晚地触发序列化或清理。 这还不是完全受支持的配置。</p>
+<p>如果你使用自定义的 Zone.js 实现，请确保 “onStable” 事件在正确的时间发出，并且不会导致水合作用的应用行为不正确。</p>
+<p>有关水合作用的更多信息，请参见<a href="guide/hydration">水合指南</a>。</p>

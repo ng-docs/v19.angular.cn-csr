@@ -1,11 +1,10 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">Circular Dependency in DI</h1>
+    <h1 tabindex="-1">依赖注入中的循环依赖</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0200.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
@@ -14,21 +13,13 @@
     </header>
     
     <div class="docs-video-container">
-      <iframe
-      class="docs-video"
-      src="https://www.youtube.com/embed/CpLOm4o_FzM"
-      
-      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-      credentialless
-      title="Video player"
-      ></iframe>
+      <iframe class="docs-video" src="https://www.youtube.com/embed/CpLOm4o_FzM" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen credentialless title="Video player"></iframe>
     </div>
-    <p>A cyclic dependency exists when a <a href="guide/di/hierarchical-dependency-injection">dependency of a service</a> directly or indirectly depends on the service itself. For example, if <code>UserService</code> depends on <code>EmployeeService</code>, which also depends on <code>UserService</code>. Angular will have to instantiate <code>EmployeeService</code> to create <code>UserService</code>, which depends on <code>UserService</code>, itself.</p>
+    <p>当一个<a href="guide/di/hierarchical-dependency-injection">服务的依赖</a>直接或间接地依赖于服务自身时，就会存在循环依赖。例如，如果 <code>UserService</code> 依赖于 <code>EmployeeService</code>，而 <code>EmployeeService</code> 也依赖于 <code>UserService</code>。Angular 将不得不实例化 <code>EmployeeService</code> 以创建 <code>UserService</code>，而 <code>UserService</code> 本身又依赖于 <code>UserService</code>。</p>
 
   <h2 id="debugging-the-error">
-    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">Debugging the error</a>
+    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">调试此错误</a>
   </h2>
-  <p>Use the call stack to determine where the cyclical dependency exists.
-You will be able to see if any child dependencies rely on the original file by <a href="guide/di/di-in-action">mapping out</a> the component, module, or service's dependencies, and identifying the loop causing the problem.</p>
-<p>Break this loop (or circle) of dependency to resolve this error. This most commonly means removing or refactoring the dependencies to not be reliant on one another.</p>
+  <p>使用调用堆栈来确定循环依赖存在的位置。
+通过<a href="guide/di/di-in-action">映射出</a>组件、模块或服务的依赖关系，并找出导致问题的循环，你将能够看到是否有任何子依赖项依赖于原始文件。</p>
+<p>打破这个依赖循环（或环）以求解此错误。这通常意味着移除或重构这些依赖项，使它们不再相互依赖。</p>

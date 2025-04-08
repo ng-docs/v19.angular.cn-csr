@@ -1,162 +1,153 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">Typed Forms</h1>
+    <h1 tabindex="-1">类型化表单</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/forms/typed-forms.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>As of Angular 14, reactive forms are strictly typed by default.</p>
-<p>As background for this guide, you should already be familiar with <a href="guide/forms/reactive-forms">Angular Reactive Forms</a>.</p>
+    <p>从 Angular 14 开始，响应式表单默认是严格类型化的。</p>
+<p>作为本指南的背景知识，你应该已经熟悉<a href="guide/forms/reactive-forms">Angular 响应式表单</a>。</p>
 
   <h2 id="overview-of-typed-forms">
-    <a href="#overview-of-typed-forms" class="docs-anchor" tabindex="-1" aria-label="Link to Overview of Typed Forms">Overview of Typed Forms</a>
+    <a href="#overview-of-typed-forms" class="docs-anchor" tabindex="-1" aria-label="Link to Overview of Typed Forms">类型化表单概览</a>
   </h2>
   
     <div class="docs-video-container">
-      <iframe
-      class="docs-video"
-      src="https://www.youtube.com/embed/L-odCf4MfJc"
-      
-      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-      credentialless
-      title="Video player"
-      ></iframe>
+      <iframe class="docs-video" src="https://www.youtube.com/embed/L-odCf4MfJc" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen credentialless title="Video player"></iframe>
     </div>
-    <p>With Angular reactive forms, you explicitly specify a <em>form model</em>. As a simple example, consider this basic user login form:</p>
+    <p>使用 Angular 响应式表单，你可以显式指定一个<em>表单模型</em>。作为一个简单的范例，请看这个基本的用户登录表单：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> login</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormGroup</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  email: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  password: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
     </pre>
-  </div><p>Angular provides many APIs for interacting with this <code>FormGroup</code>. For example, you may call <code>login.value</code>, <code>login.controls</code>, <code>login.patchValue</code>, etc. (For a full API reference, see the <a href="api/forms/FormGroup">API documentation</a>.)</p>
-<p>In previous Angular versions, most of these APIs included <code>any</code> somewhere in their types, and interacting with the structure of the controls, or the values themselves, was not type-safe. For example: you could write the following invalid code:</p>
+  </div><p>Angular 提供了许多 API 来与此 <code>FormGroup</code> 交互。例如，你可以调用 <code>login.value</code>、<code>login.controls</code>、<code>login.patchValue</code> 等。（要获得完整的 API 参考，请参阅 <a href="api/forms/FormGroup">API 文档</a>。）</p>
+<p>在之前的 Angular 版本中，这些 API 中的大多数都在其类型中的某处包含了 <code>any</code>，并且与控件的结构或值本身的交互不是类型安全的。例如：你可以编写以下无效代码：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> emailDomain</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> login.value.email.domain;</span></span></code></pre>
     </pre>
-  </div><p>With strictly typed reactive forms, the above code does not compile, because there is no <code>domain</code> property on <code>email</code>.</p>
-<p>In addition to the added safety, the types enable a variety of other improvements, such as better autocomplete in IDEs, and an explicit way to specify form structure.</p>
-<p>These improvements currently apply only to <em>reactive</em> forms (not <a href="guide/forms/template-driven-forms"><em>template-driven</em> forms</a>).</p>
+  </div><p>使用严格类型化的响应式表单，上面的代码不会编译，因为 <code>email</code> 上没有 <code>domain</code> 属性（Property）。</p>
+<p>除了增加的安全性之外，这些类型还支持各种其他改进，例如 IDE 中更好的自动完成功能，以及指定表单结构的显式方法。</p>
+<p>这些改进目前仅适用于<em>响应式</em>表单（而非 <a href="guide/forms/template-driven-forms"><em>模板驱动</em>表单</a>）。</p>
 
   <h2 id="untyped-forms">
-    <a href="#untyped-forms" class="docs-anchor" tabindex="-1" aria-label="Link to Untyped Forms">Untyped Forms</a>
+    <a href="#untyped-forms" class="docs-anchor" tabindex="-1" aria-label="Link to Untyped Forms">非类型化表单</a>
   </h2>
-  <p>Non-typed forms are still supported, and will continue to work as before. To use them, you must import the <code>Untyped</code> symbols from <code>@angular/forms</code>:</p>
+  <p>仍然支持非类型化表单，并将继续像以前一样工作。要使用它们，你必须从 <code>@angular/forms</code> 导入 <code>Untyped</code> 符号：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> login</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UntypedFormGroup</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  email: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UntypedFormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  password: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UntypedFormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
     </pre>
-  </div><p>Each <code>Untyped</code> symbol has exactly the same semantics as in previous Angular version. By removing the <code>Untyped</code> prefixes, you can incrementally enable the types.</p>
+  </div><p>每个 <code>Untyped</code> 符号都具有与以前的 Angular 版本完全相同的语义。通过删除 <code>Untyped</code> 前缀，你可以逐步启用这些类型。</p>
 
   <h2 id="formcontrol-getting-started">
-    <a href="#formcontrol-getting-started" class="docs-anchor" tabindex="-1" aria-label="Link to <code>FormControl</code>: Getting Started"><code>FormControl</code>: Getting Started</a>
+    <a href="#formcontrol-getting-started" class="docs-anchor" tabindex="-1" aria-label="Link to <code>FormControl</code>: Getting Started"><code>FormControl</code>：入门指南</a>
   </h2>
-  <p>The simplest possible form consists of a single control:</p>
+  <p>最简单的表单由单个控件组成：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> email</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'angularrox@gmail.com'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre>
     </pre>
-  </div><p>This control will be automatically inferred to have the type <code>FormControl&lt;string|null&gt;</code>. TypeScript will automatically enforce this type throughout the <a href="api/forms/FormControl"><code>FormControl</code> API</a>, such as <code>email.value</code>, <code>email.valueChanges</code>, <code>email.setValue(...)</code>, etc.</p>
+  </div><p>此控件将被自动推断为具有 <code>FormControl&lt;string|null&gt;</code> 类型。TypeScript 将在整个 <a href="api/forms/FormControl"><code>FormControl</code> API</a> 中自动强制执行此类型，例如 <code>email.value</code>、<code>email.valueChanges</code>、<code>email.setValue(...)</code> 等。</p>
 
   <h3 id="nullability">
-    <a href="#nullability" class="docs-anchor" tabindex="-1" aria-label="Link to Nullability">Nullability</a>
+    <a href="#nullability" class="docs-anchor" tabindex="-1" aria-label="Link to Nullability">可空性</a>
   </h3>
-  <p>You might wonder: why does the type of this control include <code>null</code>?  This is because the control can become <code>null</code> at any time, by calling reset:</p>
+  <p>你可能想知道：为什么此控件的类型包含 <code>null</code>？这是因为控件可以随时通过调用 reset 变为 <code>null</code>：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> email</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'angularrox@gmail.com'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">email.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">reset</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(email.value); </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// null</span></span></code></pre>
     </pre>
-  </div><p>TypeScript will enforce that you always handle the possibility that the control has become <code>null</code>. If you want to make this control non-nullable, you may use the <code>nonNullable</code> option. This will cause the control to reset to its initial value, instead of <code>null</code>:</p>
+  </div><p>TypeScript 将强制你始终处理控件已变为 <code>null</code> 的可能性。如果你想使此控件不可为空，你可以使用 <code>nonNullable</code> 选项。这将导致控件重置为其初始值，而不是 <code>null</code>：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> email</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'angularrox@gmail.com'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, {nonNullable: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">email.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">reset</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(email.value); </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// angularrox@gmail.com</span></span></code></pre>
     </pre>
-  </div><p>To reiterate, this option affects the runtime behavior of your form when <code>.reset()</code> is called, and should be flipped with care.</p>
+  </div><p>重申一下，此选项会影响调用 <code>.reset()</code> 时表单的运行时行为，应谨慎使用。</p>
 
   <h3 id="specifying-an-explicit-type">
-    <a href="#specifying-an-explicit-type" class="docs-anchor" tabindex="-1" aria-label="Link to Specifying an Explicit Type">Specifying an Explicit Type</a>
+    <a href="#specifying-an-explicit-type" class="docs-anchor" tabindex="-1" aria-label="Link to Specifying an Explicit Type">指定显式类型</a>
   </h3>
-  <p>It is possible to specify the type, instead of relying on inference. Consider a control that is initialized to <code>null</code>. Because the initial value is <code>null</code>, TypeScript will infer <code>FormControl&lt;null&gt;</code>, which is narrower than we want.</p>
+  <p>可以指定类型，而不是依赖于推断。考虑一个初始化为 <code>null</code> 的控件。由于初始值为 <code>null</code>，TypeScript 将推断出 <code>FormControl&lt;null&gt;</code>，这比我们想要的范围更窄。</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> email</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">email.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setValue</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'angularrox@gmail.com'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">); </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Error!</span></span></code></pre>
     </pre>
-  </div><p>To prevent this, we explicitly specify the type as <code>string|null</code>:</p>
+  </div><p>为了防止这种情况，我们显式地将类型指定为 <code>string|null</code>：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> email</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">email.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setValue</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'angularrox@gmail.com'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre>
     </pre>
   </div>
   <h2 id="formarray-dynamic-homogenous-collections">
-    <a href="#formarray-dynamic-homogenous-collections" class="docs-anchor" tabindex="-1" aria-label="Link to <code>FormArray</code>: Dynamic, Homogenous Collections"><code>FormArray</code>: Dynamic, Homogenous Collections</a>
+    <a href="#formarray-dynamic-homogenous-collections" class="docs-anchor" tabindex="-1" aria-label="Link to <code>FormArray</code>: Dynamic, Homogenous Collections"><code>FormArray</code>：动态的同构集合</a>
   </h2>
-  <p>A <code>FormArray</code> contains an open-ended list of controls. The type parameter corresponds to the type of each inner control:</p>
+  <p><code>FormArray</code> 包含一个开放式的控件列表。类型参数对应于每个内部控件的类型：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> names</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormArray</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">([</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Alex'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)]);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">names.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">push</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Jess'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span></code></pre>
     </pre>
-  </div><p>This <code>FormArray</code> will have the inner controls type <code>FormControl&lt;string|null&gt;</code>.</p>
-<p>If you want to have multiple different element types inside the array, you must use <code>UntypedFormArray</code>, because TypeScript cannot infer which element type will occur at which position.</p>
+  </div><p>此 <code>FormArray</code> 将具有内部控件类型 <code>FormControl&lt;string|null&gt;</code>。</p>
+<p>如果要在数组内部有多个不同的元素类型，则必须使用 <code>UntypedFormArray</code>，因为 TypeScript 无法推断哪个元素类型将出现在哪个位置。</p>
 
   <h2 id="formgroup-and-formrecord">
-    <a href="#formgroup-and-formrecord" class="docs-anchor" tabindex="-1" aria-label="Link to <code>FormGroup</code> and <code>FormRecord</code>"><code>FormGroup</code> and <code>FormRecord</code></a>
+    <a href="#formgroup-and-formrecord" class="docs-anchor" tabindex="-1" aria-label="Link to <code>FormGroup</code> and <code>FormRecord</code>"><code>FormGroup</code> 和 <code>FormRecord</code></a>
   </h2>
-  <p>Angular provides the <code>FormGroup</code> type for forms with an enumerated set of keys, and a type called <code>FormRecord</code>, for open-ended or dynamic groups.</p>
+  <p>对于具有枚举键集的表单，Angular 提供了 <code>FormGroup</code> 类型；对于开放式或动态组，则提供了一种名为 <code>FormRecord</code> 的类型。</p>
 
   <h3 id="partial-values">
-    <a href="#partial-values" class="docs-anchor" tabindex="-1" aria-label="Link to Partial Values">Partial Values</a>
+    <a href="#partial-values" class="docs-anchor" tabindex="-1" aria-label="Link to Partial Values">部分值</a>
   </h3>
-  <p>Consider again a login form:</p>
+  <p>再次考虑一个登录表单：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> login</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormGroup</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    email: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, {nonNullable: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    password: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, {nonNullable: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
     </pre>
-  </div><p>On any <code>FormGroup</code>, it is <a href="api/forms/FormGroup">possible to disable controls</a>. Any disabled control will not appear in the group's value.</p>
-<p>As a consequence, the type of <code>login.value</code> is <code>Partial&lt;{email: string, password: string}&gt;</code>. The <code>Partial</code> in this type means that each member might be undefined.</p>
-<p>More specifically, the type of <code>login.value.email</code> is <code>string|undefined</code>, and TypeScript will enforce that you handle the possibly <code>undefined</code> value (if you have <code>strictNullChecks</code> enabled).</p>
-<p>If you want to access the value <em>including</em> disabled controls, and thus bypass possible <code>undefined</code> fields, you can use <code>login.getRawValue()</code>.</p>
+  </div><p>在任何 <code>FormGroup</code> 上，都可以<a href="api/forms/FormGroup">禁用控件</a>。任何禁用的控件都不会出现在组的值中。</p>
+<p>因此，<code>login.value</code> 的类型是 <code>Partial&lt;{email: string, password: string}&gt;</code>。此类型中的 <code>Partial</code> 表示每个成员都可能是未定义的。</p>
+<p>更具体地说，<code>login.value.email</code> 的类型是 <code>string|undefined</code>，并且 TypeScript 将强制你处理可能为 <code>undefined</code> 的值（如果你启用了 <code>strictNullChecks</code>）。</p>
+<p>如果你想访问<em>包括</em>禁用控件的值，从而绕过可能的 <code>undefined</code> 字段，则可以使用 <code>login.getRawValue()</code>。</p>
 
   <h3 id="optional-controls-and-dynamic-groups">
-    <a href="#optional-controls-and-dynamic-groups" class="docs-anchor" tabindex="-1" aria-label="Link to Optional Controls and Dynamic Groups">Optional Controls and Dynamic Groups</a>
+    <a href="#optional-controls-and-dynamic-groups" class="docs-anchor" tabindex="-1" aria-label="Link to Optional Controls and Dynamic Groups">可选控件和动态组</a>
   </h3>
-  <p>Some forms have controls that may or may not be present, which can be added and removed at runtime. You can represent these controls using <em>optional fields</em>:</p>
+  <p>某些表单具有可能存在也可能不存在的控件，这些控件可以在运行时添加和删除。你可以使用<em>可选字段</em>来表示这些控件：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">interface</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LoginForm</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  email</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;;</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  password</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> login</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormGroup</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">LoginForm</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  email: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, {nonNullable: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  password: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, {nonNullable: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">login.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">removeControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'password'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre>
     </pre>
-  </div><p>In this form, we explicitly specify the type, which allows us to make the <code>password</code> control optional. TypeScript will enforce that only optional controls can be added or removed.</p>
+  </div><p>在此表单中，我们显式指定类型，这使我们可以使 <code>password</code> 控件成为可选的。TypeScript 将强制执行只能添加或删除可选控件。</p>
 
   <h3 id="formrecord">
     <a href="#formrecord" class="docs-anchor" tabindex="-1" aria-label="Link to <code>FormRecord</code>"><code>FormRecord</code></a>
   </h3>
-  <p>Some <code>FormGroup</code> usages do not fit the above pattern because the keys are not known ahead of time. The <code>FormRecord</code> class is designed for that case:</p>
+  <p>某些 <code>FormGroup</code> 用法不符合上述模式，因为键不是预先知道的。<code>FormRecord</code> 类是为此情况设计的：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> addresses</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormRecord</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&gt;({});</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">addresses.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">addControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Andrew'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormControl</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'2340 Folsom St'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span></code></pre>
     </pre>
-  </div><p>Any control of type <code>string|null</code> can be added to this <code>FormRecord</code>.</p>
-<p>If you need a <code>FormGroup</code> that is both dynamic (open-ended) and heterogeneous (the controls are different types), no improved type safety is possible, and you should use <code>UntypedFormGroup</code>.</p>
-<p>A <code>FormRecord</code> can also be built with the <code>FormBuilder</code>:</p>
+  </div><p>任何类型为 <code>string|null</code> 的控件都可以添加到此 <code>FormRecord</code> 中。</p>
+<p>如果你需要一个既是动态的（开放式的）又是异构的（控件是不同类型）的 <code>FormGroup</code>，则无法提高类型安全性，你应该使用 <code>UntypedFormGroup</code>。</p>
+<p><code>FormRecord</code> 也可以使用 <code>FormBuilder</code> 构建：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> addresses</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> fb.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">record</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Andrew'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'2340 Folsom St'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
     </pre>
   </div>
   <h2 id="formbuilder-and-nonnullableformbuilder">
-    <a href="#formbuilder-and-nonnullableformbuilder" class="docs-anchor" tabindex="-1" aria-label="Link to <code>FormBuilder</code> and <code>NonNullableFormBuilder</code>"><code>FormBuilder</code> and <code>NonNullableFormBuilder</code></a>
+    <a href="#formbuilder-and-nonnullableformbuilder" class="docs-anchor" tabindex="-1" aria-label="Link to <code>FormBuilder</code> and <code>NonNullableFormBuilder</code>"><code>FormBuilder</code> 和 <code>NonNullableFormBuilder</code></a>
   </h2>
-  <p>The <code>FormBuilder</code> class has been upgraded to support the new types as well, in the same manner as the above examples.</p>
-<p>Additionally, an additional builder is available: <code>NonNullableFormBuilder</code>. This type is shorthand for specifying <code>{nonNullable: true}</code> on every control, and can eliminate significant boilerplate from large non-nullable forms. You can access it using the <code>nonNullable</code> property on a <code>FormBuilder</code>:</p>
+  <p><code>FormBuilder</code> 类也已升级为支持新类型，方式与上述示例相同。</p>
+<p>此外，还有一个额外的构建器可用：<code>NonNullableFormBuilder</code>。此类型是用于在每个控件上指定 <code>{nonNullable: true}</code> 的简写形式，可以消除大型不可为空表单中的大量样板代码。你可以使用 <code>FormBuilder</code> 上的 <code>nonNullable</code> 属性来访问它：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> fb</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FormBuilder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> login</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> fb.nonNullable.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">group</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  email: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  password: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
     </pre>
-  </div><p>On the above example, both inner controls will be non-nullable (i.e. <code>nonNullable</code> will be set).</p>
-<p>You can also inject it using the name <code>NonNullableFormBuilder</code>.</p>
+  </div><p>在上面的示例中，两个内部控件都将是不可为空的（即，将设置 <code>nonNullable</code>）。</p>
+<p>你也可以使用名称 <code>NonNullableFormBuilder</code> 注入它。</p>

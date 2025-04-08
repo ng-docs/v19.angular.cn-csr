@@ -1,19 +1,18 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">Routing Overview</h1>
+    <h1 tabindex="-1">路由概览</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/learn-angular/steps/12-enable-routing/README.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>For most apps, there comes a point where the app requires more than a single page. When that time inevitably comes, routing becomes a big part of the performance story for users.</p>
-<p>In this activity, you'll learn how to set up and configure your app to use Angular Router.</p>
+    <p>对于大多数应用来说，都会出现应用需要多个页面的情况。当这种情况不可避免地发生时，路由就会成为关乎用户体验性能的重要部分。</p>
+<p>在本活动中，你将学习如何建立和配置你的应用以使用 Angular 路由器。</p>
 <hr>
 
 
@@ -23,14 +22,14 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="create-an-approutests-file">
-    <a href="#create-an-approutests-file" class="docs-anchor" tabindex="-1" aria-label="Link to Create an app.routes.ts file">Create an app.routes.ts file</a>
+    <a href="#create-an-approutests-file" class="docs-anchor" tabindex="-1" aria-label="Link to Create an app.routes.ts file">创建一个 app.routes.ts 文件</a>
   </h3>
   
-      <p>Inside <code>app.routes.ts</code>, make the following changes:</p>
+      <p>在 <code>app.routes.ts</code> 文件中，进行如下更改：</p>
 
     <ol class="docs-ordered-list">
-      <li>Import <code>Routes</code> from the <code>@angular/router</code> package.</li>
-<li>Export a constant called <code>routes</code> of type <code>Routes</code>, assign it <code>[]</code> as the value.</li>
+      <li>从 <code>@angular/router</code> 包中导入 <code>Routes</code>。</li>
+<li>导出一个名为 <code>routes</code> 的常量，其类型为 <code>Routes</code>，并赋予它 <code>[]</code> 作为值。</li>
 
     </ol>
     <div class="docs-code">
@@ -44,15 +43,15 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="add-routing-to-provider">
-    <a href="#add-routing-to-provider" class="docs-anchor" tabindex="-1" aria-label="Link to Add routing to provider">Add routing to provider</a>
+    <a href="#add-routing-to-provider" class="docs-anchor" tabindex="-1" aria-label="Link to Add routing to provider">将路由添加到提供者</a>
   </h3>
   
-      <p>In <code>app.config.ts</code>, configure the app to Angular Router with the following steps:</p>
+      <p>在 <code>app.config.ts</code> 中，通过以下步骤将应用配置为使用 Angular 路由器：</p>
 
     <ol class="docs-ordered-list">
-      <li>Import the <code>provideRouter</code> function from <code>@angular/router</code>.</li>
-<li>Import <code>routes</code> from the <code>./app.routes.ts</code>.</li>
-<li>Call the <code>provideRouter</code> function with <code>routes</code> passed in as an argument in the <code>providers</code> array.</li>
+      <li>从 <code>@angular/router</code> 导入 <code>provideRouter</code> 函数。</li>
+<li>从 <code>./app.routes.ts</code> 导入 <code>routes</code>。</li>
+<li>在 <code>providers</code> 数组中调用 <code>provideRouter</code> 函数，并将 <code>routes</code> 作为参数传入。</li>
 
     </ol>
     <div class="docs-code">
@@ -66,11 +65,11 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="import-routeroutlet-in-the-component">
-    <a href="#import-routeroutlet-in-the-component" class="docs-anchor" tabindex="-1" aria-label="Link to Import <code>RouterOutlet</code> in the component">Import <code>RouterOutlet</code> in the component</a>
+    <a href="#import-routeroutlet-in-the-component" class="docs-anchor" tabindex="-1" aria-label="Link to Import <code>RouterOutlet</code> in the component">在组件中导入 <code>RouterOutlet</code></a>
   </h3>
   
-      <p>Finally, to make sure your app is ready to use the Angular Router, you need to tell the app where you expect the router to display the desired content. Accomplish that by using the <code>RouterOutlet</code> directive from <code>@angular/router</code>.</p>
-<p>Update the template for <code>AppComponent</code> by adding <code>&lt;router-outlet /&gt;</code></p>
+      <p>最后，为了确保你的应用已准备好使用 Angular 路由，你需要告诉应用你希望路由器在何处显示所需内容。通过使用 <code>@angular/router</code> 中的 <code>RouterOutlet</code> 指令来完成此操作。</p>
+<p>通过添加 <code>&lt;router-outlet /&gt;</code> 来更新 <code>AppComponent</code> 的模板</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {RouterOutlet} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/router'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> href</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Home&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      |</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> href</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/user"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;User&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  `</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [RouterOutlet],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
@@ -79,5 +78,5 @@
     </li>
     
     </ol>
-    <p><span class="docs-emoji">Your app is now set up to use Angular Router. Nice work! 🙌</span></p>
-<p>Keep the momentum going to learn the next step of defining the routes for our app.</p>
+    <p><span class="docs-emoji">你的应用现在已设置为使用 Angular Router。做得好！🙌</span></p>
+<p>继续保持势头，学习下一步，为我们的应用定义路由。</p>

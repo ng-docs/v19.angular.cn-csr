@@ -1,11 +1,10 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">Template type checking</h1>
+    <h1 tabindex="-1">模板类型检查</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/template-typecheck.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
@@ -14,306 +13,306 @@
     </header>
     
   <h2 id="overview-of-template-type-checking">
-    <a href="#overview-of-template-type-checking" class="docs-anchor" tabindex="-1" aria-label="Link to Overview of template type checking">Overview of template type checking</a>
+    <a href="#overview-of-template-type-checking" class="docs-anchor" tabindex="-1" aria-label="Link to Overview of template type checking">模板类型检查概览</a>
   </h2>
-  <p>Just as TypeScript catches type errors in your code, Angular checks the expressions and bindings within the templates of your application and can report any type errors it finds.
-Angular currently has three modes of doing this, depending on the value of the <code>fullTemplateTypeCheck</code> and <code>strictTemplates</code> flags in <a href="reference/configs/angular-compiler-options">Angular's compiler options</a>.</p>
+  <p>正如 TypeScript 可以捕获你代码中的类型错误一样，Angular 也会检查你的应用模板中的表达式和绑定，并报告它发现的任何类型错误。
+Angular 目前有三种执行此操作的模式，具体取决于 <a href="reference/configs/angular-compiler-options">Angular 编译器选项</a>中 <code>fullTemplateTypeCheck</code> 和 <code>strictTemplates</code> 标志的值。</p>
 
   <h3 id="basic-mode">
-    <a href="#basic-mode" class="docs-anchor" tabindex="-1" aria-label="Link to Basic mode">Basic mode</a>
+    <a href="#basic-mode" class="docs-anchor" tabindex="-1" aria-label="Link to Basic mode">基本模式</a>
   </h3>
-  <p>In the most basic type-checking mode, with the <code>fullTemplateTypeCheck</code> flag set to <code>false</code>, Angular validates only top-level expressions in a template.</p>
-<p>If you write <code>&lt;map [city]=&quot;user.address.city&quot;&gt;</code>, the compiler verifies the following:</p>
+  <p>在最基本的类型检查模式下，当 <code>fullTemplateTypeCheck</code> 标志设置为 <code>false</code> 时，Angular 仅验证模板中的顶层表达式。</p>
+<p>如果编写 <code>&lt;map [city]="user.address.city"&gt;</code>，则编译器会验证以下内容：</p>
 
   <ul class="docs-list">
-    <li><code>user</code> is a property on the component class</li>
-<li><code>user</code> is an object with an address property</li>
-<li><code>user.address</code> is an object with a city property</li>
+    <li><code>user</code> 是组件类上的一个属性（Property）</li>
+<li><code>user</code> 是一个具有 address 属性（property）的对象</li>
+<li><code>user.address</code> 是一个具有 city 属性（property）的对象</li>
 
   </ul>
-  <p>The compiler does not verify that the value of <code>user.address.city</code> is assignable to the city input of the <code>&lt;map&gt;</code> component.</p>
-<p>The compiler also has some major limitations in this mode:</p>
+  <p>编译器不验证 <code>user.address.city</code> 的值是否可赋值给 <code>&lt;map&gt;</code> 组件的 city 输入。</p>
+<p>在这种模式下，编译器还有一些主要的局限性：</p>
 
   <ul class="docs-list">
-    <li>Importantly, it doesn't check embedded views, such as <code>*ngIf</code>, <code>*ngFor</code>, other <code>&lt;ng-template&gt;</code> embedded view.</li>
-<li>It doesn't figure out the types of <code>#refs</code>, the results of pipes, or the type of <code>$event</code> in event bindings.</li>
+    <li>重要的是，它不检查内嵌视图，例如 <code>*ngIf</code>、<code>*ngFor</code> 和其他 <code>&lt;ng-template&gt;</code> 内嵌视图。</li>
+<li>它不会计算出 <code>#refs</code> 的类型、管道的结果或事件绑定中 <code>$event</code> 的类型。</li>
 
   </ul>
-  <p>In many cases, these things end up as type <code>any</code>, which can cause subsequent parts of the expression to go unchecked.</p>
+  <p>在许多情况下，这些东西最终都变成 <code>any</code> 类型，这可能会导致表达式的后续部分未经检查。</p>
 
   <h3 id="full-mode">
-    <a href="#full-mode" class="docs-anchor" tabindex="-1" aria-label="Link to Full mode">Full mode</a>
+    <a href="#full-mode" class="docs-anchor" tabindex="-1" aria-label="Link to Full mode">完整模式</a>
   </h3>
-  <p>If the <code>fullTemplateTypeCheck</code> flag is set to <code>true</code>, Angular is more aggressive in its type-checking within templates.
-In particular:</p>
+  <p>如果 <code>fullTemplateTypeCheck</code> 标志设置为 <code>true</code>，Angular 会在模板中更积极地进行类型检查。
+特别是：</p>
 
   <ul class="docs-list">
-    <li>Embedded views (such as those within an <code>*ngIf</code> or <code>*ngFor</code>) are checked</li>
-<li>Pipes have the correct return type</li>
-<li>Local references to directives and pipes have the correct type (except for any generic parameters, which will be <code>any</code>)</li>
+    <li>内嵌视图（例如 <code>*ngIf</code> 或 <code>*ngFor</code> 中的视图）会被检查</li>
+<li>管道具有正确的返回类型</li>
+<li>对指令和管道的局部引用具有正确的类型（除了任何泛型参数，它们将是 <code>any</code> 类型）</li>
 
   </ul>
-  <p>The following still have type <code>any</code>.</p>
+  <p>以下内容仍然具有 <code>any</code> 类型。</p>
 
   <ul class="docs-list">
-    <li>Local references to DOM elements</li>
-<li>The <code>$event</code> object</li>
-<li>Safe navigation expressions</li>
+    <li>DOM 元素的本地引用</li>
+<li><code>$event</code> 对象</li>
+<li>安全导航表达式</li>
 
   </ul>
   
     <div class="docs-alert docs-alert-important">
-    <p><strong>IMPORTANT:</strong> The <code>fullTemplateTypeCheck</code> flag has been deprecated in Angular 13.
-The <code>strictTemplates</code> family of compiler options should be used instead.</p>
+    <p><strong>重要提示：</strong> <code>fullTemplateTypeCheck</code> 标志已在 Angular 13 中弃用。
+应改为使用 <code>strictTemplates</code> 系列编译器选项。</p>
 
     </div>
     
   <h3 id="strict-mode">
-    <a href="#strict-mode" class="docs-anchor" tabindex="-1" aria-label="Link to Strict mode">Strict mode</a>
+    <a href="#strict-mode" class="docs-anchor" tabindex="-1" aria-label="Link to Strict mode">严格模式</a>
   </h3>
-  <p>Angular maintains the behavior of the <code>fullTemplateTypeCheck</code> flag, and introduces a third "strict mode".
-Strict mode is a superset of full mode, and is accessed by setting the <code>strictTemplates</code> flag to true.
-This flag supersedes the <code>fullTemplateTypeCheck</code> flag.</p>
-<p>In addition to the full mode behavior, Angular does the following:</p>
+  <p>Angular 保留了 <code>fullTemplateTypeCheck</code> 标志的行为，并引入了第三种“严格模式”。
+严格模式是完整模式的超集，可以通过将 <code>strictTemplates</code> 标志设置为 true 来访问。
+此标志取代了 <code>fullTemplateTypeCheck</code> 标志。</p>
+<p>除了完整模式的行为之外，Angular 还执行以下操作：</p>
 
   <ul class="docs-list">
-    <li>Verifies that component/directive bindings are assignable to their <code>@Input()</code>s</li>
-<li>Obeys TypeScript's <code>strictNullChecks</code> flag when validating the preceding mode</li>
-<li>Infers the correct type of components/directives, including generics</li>
-<li>Infers template context types where configured (for example, allowing correct type-checking of <code>NgFor</code>)</li>
-<li>Infers the correct type of <code>$event</code> in component/directive, DOM, and animation event bindings</li>
-<li>Infers the correct type of local references to DOM elements, based on the tag name (for example, the type that <code>document.createElement</code> would return for that tag)</li>
+    <li>验证组件/指令绑定是否可赋值给其 <code>@Input()</code></li>
+<li>在验证上述模式时，遵循 TypeScript 的 <code>strictNullChecks</code> 标志</li>
+<li>推断组件/指令（包括泛型）的正确类型</li>
+<li>在配置的位置推断模板上下文类型（例如，允许对 <code>NgFor</code> 进行正确的类型检查）</li>
+<li>推断组件/指令、DOM 和动画事件绑定中 <code>$event</code> 的正确类型</li>
+<li>根据标签名称推断 DOM 元素本地引用的正确类型（例如，<code>document.createElement</code> 将为该标签返回的类型）</li>
 
   </ul>
   
   <h2 id="checking-of-ngfor">
-    <a href="#checking-of-ngfor" class="docs-anchor" tabindex="-1" aria-label="Link to Checking of <code>*ngFor</code>">Checking of <code>*ngFor</code></a>
+    <a href="#checking-of-ngfor" class="docs-anchor" tabindex="-1" aria-label="Link to Checking of <code>*ngFor</code>">检查 <code>*ngFor</code></a>
   </h2>
-  <p>The three modes of type-checking treat embedded views differently.
-Consider the following example.</p>
+  <p>三种类型检查模式对嵌入式视图的处理方式不同。
+请考虑以下范例。</p>
 <div class="docs-code" header="User interface">
-    <div class="docs-code-header"><h3>User interface</h3></div>
+    <div class="docs-code-header"><h3>用户界面</h3></div>
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">interface</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> User</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  name</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  address</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">    city</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">    state</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
     </pre>
   </div><div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> *ngFor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"let user of users"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;{{config.title}}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">span</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;City: {{user.address.city}}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">span</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
     </pre>
-  </div><p>The <code>&lt;h2&gt;</code> and the <code>&lt;span&gt;</code> are in the <code>*ngFor</code> embedded view.
-In basic mode, Angular doesn't check either of them.
-However, in full mode, Angular checks that <code>config</code> and <code>user</code> exist and assumes a type of <code>any</code>.
-In strict mode, Angular knows that the <code>user</code> in the <code>&lt;span&gt;</code> has a type of <code>User</code>, and that <code>address</code> is an object with a <code>city</code> property of type <code>string</code>.</p>
+  </div><p><code>&lt;h2&gt;</code> 和 <code>&lt;span&gt;</code> 位于 <code>*ngFor</code> 嵌入式视图中。
+在基本模式下，Angular 不会检查它们中的任何一个。
+但是，在完整模式下，Angular 会检查 <code>config</code> 和 <code>user</code> 是否存在，并假定类型为 <code>any</code>。
+在严格模式下，Angular 知道 <code>&lt;span&gt;</code> 中的 <code>user</code> 具有 <code>User</code> 类型，并且 <code>address</code> 是一个对象，其 <code>city</code> 属性（Property）的类型为 <code>string</code>。</p>
 
   <h2 id="troubleshooting-template-errors">
-    <a href="#troubleshooting-template-errors" class="docs-anchor" tabindex="-1" aria-label="Link to Troubleshooting template errors">Troubleshooting template errors</a>
+    <a href="#troubleshooting-template-errors" class="docs-anchor" tabindex="-1" aria-label="Link to Troubleshooting template errors">排查模板错误</a>
   </h2>
-  <p>With strict mode, you might encounter template errors that didn't arise in either of the previous modes.
-These errors often represent genuine type mismatches in the templates that were not caught by the previous tooling.
-If this is the case, the error message should make it clear where in the template the problem occurs.</p>
-<p>There can also be false positives when the typings of an Angular library are either incomplete or incorrect, or when the typings don't quite line up with expectations as in the following cases.</p>
+  <p>使用严格模式，你可能会遇到在以前的任何模式下都不会出现的模板错误。
+这些错误通常表示模板中真正的类型不匹配，而以前的工具未能捕获到这些错误。
+如果是这种情况，则错误消息应明确指出模板中出现问题的具体位置。</p>
+<p>当 Angular 库的类型定义不完整或不正确，或者当类型定义与预期不完全一致时，也可能出现误报，如下例所示。</p>
 
   <ul class="docs-list">
-    <li><p>When a library's typings are wrong or incomplete (for example, missing <code>null | undefined</code> if the library was not written with <code>strictNullChecks</code> in mind)</p>
+    <li><p>当库的类型定义错误或不完整时（例如，如果库的编写没有考虑到 <code>strictNullChecks</code>，则会缺少 <code>null | undefined</code>）</p>
 </li>
-<li><p>When a library's input types are too narrow and the library hasn't added appropriate metadata for Angular to figure this out.
-  This usually occurs with disabled or other common Boolean inputs used as attributes, for example, <code>&lt;input disabled&gt;</code>.</p>
+<li><p>当库的输入类型太窄，并且库没有添加适当的元数据供 Angular 计算出来时。
+ 这通常发生在用作属性（Attribute）的 disabled 或其他常见 Boolean 输入时，例如 <code>&lt;input disabled&gt;</code>。</p>
 </li>
-<li><p>When using <code>$event.target</code> for DOM events (because of the possibility of event bubbling, <code>$event.target</code> in the DOM typings doesn't have the type you might expect)</p>
+<li><p>当对 DOM 事件使用 <code>$event.target</code> 时（由于事件冒泡的可能性，DOM 类型定义中的 <code>$event.target</code> 不具有你可能期望的类型）</p>
 </li>
 
   </ul>
-  <p>In case of a false positive like these, there are a few options:</p>
+  <p>如果遇到像这样的误报，有以下几种选择：</p>
 
   <ul class="docs-list">
-    <li>Use the <code>$any()</code> type-cast function in certain contexts to opt out of type-checking for a part of the expression</li>
-<li>Disable strict checks entirely by setting <code>strictTemplates: false</code> in the application's TypeScript configuration file, <code>tsconfig.json</code></li>
-<li>Disable certain type-checking operations individually, while maintaining strictness in other aspects, by setting a <em>strictness flag</em> to <code>false</code></li>
-<li>If you want to use <code>strictTemplates</code> and <code>strictNullChecks</code> together, opt out of strict null type checking specifically for input bindings using <code>strictNullInputTypes</code></li>
+    <li>在某些情况下使用 <code>$any()</code> 类型转换函数，以选择不对表达式的某一部分进行类型检查</li>
+<li>通过在应用的 TypeScript 配置文件 <code>tsconfig.json</code> 中设置 <code>strictTemplates: false</code>，完全禁用严格检查</li>
+<li>通过将<em>严格性标志</em>设置为 <code>false</code>，可以单独禁用某些类型检查操作，同时保持其他方面的严格性</li>
+<li>如果想同时使用 <code>strictTemplates</code> 和 <code>strictNullChecks</code>，请使用 <code>strictNullInputTypes</code> 专门为输入绑定选择退出严格的 null 类型检查</li>
 
   </ul>
-  <p>Unless otherwise commented, each following option is set to the value for <code>strictTemplates</code> (<code>true</code> when <code>strictTemplates</code> is <code>true</code> and conversely, the other way around).</p>
+  <p>除非另有注释，否则以下每个选项都设置为 <code>strictTemplates</code> 的值（当 <code>strictTemplates</code> 为 <code>true</code> 时为 <code>true</code>，反之亦然）。</p>
 
   <div class="docs-table docs-scroll-track-transparent">
     <table>
       <thead>
         <tr>
-<th align="left">Strictness flag</th>
-<th align="left">Effect</th>
+<th align="left">严格性标志</th>
+<th align="left">效果</th>
 </tr>
 
       </thead>
       <tbody>
         <tr>
 <td align="left"><code>strictInputTypes</code></td>
-<td align="left">Whether the assignability of a binding expression to the <code>@Input()</code> field is checked. Also affects the inference of directive generic types.</td>
+<td align="left">是否检查绑定表达式到 <code>@Input()</code> 字段的可赋值性。还会影响指令泛型类型的推断。</td>
 </tr>
 <tr>
 <td align="left"><code>strictInputAccessModifiers</code></td>
-<td align="left">Whether access modifiers such as <code>private</code>/<code>protected</code>/<code>readonly</code> are honored when assigning a binding expression to an <code>@Input()</code>. If disabled, the access modifiers of the <code>@Input</code> are ignored; only the type is checked. This option is <code>false</code> by default, even with <code>strictTemplates</code> set to <code>true</code>.</td>
+<td align="left">在将绑定表达式赋值给 <code>@Input()</code> 时，是否遵循访问修饰符（如 <code>private</code>/<code>protected</code>/<code>readonly</code>）。如果禁用，则会忽略 <code>@Input</code> 的访问修饰符；仅检查类型。即使将 <code>strictTemplates</code> 设置为 <code>true</code>，此选项也默认为 <code>false</code>。</td>
 </tr>
 <tr>
 <td align="left"><code>strictNullInputTypes</code></td>
-<td align="left">Whether <code>strictNullChecks</code> is honored when checking <code>@Input()</code> bindings (per <code>strictInputTypes</code>). Turning this off can be useful when using a library that was not built with <code>strictNullChecks</code> in mind.</td>
+<td align="left">在检查 <code>@Input()</code> 绑定时（根据 <code>strictInputTypes</code>），是否遵循 <code>strictNullChecks</code>。当使用未考虑 <code>strictNullChecks</code> 构建的库时，关闭此选项可能很有用。</td>
 </tr>
 <tr>
 <td align="left"><code>strictAttributeTypes</code></td>
-<td align="left">Whether to check <code>@Input()</code> bindings that are made using text attributes. For example, <code>&lt;input matInput disabled=&quot;true&quot;&gt;</code> (setting the <code>disabled</code> property to the string <code>&#39;true&#39;</code>) vs <code>&lt;input matInput [disabled]=&quot;true&quot;&gt;</code> (setting the <code>disabled</code> property to the boolean <code>true</code>).</td>
+<td align="left">是否检查使用文本属性进行的 <code>@Input()</code> 绑定。例如，<code>&lt;input matInput disabled="true"&gt;</code>（将 <code>disabled</code> 属性设置为字符串 <code>'true'</code>）与 <code>&lt;input matInput [disabled]="true"&gt;</code>（将 <code>disabled</code> 属性设置为布尔值 <code>true</code>）。</td>
 </tr>
 <tr>
 <td align="left"><code>strictSafeNavigationTypes</code></td>
-<td align="left">Whether the return type of safe navigation operations (for example, <code>user?.name</code> will be correctly inferred based on the type of <code>user</code>). If disabled, <code>user?.name</code> will be of type <code>any</code>.</td>
+<td align="left">是否正确推断安全导航操作的返回类型（例如，<code>user?.name</code> 将根据 <code>user</code> 的类型正确推断）。如果禁用，<code>user?.name</code> 的类型将为 <code>any</code>。</td>
 </tr>
 <tr>
 <td align="left"><code>strictDomLocalRefTypes</code></td>
-<td align="left">Whether local references to DOM elements will have the correct type. If disabled <code>ref</code> will be of type <code>any</code> for <code>&lt;input #ref&gt;</code>.</td>
+<td align="left">DOM 元素的本地引用是否具有正确的类型。如果禁用，对于 <code>&lt;input #ref&gt;</code>，<code>ref</code> 的类型将为 <code>any</code>。</td>
 </tr>
 <tr>
 <td align="left"><code>strictOutputEventTypes</code></td>
-<td align="left">Whether <code>$event</code> will have the correct type for event bindings to component/directive an <code>@Output()</code>, or to animation events. If disabled, it will be <code>any</code>.</td>
+<td align="left">对于组件/指令 <code>@Output()</code> 或动画事件的事件绑定，<code>$event</code> 是否具有正确的类型。如果禁用，它将为 <code>any</code>。</td>
 </tr>
 <tr>
 <td align="left"><code>strictDomEventTypes</code></td>
-<td align="left">Whether <code>$event</code> will have the correct type for event bindings to DOM events. If disabled, it will be <code>any</code>.</td>
+<td align="left">对于 DOM 事件的事件绑定，<code>$event</code> 是否具有正确的类型。如果禁用，它将为 <code>any</code>。</td>
 </tr>
 <tr>
 <td align="left"><code>strictContextGenerics</code></td>
-<td align="left">Whether the type parameters of generic components will be inferred correctly (including any generic bounds). If disabled, any type parameters will be <code>any</code>.</td>
+<td align="left">是否正确推断泛型组件的类型参数（包括任何泛型边界）。如果禁用，任何类型参数都将为 <code>any</code>。</td>
 </tr>
 <tr>
 <td align="left"><code>strictLiteralTypes</code></td>
-<td align="left">Whether object and array literals declared in the template will have their type inferred. If disabled, the type of such literals will be <code>any</code>. This flag is <code>true</code> when <em>either</em> <code>fullTemplateTypeCheck</code> or <code>strictTemplates</code> is set to <code>true</code>.</td>
+<td align="left">是否推断模板中声明的对象和数组字面量的类型。如果禁用，此类字面量的类型将为 <code>any</code>。当 <code>fullTemplateTypeCheck</code> 或 <code>strictTemplates</code> <em>任一</em>设置为 <code>true</code> 时，此标志为 <code>true</code>。</td>
 </tr>
 
       </tbody>
     </table>
   </div>
-  <p>If you still have issues after troubleshooting with these flags, fall back to full mode by disabling <code>strictTemplates</code>.</p>
-<p>If that doesn't work, an option of last resort is to turn off full mode entirely with <code>fullTemplateTypeCheck: false</code>.</p>
-<p>A type-checking error that you cannot resolve with any of the recommended methods can be the result of a bug in the template type-checker itself.
-If you get errors that require falling back to basic mode, it is likely to be such a bug.
-If this happens, <a href="https://github.com/angular/angular/issues" target="_blank">file an issue</a> so the team can address it.</p>
+  <p>如果在用这些标志排查问题后仍然遇到问题，可以通过禁用 <code>strictTemplates</code> 回退到完整模式。</p>
+<p>如果这仍然不起作用，最后的手段是使用 <code>fullTemplateTypeCheck: false</code> 完全关闭完整模式。</p>
+<p>你无法使用任何推荐方法求解的类型检查错误可能是模板类型检查器本身的错误造成的。
+如果你遇到的错误需要回退到基本模式，则很可能是这种错误。
+如果发生这种情况，请<a href="https://github.com/angular/angular/issues" target="_blank">提交 issue</a>，以便团队可以解决它。</p>
 
   <h2 id="inputs-and-type-checking">
-    <a href="#inputs-and-type-checking" class="docs-anchor" tabindex="-1" aria-label="Link to Inputs and type-checking">Inputs and type-checking</a>
+    <a href="#inputs-and-type-checking" class="docs-anchor" tabindex="-1" aria-label="Link to Inputs and type-checking">输入和类型检查</a>
   </h2>
-  <p>The template type checker checks whether a binding expression's type is compatible with that of the corresponding directive input.
-As an example, consider the following component:</p>
+  <p>模板类型检查器会检查绑定表达式的类型是否与相应的指令输入的类型兼容。
+例如，考虑以下组件：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> interface</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> User</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  name</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'user-detail'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'{{ user.name }}'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UserDetailComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">user</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> User</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
     </pre>
-  </div><p>The <code>AppComponent</code> template uses this component as follows:</p>
+  </div><p><code>AppComponent</code> 模板按如下方式使用此组件：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app-root'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;user-detail [user]="selectedUser"&gt;&lt;/user-detail&gt;'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  selectedUser</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> User</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
     </pre>
-  </div><p>Here, during type checking of the template for <code>AppComponent</code>, the <code>[user]=&quot;selectedUser&quot;</code> binding corresponds with the <code>UserDetailComponent.user</code> input.
-Therefore, Angular assigns the <code>selectedUser</code> property to <code>UserDetailComponent.user</code>, which would result in an error if their types were incompatible.
-TypeScript checks the assignment according to its type system, obeying flags such as <code>strictNullChecks</code> as they are configured in the application.</p>
-<p>Avoid run-time type errors by providing more specific in-template type requirements to the template type checker.
-Make the input type requirements for your own directives as specific as possible by providing template-guard functions in the directive definition.
-See <a href="guide/directives/structural-directives#directive-type-checks">Improving template type checking for custom directives</a> in this guide.</p>
+  </div><p>在这里，在对 <code>AppComponent</code> 的模板进行类型检查期间，<code>[user]="selectedUser"</code> 绑定与 <code>UserDetailComponent.user</code> 输入相对应。
+因此，Angular 会将 <code>selectedUser</code> 属性赋值给 <code>UserDetailComponent.user</code>，如果它们的类型不兼容，则会导致错误。
+TypeScript 根据其类型体系检查赋值，并遵循诸如 <code>strictNullChecks</code> 之类的标志，因为它们是在应用中配置的。</p>
+<p>为了避免运行时类型错误，请为模板类型检查器提供更具体的模板内类型要求。
+通过在指令定义中提供模板保护函数，使你自己的指令的输入类型要求尽可能具体。
+参阅本指南中的<a href="guide/directives/structural-directives#directive-type-checks">改进自定义指令的模板类型检查</a>。</p>
 
   <h3 id="strict-null-checks">
-    <a href="#strict-null-checks" class="docs-anchor" tabindex="-1" aria-label="Link to Strict null checks">Strict null checks</a>
+    <a href="#strict-null-checks" class="docs-anchor" tabindex="-1" aria-label="Link to Strict null checks">严格的 Null 检查</a>
   </h3>
-  <p>When you enable <code>strictTemplates</code> and the TypeScript flag <code>strictNullChecks</code>, typecheck errors might occur for certain situations that might not easily be avoided.
-For example:</p>
+  <p>当你启用 <code>strictTemplates</code> 和 TypeScript 标志 <code>strictNullChecks</code> 时，在某些可能不容易避免的情况下可能会发生类型检查错误。
+例如：</p>
 
   <ul class="docs-list">
-    <li><p>A nullable value that is bound to a directive from a library which did not have <code>strictNullChecks</code> enabled.</p>
-<p>  For a library compiled without <code>strictNullChecks</code>, its declaration files will not indicate whether a field can be <code>null</code> or not.
-  For situations where the library handles <code>null</code> correctly, this is problematic, as the compiler will check a nullable value against the declaration files which omit the <code>null</code> type.
-  As such, the compiler produces a type-check error because it adheres to <code>strictNullChecks</code>.</p>
+    <li><p>从一个未启用 <code>strictNullChecks</code> 的库绑定到指令的可空值。</p>
+<p>对于在没有 <code>strictNullChecks</code> 的情况下编译的库，其对象声明文件不会指示字段是否可以为 <code>null</code>。
+  对于库正确处理 <code>null</code> 的情况，这是有问题的，因为编译器将根据省略 <code>null</code> 类型的对象声明文件检查可空值。
+  因此，编译器会生成类型检查错误，因为它遵循 <code>strictNullChecks</code>。</p>
 </li>
-<li><p>Using the <code>async</code> pipe with an Observable which you know will emit synchronously.</p>
-<p>  The <code>async</code> pipe currently assumes that the Observable it subscribes to can be asynchronous, which means that it's possible that there is no value available yet.
-  In that case, it still has to return something —which is <code>null</code>.
-  In other words, the return type of the <code>async</code> pipe includes <code>null</code>, which might result in errors in situations where the Observable is known to emit a non-nullable value synchronously.</p>
+<li><p>将 <code>async</code> 管道与已知会同步发出的可观察者一起使用。</p>
+<p><code>async</code> 管道当前假定它订阅的可观察者可能是异步的，这意味着可能还没有可用的值。
+  在这种情况下，它仍然必须返回一些东西 —— 即 <code>null</code>。
+  换句话说，<code>async</code> 管道的返回类型包括 <code>null</code>，这可能会在已知可观察者同步发出非空值的情况下导致错误。</p>
 </li>
 
   </ul>
-  <p>There are two potential workarounds to the preceding issues:</p>
+  <p>对于上述问题，有两种可能的解决方法：</p>
 
   <ul class="docs-list">
-    <li><p>In the template, include the non-null assertion operator <code>!</code> at the end of a nullable expression, such as</p>
+    <li><p>在模板中，在可空表达式的末尾包含非空断言操作符 <code>!</code>，例如</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">user-detail</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> [user]</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"user!"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">user-detail</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
     </pre>
-  </div><p>  In this example, the compiler disregards type incompatibilities in nullability, just as in TypeScript code.
-  In the case of the <code>async</code> pipe, notice that the expression needs to be wrapped in parentheses, as in</p>
+  </div><p>在此范例中，编译器会忽略 nullability 中的类型不兼容性，就像在 TypeScript 代码中一样。
+  在 <code>async</code> 管道的情况下，请注意表达式需要用括号括起来，如</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">user-detail</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> [user]</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"(user$ | async)!"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">user-detail</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
     </pre>
   </div></li>
-<li><p>Disable strict null checks in Angular templates completely.</p>
-<p>  When <code>strictTemplates</code> is enabled, it is still possible to disable certain aspects of type checking.
-  Setting the option <code>strictNullInputTypes</code> to <code>false</code> disables strict null checks within Angular templates.
-  This flag applies for all components that are part of the application.</p>
+<li><p>完全禁用 Angular 模板中的严格 Null 检查。</p>
+<p>当启用 <code>strictTemplates</code> 时，仍然可以禁用类型检查的某些方面。
+  将选项 <code>strictNullInputTypes</code> 设置为 <code>false</code> 会禁用 Angular 模板中的严格 Null 检查。
+  此标志适用于作为应用一部分的所有组件。</p>
 </li>
 
   </ul>
   
   <h3 id="advice-for-library-authors">
-    <a href="#advice-for-library-authors" class="docs-anchor" tabindex="-1" aria-label="Link to Advice for library authors">Advice for library authors</a>
+    <a href="#advice-for-library-authors" class="docs-anchor" tabindex="-1" aria-label="Link to Advice for library authors">给库作者的建议</a>
   </h3>
-  <p>As a library author, you can take several measures to provide an optimal experience for your users.
-First, enabling <code>strictNullChecks</code> and including <code>null</code> in an input's type, as appropriate, communicates to your consumers whether they can provide a nullable value or not.
-Additionally, it is possible to provide type hints that are specific to the template type checker.
-See <a href="guide/directives/structural-directives#directive-type-checks">Improving template type checking for custom directives</a>, and <a href="#input-setter-coercion">Input setter coercion</a>.</p>
+  <p>作为库作者，你可以采取一些措施来为你的用户提供最佳体验。
+首先，启用 <code>strictNullChecks</code> 并在输入的类型中包含 <code>null</code>（如果适用），可以告知你的使用者他们是否可以提供可空值。
+此外，还可以提供特定于模板类型检查器的类型提示。
+请参阅<a href="guide/directives/structural-directives#directive-type-checks">改进自定义指令的模板类型检查</a>和<a href="#input-setter-coercion">输入 setter 强制转换</a>。</p>
 
   <h2 id="input-setter-coercion">
-    <a href="#input-setter-coercion" class="docs-anchor" tabindex="-1" aria-label="Link to Input setter coercion">Input setter coercion</a>
+    <a href="#input-setter-coercion" class="docs-anchor" tabindex="-1" aria-label="Link to Input setter coercion">输入 setter 强制转换</a>
   </h2>
-  <p>Occasionally it is desirable for the <code>@Input()</code> of a directive or component to alter the value bound to it, typically using a getter/setter pair for the input.
-As an example, consider this custom button component:</p>
-<p>Consider the following directive:</p>
+  <p>有时，指令或组件的 <code>@Input()</code> 需要更改绑定到它的值，通常使用输入的 getter/setter 对。
+例如，考虑这个自定义按钮组件：</p>
+<p>考虑以下指令：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'submit-button'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    &lt;div class="wrapper"&gt;</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      &lt;button [disabled]="disabled"&gt;Submit&lt;/button&gt;</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    &lt;/div&gt;</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  `</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SubmitButton</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> _disabled</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  get</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> disabled</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    return</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">._disabled;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  set</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> disabled</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">value</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">._disabled </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> value;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
     </pre>
-  </div><p>Here, the <code>disabled</code> input of the component is being passed on to the <code>&lt;button&gt;</code> in the template.
-All of this works as expected, as long as a <code>boolean</code> value is bound to the input.
-But, suppose a consumer uses this input in the template as an attribute:</p>
+  </div><p>在这里，组件的 <code>disabled</code> 输入被传递到模板中的 <code>&lt;button&gt;</code>。
+只要将 <code>boolean</code> 值绑定到输入，所有这些都可以按预期工作。
+但是，假设使用者在模板中将此输入用作 Attribute：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">submit-button</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> disabled</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">submit-button</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
     </pre>
-  </div><p>This has the same effect as the binding:</p>
+  </div><p>这与以下绑定具有相同的效果：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">submit-button</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> [disabled]</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"''"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">submit-button</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
     </pre>
-  </div><p>At runtime, the input will be set to the empty string, which is not a <code>boolean</code> value.
-Angular component libraries that deal with this problem often "coerce" the value into the right type in the setter:</p>
+  </div><p>在运行时，输入将设置为空字符串，这不是 <code>boolean</code> 值。
+处理此问题的 Angular 组件库通常会在 setter 中将值“强制转换”为正确的类型：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">set </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">disabled</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(value: boolean) {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">._disabled </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (value </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">===</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">||</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> value;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
     </pre>
-  </div><p>It would be ideal to change the type of <code>value</code> here, from <code>boolean</code> to <code>boolean|&#39;&#39;</code>, to match the set of values which are actually accepted by the setter.
-TypeScript prior to version 4.3 requires that both the getter and setter have the same type, so if the getter should return a <code>boolean</code> then the setter is stuck with the narrower type.</p>
-<p>If the consumer has Angular's strictest type checking for templates enabled, this creates a problem: the empty string (<code>&#39;&#39;</code>) is not actually assignable to the <code>disabled</code> field, which creates a type error when the attribute form is used.</p>
-<p>As a workaround for this problem, Angular supports checking a wider, more permissive type for <code>@Input()</code> than is declared for the input field itself.
-Enable this by adding a static property with the <code>ngAcceptInputType_</code> prefix to the component class:</p>
+  </div><p>理想的情况是，在此处更改 <code>value</code> 的类型，从 <code>boolean</code> 更改为 <code>boolean|''</code>，以匹配 setter 实际接受的值集。
+版本 4.3 之前的 TypeScript 要求 getter 和 setter 具有相同的类型，因此如果 getter 应返回 <code>boolean</code>，则 setter 将停留在较窄的类型上。</p>
+<p>如果使用者为模板启用了 Angular 最严格的类型检查，则会产生一个问题：空字符串 (<code>''</code>) 实际上不可赋值给 <code>disabled</code> 字段，这在使用 Attribute 形式时会创建类型错误。</p>
+<p>作为此问题的解决方法，Angular 支持为 <code>@Input()</code> 检查比输入字段本身声明的更广泛、更宽松的类型。
+通过向组件类添加带有 <code>ngAcceptInputType_</code> 前缀的静态属性来启用此功能：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SubmitButton</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> _disabled</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  get</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> disabled</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    return</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">._disabled;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  set</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> disabled</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">value</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">._disabled </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (value </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">===</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">||</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> value;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  static</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> ngAcceptInputType_disabled</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
     </pre>
-  </div><p>Since TypeScript 4.3, the setter could have been declared to accept <code>boolean|&#39;&#39;</code> as type, making the input setter coercion field obsolete.
-As such, input setters coercion fields have been deprecated.</p>
-<p>This field does not need to have a value.
-Its existence communicates to the Angular type checker that the <code>disabled</code> input should be considered as accepting bindings that match the type <code>boolean|&#39;&#39;</code>.
-The suffix should be the <code>@Input</code> <em>field</em> name.</p>
-<p>Care should be taken that if an <code>ngAcceptInputType_</code> override is present for a given input, then the setter should be able to handle any values of the overridden type.</p>
+  </div><p>由于 TypeScript 4.3，setter 可以声明为接受 <code>boolean|''</code> 作为类型，从而使输入 setter 强制转换字段过时。
+因此，输入 setter 强制转换字段已被弃用。</p>
+<p>此字段不需要具有值。
+它的存在向 Angular 类型检查器传达了 <code>disabled</code> 输入应被视为接受与 <code>boolean|''</code> 类型匹配的绑定。
+后缀应为 <code>@Input</code> <em>字段</em>名称。</p>
+<p>应注意，如果给定的输入存在 <code>ngAcceptInputType_</code> 重写，则 setter 应该能够处理任何重写类型的值。</p>
 
   <h2 id="disabling-type-checking-using-any">
-    <a href="#disabling-type-checking-using-any" class="docs-anchor" tabindex="-1" aria-label="Link to Disabling type checking using <code>$any()</code>">Disabling type checking using <code>$any()</code></a>
+    <a href="#disabling-type-checking-using-any" class="docs-anchor" tabindex="-1" aria-label="Link to Disabling type checking using <code>$any()</code>">使用 <code>$any()</code> 禁用类型检查</a>
   </h2>
-  <p>Disable checking of a binding expression by surrounding the expression in a call to the <code>$any()</code> cast pseudo-function.
-The compiler treats it as a cast to the <code>any</code> type just like in TypeScript when a <code>&lt;any&gt;</code> or <code>as any</code> cast is used.</p>
-<p>In the following example, casting <code>person</code> to the <code>any</code> type suppresses the error <code>Property address does not exist</code>.</p>
+  <p>通过将绑定表达式包围在对 <code>$any()</code> 强制转换伪函数的调用中，来禁用对绑定表达式的检查。
+编译器将其视为强制转换为 <code>any</code> 类型，就像在 TypeScript 中使用 <code>&lt;any&gt;</code> 或 <code>as any</code> 强制转换一样。</p>
+<p>在以下范例中，将 <code>person</code> 强制转换为 <code>any</code> 类型会阻止错误 <code>Property address does not exist</code>。</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'{{$any(person).address.street}}'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  person</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>

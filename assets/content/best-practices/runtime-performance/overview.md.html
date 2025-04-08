@@ -1,32 +1,23 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">Runtime performance optimization</h1>
+    <h1 tabindex="-1">运行时性能优化</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/best-practices/runtime-performance/overview.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>Fast rendering is critical for Angular and we've built the framework with a lot of optimizations in mind to help you develop performant apps. To better understand the performance of your app we offer <a href="tools/devtools">Angular DevTools</a> and a <a href="https://www.youtube.com/watch?v=FjyX_hkscII" target="_blank">video guide</a> on how to use Chrome DevTools for profiling. In this section we cover the most common performance optimization techniques.</p>
-<p><strong>Change detection</strong> is the process through which Angular checks to see whether your application state has changed, and if any DOM needs to be updated. At a high level, Angular walks your components from top to bottom, looking for changes. Angular runs its change detection mechanism periodically so that changes to the data model are reflected in an application’s view. Change detection can be triggered either manually or through an asynchronous event (for example, a user interaction or an XMLHttpRequest completion).</p>
-<p>Change detection is highly optimized and performant, but it can still cause slowdowns if the application runs it too frequently.</p>
-<p>In this guide, you’ll learn how to control and optimize the change detection mechanism by skipping parts of your application and running change detection only when necessary.</p>
-<p>Watch this video if you prefer to learn more about performance optimizations in a media format:</p>
+    <p>快速渲染对于 Angular 至关重要，我们在构建此框架时就考虑了很多优化，以帮助你开发高性能的应用。为了更好地理解你的应用的性能，我们提供了 <a href="tools/devtools">Angular DevTools</a> 和一个关于如何使用 Chrome DevTools 进行性能分析的 <a href="https://www.youtube.com/watch?v=FjyX_hkscII" target="_blank">视频指南</a>。在本节中，我们将介绍最常见的性能优化技术。</p>
+<p><strong>变更检测</strong>是 Angular 用来检查你的应用状态是否已更改以及是否需要更新任何 DOM 的过程。从高层次来看，Angular 会从上到下遍历你的组件，以查找变更。Angular 会定期运行其变更检测机制，以便将数据模型的更改反映在应用的视图中。可以手动或通过异步事件（例如，用户交互或 XMLHttpRequest 完成）触发变更检测。</p>
+<p>变更检测经过了高度优化且性能良好，但如果应用运行得过于频繁，仍然可能导致速度减慢。</p>
+<p>在本指南中，你将学习如何通过跳过应用的某些部分并在必要时才运行变更检测来控制和优化变更检测机制。</p>
+<p>如果你更喜欢以媒体格式了解有关性能优化的更多信息，请观看此视频：</p>
 
     <div class="docs-video-container">
-      <iframe
-      class="docs-video"
-      src="https://www.youtube.com/embed/f8sA-i6gkGQ"
-      
-      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-      credentialless
-      title="Video player"
-      ></iframe>
+      <iframe class="docs-video" src="https://www.youtube.com/embed/f8sA-i6gkGQ" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen credentialless title="Video player"></iframe>
     </div>
     

@@ -1,48 +1,45 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">Defer triggers</h1>
+    <h1 tabindex="-1">延迟触发器</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/deferrable-views/steps/3-defer-triggers/README.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>While the default options for <code>@defer</code> offer great options for lazy loading parts of your components it may still be desirable to further customize the deferred loading experience.</p>
-<p>By default, deferred content loads when the browser is idle. You can, however, customize when this loading occurs by specifying a <strong>trigger</strong>. This lets you pick the loading behavior best suited to your component.</p>
-<p>Deferrable views offer two types of loading trigger:</p>
+    <p>虽然 <code>@defer</code> 的默认选项为组件的各个部分惰性加载提供了很好的选择，但可能仍然希望进一步自定义延迟加载体验。</p>
+<p>默认情况下，延迟的内容会在浏览器空闲时加载。但是，你可以通过指定<strong>触发器</strong>来自定义加载发生的时间。这使你可以选择最适合你的组件的加载行为。</p>
+<p>可延迟加载的视图提供两种类型的加载触发器：</p>
 <div class="docs-table docs-scroll-track-transparent">
   <table>
-    <tr>
+    <tbody><tr>
       <td><code>on</code></td>
-      <td>
-        A trigger condition using a trigger from the list of built-in triggers.<br/>
-        For example: <code>@defer (on viewport)</code>
+      <td>一个触发条件，使用来自内置触发器列表中的触发器。<br>
+        例如：<code>@defer (on viewport)</code>
       </td>
     </tr>
     <tr>
       <td><code>when</code></td>
-      <td>
-        A condition as an expression which is evaluated for truthiness. When the expression is truthy, the placeholder is swapped with the lazily loaded content.<br/>
-        For example: <code>@defer (when customizedCondition)</code>
+      <td>一个作为表达式的条件，该表达式会被求值以判断真值与否。当表达式为真值时，占位符将替换为惰性加载的内容。<br>
+        例如：<code>@defer (when customizedCondition)</code>
       </td>
     </tr>
-  </table>
+  </tbody></table>
 </div>
 
-<p>If the <code>when</code> condition evaluates to <code>false</code>, the <code>defer</code> block is not reverted back to the placeholder. The swap is a one-time operation.</p>
-<p>You can define multiple event triggers at once, these triggers will be evaluated as OR conditions.</p>
+<p>如果 <code>when</code> 条件求值结果为 <code>false</code>，则 <code>defer</code> 控制块不会恢复为占位符。此替换是一次性操作。</p>
+<p>你可以一次定义多个事件触发器，这些触发器将被评估为 OR 条件。</p>
 
   <ul class="docs-list">
-    <li>Ex: <code>@defer (on viewport; on timer(2s))</code></li>
-<li>Ex: <code>@defer (on viewport; when customizedCondition)</code></li>
+    <li>例如：<code>@defer (on viewport; on timer(2s))</code></li>
+<li>例如：<code>@defer (on viewport; when customizedCondition)</code></li>
 
   </ul>
-  <p>In this activity, you'll learn how to use triggers to specify the condition to load the deferrable views.</p>
+  <p>在本活动中，你将学习如何使用触发器来指定加载可延迟加载视图的条件。</p>
 <hr>
 
 
@@ -52,15 +49,15 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="add-on-hover-trigger">
-    <a href="#add-on-hover-trigger" class="docs-anchor" tabindex="-1" aria-label="Link to Add <code>on hover</code> trigger">Add <code>on hover</code> trigger</a>
+    <a href="#add-on-hover-trigger" class="docs-anchor" tabindex="-1" aria-label="Link to Add <code>on hover</code> trigger">添加 <code>on hover</code> 触发器</a>
   </h3>
   
-      <p>In your <code>app.component.ts</code>,  add an <code>on hover</code> trigger to the <code>@defer</code> block.</p>
+      <p>在你的 <code>app.component.ts</code> 中，向 <code>@defer</code> 控制块添加 <code>on hover</code> 触发器。</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (on hover) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">article-comments</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (minimum 1s) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Placeholder for comments&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@loading</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (minimum 1s; after 500ms) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Loading comments...&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@error</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Failed to load comments&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
     </pre>
-  </div><p>Now, the page will not render the comments section until you hover its placeholder.</p>
+  </div><p>现在，在你悬停评论部分的占位符之前，页面不会渲染评论部分。</p>
 
     </li>
     
@@ -68,15 +65,15 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="add-a-show-all-comments-button">
-    <a href="#add-a-show-all-comments-button" class="docs-anchor" tabindex="-1" aria-label="Link to Add a 'Show all comments' button">Add a 'Show all comments' button</a>
+    <a href="#add-a-show-all-comments-button" class="docs-anchor" tabindex="-1" aria-label="Link to Add a 'Show all comments' button">添加“显示所有评论”按钮</a>
   </h3>
   
-      <p>Next, update the template to include a button with the label "Show all comments". Include a template variable called <code>#showComments</code> with the button.</p>
+      <p>接下来，更新模板以包含一个标签为“显示所有评论”的按钮。在按钮中包含一个名为 <code>#showComments</code> 的模板变量。</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">button</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> type</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> #showComments</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Show all comments&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">button</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (on hover) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">article-comments</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (minimum 1s) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Placeholder for comments&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@loading</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (minimum 1s; after 500ms) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Loading comments...&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@error</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Failed to load comments&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
     </pre>
-  </div><p>Note: for more information on <a href="https://angular.dev/guide/templates/reference-variables#" target="_blank">template variables check the documentation</a>.</p>
+  </div><p>注意：有关<a href="https://angular.dev/guide/templates/reference-variables#" target="_blank">模板变量的更多信息，请查看文档</a>。</p>
 
     </li>
     
@@ -84,25 +81,25 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="add-on-interaction-trigger">
-    <a href="#add-on-interaction-trigger" class="docs-anchor" tabindex="-1" aria-label="Link to Add <code>on interaction</code> trigger">Add <code>on interaction</code> trigger</a>
+    <a href="#add-on-interaction-trigger" class="docs-anchor" tabindex="-1" aria-label="Link to Add <code>on interaction</code> trigger">添加 <code>on interaction</code> 触发器</a>
   </h3>
   
-      <p>Update the <code>@defer</code> block in the template to use the <code>on interaction</code> trigger. Provide the <code>showComments</code> template variable as the parameter to <code>interaction</code>.</p>
+      <p>更新模板中的 <code>@defer</code> 控制块以使用 <code>on interaction</code> 触发器。将 <code>showComments</code> 模板变量作为 <code>interaction</code> 的参数提供。</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">button</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> type</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> #showComments</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Show all comments&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">button</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (on hover; on </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">interaction</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(showComments)) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">article-comments</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (minimum 1s) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Placeholder for comments&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@loading</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (minimum 1s; after 500ms) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Loading comments...&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@error</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Failed to load comments&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
     </pre>
-  </div><p>With these changes, the page will wait for one of the following conditions before rendering the comments section:</p>
+  </div><p>完成这些更改后，页面将等待以下条件之一，然后再渲染评论部分：</p>
 
   <ul class="docs-list">
-    <li>User hovers the comments section’s placeholder</li>
-<li>User clicks on the “Show all comments" button</li>
+    <li>用户悬停评论部分的占位符</li>
+<li>用户单击“显示所有评论”按钮</li>
 
   </ul>
-  <p>You can reload the page to try out different triggers to render the comments section.</p>
+  <p>你可以重新加载页面以尝试不同的触发器来渲染评论部分。</p>
 
     </li>
     
     </ol>
-    <p>If you would like to learn more, check out the documentation for <a href="https://angular.dev/guide/defer" target="_blank">Deferrable View</a>.
-Keep learning to unlock more of Angular's great features.</p>
+    <p>如果你想了解更多信息，请查看<a href="https://angular.dev/guide/defer" target="_blank">可延迟视图</a>的文档。
+继续学习以解锁 Angular 的更多强大特性。</p>

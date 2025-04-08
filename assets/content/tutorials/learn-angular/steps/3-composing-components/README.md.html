@@ -1,23 +1,22 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">Composing Components</h1>
+    <h1 tabindex="-1">组合组件</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/learn-angular/steps/3-composing-components/README.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>You've learned to update the component template, component logic, and component styles, but how do you use a component in your application?</p>
-<p>The <code>selector</code> property of the component configuration gives you a name to use when referencing the component in another template. You use the <code>selector</code> like an HTML tag, for example <code>app-user</code> would be <code>&lt;app-user /&gt;</code> in the template.</p>
-<p>In this activity, you'll learn how to compose components.</p>
-<hr/>
+    <p>你已经学会了更新组件模板、组件逻辑和组件样式，但是如何在你的应用中使用组件呢？</p>
+<p>组件配置的 <code>selector</code> 属性为你提供了一个名称，以便在另一个模板中引用该组件。你可以像使用 HTML 标签一样使用 <code>selector</code>，例如 <code>app-user</code> 在模板中会是 <code>&lt;app-user /&gt;</code>。</p>
+<p>在本活动中，你将学习如何组合组件。</p>
+<hr>
 
-<p>In this example, there are two components <code>UserComponent</code> and <code>AppComponent</code>.</p>
+<p>在这个范例中，有两个组件 <code>UserComponent</code> 和 <code>AppComponent</code>。</p>
 
     <ol class="docs-steps">
       
@@ -25,15 +24,15 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="add-a-reference-to-usercomponent">
-    <a href="#add-a-reference-to-usercomponent" class="docs-anchor" tabindex="-1" aria-label="Link to Add a reference to <code>UserComponent</code>">Add a reference to <code>UserComponent</code></a>
+    <a href="#add-a-reference-to-usercomponent" class="docs-anchor" tabindex="-1" aria-label="Link to Add a reference to <code>UserComponent</code>">添加对 <code>UserComponent</code> 的引用</a>
   </h3>
   
-      <p>Update the <code>AppComponent</code> template to include a reference to the <code>UserComponent</code> which uses the selector <code>app-user</code>. Be sure to add <code>UserComponent</code> to the imports array of <code>AppComponent</code>, this makes it available for use in the <code>AppComponent</code> template.</p>
+      <p>更新 <code>AppComponent</code> 模板，以包含对使用选择器 <code>app-user</code> 的 <code>UserComponent</code> 的引用。请务必将 <code>UserComponent</code> 添加到 <code>AppComponent</code> 的 imports 数组中，这将使其可在 <code>AppComponent</code> 模板中使用。</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`&lt;app-user /&gt;`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">imports</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [UserComponent]</span></span></code></pre>
     </pre>
-  </div><p>The component now displays the message <code>Username: youngTech</code>. You can update the template code to include more markup.</p>
+  </div><p>现在，该组件显示消息 <code>Username: youngTech</code>。你可以更新模板代码以包含更多标记。</p>
 
     </li>
     
@@ -41,10 +40,10 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="add-more-markup">
-    <a href="#add-more-markup" class="docs-anchor" tabindex="-1" aria-label="Link to Add more markup">Add more markup</a>
+    <a href="#add-more-markup" class="docs-anchor" tabindex="-1" aria-label="Link to Add more markup">添加更多标记</a>
   </h3>
   
-      <p>Because you can use any HTML markup that you want in a template, try updating the template for <code>AppComponent</code> to also include more HTML elements. This example will add a <code>&lt;section&gt;</code> element as the parent of the <code>&lt;app-user&gt;</code> element.</p>
+      <p>因为你可以在模板中使用任何你想要的 HTML 标记，所以尝试更新 <code>AppComponent</code> 的模板，使其也包含更多 HTML 元素。此范例将添加一个 <code>&lt;section&gt;</code> 元素作为 <code>&lt;app-user&gt;</code> 元素的父元素。</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`&lt;section&gt;&lt;app-user /&gt;&lt;/section&gt;`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span></code></pre>
@@ -53,5 +52,5 @@
     </li>
     
     </ol>
-    <p>You can use as much HTML markup and as many components as you need to bring your app idea to reality. You can even have multiple copies of your component on the same page.</p>
-<p>That's a great segue, how would you conditionally show a component based on data? Head to the next section to find out.</p>
+    <p>你可以使用任意数量的 HTML 标记和组件，以将你的应用想法变为现实。你甚至可以在同一页面上拥有组件的多个副本。</p>
+<p>这是一个很好的过渡，你将如何根据数据有条件地显示组件？前往下一节以了解。</p>

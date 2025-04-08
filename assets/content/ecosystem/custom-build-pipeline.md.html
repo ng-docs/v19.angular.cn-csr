@@ -1,47 +1,46 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">Custom build pipeline</h1>
+    <h1 tabindex="-1">自定义构建管道</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/ecosystem/custom-build-pipeline.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>When building an Angular app we strongly recommend you to use the Angular CLI to leverage its structure-dependent update functionality and build system abstraction. This way your projects benefit from the latest security, performance, and API improvements and transparent build improvements.</p>
-<p>This page explores the <strong>rare use cases</strong> when you need a custom build pipeline that does not use the Angular CLI. All listed tools below are open source build plugins that are maintained by members of the Angular community. To learn more about their support model and maintenance status look at their documentation and GitHub repository URLs.</p>
+    <p>在构建 Angular 应用时，我们强烈建议你使用 Angular CLI，以利用其依赖于结构的更新功能和构建系统抽象。 这样，你的项目就可以从最新的安全性、性能和 API 改进以及透明的构建改进中获益。</p>
+<p>本页探讨了当你需要不使用 Angular CLI 的自定义构建管道时的<strong>罕见用例</strong>。 下面列出的所有工具都是由 Angular 社区成员维护的开源构建插件。 要了解有关其支持模式和维护状态的更多信息，请查看其文档和 GitHub 仓库 URL。</p>
 
   <h2 id="when-should-you-use-a-custom-build-pipeline">
-    <a href="#when-should-you-use-a-custom-build-pipeline" class="docs-anchor" tabindex="-1" aria-label="Link to When should you use a custom build pipeline?">When should you use a custom build pipeline?</a>
+    <a href="#when-should-you-use-a-custom-build-pipeline" class="docs-anchor" tabindex="-1" aria-label="Link to When should you use a custom build pipeline?">何时应该使用自定义构建管道？</a>
   </h2>
-  <p>There are some niche use cases when you may want to maintain a custom build pipeline. For example:</p>
+  <p>在某些特定的用例中，你可能希望维护自定义构建管道。 例如：</p>
 
   <ul class="docs-list">
-    <li>You have an existing app using a different toolchain and you’d like to add Angular to it</li>
-<li>You’re strongly coupled to <a href="https://module-federation.io/" target="_blank">module federation</a> and unable to adopt bundler-agnostic <a href="https://www.npmjs.com/package/@angular-architects/native-federation" target="_blank">native federation</a></li>
-<li>You’d like to create an short-lived experiment using your favorite build tool</li>
+    <li>你有一个使用不同工具链的现有应用，并且你想向其中添加 Angular</li>
+<li>你与 <a href="https://module-federation.io/" target="_blank">module federation</a> 紧密耦合，并且无法采用与捆绑器无关的 <a href="https://www.npmjs.com/package/@angular-architects/native-federation" target="_blank">native federation</a></li>
+<li>你想使用你最喜欢的构建工具创建一个短期的实验</li>
 
   </ul>
   
   <h2 id="what-are-the-options">
-    <a href="#what-are-the-options" class="docs-anchor" tabindex="-1" aria-label="Link to What are the options?">What are the options?</a>
+    <a href="#what-are-the-options" class="docs-anchor" tabindex="-1" aria-label="Link to What are the options?">有哪些选项？</a>
   </h2>
-  <p>Currently, there are two well supported community tools that enable you to create a custom build pipeline with a <a href="https://www.npmjs.com/package/@analogjs/vite-plugin-angular" target="_blank">Vite plugin</a> and <a href="https://www.npmjs.com/package/@nx/angular-rspack" target="_blank">Rspack plugin</a>. Both of them use underlying abstractions that power the Angular CLI. They allow you to create a flexible build pipeline and require manual maintenance and no automated update experience.</p>
+  <p>目前，有两个得到良好支持的社区工具，使你能够使用 <a href="https://www.npmjs.com/package/@analogjs/vite-plugin-angular" target="_blank">Vite 插件</a> 和 <a href="https://www.npmjs.com/package/@nx/angular-rspack" target="_blank">Rspack 插件</a> 创建自定义构建管道。 它们都使用为 Angular CLI 提供支持的底层抽象。 它们允许你创建灵活的构建管道，并且需要手动维护，没有自动更新体验。</p>
 
   <h3 id="rspack">
     <a href="#rspack" class="docs-anchor" tabindex="-1" aria-label="Link to Rspack">Rspack</a>
   </h3>
-  <p>Rspack is a Rust-based bundler that aims to provide compatibility with the webpack plugin ecosystem.</p>
-<p>If your project is tightly coupled to the webpack ecosystem, heavily relying on a custom webpack configuration you can leverage Rspack to improve your build times.</p>
-<p>You can find more about Angular Rspack on the project’s <a href="https://nx.dev/recipes/angular/rspack/introduction" target="_blank">documentation website</a>.</p>
+  <p>Rspack 是一个基于 Rust 的捆绑器，旨在提供与 webpack 插件生态系统的兼容性。</p>
+<p>如果你的项目与 webpack 生态系统紧密耦合，并且严重依赖自定义 webpack 配置，则可以利用 Rspack 来缩短构建时间。</p>
+<p>你可以在该项目的<a href="https://nx.dev/recipes/angular/rspack/introduction" target="_blank">文档网站</a>上找到有关 Angular Rspack 的更多信息。</p>
 
   <h3 id="vite">
     <a href="#vite" class="docs-anchor" tabindex="-1" aria-label="Link to Vite">Vite</a>
   </h3>
-  <p>Vite is a frontend build tool that aims to provide a faster and leaner development experience for modern web projects. Vite is also extensible through its plugin system that allows ecosystems to build integrations with Vite, such as Vitest for unit and browser testing, Storybook for authoring components in isolation, and more. The Angular CLI also uses Vite as its development server.</p>
-<p>The <a href="https://www.npmjs.com/package/@analogjs/vite-plugin-angular" target="_blank">AnalogJS Vite plugin for Angular</a> enables the adoption of Angular with a project or framework that uses or is built on top of Vite. This can consist of developing and building an Angular project with Vite directly, or adding Angular to an existing project or pipeline. One example is integrating Angular UI components into a documentation website using <a href="https://analogjs.org/docs/packages/astro-angular/overview" target="_blank">Astro and Starlight</a>.</p>
-<p>You can learn more about AnalogJS and how to use the plugin through its <a href="https://analogjs.org/docs/packages/vite-plugin-angular/overview" target="_blank">documentation page</a>.</p>
+  <p>Vite 是一种前端构建工具，旨在为现代 Web 项目提供更快、更精简的开发体验。 Vite 还可通过其插件系统进行扩展，该系统允许生态系统构建与 Vite 的集成，例如用于单元和浏览器测试的 Vitest、用于隔离创作组件的 Storybook 等。 Angular CLI 也使用 Vite 作为其开发服务器。</p>
+<p><a href="https://www.npmjs.com/package/@analogjs/vite-plugin-angular" target="_blank">AnalogJS Vite plugin for Angular</a> 使 Angular 能够与使用 Vite 或构建于 Vite 之上的项目或框架一起使用。 这可以包括直接使用 Vite 开发和构建 Angular 项目，或将 Angular 添加到现有项目或管道。 一个示例是将 Angular UI 组件集成到使用 <a href="https://analogjs.org/docs/packages/astro-angular/overview" target="_blank">Astro and Starlight</a> 的文档网站中。</p>
+<p>你可以通过其<a href="https://analogjs.org/docs/packages/vite-plugin-angular/overview" target="_blank">文档页面</a>了解有关 AnalogJS 以及如何使用该插件的更多信息。</p>

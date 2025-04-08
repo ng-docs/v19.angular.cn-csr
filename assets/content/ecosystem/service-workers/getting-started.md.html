@@ -1,160 +1,152 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">Getting started with service workers</h1>
+    <h1 tabindex="-1">Service Worker 入门</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/ecosystem/service-workers/getting-started.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>This document explains how to enable Angular service worker support in projects that you created with the <a href="tools/cli">Angular CLI</a>. It then uses an example to show you a service worker in action, demonstrating loading and basic caching.</p>
+    <p>本文档介绍如何在用 <a href="tools/cli">Angular CLI</a> 创建的项目中启用 Angular Service Worker 支持。然后通过一个范例展示 Service Worker 的实际应用，演示加载和基本缓存。</p>
 
   <h2 id="adding-a-service-worker-to-your-project">
-    <a href="#adding-a-service-worker-to-your-project" class="docs-anchor" tabindex="-1" aria-label="Link to Adding a service worker to your project">Adding a service worker to your project</a>
+    <a href="#adding-a-service-worker-to-your-project" class="docs-anchor" tabindex="-1" aria-label="Link to Adding a service worker to your project">向你的项目添加 Service Worker</a>
   </h2>
-  <p>To set up the Angular service worker in your project, run the following CLI command:</p>
+  <p>要在你的项目中建立 Angular Service Worker，请运行以下 CLI 命令：</p>
 <div class="docs-code shell">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/pwa</span></span></code></pre>
     </pre>
-  </div><p>The CLI configures your application to use service workers with the following actions:</p>
+  </div><p>CLI 通过以下操作配置你的应用以使用 Service Worker：</p>
 
     <ol class="docs-ordered-list">
-      <li>Adds the <code>@angular/service-worker</code> package to your project.</li>
-<li>Enables service worker build support in the CLI.</li>
-<li>Imports and registers the service worker with the application's root providers.</li>
-<li>Updates the <code>index.html</code> file:
-  <ul class="docs-list">
-    <li>Includes a link to add the <code>manifest.webmanifest</code> file</li>
-<li>Adds a meta tag for <code>theme-color</code></li>
+      <li>将 <code>@angular/service-worker</code> 软件包添加到你的项目中。</li>
+<li>在 CLI 中启用 Service Worker 构建支持。</li>
+<li>导入 Service Worker 并使用该应用的根提供者对其进行注册。</li>
+<li>更新 <code>index.html</code> 文件：<ul class="docs-list">
+    <li>包含一个用于添加 <code>manifest.webmanifest</code> 文件的链接</li>
+<li>为 <code>theme-color</code> 添加一个 meta 标签</li>
 
   </ul>
   </li>
-<li>Installs icon files to support the installed Progressive Web App (PWA).</li>
-<li>Creates the service worker configuration file called <a href="ecosystem/service-workers/config"><code>ngsw-config.json</code></a>,
-which specifies the caching behaviors and other settings.</li>
+<li>安装图标文件以支持已安装的渐进式 Web 应用 (PWA)。</li>
+<li>创建名为 <a href="ecosystem/service-workers/config"><code>ngsw-config.json</code></a> 的 Service Worker 配置文件，其中指定了缓存行为和其他设置。</li>
 
     </ol>
-    <p>Now, build the project:</p>
+    <p>现在，构建项目：</p>
 <div class="docs-code shell">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span></span></code></pre>
     </pre>
-  </div><p>The CLI project is now set up to use the Angular service worker.</p>
+  </div><p>CLI 项目现在已建立以使用 Angular Service Worker。</p>
 
   <h2 id="service-worker-in-action-a-tour">
-    <a href="#service-worker-in-action-a-tour" class="docs-anchor" tabindex="-1" aria-label="Link to Service worker in action: a tour">Service worker in action: a tour</a>
+    <a href="#service-worker-in-action-a-tour" class="docs-anchor" tabindex="-1" aria-label="Link to Service worker in action: a tour">Service Worker 实践：导览</a>
   </h2>
-  <p>This section demonstrates a service worker in action,
-using an example application. To enable service worker support during local development, use the production configuration with the following command:</p>
+  <p>本节演示 Service Worker 的实际应用，使用一个范例应用。要在本地开发期间启用 Service Worker 支持，请使用以下命令使用生产配置：</p>
 <div class="docs-code shell">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> serve</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --prod</span></span></code></pre>
     </pre>
-  </div><p>Alternatively, you can use the <a href="https://www.npmjs.com/package/http-server" target="_blank"><code>http-server package</code></a> from
-npm, which supports service worker applications. Run it without installation using:</p>
+  </div><p>或者，你可以使用 npm 中的 <a href="https://www.npmjs.com/package/http-server" target="_blank"><code>http-server package</code></a>，它支持 Service Worker 应用。使用以下命令在不安装的情况下运行它：</p>
 <div class="docs-code shell">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npx</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> http-server</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -p</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 8080</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -c-1</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> dist/</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">project-nam</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">e</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">/browser</span></span></code></pre>
     </pre>
-  </div><p>This will serve your application with service worker support at <a href="http://localhost:8080" target="_blank">http://localhost:8080</a>.</p>
+  </div><p>这将为你的应用启动服务器，并提供 Service Worker 支持，地址为 <a href="http://localhost:8080" target="_blank">http://localhost:8080</a>。</p>
 
   <h3 id="initial-load">
-    <a href="#initial-load" class="docs-anchor" tabindex="-1" aria-label="Link to Initial load">Initial load</a>
+    <a href="#initial-load" class="docs-anchor" tabindex="-1" aria-label="Link to Initial load">初始加载</a>
   </h3>
-  <p>With the server running on port <code>8080</code>, point your browser at <code>http://localhost:8080</code>.
-Your application should load normally.</p>
+  <p>当服务器在端口 <code>8080</code> 上运行时，将你的浏览器指向 <code>http://localhost:8080</code>。你的应用应该正常加载。</p>
 
     <div class="docs-alert docs-alert-tip">
-    <p><strong>Tip:</strong> When testing Angular service workers, it's a good idea to use an incognito or private window in your browser to ensure the service worker doesn't end up reading from a previous leftover state, which can cause unexpected behavior.</p>
+    <p><strong>提示：</strong> 在测试 Angular Service Worker 时，最好在浏览器中使用隐身窗口或私有窗口，以确保 Service Worker 不会从以前的残留状态读取，这可能会导致意外行为。</p>
 
     </div>
     
     <div class="docs-alert docs-alert-helpful">
-    <p><strong>HELPFUL:</strong> If you are not using HTTPS, the service worker will only be registered when accessing the application on <code>localhost</code>.</p>
+    <p><strong>帮助提示：</strong> 如果你未使用 HTTPS，则仅当在 <code>localhost</code> 上访问应用时，才会注册 Service Worker。</p>
 
     </div>
     
   <h3 id="simulating-a-network-issue">
-    <a href="#simulating-a-network-issue" class="docs-anchor" tabindex="-1" aria-label="Link to Simulating a network issue">Simulating a network issue</a>
+    <a href="#simulating-a-network-issue" class="docs-anchor" tabindex="-1" aria-label="Link to Simulating a network issue">模拟网络问题</a>
   </h3>
-  <p>To simulate a network issue, disable network interaction for your application.</p>
-<p>In Chrome:</p>
+  <p>要模拟网络问题，请禁用你的应用的联网互动。</p>
+<p>在 Chrome 中：</p>
 
     <ol class="docs-ordered-list">
-      <li>Select <strong>Tools</strong> > <strong>Developer Tools</strong> (from the Chrome menu located in the top right corner).</li>
-<li>Go to the <strong>Network tab</strong>.</li>
-<li>Select <strong>Offline</strong> in the <strong>Throttling</strong> dropdown menu.</li>
+      <li>选择<strong>工具</strong> &gt; <strong>开发者工具</strong>（从位于右上角的 Chrome 菜单中）。</li>
+<li>转到 <strong>Network 选项卡</strong>。</li>
+<li>在 <strong>Throttling</strong> 下拉菜单中选择 <strong>Offline</strong>。</li>
 
     </ol>
     <img alt="The offline option in the Network tab is selected" src="assets/images/guide/service-worker/offline-option.png">
 
-<p>Now the application has no access to network interaction.</p>
-<p>For applications that do not use the Angular service worker, refreshing now would display Chrome's Internet disconnected page that says "There is no Internet connection".</p>
-<p>With the addition of an Angular service worker, the application behavior changes.
-On a refresh, the page loads normally.</p>
-<p>Look at the Network tab to verify that the service worker is active.</p>
+<p>现在，应用无法进行联网互动。</p>
+<p>对于不使用 Angular Service Worker 的应用，现在刷新将显示 Chrome 的 Internet 断开连接页面，其中显示“没有 Internet 连接”。</p>
+<p>随着 Angular Service Worker 的添加，应用行为发生了变化。刷新后，页面正常加载。</p>
+<p>查看 Network 选项卡以验证 Service Worker 是否处于活动状态。</p>
 <img alt="Requests are marked as from ServiceWorker" src="assets/images/guide/service-worker/sw-active.png">
 
 
     <div class="docs-alert docs-alert-helpful">
-    <p><strong>HELPFUL:</strong> Under the "Size" column, the requests state is <code>(ServiceWorker)</code>.
-This means that the resources are not being loaded from the network.
-Instead, they are being loaded from the service worker's cache.</p>
+    <p><strong>提示：</strong> 在“Size”列下，请求状态为 <code>(ServiceWorker)</code>。
+这意味着资源不是从网络加载的。
+而是从 Service Worker 的缓存加载的。</p>
 
     </div>
     
   <h3 id="whats-being-cached">
-    <a href="#whats-being-cached" class="docs-anchor" tabindex="-1" aria-label="Link to What's being cached?">What's being cached?</a>
+    <a href="#whats-being-cached" class="docs-anchor" tabindex="-1" aria-label="Link to What's being cached?">正在缓存什么？</a>
   </h3>
-  <p>Notice that all of the files the browser needs to render this application are cached.
-The <code>ngsw-config.json</code> boilerplate configuration is set up to cache the specific resources used by the CLI:</p>
+  <p>请注意，浏览器渲染此应用所需的所有文件都已缓存。<code>ngsw-config.json</code> 样板配置设置为缓存 CLI 使用的特定资源：</p>
 
   <ul class="docs-list">
     <li><code>index.html</code></li>
 <li><code>favicon.ico</code></li>
-<li>Build artifacts (JS and CSS bundles)</li>
-<li>Anything under <code>assets</code></li>
-<li>Images and fonts directly under the configured <code>outputPath</code> (by default <code>./dist/&lt;project-name&gt;/</code>) or <code>resourcesOutputPath</code>.
-  See the documentation for <code>ng build</code> for more information about these options.</li>
+<li>构建产物（JS 和 CSS 捆绑包）</li>
+<li><code>assets</code> 下的任何内容</li>
+<li>直接位于配置的 <code>outputPath</code> (默认为 <code>./dist/&lt;project-name&gt;/</code>) 或 <code>resourcesOutputPath</code> 下的图像和字体。
+  有关这些选项的更多信息，请参阅 <code>ng build</code> 的文档。</li>
 
   </ul>
   
     <div class="docs-alert docs-alert-important">
-    <p><strong>IMPORTANT:</strong> The generated <code>ngsw-config.json</code> includes a limited list of cacheable fonts and images extensions. In some cases, you might want to modify the glob pattern to suit your needs.</p>
+    <p><strong>重要提示：</strong> 生成的 <code>ngsw-config.json</code> 包含可缓存的字体和图片扩展名的有限列表。在某些情况下，你可能需要修改 glob 模式以满足你的需求。</p>
 
     </div>
     
     <div class="docs-alert docs-alert-important">
-    <p><strong>IMPORTANT:</strong> If <code>resourcesOutputPath</code> or <code>assets</code> paths are modified after the generation of configuration file, you need to change the paths manually in <code>ngsw-config.json</code>.</p>
+    <p><strong>重要提示：</strong> 如果在生成配置文件后修改了 <code>resourcesOutputPath</code> 或 <code>assets</code> 路径，则需要在 <code>ngsw-config.json</code> 中手动更改路径。</p>
 
     </div>
     
   <h3 id="making-changes-to-your-application">
-    <a href="#making-changes-to-your-application" class="docs-anchor" tabindex="-1" aria-label="Link to Making changes to your application">Making changes to your application</a>
+    <a href="#making-changes-to-your-application" class="docs-anchor" tabindex="-1" aria-label="Link to Making changes to your application">更改你的应用</a>
   </h3>
-  <p>Now that you've seen how service workers cache your application, the next step is understanding how updates work.
-Make a change to the application, and watch the service worker install the update:</p>
+  <p>既然你已经了解了 Service Worker 如何缓存你的应用，那么下一步就是了解更新是如何工作的。
+对应用进行更改，并观察 Service Worker 如何安装更新：</p>
 
     <ol class="docs-ordered-list">
-      <li><p>If you're testing in an incognito window, open a second blank tab.
- This keeps the incognito and the cache state alive during your test.</p>
+      <li><p>如果你在隐身窗口中进行测试，请打开第二个空白标签页。
+ 这可以在测试期间保持隐身状态和缓存状态处于活动状态。</p>
 </li>
-<li><p>Close the application tab, but not the window.
- This should also close the Developer Tools.</p>
+<li><p>关闭应用标签页，但不要关闭窗口。
+ 这也应该关闭开发者工具（Developer Tools）。</p>
 </li>
-<li><p>Shut down <code>http-server</code> (Ctrl-c).</p>
+<li><p>关闭 <code>http-server</code> (Ctrl-c)。</p>
 </li>
-<li><p>Open <code>src/app/app.component.html</code> for editing.</p>
+<li><p>打开 <code>src/app/app.component.html</code> 进行编辑。</p>
 </li>
-<li><p>Change the text <code>Welcome to {{title}}!</code> to <code>Bienvenue à {{title}}!</code>.</p>
+<li><p>将文本 <code>Welcome to {{title}}!</code> 更改为 <code>Bienvenue à {{title}}!</code>。</p>
 </li>
-<li><p>Build and run the server again:</p>
+<li><p>再次构建并运行服务器：</p>
 <div class="docs-code shell">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> npx</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> http-server</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -p</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 8080</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -c-1</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> dist/</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">project-nam</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">e</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">/browser</span></span></code></pre>
@@ -164,59 +156,59 @@ Make a change to the application, and watch the service worker install the updat
     </ol>
     
   <h3 id="updating-your-application-in-the-browser">
-    <a href="#updating-your-application-in-the-browser" class="docs-anchor" tabindex="-1" aria-label="Link to Updating your application in the browser">Updating your application in the browser</a>
+    <a href="#updating-your-application-in-the-browser" class="docs-anchor" tabindex="-1" aria-label="Link to Updating your application in the browser">在浏览器中更新你的应用</a>
   </h3>
-  <p>Now look at how the browser and service worker handle the updated application.</p>
+  <p>现在看看浏览器和 Service Worker 如何处理更新后的应用。</p>
 
     <ol class="docs-ordered-list">
-      <li><p>Open <a href="http://localhost:8080" target="_blank">http://localhost:8080</a> again in the same window.
- What happens?</p>
+      <li><p>在同一窗口中再次打开 <a href="http://localhost:8080" target="_blank">http://localhost:8080</a>。
+ 发生了什么？</p>
  <img alt="It still says Welcome to Service Workers!" src="assets/images/guide/service-worker/welcome-msg-en.png">
 
-<p> What went wrong?
- <em>Nothing, actually!</em>
- The Angular service worker is doing its job and serving the version of the application that it has <strong>installed</strong>, even though there is an update available.
- In the interest of speed, the service worker doesn't wait to check for updates before it serves the application that it has cached.</p>
-<p> Look at the <code>http-server</code> logs to see the service worker requesting <code>/ngsw.json</code>.</p>
+<p>哪里出错了？
+ <em>实际上什么都没错！</em>
+ Angular Service Worker 正在执行其工作，并提供它已<strong>安装</strong>的应用版本，即使有可用的更新。
+ 为了速度，Service Worker 在提供其缓存的应用之前，不会等待检查更新。</p>
+<p>查看 <code>http-server</code> 日志，以查看 Service Worker 请求 <code>/ngsw.json</code>。</p>
 <div class="docs-code shell">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[2023-09-07T00:37:24.372Z]  </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"GET /ngsw.json?ngsw-cache-bust=0.9365263935102124"</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"</span></span></code></pre>
     </pre>
-  </div><p> This is how the service worker checks for updates.</p>
+  </div><p>这是 Service Worker 检查更新的方式。</p>
 </li>
-<li><p>Refresh the page.</p>
+<li><p>刷新页面。</p>
  <img alt="The text has changed to say Bienvenue à app!" src="assets/images/guide/service-worker/welcome-msg-fr.png">
 
-<p> The service worker installed the updated version of your application <em>in the background</em>, and the next time the page is loaded or reloaded, the service worker switches to the latest version.</p>
+<p>Service Worker <em>在后台</em>安装了你的应用的更新版本，并且下次页面加载或重新加载时，Service Worker 会切换到最新版本。</p>
 </li>
 
     </ol>
     
   <h2 id="more-on-angular-service-workers">
-    <a href="#more-on-angular-service-workers" class="docs-anchor" tabindex="-1" aria-label="Link to More on Angular service workers">More on Angular service workers</a>
+    <a href="#more-on-angular-service-workers" class="docs-anchor" tabindex="-1" aria-label="Link to More on Angular service workers">更多关于 Angular Service Worker 的信息</a>
   </h2>
-  <p>You might also be interested in the following:</p>
+  <p>你可能也会对以下内容感兴趣：</p>
 
     <nav class="docs-pill-row">
       
     <a class="docs-pill" href="ecosystem/service-workers/config">
-      Configuration file
+      配置文件
     </a>
     
     <a class="docs-pill" href="ecosystem/service-workers/communications">
-      Communicating with the Service Worker
+      与 Service Worker 通信
     </a>
     
     <a class="docs-pill" href="ecosystem/service-workers/push-notifications">
-      Push notifications
+      推送通知
     </a>
     
     <a class="docs-pill" href="ecosystem/service-workers/devops">
-      Service Worker devops
+      Service Worker 开发运维
     </a>
     
     <a class="docs-pill" href="ecosystem/service-workers/app-shell">
-      App shell pattern
+      应用外壳模式
     </a>
     
 

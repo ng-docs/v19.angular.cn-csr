@@ -1,37 +1,35 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">Constructor-based dependency injection</h1>
+    <h1 tabindex="-1">基于构造函数的依赖注入</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/learn-angular/steps/21-constructor-based-di/README.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>In previous activities you used the <code>inject()</code> function to make resources available, "providing" them to your components. The <code>inject()</code> function is one pattern and it is useful to know that there is another pattern for injecting resources called constructor-based dependency injection.</p>
-<p>You specify the resources as parameters to the <code>constructor</code> function of a component. Angular will make those resources available to your component.
-<br><br>
-In this activity, you will learn how to use constructor-based dependency injection.</p>
+    <p>在之前的活动中，你使用 <code>inject()</code> 函数来提供资源，也就是将资源“提供”给你的组件。<code>inject()</code> 函数是一种模式，但了解还有另一种注入资源的模式也很有用，这种模式叫做基于构造函数的依赖注入。</p>
+<p>你可以将资源指定为组件的 <code>constructor</code> 函数的参数。Angular 将使这些资源可用于你的组件。<br><br>
+在本活动中，你将学习如何使用基于构造函数的依赖注入。</p>
 <hr>
 
-<p>To inject a service or some other injectable resource into your component use the following syntax:</p>
+<p>要将服务或其他可注入的资源注入到你的组件中，请使用以下语法：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> PetCarDashboardComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> petCareService</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> PetCareService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
     </pre>
-  </div><p>There are a few things to notice here:</p>
+  </div><p>这里有几件事需要注意：</p>
 
   <ul class="docs-list">
-    <li>Use the <code>private</code> keyword</li>
-<li>The <code>petCareService</code> becomes a property you can use in your class</li>
-<li>The <code>PetCareService</code> class is the injected class</li>
+    <li>使用 <code>private</code> 关键字</li>
+<li><code>petCareService</code> 变成了你可以在类中使用的属性（Property）</li>
+<li><code>PetCareService</code> 类是注入的类</li>
 
   </ul>
-  <p>Alright, now you give this a try:</p>
+  <p>好的，现在你来试试看：</p>
 
     <ol class="docs-steps">
       
@@ -39,13 +37,13 @@ In this activity, you will learn how to use constructor-based dependency injecti
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="update-the-code-to-use-constructor-based-di">
-    <a href="#update-the-code-to-use-constructor-based-di" class="docs-anchor" tabindex="-1" aria-label="Link to Update the code to use constructor-based DI">Update the code to use constructor-based DI</a>
+    <a href="#update-the-code-to-use-constructor-based-di" class="docs-anchor" tabindex="-1" aria-label="Link to Update the code to use constructor-based DI">更新代码以使用基于构造函数的依赖注入</a>
   </h3>
   
-      <p>In <code>app.component.ts</code>, update the constructor code to match the code below:</p>
+      <p>在 <code>app.component.ts</code> 中，更新构造函数代码以匹配以下代码：</p>
 
     <div class="docs-alert docs-alert-tip">
-    <p><strong>Tip:</strong> Remember, if you get stuck refer to the example on this activity page.</p>
+    <p><strong>提示：</strong> 请记住，如果你遇到困难，请参考此活动页面上的范例。</p>
 
     </div>
     <div class="docs-code">
@@ -56,7 +54,7 @@ In this activity, you will learn how to use constructor-based dependency injecti
     </li>
     
     </ol>
-    <p>Congratulations on completing this activity. The example code works the same as with using the <code>inject</code> function. While these two approaches are largely the same, there are some small differences that are beyond the scope of this tutorial.</p>
+    <p>祝贺你完成此活动。示例代码的工作方式与使用 <code>inject</code> 函数相同。虽然这两种方法在很大程度上是相同的，但仍有一些细微的差异超出了本教程的范围。</p>
 <br>
 
-<p>You can find out more information about dependency injection in the <a href="guide/di">Angular Documentation</a>.</p>
+<p>你可以在<a href="guide/di">Angular 文档</a>中找到有关依赖注入的更多信息。</p>

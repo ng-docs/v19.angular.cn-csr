@@ -1,46 +1,40 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">@loading, @error and @placeholder blocks</h1>
+    <h1 tabindex="-1">`@loading`、`@error` 和 `@placeholder` 控制块</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/deferrable-views/steps/2-loading-error-placeholder/README.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>Deferrable views let you define content to be shown in different loading states.</p>
+    <p>可延迟视图允许你定义在不同加载状态下显示的内容。</p>
 <div class="docs-table docs-scroll-track-transparent">
   <table>
-    <tr>
+    <tbody><tr>
       <td><code>@placeholder</code></td>
-      <td>
-        By default, defer blocks do not render any content before they are triggered. The <code>@placeholder</code> is an optional block that declares content to show before the deferred content loads. Angular replaces the placeholder with the deferred content after loading completes. While this block is optional, the Angular team recommends always including a placeholder.
+      <td>默认情况下，defer 控制块在被触发之前不会渲染任何内容。<code>@placeholder</code> 是一个可选的控制块，用于声明在延迟内容加载之前显示的内容。Angular 在加载完成后，会将占位符替换为延迟内容。虽然此控制块是可选的，但 Angular 团队建议始终包含一个占位符。
         <a href="https://angular.dev/guide/defer#triggers" target="_blank">
-          Learn more in the full deferrable views documentation
+          在完整的可延迟视图文档中了解更多信息
         </a>
       </td>
     </tr>
     <tr>
       <td><code>@loading</code></td>
-      <td>
-        This optional block allows you to declare content to be shown during the loading of any deferred dependencies.
-      </td>
+      <td>这个可选的控制块允许你声明在任何延迟依赖项加载期间显示的内容。</td>
     </tr>
     <tr>
       <td><code>@error</code></td>
-      <td>
-        This block allows you to declare content which is shown if deferred loading fails.
-      </td>
+      <td>此控制块允许你声明在延迟加载失败时显示的内容。</td>
     </tr>
-  </table>
+  </tbody></table>
 </div>
 
-<p>The contents of all the above sub-blocks are eagerly loaded. Additionally, some features require a <code>@placeholder</code> block.</p>
-<p>In this activity, you'll learn how to use the <code>@loading</code>, <code>@error</code> and <code>@placeholder</code> blocks to manage the states of deferrable views.</p>
+<p>上述所有子控制块的内容都是急性加载的。此外，某些特性需要一个 <code>@placeholder</code> 控制块。</p>
+<p>在本活动中，你将学习如何使用 <code>@loading</code>、<code>@error</code> 和 <code>@placeholder</code> 控制块来管理可延迟视图的状态。</p>
 <hr>
 
 
@@ -50,10 +44,10 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="add-placeholder-block">
-    <a href="#add-placeholder-block" class="docs-anchor" tabindex="-1" aria-label="Link to Add <code>@placeholder</code> block">Add <code>@placeholder</code> block</a>
+    <a href="#add-placeholder-block" class="docs-anchor" tabindex="-1" aria-label="Link to Add <code>@placeholder</code> block">添加 <code>@placeholder</code> 控制块</a>
   </h3>
   
-      <p>In your <code>app.component.ts</code>, add a <code>@placeholder</code> block to the <code>@defer</code> block.</p>
+      <p>在你的 <code>app.component.ts</code> 中，将一个 <code>@placeholder</code> 控制块添加到 <code>@defer</code> 控制块。</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">article-comments</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Placeholder for comments&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
@@ -65,10 +59,10 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="configure-the-placeholder-block">
-    <a href="#configure-the-placeholder-block" class="docs-anchor" tabindex="-1" aria-label="Link to Configure the <code>@placeholder</code> block">Configure the <code>@placeholder</code> block</a>
+    <a href="#configure-the-placeholder-block" class="docs-anchor" tabindex="-1" aria-label="Link to Configure the <code>@placeholder</code> block">配置 <code>@placeholder</code> 控制块</a>
   </h3>
   
-      <p>The <code>@placeholder</code> block accepts an optional parameter to specify the <code>minimum</code> amount of time that this placeholder should be shown. This <code>minimum</code> parameter is specified in time increments of milliseconds (ms) or seconds (s). This parameter exists to prevent fast flickering of placeholder content in the case that the deferred dependencies are fetched quickly.</p>
+      <p><code>@placeholder</code> 控制块接受一个可选参数，用于指定此占位符应显示的 <code>minimum</code> 最短时间。此 <code>minimum</code> 参数以毫秒 (ms) 或秒 (s) 的时间增量指定。此参数的存在是为了防止在快速获取延迟依赖项的情况下，占位符内容快速闪烁。</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">article-comments</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (minimum 1s) {</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Placeholder for comments&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
@@ -80,24 +74,24 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="add-loading-block">
-    <a href="#add-loading-block" class="docs-anchor" tabindex="-1" aria-label="Link to Add <code>@loading</code> block">Add <code>@loading</code> block</a>
+    <a href="#add-loading-block" class="docs-anchor" tabindex="-1" aria-label="Link to Add <code>@loading</code> block">添加 <code>@loading</code> 控制块</a>
   </h3>
   
-      <p>Next add a <code>@loading</code> block to the component template.</p>
-<p>The <code>@loading</code> block accepts two optional parameters:</p>
+      <p>接下来，将一个 <code>@loading</code> 控制块添加到组件模板中。</p>
+<p><code>@loading</code> 控制块接受两个可选参数：</p>
 
   <ul class="docs-list">
-    <li><code>minimum</code>: the amount of time that this block should be shown</li>
-<li><code>after</code>: the amount of time to wait after loading begins before showing the loading template</li>
+    <li><code>minimum</code>：此控制块应显示的最短时间</li>
+<li><code>after</code>：加载开始后，在显示加载模板之前等待的时间量</li>
 
   </ul>
-  <p>Both parameters are specified in time increments of milliseconds (ms) or seconds (s).</p>
-<p>Update <code>app.component.ts</code> to include a <code>@loading</code> block with a minimum parameter of <code>1s</code> as well as an after parameter with the value 500ms  to the @loading block.</p>
+  <p>这两个参数都以毫秒 (ms) 或秒 (s) 的时间增量指定。</p>
+<p>更新 <code>app.component.ts</code>，以包含一个 <code>@loading</code> 控制块，其中 <code>minimum</code> 参数为 <code>1s</code>，<code>after</code> 参数的值为 500ms。</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">article-comments</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (minimum 1s) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Placeholder for comments&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@loading</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (minimum 1s; after 500ms) {</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Loading comments...&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
     </pre>
-  </div><p>Note: this example uses two parameters, separated by the ; character.</p>
+  </div><p>注意：此范例使用两个参数，以 <code>;</code> 字符分隔。</p>
 
     </li>
     
@@ -105,10 +99,10 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="add-error-block">
-    <a href="#add-error-block" class="docs-anchor" tabindex="-1" aria-label="Link to Add <code>@error</code> block">Add <code>@error</code> block</a>
+    <a href="#add-error-block" class="docs-anchor" tabindex="-1" aria-label="Link to Add <code>@error</code> block">添加 <code>@error</code> 控制块</a>
   </h3>
   
-      <p>Finally, add an <code>@error</code> block to the <code>@defer</code> block.</p>
+      <p>最后，将一个 <code>@error</code> 控制块添加到 <code>@defer</code> 控制块。</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">article-comments</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (minimum 1s) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Placeholder for comments&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@loading</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (minimum 1s; after 500ms) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Loading comments...&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@error</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Failed to load comments&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
@@ -117,4 +111,4 @@
     </li>
     
     </ol>
-    <p>Congratulations! At this point, you have a good understanding about deferrable views. Keep up the great work and let's learn about triggers next.</p>
+    <p>恭喜你！至此，你已经对可延迟视图有了很好的理解。请继续保持，接下来让我们学习触发器。</p>

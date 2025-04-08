@@ -1,27 +1,26 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">Inject-based dependency injection</h1>
+    <h1 tabindex="-1">基于注入的依赖注入</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/learn-angular/steps/20-inject-based-di/README.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>Creating an injectable service is the first part of the dependency injection (DI) system in Angular. How do you inject a service into a component? Angular has a convenient function called <code>inject()</code> that can be used in the proper context.</p>
+    <p>创建一个可注入的服务是在 Angular 中使用依赖注入（DI）体系的第一步。如何将服务注入到组件中？Angular 有一个名为 <code>inject()</code> 的便捷函数，可以在适当的上下文中使用。</p>
 
     <div class="docs-alert docs-alert-note">
-    <p><strong>Note:</strong> Injection contexts are beyond the scope of this tutorial, but you can find more information in the <a href="guide/di/dependency-injection-context">Angular Docs</a> if you would like to learn more.</p>
+    <p><strong>注意：</strong> 注入上下文超出了本教程的范围，但如果你想了解更多信息，可以在 <a href="guide/di/dependency-injection-context">Angular 文档</a> 中找到更多信息。</p>
 
     </div>
-    <p>In this activity, you'll learn how to inject a service and use it in a component.</p>
+    <p>在本活动中，你将学习如何注入服务并在组件中使用它。</p>
 <hr>
 
-<p>It is often helpful to initialize class properties with values provided by the DI system. Here's an example:</p>
+<p>通常，使用 DI 体系提供的值初始化类属性会很有帮助。这是一个范例：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> PetCareDashboardComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">    petRosterService</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(PetRosterService);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
@@ -33,11 +32,11 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="inject-the-carservice">
-    <a href="#inject-the-carservice" class="docs-anchor" tabindex="-1" aria-label="Link to Inject the <code>CarService</code>">Inject the <code>CarService</code></a>
+    <a href="#inject-the-carservice" class="docs-anchor" tabindex="-1" aria-label="Link to Inject the <code>CarService</code>">注入 <code>CarService</code></a>
   </h3>
   
-      <p>In <code>app.component.ts</code>, using the <code>inject()</code> function inject the <code>CarService</code> and assign it to a property called <code>carService</code></p>
-<p>Note: Notice the difference between the property <code>carService</code> and the class <code>CarService</code>.</p>
+      <p>在 <code>app.component.ts</code> 中，使用 <code>inject()</code> 函数注入 <code>CarService</code> 并将其赋值给名为 <code>carService</code> 的属性</p>
+<p>注意：请注意属性（Property） <code>carService</code> 和类 <code>CarService</code> 之间的区别。</p>
 
     </li>
     
@@ -45,11 +44,11 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="use-the-carservice-instance">
-    <a href="#use-the-carservice-instance" class="docs-anchor" tabindex="-1" aria-label="Link to Use the <code>carService</code> instance">Use the <code>carService</code> instance</a>
+    <a href="#use-the-carservice-instance" class="docs-anchor" tabindex="-1" aria-label="Link to Use the <code>carService</code> instance">使用 <code>carService</code> 实例</a>
   </h3>
   
-      <p>Calling <code>inject(CarService)</code> gave you an instance of the <code>CarService</code> that you can use in your application, stored in the <code>carService</code> property.</p>
-<p>In the <code>constructor</code> function of the <code>AppComponent</code>, add the following implementation:</p>
+      <p>调用 <code>inject(CarService)</code> 为你提供了一个 <code>CarService</code> 的实例，你可以在你的应用中使用它，它存储在 <code>carService</code> 属性（Property）中。</p>
+<p>在 <code>AppComponent</code> 的 <code>constructor</code> 函数中，添加以下实现：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.display </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.carService.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getCars</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">join</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">' ⭐️ '</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
@@ -61,10 +60,10 @@
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="update-the-appcomponent-template">
-    <a href="#update-the-appcomponent-template" class="docs-anchor" tabindex="-1" aria-label="Link to Update the <code>AppComponent</code> template">Update the <code>AppComponent</code> template</a>
+    <a href="#update-the-appcomponent-template" class="docs-anchor" tabindex="-1" aria-label="Link to Update the <code>AppComponent</code> template">更新 <code>AppComponent</code> 模板</a>
   </h3>
   
-      <p>Update the component template in <code>app.component.ts</code> with the following code:</p>
+      <p>使用以下代码更新 <code>app.component.ts</code> 中的组件模板：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`&lt;p&gt;Car Listing: {{ display }}&lt;/p&gt;`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span></code></pre>
@@ -73,4 +72,4 @@
     </li>
     
     </ol>
-    <p>You've just injected your first service into a component - fantastic effort. Before you finish this section on DI, you'll learn an alternative syntax to inject resources into your components.</p>
+    <p>您刚刚将您的第一个服务注入到了一个组件中 - 非常棒！在您完成关于 DI 的这一节之前，您将学习一种替代语法，用于将资源注入到您的组件中。</p>

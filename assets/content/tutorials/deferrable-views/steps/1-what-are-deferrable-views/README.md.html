@@ -1,20 +1,19 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">What are deferrable views?</h1>
+    <h1 tabindex="-1">什么是可延迟视图？</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/deferrable-views/steps/1-what-are-deferrable-views/README.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>A fully rendered Angular page may contain many different components, directives, and pipes. While certain parts of the page should be shown to the user immediately, there may be portions that can wait to display until later.
-Angular's <em>deferrable views</em>, using the <code>@defer</code> syntax, can help you speed up your application by telling Angular to wait to download the JavaScript for the parts of the page that don't need to be shown right away.</p>
-<p>In this activity, you'll learn how to use deferrable views to defer load a section of your component template.</p>
+    <p>一个完全渲染的 Angular 页面可能包含许多不同的组件、指令和管道。虽然页面的某些部分应该立即显示给用户，但可能有些部分可以等待稍后显示。
+Angular 的 <em>可延迟视图 </em>，使用 <code>@defer</code> 语法，可以帮助你加速你的应用，它会告诉 Angular 延迟下载页面中不需要立即显示的部分的 JavaScript。</p>
+<p>在本活动中，你将学习如何使用可延迟视图来延迟加载组件模板的某个部分。</p>
 <hr>
 
 
@@ -24,16 +23,16 @@ Angular's <em>deferrable views</em>, using the <code>@defer</code> syntax, can h
       <span class="docs-step-number" aria-hidden="true"></span>
       
   <h3 id="add-a-defer-block-to-a-section-of-a-template">
-    <a href="#add-a-defer-block-to-a-section-of-a-template" class="docs-anchor" tabindex="-1" aria-label="Link to Add a <code>@defer</code> block to a section of a template">Add a <code>@defer</code> block to a section of a template</a>
+    <a href="#add-a-defer-block-to-a-section-of-a-template" class="docs-anchor" tabindex="-1" aria-label="Link to Add a <code>@defer</code> block to a section of a template">向模板的某个部分添加一个 <code>@defer</code> 控制块</a>
   </h3>
   
-      <p>In your <code>app.component.ts</code>, wrap the <code>article-comments</code> component with a <code>@defer</code> block to defer load it.</p>
+      <p>在你的 <code>app.component.ts</code> 中，用 <code>@defer</code> 控制块包裹 <code>article-comments</code> 组件以延迟加载它。</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">article-comments</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
     </pre>
-  </div><p>By default, <code>@defer</code> loads the <code>article-comments</code> component when the browser is idle.</p>
-<p>In your browser's developer console, you can see that the <code>article-comments-component</code> lazy chunk file is loaded separately (The specific file names may change from run to run):</p>
+  </div><p>默认情况下，当浏览器空闲时，<code>@defer</code> 加载 <code>article-comments</code> 组件。</p>
+<p>在你的浏览器的开发者控制台中，你可以看到 <code>article-comments-component</code> 惰性加载块文件是单独加载的（具体的文件名可能因运行而异）：</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">Initial chunk files | Names                      |  Raw size</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">chunk-NNSQHFIE.js   | -                          | 769.00 kB | </span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">main.js             | main                       | 229.25 kB | </span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">Lazy chunk files    | Names                      |  Raw size</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">chunk-T5UYXUSI.js   | article-comments-component |   1.84 kB |</span></span></code></pre>
@@ -42,4 +41,4 @@ Angular's <em>deferrable views</em>, using the <code>@defer</code> syntax, can h
     </li>
     
     </ol>
-    <p>Great work! You’ve learned the basics of deferrable views.</p>
+    <p>做得好！你已经学习了可延迟视图的基础知识。</p>

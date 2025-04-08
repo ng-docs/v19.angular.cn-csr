@@ -1,23 +1,16 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">@defer behavior when HMR is enabled</h1>
+    <h1 tabindex="-1">@defer 在启用 HMR 时的行为</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0751.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>Hot Module Replacement (HMR) is a technique used by development servers to avoid reloading the entire page when only part of an application is changed.</p>
-<p>When the HMR is enabled in Angular, all <code>@defer</code> block dependencies are loaded
-eagerly, instead of waiting for configured trigger conditions (both for client-only and incremental hydration triggers). This is needed
-for the HMR to function properly, replacing components in an application at runtime
-without the need to reload the entire page. Note: the actual rendering of defer
-blocks respects trigger conditions in the HMR mode.</p>
-<p>If you want to test <code>@defer</code> block behavior in development mode and ensure that
-the necessary dependencies are loaded when a triggering condition is met, you can
-disable the HMR mode as described in <a href="/tools/cli/build-system-migration#hot-module-replacement"><code>this document</code></a>.</p>
+    <p>热模块替换 (HMR) 是开发服务器使用的一种技术，用于在仅更改应用的一部分时避免重新加载整个页面。</p>
+<p>当在 Angular 中启用 HMR 时，所有 <code>@defer</code> 控制块依赖项都会被急性加载，而不是等待配置的触发条件（客户端专用和增量水合触发器）。这是 HMR 正常运行所必需的，可以在运行时替换应用中的组件，而无需重新加载整个页面。注意：defer 控制块的实际渲染在 HMR 模式下会遵循触发条件。</p>
+<p>如果你想在开发模式下测试 <code>@defer</code> 控制块的行为，并确保在满足触发条件时加载必要的依赖项，你可以禁用 HMR 模式，如<a href="/tools/cli/build-system-migration#hot-module-replacement"><code>本文档</code></a>中所述。</p>

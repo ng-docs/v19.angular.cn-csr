@@ -1,100 +1,99 @@
-
-    <header class="docs-header">
+<header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
 
       
   <!-- Page title -->
   <div class="docs-page-title">
-    <h1 tabindex="-1">Refer to locales by ID</h1>
+    <h1 tabindex="-1">通过 ID 引用语言环境</h1>
     <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/i18n/locale-id.md" title="Edit this page" aria-label="Edit this page">
       <!-- Pencil -->
       <docs-icon role="presentation">edit</docs-icon>
     </a>
   </div>
     </header>
-    <p>Angular uses the Unicode <em>locale identifier</em> (Unicode locale ID) to find the correct locale data for internationalization of text strings.</p>
+    <p>Angular 使用 Unicode <em>语言环境标识符</em>（Unicode 语言环境 ID）来查找正确的语言环境数据，以便对文本字符串进行国际化。</p>
 
     <div class="docs-callout docs-callout-helpful">
-      <h3>Unicode locale ID</h3>
+      <h3>Unicode 语言环境 ID</h3>
       
   <ul class="docs-list">
-    <li><p>A locale ID conforms to the <a href="https://cldr.unicode.org/index/cldr-spec" title=Core Specification | Unicode CLDR Project target="_blank">Unicode Common Locale Data Repository (CLDR) core specification</a>.
-  For more information about locale IDs, see [Unicode Language and Locale Identifiers][UnicodeCldrDevelopmentCoreSpecificationLocaleIDs].</p>
+    <li><p>语言环境 ID 符合 <a href="https://cldr.unicode.org/index/cldr-spec" title="Core" specification | unicode cldr project target="_blank">Unicode 通用语言环境数据仓库 (CLDR) 核心规范</a>。
+  有关语言环境 ID 的更多信息，请参阅 [Unicode 语言和语言环境标识符][UnicodeCldrDevelopmentCoreSpecificationLocaleIDs]。</p>
 </li>
-<li><p>CLDR and Angular use <a href="https://www.rfc-editor.org/info/bcp47" title=BCP 47 | RFC Editor target="_blank">BCP 47 tags</a> as the base for the locale ID</p>
+<li><p>CLDR 和 Angular 使用 <a href="https://www.rfc-editor.org/info/bcp47" title="BCP" 47 | rfc editor target="_blank">BCP 47 标记</a>作为语言环境 ID 的基础</p>
 </li>
 
   </ul>
   
     </div>
-    <p>A locale ID specifies the language, country, and an optional code for further variants or subdivisions.
-A locale ID consists of the language identifier, a hyphen (<code>-</code>) character, and the locale extension.</p>
+    <p>语言环境 ID 指定了语言、国家以及用于进一步变体或细分的可选代码。
+语言环境 ID 由语言标识符、连字符 (<code>-</code>) 和语言环境扩展名组成。</p>
 <div class="docs-code">
     
     <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{language_id}-{locale_extension}</span></span></code></pre>
     </pre>
   </div>
     <div class="docs-alert docs-alert-helpful">
-    <p><strong>HELPFUL:</strong> To accurately translate your Angular project, you must decide which languages and locales you are targeting for internationalization.</p>
+    <p><strong>提示：</strong> 要准确翻译你的 Angular 项目，你必须确定要将哪些语言和语言环境作为国际化的目标。</p>
 
     </div>
-    <p>Many countries share the same language, but differ in usage.
-The differences include grammar, punctuation, formats for currency, decimal numbers, dates, and so on.</p>
-<p>For the examples in this guide, use the following languages and locales.</p>
+    <p>许多国家/地区使用相同的语言，但在用法上有所不同。
+差异包括语法、标点符号、货币格式、十进制数字、日期等等。</p>
+<p>对于本指南中的示例，请使用以下语言和语言环境。</p>
 
   <div class="docs-table docs-scroll-track-transparent">
     <table>
       <thead>
         <tr>
-<th align="left">Language</th>
-<th align="left">Locale</th>
-<th align="left">Unicode locale ID</th>
+<th align="left">语言</th>
+<th align="left">语言环境</th>
+<th align="left">Unicode 语言环境 ID</th>
 </tr>
 
       </thead>
       <tbody>
         <tr>
-<td align="left">English</td>
-<td align="left">Canada</td>
+<td align="left">英语</td>
+<td align="left">加拿大</td>
 <td align="left"><code>en-CA</code></td>
 </tr>
 <tr>
-<td align="left">English</td>
-<td align="left">United States of America</td>
+<td align="left">英语</td>
+<td align="left">美利坚合众国</td>
 <td align="left"><code>en-US</code></td>
 </tr>
 <tr>
-<td align="left">French</td>
-<td align="left">Canada</td>
+<td align="left">法语</td>
+<td align="left">加拿大</td>
 <td align="left"><code>fr-CA</code></td>
 </tr>
 <tr>
-<td align="left">French</td>
-<td align="left">France</td>
+<td align="left">法语</td>
+<td align="left">法国</td>
 <td align="left"><code>fr-FR</code></td>
 </tr>
 
       </tbody>
     </table>
   </div>
-  <p>The <a href="https://github.com/angular/angular/tree/main/packages/common/locales" title=angular/packages/common/locales | angular/angular | GitHub target="_blank">Angular repository</a> includes common locales.</p>
+  <p><a href="https://github.com/angular/angular/tree/main/packages/common/locales" title="angular/packages/common/locales" | angular github target="_blank">Angular 代码仓</a> 包含了通用的语言环境。</p>
 
     <div class="docs-callout docs-callout-helpful">
       <h3></h3>
-      <p>For a list of language codes, see <a href="https://www.loc.gov/standards/iso639-2" target="_blank">ISO 639-2</a>.</p>
+      <p>有关语言代码列表，请参阅 <a href="https://www.loc.gov/standards/iso639-2" target="_blank">ISO 639-2</a>。</p>
 
     </div>
     
   <h2 id="set-the-source-locale-id">
-    <a href="#set-the-source-locale-id" class="docs-anchor" tabindex="-1" aria-label="Link to Set the source locale ID">Set the source locale ID</a>
+    <a href="#set-the-source-locale-id" class="docs-anchor" tabindex="-1" aria-label="Link to Set the source locale ID">设置源语言环境 ID</a>
   </h2>
-  <p>Use the Angular CLI to set the source language in which you are writing the component template and code.</p>
-<p>By default, Angular uses <code>en-US</code> as the source locale of your project.</p>
-<p>To change the source locale of your project for the build, complete the following actions.</p>
+  <p>使用 Angular CLI 设置你正在编写组件模板和代码的源语言。</p>
+<p>默认情况下，Angular 使用 <code>en-US</code> 作为项目的源语言环境。</p>
+<p>要更改项目中用于构建的源语言环境，请完成以下操作。</p>
 
     <ol class="docs-ordered-list">
-      <li>Open the <a href="reference/configs/workspace-config" title=Angular workspace configuration | Angular><code>angular.json</code></a> workspace build configuration file.</li>
-<li>Add or modify the <code>sourceLocale</code> field inside the <code>i18n</code> section:</li>
+      <li>打开 <a href="reference/configs/workspace-config" title="Angular" workspace configuration | angular><code>angular.json</code></a> 工作区构建配置文件。</li>
+<li>在 <code>i18n</code> 部分内添加或修改 <code>sourceLocale</code> 字段：</li>
 
     </ol>
     <div class="docs-code">
@@ -103,14 +102,12 @@ The differences include grammar, punctuation, formats for currency, decimal numb
     </pre>
   </div>
   <h2 id="whats-next">
-    <a href="#whats-next" class="docs-anchor" tabindex="-1" aria-label="Link to What's next">What's next</a>
+    <a href="#whats-next" class="docs-anchor" tabindex="-1" aria-label="Link to What's next">下一步是什么</a>
   </h2>
   
     <nav class="docs-pill-row">
       
-    <a class="docs-pill" href="guide/i18n/format-data-locale">
-      Format data based on locale
-    </a>
+    <a class="docs-pill" href="guide/i18n/format-data-locale">基于语言环境格式化数据</a>
     
 
     </nav>

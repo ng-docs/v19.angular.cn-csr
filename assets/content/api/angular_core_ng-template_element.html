@@ -1,76 +1,49 @@
-<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/core</span><div class="docs-reference-title"><div><h1>ng-template</h1><div class="docs-api-item-label type-element full">element</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/tools/manual_api_docs/elements/ng-template.md#L0-L0" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">code</i></a></div><section class="docs-reference-description"><p>Angular&#39;s <code>&lt;ng-template&gt;</code> element defines a template that is not rendered by default.</p>
-<p>With <code>&lt;ng-template&gt;</code>, you can define template content that is only being rendered by Angular when
-you, whether directly or indirectly, specifically instruct it to do so, allowing you to have full
-control over how and when the content is displayed.</p>
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/core</span><div class="docs-reference-title"><div><h1>ng-template</h1><div class="docs-api-item-label type-element full">element</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/tools/manual_api_docs/elements/ng-template.md#L0-L0" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">代码</i></a></div><section class="docs-reference-description"><p>Angular 的 <code>&lt;ng-template&gt;</code> 元素定义了一个默认情况下不会渲染的模板。</p>
+<p>使用 <code>&lt;ng-template&gt;</code>，你可以定义模板内容，这些内容只有在你直接或间接明确指示 Angular 执行渲染时才会被渲染，从而使你可以完全控制内容的显示方式和时间。</p>
 <div class="alter is-helpful">
 
-<p>Note that if you wrap content inside an <code>&lt;ng-template&gt;</code> without instructing Angular to render it,
-such content will not appear on a page. For example, see the following HTML code, when handling it
-Angular won&#39;t render the middle &quot;Hip!&quot; in the phrase &quot;Hip! Hip! Hooray!&quot; because of the
-surrounding <code>&lt;ng-template&gt;</code>.</p>
+<p>请注意，如果你将内容包裹在 <code>&lt;ng-template&gt;</code> 中，而不指示 Angular 渲染它，则此类内容将不会显示在页面上。例如，请看下面的 HTML 代码，当处理它时，Angular 不会渲染短语 "Hip! Hip! Hooray!" 中的中间的 "Hip!"，因为周围有 <code>&lt;ng-template&gt;</code>。</p>
 
       <div class="docs-code" role="group">
-        <pre class="docs-mini-scroll-track">
-          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>Hip!&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">ng-template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>Hip!&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">ng-template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>Hooray!&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Hip!&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">ng-template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Hip!&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">ng-template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Hooray!&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
         </pre>
       </div>
     </div>
 
 
       <h2 id="usage-notes" class="docs-reference-section-heading docs-reference-section-heading--sub">
-        <a href="#usage-notes" aria-label="Link to Usage notes section" tabIndex="-1">
-          Usage notes
-        </a>
+        <a href="#usage-notes" aria-label="Link to Usage notes section" tabindex="-1">用法说明</a>
       </h2>
     
       <h3 id="structural-directives" class="docs-reference-section-heading docs-reference-section-heading--sub">
-        <a href="#structural-directives" aria-label="Link to Structural Directives section" tabIndex="-1">
-          Structural Directives
-        </a>
+        <a href="#structural-directives" aria-label="Link to Structural Directives section" tabindex="-1">结构型指令</a>
       </h3>
-    <p>One of the main uses for <code>&lt;ng-template&gt;</code> is to hold template content that will be used
-by <a href="guide/directives/structural-directives">Structural directives</a>. Those directives can add and remove copies
-of the template content based on their own logic.</p>
-<p>When using
-the <a href="guide/directives/structural-directives#structural-directive-shorthand">structural directive shorthand</a>,
-Angular creates an <code>&lt;ng-template&gt;</code> element behind the scenes.</p>
+    <p><code>&lt;ng-template&gt;</code> 的主要用途之一是保存将由<a href="guide/directives/structural-directives">结构型指令</a>使用的模板内容。这些指令可以根据它们自己的逻辑添加和删除模板内容的副本。</p>
+<p>当使用<a href="guide/directives/structural-directives#structural-directive-shorthand">结构型指令简写</a>时，Angular 会在幕后创建一个 <code>&lt;ng-template&gt;</code> 元素。</p>
 
       <h3 id="templateref" class="docs-reference-section-heading docs-reference-section-heading--sub">
-        <a href="#templateref" aria-label="Link to TemplateRef section" tabIndex="-1">
+        <a href="#templateref" aria-label="Link to TemplateRef section" tabindex="-1">
           TemplateRef
         </a>
       </h3>
-    <p><code>&lt;ng-template&gt;</code> elements are represented as instances of the <code>TemplateRef</code> class.</p>
-<p>To add copies of the template to the DOM, pass this object to the <code>ViewContainerRef</code>
-method <code>createEmbeddedView()</code>.</p>
+    <p><code>&lt;ng-template&gt;</code> 元素表示为 <code>TemplateRef</code> 类的实例。</p>
+<p>要将模板的副本添加到 DOM，请将此对象传递给 <code>ViewContainerRef</code> 的 <code>createEmbeddedView()</code> 方法。</p>
 
       <h3 id="template-variables" class="docs-reference-section-heading docs-reference-section-heading--sub">
-        <a href="#template-variables" aria-label="Link to Template Variables section" tabIndex="-1">
-          Template Variables
-        </a>
+        <a href="#template-variables" aria-label="Link to Template Variables section" tabindex="-1">模板变量</a>
       </h3>
-    <p><code>&lt;ng-template&gt;</code> elements can be referenced in templates
-using <a href="guide/templates/variables#template-reference-variables#how-angular-assigns-values-to-template-variables">standard template variables</a>.</p>
-<p><em>This is how <code>&lt;ng-template&gt;</code> elements are used as <code>ngIf</code> else clauses.</em></p>
-<p>Such template variables can be used in conjunction with <code>ngTemplateOutlet</code> directives to render the
-content defined inside <code>&lt;ng-template&gt;</code> tags.</p>
+    <p><code>&lt;ng-template&gt;</code> 元素可以在模板中被引用，可以使用<a href="guide/templates/variables#template-reference-variables#how-angular-assigns-values-to-template-variables">标准模板变量</a>。</p>
+<p><em>这就是 <code>&lt;ng-template&gt;</code> 元素如何用作 <code>ngIf</code> 的 else 子句。</em></p>
+<p>这样的模板变量可以与 <code>ngTemplateOutlet</code> 指令结合使用，以渲染 <code>&lt;ng-template&gt;</code> 标签内定义的内容。</p>
 
       <h3 id="querying" class="docs-reference-section-heading docs-reference-section-heading--sub">
-        <a href="#querying" aria-label="Link to Querying section" tabIndex="-1">
-          Querying
-        </a>
+        <a href="#querying" aria-label="Link to Querying section" tabindex="-1">查询</a>
       </h3>
-    <p>A <a href="api/core/Query">Query</a> (such as <code>ViewChild</code>) can find the <code>TemplateRef</code> associated to
-an <code>&lt;ng-template&gt;</code> element so that it can be used programmatically; for instance, to pass it to
-the <code>ViewContainerRef</code> method <code>createEmbeddedView()</code>.</p>
+    <p><a href="api/core/Query">Query</a>（例如 <code>ViewChild</code>）可以找到与 <code>&lt;ng-template&gt;</code> 元素关联的 <code>TemplateRef</code>，以便可以以编程方式使用它；例如，将其传递给 <code>ViewContainerRef</code> 的 <code>createEmbeddedView()</code> 方法。</p>
 
       <h3 id="context" class="docs-reference-section-heading docs-reference-section-heading--sub">
-        <a href="#context" aria-label="Link to Context section" tabIndex="-1">
-          Context
-        </a>
+        <a href="#context" aria-label="Link to Context section" tabindex="-1">上下文</a>
       </h3>
-    <p>Inside the <code>&lt;ng-template&gt;</code> tags you can reference variables present in the surrounding outer
-template.
-Additionally, a context object can be associated with <code>&lt;ng-template&gt;</code> elements.
-Such an object contains variables that can be accessed from within the template contents via
-template (<code>let</code> and <code>as</code>) declarations.</p></section></header></div>
+    <p>在 <code>&lt;ng-template&gt;</code> 标签内，你可以引用周围外部模板中存在的变量。
+此外，上下文对象可以与 <code>&lt;ng-template&gt;</code> 元素关联。
+这样的对象包含可以通过模板（<code>let</code> 和 <code>as</code>）声明从模板内容中访问的变量。</p></section></header></div>
