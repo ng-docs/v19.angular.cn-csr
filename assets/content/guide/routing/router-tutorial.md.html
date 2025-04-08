@@ -1,0 +1,352 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">在单页应用中使用 Angular 路由</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/routing/router-tutorial.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>本教程介绍如何构建一个使用多个 Angular 路由的单页应用（SPA）。</p>
+<p>在单页应用（SPA）中，你的应用的所有功能都存在于单个 HTML 页面中。
+当用户访问应用的功能时，浏览器只需要渲染对用户重要的部分，而不是加载新页面。
+这种模式可以显著改善应用的用户体验。</p>
+<p>要定义用户如何在你的应用中导航，你可以使用路由。
+添加路由以定义用户如何从应用的某一部分导航到另一部分。
+你也可以配置路由以防止意外或未经授权的行为。</p>
+
+  <h2 id="objectives">
+    <a href="#objectives" class="docs-anchor" tabindex="-1" aria-label="Link to Objectives">目标</a>
+  </h2>
+  
+  <ul class="docs-list">
+    <li>将示例应用的功能组织成模块。</li>
+<li>定义如何导航到组件。</li>
+<li>使用参数将信息传递给组件。</li>
+<li>通过嵌套多个路由来构建路由结构。</li>
+<li>检查用户是否可以访问路由。</li>
+<li>控制应用是否可以放弃未保存的更改。</li>
+<li>通过预取路由数据和惰性加载特性模块来提高性能。</li>
+<li>要求满足特定条件才能加载组件。</li>
+
+  </ul>
+  
+  <h2 id="create-a-sample-application">
+    <a href="#create-a-sample-application" class="docs-anchor" tabindex="-1" aria-label="Link to Create a sample application">创建一个示例应用</a>
+  </h2>
+  <p>使用 Angular CLI，创建一个新的应用，<em>angular-router-sample</em>。
+此应用将有两个组件：<em>crisis-list</em> 和 <em>heroes-list</em>。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>创建一个新的 Angular 项目，<em>angular-router-sample</em>。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> new</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> angular-router-sample</span></span></code></pre>
+    </pre>
+  </div><p>当提示 <code>Would you like to add Angular routing?</code> 时，选择 <code>N</code>。</p>
+<p>当提示 <code>Which stylesheet format would you like to use?</code> 时，选择 <code>CSS</code>。</p>
+<p>稍等片刻，新的项目 <code>angular-router-sample</code> 就准备好了。</p>
+</li>
+<li><p>从终端中，导航到 <code>angular-router-sample</code> 目录。</p>
+</li>
+<li><p>创建一个组件，<em>crisis-list</em>。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> component</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> crisis-list</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>在你的代码编辑器中，找到文件 <code>crisis-list.component.html</code>，并将占位符内容替换为以下 HTML。</p>
+<div class="docs-code" path="adev/src/content/examples/router-tutorial/src/app/crisis-list/crisis-list.component.html" header="src/app/crisis-list/crisis-list.component.html">
+    <div class="docs-code-header"><h3>src/app/crisis-list/crisis-list.component.html</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h3</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;CRISIS CENTER&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h3</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Get your crisis here&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>创建第二个组件，<em>heroes-list</em>。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> component</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> heroes-list</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>在你的代码编辑器中，找到文件 <code>heroes-list.component.html</code>，并将占位符内容替换为以下 HTML。</p>
+<div class="docs-code" path="adev/src/content/examples/router-tutorial/src/app/heroes-list/heroes-list.component.html" header="src/app/heroes-list/heroes-list.component.html">
+    <div class="docs-code-header"><h3>src/app/heroes-list/heroes-list.component.html</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h3</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;HEROES&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h3</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Get your heroes here&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>在你的代码编辑器中，打开文件 <code>app.component.html</code>，并将其内容替换为以下 HTML。</p>
+<div class="docs-code" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" visiblelines="0,19,20" header="src/app/app.component.html">
+    <div class="docs-code-header"><h3>src/app/app.component.html</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Angular Router Sample&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/crisis-list"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLinkActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"activebutton"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     ariaCurrentWhenActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"page"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Crisis Center</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; |</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/heroes-list"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLinkActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"activebutton"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     ariaCurrentWhenActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"page"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Heroes</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> style</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"display: none;"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- This HTML represents the initial state for the tutorial. It is not intended to appear in the app. --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-crisis-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-crisis-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-heroes-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-heroes-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- This HTML snippet is for when the user first adds the routerlink navigation. --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/crisis-list"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Crisis Center&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; |</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/heroes-list"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Heroes&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>通过运行 <code>ng serve</code> 命令，验证你的新应用是否按预期运行。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> serve</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>在浏览器中打开 <code>http://localhost:4200</code>。</p>
+<p>你应该看到一个单页，其中包含标题和你两个组件的 HTML。</p>
+</li>
+
+    </ol>
+    
+  <h2 id="define-your-routes">
+    <a href="#define-your-routes" class="docs-anchor" tabindex="-1" aria-label="Link to Define your routes">定义你的路由</a>
+  </h2>
+  <p>在本节中，你将定义两个路由：</p>
+
+  <ul class="docs-list">
+    <li>路由 <code>/crisis-center</code> 打开 <code>crisis-center</code> 组件。</li>
+<li>路由 <code>/heroes-list</code> 打开 <code>heroes-list</code> 组件。</li>
+
+  </ul>
+  <p>路由定义是一个 JavaScript 对象。
+每个路由通常有两个属性。
+第一个属性 <code>path</code> 是一个字符串，用于指定路由的 URL 路径。
+第二个属性 <code>component</code> 是一个字符串，用于指定你的应用应该为该路径显示的组件。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>在你的代码编辑器中，创建并打开 <code>app.routes.ts</code> 文件。</p>
+</li>
+<li><p>为你的应用创建并导出一个路由列表：</p>
+<pre><code class="language-ts">import {Routes} from '@angular/router';
+
+export const routes = [];
+</code></pre>
+</li>
+<li><p>为你的前两个组件添加两个路由：</p>
+<pre><code class="language-ts">{path: 'crisis-list', component: CrisisListComponent},
+{path: 'heroes-list', component: HeroesListComponent},
+</code></pre>
+</li>
+
+    </ol>
+    <p>此路由列表是一个 JavaScript 对象数组，每个对象都定义了一个路由的属性。</p>
+
+  <h2 id="import-providerouter-from-angular-router">
+    <a href="#import-providerouter-from-angular-router" class="docs-anchor" tabindex="-1" aria-label="Link to Import <code>provideRouter</code> from <code>@angular/router</code>">从 <code>@angular/router</code> 导入 <code>provideRouter</code></a>
+  </h2>
+  <p>路由允许你根据 URL 路径显示应用的特定视图。
+要将此功能添加到你的示例应用，你需要更新 <code>app.config.ts</code> 文件以使用路由提供者函数 <code>provideRouter</code>。
+你从 <code>@angular/router</code> 导入此提供者函数。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>在你的代码编辑器中，打开 <code>app.config.ts</code> 文件。</p>
+</li>
+<li><p>添加以下导入语句：</p>
+<pre><code class="language-ts">import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
+</code></pre>
+</li>
+<li><p>更新 <code>appConfig</code> 中的 providers：</p>
+<pre><code class="language-ts">providers: [provideRouter(routes)]
+</code></pre>
+</li>
+
+    </ol>
+    <p>对于基于 <code>NgModule</code> 的应用，将 <code>provideRouter</code> 放在 <code>AppModule</code> 的 <code>providers</code> 列表中，或者传递给应用中 <code>bootstrapModule</code> 的任何模块。</p>
+
+  <h2 id="update-your-component-with-router-outlet">
+    <a href="#update-your-component-with-router-outlet" class="docs-anchor" tabindex="-1" aria-label="Link to Update your component with <code>router-outlet</code>">使用 <code>router-outlet</code> 更新你的组件</a>
+  </h2>
+  <p>此时，你已经为你的应用定义了两个路由。
+但是，你的应用仍然在 <code>app.component.html</code> 模板中硬编码了 <code>crisis-list</code> 和 <code>heroes-list</code> 组件。
+为了使你的路由工作，你需要更新你的模板以根据 URL 路径动态加载组件。</p>
+<p>要实现此功能，你需要将 <code>router-outlet</code> 指令添加到你的模板文件中。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>在你的代码编辑器中，打开 <code>app.component.html</code> 文件。</p>
+</li>
+<li><p>删除以下行。</p>
+<div class="docs-code" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" visiblelines="19,20" header="src/app/app.component.html">
+    <div class="docs-code-header"><h3>src/app/app.component.html</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Angular Router Sample&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/crisis-list"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLinkActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"activebutton"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     ariaCurrentWhenActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"page"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Crisis Center</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; |</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/heroes-list"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLinkActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"activebutton"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     ariaCurrentWhenActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"page"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Heroes</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> style</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"display: none;"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- This HTML represents the initial state for the tutorial. It is not intended to appear in the app. --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-crisis-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-crisis-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-heroes-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-heroes-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- This HTML snippet is for when the user first adds the routerlink navigation. --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/crisis-list"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Crisis Center&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; |</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/heroes-list"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Heroes&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>添加 <code>router-outlet</code> 指令。</p>
+<div class="docs-code" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" visiblelines="15" header="src/app/app.component.html">
+    <div class="docs-code-header"><h3>src/app/app.component.html</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Angular Router Sample&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/crisis-list"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLinkActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"activebutton"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     ariaCurrentWhenActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"page"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Crisis Center</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; |</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/heroes-list"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLinkActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"activebutton"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     ariaCurrentWhenActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"page"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Heroes</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> style</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"display: none;"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- This HTML represents the initial state for the tutorial. It is not intended to appear in the app. --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-crisis-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-crisis-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-heroes-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-heroes-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- This HTML snippet is for when the user first adds the routerlink navigation. --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/crisis-list"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Crisis Center&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; |</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/heroes-list"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Heroes&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>在 <code>app.component.ts</code> 中，把 <code>RouterOutlet</code> 添加到 <code>AppComponent</code> 的 imports 中</p>
+<pre><code class="language-ts">imports: [RouterOutlet],
+</code></pre>
+</li>
+
+    </ol>
+    <p>在浏览器中查看你更新后的应用。
+你应该只看到应用标题。
+要查看 <code>crisis-list</code> 组件，请将 <code>crisis-list</code> 添加到浏览器地址栏中路径的末尾。
+例如：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">http://localhost:4200/crisis-list</span></span></code></pre>
+    </pre>
+  </div><p>请注意，<code>crisis-list</code> 组件会显示出来。
+Angular 正在使用你定义的路由来动态加载该组件。
+你可以用同样的方式加载 <code>heroes-list</code> 组件：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">http://localhost:4200/heroes-list</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="control-navigation-with-ui-elements">
+    <a href="#control-navigation-with-ui-elements" class="docs-anchor" tabindex="-1" aria-label="Link to Control navigation with UI elements">使用 UI 元素控制导航</a>
+  </h2>
+  <p>目前，你的应用支持两个路由。
+然而，使用这些路由的唯一方法是让用户在浏览器的地址栏中手动输入路径。
+在本节中，你将添加两个链接，用户可以单击这些链接在 <code>heroes-list</code> 和 <code>crisis-list</code> 组件之间导航。
+你还将添加一些 CSS 样式。
+虽然这些样式不是必需的，但它们可以更容易地识别当前显示组件的链接。
+你将在下一节中添加该功能。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>打开 <code>app.component.html</code> 文件，并在标题下方添加以下 HTML。</p>
+<div class="docs-code" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" visiblelines="23,24,25,26" header="src/app/app.component.html">
+    <div class="docs-code-header"><h3>src/app/app.component.html</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Angular Router Sample&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/crisis-list"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLinkActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"activebutton"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     ariaCurrentWhenActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"page"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Crisis Center</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; |</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/heroes-list"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLinkActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"activebutton"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     ariaCurrentWhenActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"page"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Heroes</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> style</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"display: none;"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- This HTML represents the initial state for the tutorial. It is not intended to appear in the app. --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-crisis-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-crisis-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-heroes-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-heroes-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- This HTML snippet is for when the user first adds the routerlink navigation. --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/crisis-list"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Crisis Center&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; |</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/heroes-list"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Heroes&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div><p>此 HTML 使用了一个 Angular 指令 <code>routerLink</code>。
+此指令将你定义的路由连接到你的模板文件。</p>
+</li>
+<li><p>将 <code>RouterLink</code> 指令添加到 <code>app.component.ts</code> 中 <code>AppComponent</code> 的 imports 列表中。</p>
+</li>
+<li><p>打开 <code>app.component.css</code> 文件，并添加以下样式。</p>
+<div class="docs-code" path="adev/src/content/examples/router-tutorial/src/app/app.component.css" header="src/app/app.component.css">
+    <div class="docs-code-header"><h3>src/app/app.component.css</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.button {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    box</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">shadow</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: inset </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> 1px </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> #ffffff;</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    background</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: #ffffff linear</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">gradient</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(to bottom, #ffffff </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">5</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">%</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, #f6f6f6 </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">100</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">%</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    border</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">radius</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: 6px;</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    border</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: 1px solid #dcdcdc;</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    display</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: inline</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">block;</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    cursor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: pointer;</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    color</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: #</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">666666</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    font</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">family</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: Arial, sans</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">serif;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    font</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">size</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: 15px;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    font</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">weight</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: bold;</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    padding</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: 6px 24px;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    text</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">decoration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: none;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    text</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">shadow</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> 1px </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> #ffffff;</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    outline</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.activebutton {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    box</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">shadow</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: inset </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> 1px </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> #dcecfb;</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    background</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: #bddbfa linear</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">gradient</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(to bottom, #bddbfa </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">5</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">%</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, #80b5ea </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">100</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">%</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    border</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: 1px solid #84bbf3;</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    color</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: #ffffff;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    text</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">shadow</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> 1px </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> #528ecc;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div></li>
+
+    </ol>
+    <p>如果在浏览器中查看你的应用，你应该会看到这两个链接。
+当你单击链接时，相应的组件就会出现。</p>
+
+  <h2 id="identify-the-active-route">
+    <a href="#identify-the-active-route" class="docs-anchor" tabindex="-1" aria-label="Link to Identify the active route">识别活动路由</a>
+  </h2>
+  <p>虽然用户可以使用你在上一节中添加的链接来导航你的应用，但他们没有直接的方式来识别哪个是活动路由。
+使用 Angular 的 <code>routerLinkActive</code> 指令添加此功能。</p>
+
+    <ol class="docs-ordered-list">
+      <li>在你的代码编辑器中，打开 <code>app.component.html</code> 文件。</li>
+<li>更新这些锚点标签，以包含 <code>routerLinkActive</code> 指令。<div class="docs-code" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" visiblelines="1,2,3,4,5,6,7,8,9,10,11,12,13,14" header="src/app/app.component.html">
+    <div class="docs-code-header"><h3>src/app/app.component.html</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Angular Router Sample&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/crisis-list"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLinkActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"activebutton"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     ariaCurrentWhenActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"page"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Crisis Center</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; |</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/heroes-list"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     routerLinkActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"activebutton"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">     ariaCurrentWhenActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"page"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Heroes</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> style</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"display: none;"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- This HTML represents the initial state for the tutorial. It is not intended to appear in the app. --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-crisis-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-crisis-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-heroes-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-heroes-list</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- This HTML snippet is for when the user first adds the routerlink navigation. --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/crisis-list"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Crisis Center&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; |</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"button"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/heroes-list"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Heroes&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div></li>
+<li>将 <code>RouterLinkActive</code> 指令添加到 <code>app.component.ts</code> 中 <code>AppComponent</code> 的 <code>imports</code> 列表中。</li>
+
+    </ol>
+    <p>再次查看你的应用。
+当你单击其中一个按钮时，该按钮的样式会自动更新，从而向用户标识出活动的组件。
+通过添加 <code>routerLinkActive</code> 指令，你可以通知你的应用将特定的 CSS 类应用于活动路由。
+在本教程中，该 CSS 类是 <code>activebutton</code>，但你可以使用任何你想要的类。</p>
+<p>请注意，我们还为 <code>routerLinkActive</code> 的 <code>ariaCurrentWhenActive</code> 指定了一个值。这确保了视觉障碍用户（他们可能无法感知到正在应用的不同样式）也可以识别出活动按钮。有关更多信息，请参阅无障碍功能最佳实践的<a href="/best-practices/a11y#active-links-identification">活动链接识别</a>部分。</p>
+
+  <h2 id="adding-a-redirect">
+    <a href="#adding-a-redirect" class="docs-anchor" tabindex="-1" aria-label="Link to Adding a redirect">添加重定向</a>
+  </h2>
+  <p>在本教程的这一步中，你将添加一个路由，该路由会将用户重定向以显示 <code>/heroes-list</code> 组件。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>在你的代码编辑器中，打开 <code>app.routes.ts</code> 文件。</p>
+</li>
+<li><p>按如下所示更新 <code>routes</code> 部分。</p>
+<pre><code class="language-ts">{path: '', redirectTo: '/heroes-list', pathMatch: 'full'},
+</code></pre>
+<p>请注意，这个新路由使用一个空字符串作为其路径。
+此外，它使用两个新属性替换了 <code>component</code> 属性：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">属性</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>redirectTo</code></td>
+<td align="left">此属性指示 Angular 从空路径重定向到 <code>heroes-list</code> 路径。</td>
+</tr>
+<tr>
+<td align="left"><code>pathMatch</code></td>
+<td align="left">此属性指示 Angular 如何匹配 URL 的多少。对于本教程，你应该将此属性设置为 <code>full</code>。当你的路径为空字符串时，建议使用此策略。有关此属性的更多信息，请参阅 <a href="api/router/Route">Route API 文档</a>。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  </li>
+
+    </ol>
+    <p>现在，当你打开你的应用时，它默认会显示 <code>heroes-list</code> 组件。</p>
+
+  <h2 id="adding-a-404-page">
+    <a href="#adding-a-404-page" class="docs-anchor" tabindex="-1" aria-label="Link to Adding a 404 page">添加 404 页面</a>
+  </h2>
+  <p>用户有可能尝试访问你尚未定义的路由。
+为了应对这种行为，最佳实践是显示 404 页面。
+在本节中，你将创建一个 404 页面并更新你的路由配置，以便为任何未指定的路由显示该页面。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>从终端中，创建一个新组件 <code>PageNotFound</code>。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> component</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> page-not-found</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>在你的代码编辑器中，打开 <code>page-not-found.component.html</code> 文件，并将其内容替换为以下 HTML。</p>
+<div class="docs-code" path="adev/src/content/examples/router-tutorial/src/app/page-not-found/page-not-found.component.html" header="src/app/page-not-found/page-not-found.component.html">
+    <div class="docs-code-header"><h3>src/app/page-not-found/page-not-found.component.html</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Page Not Found&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;We couldn't find that page! Not even with x-ray vision.&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>打开 <code>app.routes.ts</code> 文件，并将以下路由添加到路由列表中：</p>
+<pre><code class="language-ts">{path: '**', component: PageNotFoundComponent}
+</code></pre>
+<p>新路由使用路径 <code>**</code>。
+此路径是 Angular 识别通配符路由的方式。
+任何与你的配置中现有路由不匹配的路由都将使用此路由。</p>
+</li>
+
+    </ol>
+    
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> 请注意，通配符路由位于数组的末尾。
+你的路由顺序非常重要，因为 Angular 会按顺序应用路由并使用它找到的第一个匹配项。</p>
+
+    </div>
+    <p>尝试导航到你的应用上不存在的路由，例如 <code>http://localhost:4200/powers</code>。
+此路由与你在 <code>app.routes.ts</code> 文件中定义的任何内容都不匹配。
+但是，由于你定义了一个通配符路由，因此应用会自动显示你的 <code>PageNotFound</code> 组件。</p>
+
+  <h2 id="next-steps">
+    <a href="#next-steps" class="docs-anchor" tabindex="-1" aria-label="Link to Next steps">后续步骤</a>
+  </h2>
+  <p>至此，你已经有了一个基本应用，它使用 Angular 的路由特性来根据 URL 地址更改用户可以看到的组件。
+你已经扩展了这些特性，以包含重定向以及用于显示自定义 404 页面的通配符路由。</p>
+<p>有关路由的更多信息，请参阅以下主题：</p>
+
+    <nav class="docs-pill-row">
+      
+    <a class="docs-pill" href="guide/routing/common-router-tasks">
+      应用内路由和导航
+    </a>
+    
+    <a class="docs-pill" href="api/router/Router">
+      Router API
+    </a>
+    
+
+    </nav>
+    

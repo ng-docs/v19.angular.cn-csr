@@ -1,0 +1,50 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">无效的 Banana-in-Box</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/extended-diagnostics/NG8101.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>此诊断检测到用于<a href="guide/templates/two-way-binding">双向绑定</a>的反向 “banana-in-box” 语法。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">user-viewer</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ([user])</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"loggedInUser"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="whats-wrong-with-that">
+    <a href="#whats-wrong-with-that" class="docs-anchor" tabindex="-1" aria-label="Link to What's wrong with that?">那有什么问题？</a>
+  </h2>
+  <p>就目前而言，<code>([var])</code> 实际上是一个名为 <code>[var]</code> 的<a href="guide/templates/event-listeners">事件绑定</a>。作者可能打算将其作为名为 <code>var</code> 的变量的双向绑定，但就目前而言，此绑定不起作用。</p>
+
+  <h2 id="what-should-i-do-instead">
+    <a href="#what-should-i-do-instead" class="docs-anchor" tabindex="-1" aria-label="Link to What should I do instead?">我应该怎么做？</a>
+  </h2>
+  <p>修复笔误。
+顾名思义，香蕉 <code>(</code> 应该放在方框 <code>[]</code> <em>里面</em>。
+在这种情况下：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">user-viewer</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> [(user)]</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"loggedInUser"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="configuration-requirements">
+    <a href="#configuration-requirements" class="docs-anchor" tabindex="-1" aria-label="Link to Configuration requirements">配置要求</a>
+  </h2>
+  <p>必须启用<a href="tools/cli/template-typecheck#strict-mode"><code>strictTemplates</code></a>才能发出任何扩展诊断。
+<code>invalidBananaInBox</code> 除了 <code>strictTemplates</code> 之外没有其他要求。</p>
+
+  <h2 id="what-if-i-cant-avoid-this">
+    <a href="#what-if-i-cant-avoid-this" class="docs-anchor" tabindex="-1" aria-label="Link to What if I can't avoid this?">如果我无法避免这种情况怎么办？</a>
+  </h2>
+  <p>可以通过编辑项目的 <code>tsconfig.json</code> 文件来禁用此诊断：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "angularCompilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "extendedDiagnostics"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "checks"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "invalidBananaInBox"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"suppress"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>有关更多信息，请参阅<a href="extended-diagnostics#configuration">扩展诊断配置</a>。</p>

@@ -1,0 +1,78 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/upgrade/static/testing</span><div class="docs-reference-title"><div><h1>createAngularJSTestingModule</h1><div class="docs-api-item-label type-function full">函数</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/upgrade/static/testing/src/create_angularjs_testing_module.ts#L80-L94" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">代码</i></a></div><section class="docs-reference-description"><p>一个辅助函数，用于单元测试依赖于降级 Angular 服务的 AngularJS 服务。</p></section></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">  <code>
+    <span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/upgrade/static/testing/createAngularJSTestingModule">createAngularJSTestingModule</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line "><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  angularModules</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[]</span></span><span class="line "><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-members"><div id="createAngularJSTestingModule_0" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>createAngularJSTestingModule</h3><div><code>string</code></div></header><div class="docs-reference-card-body"><div class="docs-reference-card-item "><div class="docs-function-definition"><p>一个辅助函数，用于单元测试依赖于降级 Angular 服务的 AngularJS 服务。</p>
+<p>此函数返回一个 AngularJS 模块，该模块配置为连接 AngularJS 和 Angular 注入器，而无需实际引导混合应用。这使得单元测试服务更简单、更快速。</p>
+<p>在调用 <a href="https://docs.angularjs.org/api/ngMock/function/angular.mock.module"><code>angular.mocks.module</code></a> 时使用返回的 AngularJS 模块，以便将此模块包含在单元测试注入器中。</p>
+<p>在以下代码片段中，我们正在使用两个模块配置 <code>$injector</code>：AngularJS 的 <code>ng1AppModule</code>，它是我们混合应用的 AngularJS 部分；以及 <code>Ng2AppModule</code>，它是 Angular 部分。</p>
+<p>{@example upgrade/static/ts/full/module.spec.ts region='angularjs-setup'}</p>
+<p>完成此操作后，我们可以像往常一样通过 AngularJS <code>$injector</code> 获取服务。作为降级 Angular 服务的服务（或具有对降级 Angular 服务的依赖项的服务）将根据 Angular 根 <code><a href="/api/core/Injector">Injector</a></code> 的需要进行实例化。</p>
+<p>在以下代码片段中，<code>heroesService</code> 是一个降级的 Angular 服务，我们正在从 AngularJS 访问它。</p>
+<p>{@example upgrade/static/ts/full/module.spec.ts region='angularjs-spec'}</p>
+<div class="docs-alert docs-alert-important">
+
+<p>此辅助函数用于测试服务，而不是组件。对于组件测试，你仍然必须引导混合应用。有关更多信息，请参阅 <code>UpgradeModule</code> 或 <code>downgradeModule</code>。</p>
+</div>
+
+<div class="docs-alert docs-alert-important">
+
+<p>生成的配置不会将 AngularJS 摘要连接到 Zone 钩子。测试编写者有责任根据需要调用 <code>$rootScope.$apply</code>，以触发来自 Angular 的异步事件的 AngularJS 处理程序。</p>
+</div>
+
+<div class="docs-alert docs-alert-important">
+
+<p>此辅助函数会设置全局变量以保存共享的 Angular 和 AngularJS 注入器。</p>
+
+    <ul class="docs-list">
+      <li>每个 spec 只调用此辅助函数一次。</li>
+<li>不要在同一个 spec 中同时使用 <code><a href="/api/upgrade/static/testing/createAngularJSTestingModule">createAngularJSTestingModule</a></code> 和 <code><a href="/api/upgrade/static/testing/createAngularTestingModule">createAngularTestingModule</a></code>。</li>
+
+    </ul>
+    </div>
+
+<p>这是一个范例应用及其单元测试，它们使用了 <code><a href="/api/upgrade/static/testing/createAngularTestingModule">createAngularTestingModule</a></code> 和 <code><a href="/api/upgrade/static/testing/createAngularJSTestingModule">createAngularJSTestingModule</a></code>。</p>
+<code-tabs>
+ <code-pane header="module.spec.ts" path="upgrade/static/ts/full/module.spec.ts"></code-pane>
+ <code-pane header="module.ts" path="upgrade/static/ts/full/module.ts"></code-pane>
+</code-tabs></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">angularModules</span><code>any[]</code><div class="docs-parameter-description"><p>要在配置中包含的 Angular 模块的集合。</p></div></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code>string</code></div></div></div></div></div><div class="docs-reference-section"><h2 id="description" class="docs-reference-section-heading"><a href="#description" aria-label="Link to Description section" tabindex="-1">说明</a></h2><div><p>一个辅助函数，用于单元测试依赖于降级 Angular 服务的 AngularJS 服务。</p>
+<p>此函数返回一个 AngularJS 模块，该模块配置为连接 AngularJS 和 Angular 注入器，而无需实际引导混合应用。这使得单元测试服务更简单、更快速。</p>
+<p>在调用 <a href="https://docs.angularjs.org/api/ngMock/function/angular.mock.module"><code>angular.mocks.module</code></a> 时使用返回的 AngularJS 模块，以便将此模块包含在单元测试注入器中。</p>
+<p>在以下代码片段中，我们正在使用两个模块配置 <code>$injector</code>：AngularJS 的 <code>ng1AppModule</code>，它是我们混合应用的 AngularJS 部分；以及 <code>Ng2AppModule</code>，它是 Angular 部分。</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">beforeEach</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">module</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/upgrade/static/testing/createAngularJSTestingModule">createAngularJSTestingModule</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">([Ng2AppModule])));</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  beforeEach</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">module</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(ng1AppModule.name));</span></span></code></pre>
+        </pre>
+      </div>
+    <p>完成此操作后，我们可以像往常一样通过 AngularJS <code>$injector</code> 获取服务。作为降级 Angular 服务的服务（或具有对降级 Angular 服务的依赖项的服务）将根据 Angular 根 <code><a href="/api/core/Injector">Injector</a></code> 的需要进行实例化。</p>
+<p>在以下代码片段中，<code>heroesService</code> 是一个降级的 Angular 服务，我们正在从 AngularJS 访问它。</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">it</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'should have access to the HeroesService'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">((</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">heroesService</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HeroesService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    expect</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(heroesService).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">toBeDefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }));</span></span></code></pre>
+        </pre>
+      </div>
+    <div class="docs-alert docs-alert-important">
+
+<p>此辅助函数用于测试服务，而不是组件。对于组件测试，你仍然必须引导混合应用。有关更多信息，请参阅 <code>UpgradeModule</code> 或 <code>downgradeModule</code>。</p>
+</div>
+
+<div class="docs-alert docs-alert-important">
+
+<p>生成的配置不会将 AngularJS 摘要连接到 Zone 钩子。测试编写者有责任根据需要调用 <code>$rootScope.$apply</code>，以触发来自 Angular 的异步事件的 AngularJS 处理程序。</p>
+</div>
+
+<div class="docs-alert docs-alert-important">
+
+<p>此辅助函数会设置全局变量以保存共享的 Angular 和 AngularJS 注入器。</p>
+
+    <ul class="docs-list">
+      <li>每个 spec 只调用此辅助函数一次。</li>
+<li>不要在同一个 spec 中同时使用 <code><a href="/api/upgrade/static/testing/createAngularJSTestingModule">createAngularJSTestingModule</a></code> 和 <code><a href="/api/upgrade/static/testing/createAngularTestingModule">createAngularTestingModule</a></code>。</li>
+
+    </ul>
+    </div>
+
+<p>这是一个范例应用及其单元测试，它们使用了 <code><a href="/api/upgrade/static/testing/createAngularTestingModule">createAngularTestingModule</a></code> 和 <code><a href="/api/upgrade/static/testing/createAngularJSTestingModule">createAngularJSTestingModule</a></code>。</p>
+<code-tabs>
+ <code-pane header="module.spec.ts" path="upgrade/static/ts/full/module.spec.ts"></code-pane>
+ <code-pane header="module.ts" path="upgrade/static/ts/full/module.ts"></code-pane>
+</code-tabs></div></div></div>

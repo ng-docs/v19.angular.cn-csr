@@ -1,0 +1,36 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">子查询结果是必需的，但没有可用的值。</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0951.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>必需的子查询 (<code>contentChild.required</code> 或 <code>viewChild.required</code>) 结果在查询结果被计算出来之前或查询没有匹配项时被访问。</p>
+<p>这可能发生在两种不同的情况下：</p>
+
+  <ul class="docs-list">
+    <li>查询结果在给定的查询可以收集结果之前被访问；</li>
+<li>查询已执行，但没有匹配任何节点，因此没有结果。</li>
+
+  </ul>
+  <p>内容查询和视图查询各自在不同的时间点计算其结果：</p>
+
+  <ul class="docs-list">
+    <li><code>contentChild</code> 结果在<em>宿主</em>视图（声明查询的指令所使用的模板）创建之后可用；</li>
+<li><code>viewChild</code> 结果在声明查询的组件的模板创建之后可用。</li>
+
+  </ul>
+  <p>在查询结果可用之前访问它们会导致本页描述的错误。最值得注意的是，查询结果在声明查询的组件或指令的构造函数中是<em>永远</em>不可用的。</p>
+
+  <h2 id="fixing-the-error">
+    <a href="#fixing-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Fixing the error">修复此错误</a>
+  </h2>
+  <p><code>contentChild</code> 查询结果可以在 <code>AfterContentChecked</code> 生命周期钩子或之后访问。
+<code>viewChild</code> 查询结果可以在 <code>AfterViewChecked</code> 生命周期钩子或之后访问。</p>
+<p>确保必需的查询至少匹配一个节点并且始终有结果。你可以通过在上面列出的生命周期钩子中访问查询结果来验证这一点。</p>

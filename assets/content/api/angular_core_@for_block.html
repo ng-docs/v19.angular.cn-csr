@@ -1,0 +1,77 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/core</span><div class="docs-reference-title"><div><h1>@for</h1><div class="docs-api-item-label type-block full">控制块</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/tools/manual_api_docs/blocks/for.md#L0-L0" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">代码</i></a></div><section class="docs-reference-description"><p><code>@for</code> 控制块为集合中的每个条目重复渲染一个控制块的内容。</p>
+
+      <h2 id="syntax" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#syntax" aria-label="Link to Syntax section" tabindex="-1">语法</a>
+      </h2>
+    
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (item </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">of</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> items; track item.name) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">li</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;{{ item.name }}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">li</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@empty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">li</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;There are no items.&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">li</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+        </pre>
+      </div>
+    
+      <h2 id="description" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#description" aria-label="Link to Description section" tabindex="-1">描述</a>
+      </h2>
+    <p><code>@for</code> 控制块会渲染其内容，以响应集合中的更改。集合可以是任何 JavaScript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols">可迭代者</a>，但使用常规 <code>Array</code> 具有性能优势。</p>
+<p>你可以选择在 <code>@for</code> 控制块内容之后立即包含一个 <code>@empty</code> 区块。当没有条目时，将显示 <code>@empty</code> 控制块的内容。</p>
+<p>Angular 的 <code>@for</code> 控制块不支持像 JavaScript 的 <code>continue</code> 或 <code>break</code> 这样的流程修改语句。</p>
+
+      <h3 id="track-and-objects-identity" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#track-and-objects-identity" aria-label="Link to `track` and objects identity section" tabindex="-1">
+          <code data-skip-anchor>track</code> 和对象标识</a>
+      </h3>
+    <p><code>track</code> 表达式的值决定了一个键，该键用于将数组条目与 DOM 中的视图相关联。清晰地指示条目标识，使 Angular 可以在集合中添加、删除或移动条目时执行最少的 DOM 操作集。</p>
+<p>为了优化性能，尤其是在遍历不可变数据的循环中，请确保有效地使用 track 表达式来唯一标识每个条目。由于可能导致性能不佳，因此 <code>@for</code> 循环需要 <code>track</code> 表达式。</p>
+<p>对于保持静态的集合，<code>track $index</code> 提供了一种直接的跟踪机制。对于经历添加、删除或重新排序的动态集合，请选择每个条目的唯一属性作为跟踪键。</p>
+
+      <h3 id="index-and-other-contextual-variables" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#index-and-other-contextual-variables" aria-label="Link to `$index` and other contextual variables section" tabindex="-1">
+          <code data-skip-anchor>$index</code> 和其他上下文变量</a>
+      </h3>
+    <p>在 <code>@for</code> 内容内部，始终有几个隐式变量可用：</p>
+
+      <div class="docs-table docs-scroll-track-transparent">
+        <table>
+          <thead>
+          <tr>
+<th>变量</th>
+<th>含义</th>
+</tr>
+
+          </thead>
+          <tbody>
+          <tr>
+<td><code>$count</code></td>
+<td>迭代集合中的条目数</td>
+</tr>
+<tr>
+<td><code>$index</code></td>
+<td>当前行的索引</td>
+</tr>
+<tr>
+<td><code>$first</code></td>
+<td>当前行是否为第一行</td>
+</tr>
+<tr>
+<td><code>$last</code></td>
+<td>当前行是否为最后一行</td>
+</tr>
+<tr>
+<td><code>$even</code></td>
+<td>当前行索引是否为偶数</td>
+</tr>
+<tr>
+<td><code>$odd</code></td>
+<td>当前行索引是否为奇数</td>
+</tr>
+
+          </tbody>
+        </table>
+      </div>
+    <p>这些变量始终以这些名称提供，但可以通过 <code>let</code> 段进行别名：</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (item </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">of</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> items; track item.id; </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> idx </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> $index, e </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> $even) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">Item #{{ idx }}: {{ item.name }}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+        </pre>
+      </div>
+    <p>在使用嵌套的 <code>@for</code> 控制块（其中上下文变量名称可能冲突）的情况下，别名特别有用。</p></section></header></div>

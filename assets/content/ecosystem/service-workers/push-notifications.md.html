@@ -1,0 +1,122 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">推送通知</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/ecosystem/service-workers/push-notifications.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>推送通知是吸引用户的一种引人注目的方式。
+借助 Service Worker 的强大功能，即使你的应用未被聚焦，通知也可以被传送到设备。</p>
+<p>Angular Service Worker 允许显示推送通知并处理通知点击事件。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 当使用 Angular Service Worker 时，推送通知交互由 <code>SwPush</code> 服务处理。
+要了解更多关于所涉及的浏览器 API 的信息，请参阅 <a href="https://developer.mozilla.org/docs/Web/API/Push_API" target="_blank">Push API</a> 和 <a href="https://developer.mozilla.org/docs/Web/API/Notifications_API/Using_the_Notifications_API" target="_blank">Using the Notifications API</a>。</p>
+
+    </div>
+    
+  <h2 id="notification-payload">
+    <a href="#notification-payload" class="docs-anchor" tabindex="-1" aria-label="Link to Notification payload">通知负载</a>
+  </h2>
+  <p>通过推送带有有效负载的消息来调用推送通知。
+请参阅 <code>SwPush</code> 以获得指导。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 在 Chrome 浏览器中，你可以在没有后端的情况下测试推送通知。
+打开 Devtools -&gt; Application -&gt; Service Workers，并使用 <code>Push</code> 输入框发送 JSON 通知负载。</p>
+
+    </div>
+    
+  <h2 id="notification-click-handling">
+    <a href="#notification-click-handling" class="docs-anchor" tabindex="-1" aria-label="Link to Notification click handling">通知点击处理</a>
+  </h2>
+  <p><code>notificationclick</code> 事件的默认行为是关闭通知并通知 <code>SwPush.notificationClicks</code>。</p>
+<p>你可以通过将 <code>onActionClick</code> 属性添加到 <code>data</code> 对象并提供 <code>default</code> 条目，来指定要在 <code>notificationclick</code> 上执行的附加操作。
+当通知被点击时，如果没有打开的客户端，这将特别有用。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "notification"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"New Notification!"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "data"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "onActionClick"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"operation"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"openWindow"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"url"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"foo"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="operations">
+    <a href="#operations" class="docs-anchor" tabindex="-1" aria-label="Link to Operations">操作</a>
+  </h3>
+  <p>Angular Service Worker 支持以下操作：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">操作</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>openWindow</code></td>
+<td align="left">在指定的 URL 中打开一个新标签页。</td>
+</tr>
+<tr>
+<td align="left"><code>focusLastFocusedOrOpen</code></td>
+<td align="left">聚焦于最后聚焦的客户端。如果没有打开的客户端，则在指定的 URL 中打开一个新标签页。</td>
+</tr>
+<tr>
+<td align="left"><code>navigateLastFocusedOrOpen</code></td>
+<td align="left">聚焦于最后聚焦的客户端并将其导航到指定的 URL。如果没有打开的客户端，则在指定的 URL 中打开一个新标签页。</td>
+</tr>
+<tr>
+<td align="left"><code>sendRequest</code></td>
+<td align="left">向指定的 URL 发送一个简单的 GET 请求。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要：</strong> URL 是相对于 Service Worker 的注册范围解析的。<br>如果 <code>onActionClick</code> 条目未定义 <code>url</code>，则使用 Service Worker 的注册范围。</p>
+
+    </div>
+    
+  <h3 id="actions">
+    <a href="#actions" class="docs-anchor" tabindex="-1" aria-label="Link to Actions">操作</a>
+  </h3>
+  <p>操作提供了一种自定义用户与通知交互方式的途径。</p>
+<p>使用 <code>actions</code> 属性，你可以定义一组可用的操作。
+每个操作都表示为一个操作按钮，用户可以点击该按钮与通知进行交互。</p>
+<p>此外，通过使用 <code>data</code> 对象上的 <code>onActionClick</code> 属性，你可以将每个操作绑定到一个操作，以便在点击相应的操作按钮时执行：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "notification"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"New Notification!"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "actions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"action"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"foo"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Open new tab"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"action"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"bar"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Focus last"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"action"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"baz"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Navigate last"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"action"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"qux"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Send request in the background"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"action"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"other"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Just notify existing clients"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ],</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "data"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "onActionClick"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"operation"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"openWindow"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        "foo"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"operation"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"openWindow"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"url"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/absolute/path"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        "bar"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"operation"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"focusLastFocusedOrOpen"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"url"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"relative/path"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        "baz"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"operation"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"navigateLastFocusedOrOpen"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"url"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"https://other.domain.com/"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        "qux"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"operation"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"sendRequest"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"url"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"https://yet.another.domain.com/"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要：</strong> 如果操作没有相应的 <code>onActionClick</code> 条目，则通知将被关闭，并且 <code>SwPush.notificationClicks</code> 将在现有客户端上收到通知。</p>
+
+    </div>
+    
+  <h2 id="more-on-angular-service-workers">
+    <a href="#more-on-angular-service-workers" class="docs-anchor" tabindex="-1" aria-label="Link to More on Angular service workers">关于 Angular Service Worker 的更多信息</a>
+  </h2>
+  <p>你可能还对以下内容感兴趣：</p>
+
+    <nav class="docs-pill-row">
+      
+    <a class="docs-pill" href="ecosystem/service-workers/communications">
+      与 Service Worker 通信
+    </a>
+    
+    <a class="docs-pill" href="ecosystem/service-workers/devops">
+      Service Worker 运维
+    </a>
+    
+
+    </nav>
+    

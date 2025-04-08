@@ -1,0 +1,110 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">工作区 npm 依赖</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/configs/npm-packages.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular 框架、Angular CLI 以及 Angular 应用所使用的组件都打包为 <a href="https://docs.npmjs.com/getting-started/what-is-npm" title="What" is npm? target="_blank">npm 软件包</a>，并使用 <a href="https://docs.npmjs.com" target="_blank">npm 仓库</a> 进行分发。</p>
+<p>你可以使用 <a href="https://docs.npmjs.com/cli/install" target="_blank">npm CLI 客户端</a> 下载和安装这些 npm 软件包。
+默认情况下，Angular CLI 使用 npm 客户端。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 有关 <code>Node.js</code> 和 <code>npm</code> 的必要版本和安装信息，请参阅 <a href="tools/cli/setup-local" title="Setting" up for local development>本地环境建立</a>。</p>
+
+    </div>
+    <p>如果你的机器上已经有正在运行的项目使用了其他版本的 Node.js 和 npm，请考虑使用 <a href="https://github.com/creationix/nvm" target="_blank">nvm</a> 来管理多个版本的 Node.js 和 npm。</p>
+
+  <h2 id="packagejson">
+    <a href="#packagejson" class="docs-anchor" tabindex="-1" aria-label="Link to <code>package.json</code>"><code>package.json</code></a>
+  </h2>
+  <p><code>npm</code> 安装在 <a href="https://docs.npmjs.com/files/package.json" target="_blank"><code>package.json</code></a> 文件中标识的包。</p>
+<p>当 CLI 命令 <code>ng new</code> 创建新的工作区时，会创建一个 <code>package.json</code> 文件。
+工作区中的所有项目（包括 CLI 在创建工作区时创建的初始应用项目）都使用此 <code>package.json</code>。
+使用 <code>ng generate library</code> 创建的库将包含它们自己的 <code>package.json</code> 文件。</p>
+<p>最初，此 <code>package.json</code> 包含<em>一组入门软件包</em>，其中一些是 Angular 所必需的，另一些则支持常见的应用场景。
+随着应用的演进，你可以向 <code>package.json</code> 中添加软件包。</p>
+
+  <h2 id="default-dependencies">
+    <a href="#default-dependencies" class="docs-anchor" tabindex="-1" aria-label="Link to Default Dependencies">默认依赖</a>
+  </h2>
+  <p>以下 Angular 软件包作为依赖项包含在新的 Angular 工作区的默认 <code>package.json</code> 文件中。
+有关 Angular 软件包的完整列表，请参阅 <a href="api">API 参考</a>。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">软件包名称</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><a href="api#animations"><code>@angular/animations</code></a></td>
+<td align="left">Angular 的动画库可以轻松定义和应用动画效果，例如页面和列表过渡。有关更多信息，请参阅<a href="guide/animations">动画指南</a>。</td>
+</tr>
+<tr>
+<td align="left"><a href="api#common"><code>@angular/common</code></a></td>
+<td align="left">Angular 团队提供的常用服务、管道和指令。</td>
+</tr>
+<tr>
+<td align="left"><code>@angular/compiler</code></td>
+<td align="left">Angular 的模板编译器。它理解 Angular 模板，并可以将它们转换为使应用运行的代码。</td>
+</tr>
+<tr>
+<td align="left"><code>@angular/compiler-cli</code></td>
+<td align="left">Angular 的编译器，由 Angular CLI 的 <code>ng build</code> 和 <code>ng serve</code> 命令调用。它在标准的 TypeScript 编译中，使用 <code>@angular/compiler</code> 处理 Angular 模板。</td>
+</tr>
+<tr>
+<td align="left"><a href="api#core"><code>@angular/core</code></a></td>
+<td align="left">每个应用都需要的框架的关键运行时部分。包括所有元数据装饰器，例如 <code>@Component</code>、依赖注入和组件生命周期钩子。</td>
+</tr>
+<tr>
+<td align="left"><a href="api#forms"><code>@angular/forms</code></a></td>
+<td align="left">同时支持<a href="guide/forms">模板驱动表单</a>和<a href="guide/forms/reactive-forms">响应式表单</a>。请参阅<a href="guide/forms">表单简介</a>。</td>
+</tr>
+<tr>
+<td align="left"><a href="api#platform-browser"><code>@angular/platform-browser</code></a></td>
+<td align="left">所有与 DOM 和浏览器相关的内容，尤其是那些有助于渲染到 DOM 中的部分。</td>
+</tr>
+<tr>
+<td align="left"><a href="api#platform-browser-dynamic"><code>@angular/platform-browser-dynamic</code></a></td>
+<td align="left">包括 <a href="api/core/Provider">提供者</a> 以及使用 <a href="tools/cli/aot-compiler#choosing-a-compiler">即时编译器</a> 在客户端编译和运行应用的方法。</td>
+</tr>
+<tr>
+<td align="left"><a href="api#router"><code>@angular/router</code></a></td>
+<td align="left">当浏览器 URL 更改时，路由器模块会在你的应用页面之间导航。有关更多信息，请参阅<a href="guide/routing">路由与导航</a>。</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/angular/angular-cli" target="_blank"><code>@angular/cli</code></a></td>
+<td align="left">包含用于运行 <code>ng</code> 命令的 Angular CLI 二进制文件。</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/angular/angular-cli" target="_blank"><code>@angular-devkit/build-angular</code></a></td>
+<td align="left">包含用于捆绑、测试和为 Angular 应用和库启动服务器的默认 CLI 构建器。</td>
+</tr>
+<tr>
+<td align="left"><code>rxjs</code></td>
+<td align="left">一个使用 <code>Observables</code> 进行响应式编程的库。</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/angular/zone.js" target="_blank"><code>zone.js</code></a></td>
+<td align="left">当原生 JavaScript 操作引发事件时，Angular 依赖 <code>zone.js</code> 运行 Angular 的变更检测过程。</td>
+</tr>
+<tr>
+<td align="left"><a href="https://www.npmjs.com/package/typescript" target="_blank"><code>typescript</code></a></td>
+<td align="left">TypeScript 编译器、语言服务器和内置类型定义。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  

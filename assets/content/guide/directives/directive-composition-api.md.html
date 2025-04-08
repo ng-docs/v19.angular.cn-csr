@@ -1,0 +1,115 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">指令组合 API</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/directives/directive-composition-api.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular 指令提供了一种封装可复用行为的绝佳方式 —— 指令可以将 Attribute、CSS 类和事件监听器应用到元素上。</p>
+<p><em>指令组合 API</em> 使你可以从组件的 TypeScript 类<em>内部</em>将指令应用到组件的宿主元素。</p>
+
+  <h2 id="adding-directives-to-a-component">
+    <a href="#adding-directives-to-a-component" class="docs-anchor" tabindex="-1" aria-label="Link to Adding directives to a component">向组件添加指令</a>
+  </h2>
+  <p>你可以通过将 <code>hostDirectives</code> 属性添加到组件的装饰器中，来将指令应用到组件。我们称此类指令为<em>宿主指令</em>。</p>
+<p>在此范例中，我们将指令 <code>MenuBehavior</code> 应用于 <code>AdminMenu</code> 的宿主元素。这与在模板中将 <code>MenuBehavior</code> 应用于 <code>&lt;admin-menu&gt;</code> 元素的工作方式类似。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu.html'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [MenuBehavior],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AdminMenu</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>当框架渲染组件时，Angular 还会创建每个宿主指令的实例。这些指令的宿主绑定会应用到组件的宿主元素。默认情况下，宿主指令的输入和输出不会作为组件公共 API 的一部分公开。有关更多信息，请参见下文<a href="#including-inputs-and-outputs">包含输入和输出</a>。</p>
+<p><strong>Angular 在编译时静态地应用宿主指令。</strong> 你无法在运行时动态添加指令。</p>
+<p><strong>在 <code>hostDirectives</code> 中使用的指令不得指定 <code>standalone: false</code>。</strong></p>
+<p><strong>Angular 会忽略在 <code>hostDirectives</code> 属性中应用的指令的 <code>selector</code>。</strong></p>
+
+  <h2 id="including-inputs-and-outputs">
+    <a href="#including-inputs-and-outputs" class="docs-anchor" tabindex="-1" aria-label="Link to Including inputs and outputs">包含输入和输出</a>
+  </h2>
+  <p>当你将 <code>hostDirectives</code> 应用于组件时，默认情况下，宿主指令的输入和输出不会包含在组件的 API 中。你可以通过展开 <code>hostDirectives</code> 中的条目，在组件的 API 中显式包含输入和输出：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu.html'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [{</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    directive: MenuBehavior,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    inputs: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'menuId'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    outputs: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'menuClosed'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AdminMenu</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>通过显式指定输入和输出，带有 <code>hostDirective</code> 的组件的使用者可以在模板中绑定它们：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">admin-menu</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> menuId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"top-menu"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> (menuClosed)</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"logMenuClosed()"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div><p>此外，你可以为 <code>hostDirective</code> 中的输入和输出设置别名，以自定义组件的 API：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu.html'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [{</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    directive: MenuBehavior,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    inputs: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'menuId: id'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    outputs: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'menuClosed: closed'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AdminMenu</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">admin-menu</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"top-menu"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> (closed)</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"logMenuClosed()"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="adding-directives-to-another-directive">
+    <a href="#adding-directives-to-another-directive" class="docs-anchor" tabindex="-1" aria-label="Link to Adding directives to another directive">向另一个指令添加指令</a>
+  </h2>
+  <p>除了组件之外，你还可以将 <code>hostDirectives</code> 添加到其他指令。这实现了多种行为的传递聚合。</p>
+<p>在以下范例中，我们定义了两个指令 <code>Menu</code> 和 <code>Tooltip</code>。然后，我们在 <code>MenuWithTooltip</code> 中组合了这两个指令的行为。最后，我们将 <code>MenuWithTooltip</code> 应用于 <code>SpecializedMenuWithTooltip</code>。</p>
+<p>当 <code>SpecializedMenuWithTooltip</code> 在模板中使用时，它会创建 <code>Menu</code>、<code>Tooltip</code> 和 <code>MenuWithTooltip</code> 的所有实例。这些指令中的每一个的宿主绑定都应用于 <code>SpecializedMenuWithTooltip</code> 的宿主元素。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Directive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Menu</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Directive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Tooltip</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// MenuWithTooltip can compose behaviors from multiple other directives</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Directive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [Tooltip, Menu],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MenuWithTooltip</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CustomWidget can apply the already-composed behaviors from MenuWithTooltip</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Directive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [MenuWithTooltip],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SpecializedMenuWithTooltip</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="host-directive-semantics">
+    <a href="#host-directive-semantics" class="docs-anchor" tabindex="-1" aria-label="Link to Host directive semantics">宿主指令语义</a>
+  </h2>
+  
+  <h3 id="directive-execution-order">
+    <a href="#directive-execution-order" class="docs-anchor" tabindex="-1" aria-label="Link to Directive execution order">指令执行顺序</a>
+  </h3>
+  <p>宿主指令与直接在模板中使用的组件和指令经历相同的生命周期。但是，宿主指令始终在应用它们的组件或指令<em>之前</em>执行其构造函数、生命周期钩子和绑定。</p>
+<p>以下范例展示了宿主指令的最小化用法：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin-menu.html'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [MenuBehavior],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AdminMenu</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>此处的执行顺序为：</p>
+
+    <ol class="docs-ordered-list">
+      <li><code>MenuBehavior</code> 已实例化</li>
+<li><code>AdminMenu</code> 已实例化</li>
+<li><code>MenuBehavior</code> 接收输入 (<code>ngOnInit</code>)</li>
+<li><code>AdminMenu</code> 接收输入 (<code>ngOnInit</code>)</li>
+<li><code>MenuBehavior</code> 应用宿主绑定</li>
+<li><code>AdminMenu</code> 应用宿主绑定</li>
+
+    </ol>
+    <p>此操作顺序意味着带有 <code>hostDirectives</code> 的组件可以重写宿主指令指定的任何宿主绑定。</p>
+<p>如以下范例所示，此操作顺序扩展到宿主指令的嵌套链。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Directive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Tooltip</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Directive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [Tooltip],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomTooltip</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Directive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  hostDirectives: [CustomTooltip],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> EvenMoreCustomTooltip</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>在上面的范例中，执行顺序为：</p>
+
+    <ol class="docs-ordered-list">
+      <li><code>Tooltip</code> 已实例化</li>
+<li><code>CustomTooltip</code> 已实例化</li>
+<li><code>EvenMoreCustomTooltip</code> 已实例化</li>
+<li><code>Tooltip</code> 接收输入 (<code>ngOnInit</code>)</li>
+<li><code>CustomTooltip</code> 接收输入 (<code>ngOnInit</code>)</li>
+<li><code>EvenMoreCustomTooltip</code> 接收输入 (<code>ngOnInit</code>)</li>
+<li><code>Tooltip</code> 应用宿主绑定</li>
+<li><code>CustomTooltip</code> 应用宿主绑定</li>
+<li><code>EvenMoreCustomTooltip</code> 应用宿主绑定</li>
+
+    </ol>
+    
+  <h3 id="dependency-injection">
+    <a href="#dependency-injection" class="docs-anchor" tabindex="-1" aria-label="Link to Dependency injection">依赖注入</a>
+  </h3>
+  <p>指定了 <code>hostDirectives</code> 的组件或指令可以注入这些宿主指令的实例，反之亦然。</p>
+<p>当将宿主指令应用于组件时，组件和宿主指令都可以定义提供者。</p>
+<p>如果带有 <code>hostDirectives</code> 的组件或指令以及这些宿主指令都提供相同的注入令牌，则带有 <code>hostDirectives</code> 的类定义的提供者优先于宿主指令定义的提供者。</p>

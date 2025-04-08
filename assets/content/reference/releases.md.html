@@ -1,0 +1,334 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular 版本控制与发布</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/releases.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>我们认识到你需要 Angular 框架的稳定性。稳定性确保了可复用的组件和库、教程、工具以及学到的实践经验不会意外地过时。稳定性对于 Angular 周围生态系统的蓬勃发展至关重要。</p>
+<p>我们也和你一样，认为 Angular 需要不断发展。我们努力确保你正在构建的基础设施能够持续改进，使你能够与 Web 生态系统的其他部分以及用户的需求保持同步。</p>
+<p>本文档包含我们遵循的实践，旨在为你提供一个领先的应用开发平台，并在稳定性方面取得平衡。我们力求确保未来的变更始终以可预测的方式引入。我们希望每个依赖 Angular 的人都知道何时以及如何添加新特性，并在过时的特性被删除时做好充分准备。</p>
+<p>有时，为了创新并与不断发展的最佳实践、不断变化的依赖项或 Web 平台的转变保持同步，<em>破坏性变更</em>（例如删除 API 或特性）是必要的。这些破坏性变更会经历一个弃用过程，这在我们的<a href="#deprecation-policy">弃用策略</a>中进行了解释。</p>
+<p>为了使这些过渡尽可能简单明了，Angular 团队做出了以下承诺：</p>
+
+  <ul class="docs-list">
+    <li>我们努力减少破坏性变更的数量，并在可能的情况下提供迁移工具</li>
+<li>我们遵循此处描述的弃用策略，以便你有时间将你的应用更新到最新的 API 和最佳实践</li>
+
+  </ul>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 本文档中描述的实践适用于 Angular 2.0 及更高版本。如果你目前正在使用 AngularJS，请参阅<a href="https://angular.io/guide/upgrade" title="Upgrading" from angular js target="_blank">从 AngularJS 升级</a>。<em>AngularJS</em> 是所有 v1.x 版本 Angular 的名称。</p>
+
+    </div>
+    
+  <h2 id="angular-versioning">
+    <a href="#angular-versioning" class="docs-anchor" tabindex="-1" aria-label="Link to Angular versioning">Angular 版本控制</a>
+  </h2>
+  <p>Angular 版本号指示了版本发布所引入的变更级别。这种<a href="https://semver.org/" title="Semantic" versioning specification target="_blank">语义化版本控制</a>的使用有助于你了解更新到新版本的潜在影响。</p>
+<p>Angular 版本号有三个部分：<code>major.minor.patch</code>。例如，版本 7.2.11 表示主版本 7，次版本 2 和补丁级别 11。</p>
+<p>版本号会根据版本发布中包含的变更级别进行递增。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">变更级别</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">主版本发布</td>
+<td align="left">包含重要的新特性，更新期间预计需要少量但最少的开发者协助。当更新到新的主版本发布时，你可能需要运行更新脚本、重构代码、运行额外的测试以及学习新的 API。</td>
+</tr>
+<tr>
+<td align="left">次版本发布</td>
+<td align="left">包含新的较小特性。次版本发布是完全向后兼容的；更新期间预计不需要开发者协助，但是你可以选择修改你的应用和库，开始使用版本发布中添加的新 API、特性和功能。我们在次版本中通过扩展支持的版本来更新对等依赖，但是我们不要求项目更新这些依赖。</td>
+</tr>
+<tr>
+<td align="left">补丁版本发布</td>
+<td align="left">低风险的缺陷修复版本发布。更新期间预计不需要开发者协助。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 从 Angular 版本 7 开始，Angular core 和 CLI 的主版本已对齐。这意味着为了在你开发 Angular 应用时使用 CLI，<code>@angular/core</code> 和 CLI 的版本需要相同。</p>
+
+    </div>
+    
+  <h3 id="preview-releases">
+    <a href="#preview-releases" class="docs-anchor" tabindex="-1" aria-label="Link to Preview releases">预览版本发布</a>
+  </h3>
+  <p>我们通过为每个主版本和次版本发布提供 "Next" 和发布候选版本 (<code>rc</code>) 预发布版本，让你预览即将发布的内容：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">预发布版本类型</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">Next</td>
+<td align="left">正在积极开发和测试的版本。next 版本由附加了 <code>-next</code> 标识符的版本标记指示，例如 <code>8.1.0-next.0</code>。</td>
+</tr>
+<tr>
+<td align="left">发布候选版本</td>
+<td align="left">一个特性完整且正在进行最终测试的版本。发布候选版本由附加了 <code>-rc</code> 标识符的版本标记指示，例如版本 <code>8.1.0-rc.0</code>。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>最新的 <code>next</code> 或 <code>rc</code> 预发布版本的文档可在 <a href="https://next.angular.dev" target="_blank">next.angular.dev</a> 上找到。</p>
+
+  <h2 id="release-frequency">
+    <a href="#release-frequency" class="docs-anchor" tabindex="-1" aria-label="Link to Release frequency">发布频率</a>
+  </h2>
+  <p>我们致力于定期的版本发布计划，以便你可以计划和协调你的更新，使其与 Angular 的持续发展保持同步。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 日期仅作为一般指导，可能会发生变化。</p>
+
+    </div>
+    <p>通常，可以预期以下发布周期：</p>
+
+  <ul class="docs-list">
+    <li>每 6 个月一次主版本发布</li>
+<li>每个主版本发布包含 1-3 个次版本发布</li>
+<li>几乎每周都会发布补丁版本和预发布版本（<code>next</code> 或 <code>rc</code>）构建</li>
+
+  </ul>
+  <p>这种发布节奏使渴望尝鲜的开发者能够在其新特性完全开发并通过我们的代码审查和集成测试流程后立即访问这些特性，同时保持平台的稳定性和可靠性，以满足喜欢在特性经过 Google 和其他使用预发布版本构建的开发者验证后再接收这些特性的生产用户的需求。</p>
+
+  <h2 id="support-policy-and-schedule">
+    <a href="#support-policy-and-schedule" class="docs-anchor" tabindex="-1" aria-label="Link to Support policy and schedule">支持策略和时间表</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 近似日期仅作为一般指导，可能会发生变化。</p>
+
+    </div>
+    
+  <h3 id="release-schedule">
+    <a href="#release-schedule" class="docs-anchor" tabindex="-1" aria-label="Link to Release schedule">发布时间表</a>
+  </h3>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">版本</th>
+<th align="left">日期</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">v19.1</td>
+<td align="left">2025-01-13当周</td>
+</tr>
+<tr>
+<td align="left">v19.2</td>
+<td align="left">2025-02-24当周</td>
+</tr>
+<tr>
+<td align="left">v20.0</td>
+<td align="left">2025-05-26当周</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="support-window">
+    <a href="#support-window" class="docs-anchor" tabindex="-1" aria-label="Link to Support window">支持窗口期</a>
+  </h3>
+  <p>所有主要版本通常都会获得 18 个月的支持。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">支持阶段</th>
+<th align="left">支持时序</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">积极支持</td>
+<td align="left">6 个月</td>
+<td align="left">定期发布计划更新和补丁</td>
+</tr>
+<tr>
+<td align="left">长期支持 (LTS)</td>
+<td align="left">12 个月</td>
+<td align="left">仅发布<a href="#lts-fixes">关键修复和安全补丁</a></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="actively-supported-versions">
+    <a href="#actively-supported-versions" class="docs-anchor" tabindex="-1" aria-label="Link to Actively supported versions">积极支持的版本</a>
+  </h3>
+  <p>下表提供了受支持的 Angular 版本的状态。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">版本</th>
+<th align="left">状态</th>
+<th align="left">已发布</th>
+<th align="left">积极支持结束</th>
+<th align="left">LTS 支持结束</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">^19.0.0</td>
+<td align="left">积极支持</td>
+<td align="left">2024-11-19</td>
+<td align="left">2025-05-19</td>
+<td align="left">2026-05-19</td>
+</tr>
+<tr>
+<td align="left">^18.0.0</td>
+<td align="left">LTS</td>
+<td align="left">2024-05-22</td>
+<td align="left">2024-11-19</td>
+<td align="left">2025-11-19</td>
+</tr>
+<tr>
+<td align="left">^17.0.0</td>
+<td align="left">LTS</td>
+<td align="left">2023-11-08</td>
+<td align="left">2024-05-08</td>
+<td align="left">2025-05-15</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>Angular v2 到 v16 版本已不再受支持。</p>
+
+  <h3 id="lts-fixes">
+    <a href="#lts-fixes" class="docs-anchor" tabindex="-1" aria-label="Link to LTS fixes">LTS 修复</a>
+  </h3>
+  <p>作为一般规则，如果修复是为了解决以下问题之一，则 LTS 版本会考虑该修复：</p>
+
+  <ul class="docs-list">
+    <li>新发现的安全漏洞，</li>
+<li>自 LTS 开始以来，由第三方更改（例如新的浏览器版本）引起的回归。</li>
+
+  </ul>
+  
+  <h2 id="deprecation-policy">
+    <a href="#deprecation-policy" class="docs-anchor" tabindex="-1" aria-label="Link to Deprecation policy">弃用策略</a>
+  </h2>
+  <p>当 Angular 团队打算移除某个 API 或特性时，它将被标记为 <em>deprecated</em>（已弃用）。当某个 API 过时、被另一个 API 取代或以其他方式停止使用时，就会发生这种情况。已弃用的 API 在其弃用阶段仍然可用，该阶段至少持续两个主要版本（大约一年）。</p>
+<p>为了帮助确保您有足够的时间和清晰的更新路径，以下是我们的弃用策略：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">弃用阶段</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">公告</td>
+<td align="left">我们在 <a href="https://github.com/angular/angular/blob/main/CHANGELOG.md" title="Angular" change log target="_blank">变更日志</a> 中宣布已弃用的 API 和特性。已弃用的 API 会在 <a href="api?status=deprecated">文档</a> 中以 <del>删除线</del> 的形式出现。当我们宣布弃用时，我们还会宣布推荐的更新路径。此外，所有已弃用的 API 都在相应的文档中使用 <code>@deprecated</code> 进行注解，这使文本编辑器和 IDE 能够在您的项目依赖于它们时提供提示。</td>
+</tr>
+<tr>
+<td align="left">弃用周期</td>
+<td align="left">当 API 或特性被弃用时，它至少在接下来的两个主要版本（至少 12 个月的时间段）中仍然存在。在此之后，已弃用的 API 和特性将成为移除的候选对象。可以在任何版本中宣布弃用，但已弃用 API 或特性的移除仅在主要版本中发生。在已弃用的 API 或特性被移除之前，它会根据 LTS 支持策略进行维护，这意味着只会修复关键问题和安全问题。</td>
+</tr>
+<tr>
+<td align="left">npm 依赖</td>
+<td align="left">我们只在主要版本中进行需要更改您的应用的 npm 依赖更新。在次要版本中，我们通过扩展支持的版本来更新对等依赖，但我们不要求项目在未来的主要版本之前更新这些依赖。这意味着在 Angular 的次要版本发布期间，Angular 应用和库中的 npm 依赖更新是可选的。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="compatibility-policy">
+    <a href="#compatibility-policy" class="docs-anchor" tabindex="-1" aria-label="Link to Compatibility policy">兼容性策略</a>
+  </h2>
+  <p>Angular 是许多软件包、子项目和工具的集合。
+为了防止意外使用私有 API，并使您可以清楚地了解此处描述的实践涵盖的内容，我们记录了哪些被认为是我们的公共 API 表面，哪些不是。
+有关详细信息，请参阅 <a href="https://github.com/angular/angular/blob/main/contributing-docs/public-api-surface.md" title="Supported" public api surface of angular target="_blank">Angular 支持的公共 API 表面</a>。</p>
+<p>为了保证 Angular 的向后兼容性，我们在合并任何更改之前都会运行一系列检查：</p>
+
+  <ul class="docs-list">
+    <li>单元测试和集成测试</li>
+<li>比较更改前后公共 API 表面的类型定义</li>
+<li>运行 Google 中所有依赖 Angular 的应用的测试</li>
+
+  </ul>
+  <p>对公共 API 表面的任何更改均根据先前描述的版本控制、支持和弃用策略进行。在特殊情况下，例如关键安全补丁，修复程序可能会引入向后不兼容的更改。此类特殊情况会附带框架官方沟通渠道上的明确通知。</p>
+
+  <h2 id="breaking-change-policy-and-update-paths">
+    <a href="#breaking-change-policy-and-update-paths" class="docs-anchor" tabindex="-1" aria-label="Link to Breaking change policy and update paths">破坏性变更策略和更新路径</a>
+  </h2>
+  <p>破坏性变更需要您进行一些工作，因为变更后的状态与变更前的状态不向后兼容。您可以在 <a href="#compatibility-policy">兼容性策略</a> 中找到此规则的罕见例外情况。破坏性变更的示例包括删除公共 API 或 Angular 类型定义的其他更改、更改调用的时序或更新到 Angular 依赖项的新版本，而新版本本身包含破坏性变更。</p>
+<p>为了在 Angular 中出现破坏性变更时为您提供支持：</p>
+
+  <ul class="docs-list">
+    <li>在移除公共 API 之前，我们遵循 <a href="#deprecation-policy">弃用策略</a></li>
+<li>通过 <code>ng update</code> 命令支持更新自动化。它提供了代码转换，我们通常在 Google 的数十万个项目中提前测试过这些转换</li>
+<li>在 <a href="update-guide">“Angular 更新指南”</a> 中，提供了如何从一个主要版本更新到另一个主要版本的逐步说明</li>
+
+  </ul>
+  <p>您可以 <code>ng update</code> 到任何 Angular 版本，前提是满足以下条件：</p>
+
+  <ul class="docs-list">
+    <li>您要更新<em>到</em>的版本受支持。</li>
+<li>您要更新<em>自</em>的版本在您要升级到的版本的一个主要版本之内。</li>
+
+  </ul>
+  <p>例如，您可以从版本 11 更新到版本 12，前提是版本 12 仍然受支持。
+如果您想跨多个主要版本更新，请一次执行一个主要版本的更新。
+例如，要从版本 10 更新到版本 12：</p>
+
+    <ol class="docs-ordered-list">
+      <li>从版本 10 更新到版本 11。</li>
+<li>从版本 11 更新到版本 12。</li>
+
+    </ol>
+    
+  <h2 id="developer-preview">
+    <a href="#developer-preview" class="docs-anchor" tabindex="-1" aria-label="Link to Developer Preview">开发者预览版</a>
+  </h2>
+  <p>有时我们会以“开发者预览版”的标签引入新的 API。这些 API 功能齐全且经过完善，但我们尚未准备好根据我们正常的弃用策略对其进行稳定。</p>
+<p>这可能是因为我们希望在稳定之前收集来自真实应用的反馈，或者因为相关的文档或迁移工具尚未完全完成。可以通过 <a href="https://github.com/angular/angular/issues" target="_blank">GitHub issue</a> 提供反馈，开发者可以在其中分享他们的经验、报告错误或提出改进建议，以帮助改进该特性。</p>
+<p>本文档中描述的策略和实践不适用于标记为“开发者预览版”的 API。此类 API 可能会随时更改，即使在框架的新补丁版本中也是如此。团队应自行决定，使用“开发者预览版”API 的好处是否值得冒语义化版本控制正常使用之外的破坏性变更的风险。</p>
+
+  <h2 id="experimental">
+    <a href="#experimental" class="docs-anchor" tabindex="-1" aria-label="Link to Experimental">实验性的</a>
+  </h2>
+  <p>这些 API 可能根本不会变得稳定，或者在变得稳定之前会发生重大变化。</p>
+<p>本文档中描述的策略和实践不适用于标记为实验性的 API。此类 API 可能会随时更改，即使在框架的新补丁版本中也是如此。团队应自行决定，使用实验性 API 的好处是否值得冒语义化版本控制正常使用之外的破坏性变更的风险。</p>

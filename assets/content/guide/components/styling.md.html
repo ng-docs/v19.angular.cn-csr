@@ -1,0 +1,79 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">组件样式</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/components/styling.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+    <div class="docs-alert docs-alert-tip">
+    <p><strong>提示：</strong> 本指南假定你已阅读过<a href="essentials">《要点指南》</a>。 如果你是 Angular 新手，请先阅读它。</p>
+
+    </div>
+    <p>组件可以选择包含应用于该组件 DOM 的 CSS 样式：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'profile-photo'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> src</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"profile-photo.jpg"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> alt</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Your profile photo"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  styles: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D"> img</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">border-radius</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">50</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">%</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; } </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ProfilePhoto</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>你也可以选择在单独的文件中编写样式：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'profile-photo'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  templateUrl: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'profile-photo.html'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  styleUrl: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'profile-photo.css'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ProfilePhoto</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>当 Angular 编译你的组件时，这些样式会随组件的 JavaScript 输出一起发出。 这意味着组件样式参与 JavaScript 模块系统。 当你渲染 Angular 组件时，即使在惰性加载组件时，该框架也会自动包含其关联的样式。</p>
+<p>Angular 可以与任何输出 CSS 的工具一起使用，包括 <a href="https://sass-lang.com" target="_blank">Sass</a>、<a href="https://lesscss.org" target="_blank">less</a> 和 <a href="https://stylus-lang.com" target="_blank">stylus</a>。</p>
+
+  <h2 id="style-scoping">
+    <a href="#style-scoping" class="docs-anchor" tabindex="-1" aria-label="Link to Style scoping">样式作用域</a>
+  </h2>
+  <p>每个组件都有一个<strong>视图封装</strong>设置，用于确定框架如何限定组件样式的作用域。 有三种视图封装模式：<code>Emulated</code>、<code>ShadowDom</code> 和 <code>None</code>。 你可以在 <code>@Component</code> 装饰器中指定模式：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  encapsulation: ViewEncapsulation.None,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ProfilePhoto</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="viewencapsulationemulated">
+    <a href="#viewencapsulationemulated" class="docs-anchor" tabindex="-1" aria-label="Link to ViewEncapsulation.Emulated">ViewEncapsulation.Emulated</a>
+  </h3>
+  <p>默认情况下，Angular 使用模拟封装，以便组件的样式仅应用于在该组件模板中定义的元素。 在此模式下，框架为每个组件实例生成唯一的 HTML Attribute，将该 Attribute 添加到组件模板中的元素，并将该 Attribute 插入到组件样式中定义的 CSS 选择器中。</p>
+<p>此模式确保组件的样式不会泄漏出去并影响其他组件。 但是，在组件外部定义的全局样式仍然可能会影响具有模拟封装的组件内部的元素。</p>
+<p>在模拟模式下，Angular 支持 <a href="https://developer.mozilla.org/docs/Web/CSS/:host" target="_blank"><code>:host</code></a> 和 <a href="https://developer.mozilla.org/docs/Web/CSS/:host-context" target="_blank"><code>:host-context()</code></a> 伪类，而无需使用 <a href="https://developer.mozilla.org/docs/Web/Web_Components/Using_shadow_DOM" target="_blank">Shadow DOM</a>。 在编译期间，框架会将这些伪类转换为 Attribute，因此它在运行时不符合这些原生伪类的规则（例如，浏览器兼容性、特异性）。 Angular 的模拟封装模式不支持任何其他与 Shadow DOM 相关的伪类，例如 <code>::shadow</code> 或 <code>::part</code>。</p>
+
+  <h4 id="ng-deep">
+    <a href="#ng-deep" class="docs-anchor" tabindex="-1" aria-label="Link to <code>::ng-deep</code>"><code>::ng-deep</code></a>
+  </h4>
+  <p>Angular 的模拟封装模式支持自定义伪类 <code>::ng-deep</code>。 将此伪类应用于 CSS 规则会禁用该规则的封装，从而有效地将其转换为全局样式。 <strong>Angular 团队强烈建议不要再使用 <code>::ng-deep</code></strong>。 这些 API 仍然完全是为了向后兼容。</p>
+
+  <h3 id="viewencapsulationshadowdom">
+    <a href="#viewencapsulationshadowdom" class="docs-anchor" tabindex="-1" aria-label="Link to ViewEncapsulation.ShadowDom">ViewEncapsulation.ShadowDom</a>
+  </h3>
+  <p>此模式通过使用 <a href="https://developer.mozilla.org/docs/Web/Web_Components/Using_shadow_DOM" target="_blank">Web 标准 Shadow DOM API</a> 在组件内限定样式的作用域。 启用此模式后，Angular 会将阴影根附着到组件的宿主元素，并将组件的模板和样式渲染到相应的阴影树中。</p>
+<p>此模式严格保证<em>只有</em>该组件的样式才应用于组件模板中的元素。 全局样式不能影响阴影树中的元素，阴影树内的样式也不能影响该阴影树之外的元素。</p>
+<p>但是，启用 <code>ShadowDom</code> 封装的影响不仅仅是样式作用域。 在阴影树中渲染组件会影响事件传播、与 <a href="https://developer.mozilla.org/docs/Web/Web_Components/Using_templates_and_slots" target="_blank"><code>&lt;slot&gt;</code> API</a> 的交互以及浏览器开发者工具显示元素的方式。 在你的应用中启用此选项之前，请务必了解使用 Shadow DOM 的全部含义。</p>
+
+  <h3 id="viewencapsulationnone">
+    <a href="#viewencapsulationnone" class="docs-anchor" tabindex="-1" aria-label="Link to ViewEncapsulation.None">ViewEncapsulation.None</a>
+  </h3>
+  <p>此模式禁用组件的所有样式封装。 与组件关联的任何样式都表现为全局样式。</p>
+
+    <div class="docs-alert docs-alert-note">
+    <p><strong>注意：</strong> 在 <code>Emulated</code> 和 <code>ShadowDom</code> 模式下，Angular 不能 100% 保证你的组件样式始终会覆盖来自外部的样式。 假设在发生冲突时，这些样式与你的组件样式具有相同的特异性。</p>
+
+    </div>
+    
+  <h2 id="defining-styles-in-templates">
+    <a href="#defining-styles-in-templates" class="docs-anchor" tabindex="-1" aria-label="Link to Defining styles in templates">在模板中定义样式</a>
+  </h2>
+  <p>你可以在组件的模板中使用 <code>&lt;style&gt;</code> 元素来定义其他样式。 组件的视图封装模式适用于以这种方式定义的样式。</p>
+<p>Angular 不支持样式元素内部的绑定。</p>
+
+  <h2 id="referencing-external-style-files">
+    <a href="#referencing-external-style-files" class="docs-anchor" tabindex="-1" aria-label="Link to Referencing external style files">引用外部样式文件</a>
+  </h2>
+  <p>组件模板可以 使用 <a href="https://developer.mozilla.org/docs/Web/HTML/Element/link" target="_blank"><code>&lt;link&gt;</code> 元素</a> 来引用 CSS 文件。 此外，你的 CSS 可能会使用 <a href="https://developer.mozilla.org/docs/Web/CSS/@import" target="_blank"><code>@import</code> at-rule</a> 来引用 CSS 文件。 Angular 将这些引用视为<em>外部</em>样式。 外部样式不受模拟视图封装的影响。</p>

@@ -1,0 +1,24 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">必要的输入属性在其值被设置之前就被访问了。</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0950.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>必要的输入属性已被访问，但没有值被绑定。</p>
+<p>当必要的输入属性在你的指令或组件中过早被访问时，可能会发生这种情况。
+这种情况通常发生在输入属性在类构造期间被读取时。</p>
+<p>输入属性保证在 <code>ngOnInit</code> 生命周期钩子及其之后可用。</p>
+
+  <h2 id="fixing-the-error">
+    <a href="#fixing-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Fixing the error">修复此错误</a>
+  </h2>
+  <p>在响应式上下文中访问必要的输入属性。
+例如，在模板本身中，在 <code>computed</code> 内部，或在副作用内部。</p>
+<p>或者，在 <code>ngOnInit</code> 生命周期钩子或之后访问输入属性。</p>

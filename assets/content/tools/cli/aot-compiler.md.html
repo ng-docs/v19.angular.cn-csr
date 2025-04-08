@@ -1,0 +1,586 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">预先编译 (AoT) compilation</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/aot-compiler.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular 应用主要由组件及其 HTML 模板组成。
+由于浏览器无法直接理解 Angular 提供的组件和模板，因此 Angular 应用需要一个编译过程才能在浏览器中运行。</p>
+<p>Angular 预先编译 (AoT) 编译器在构建阶段<em>在</em>浏览器下载并运行该代码<em>之前</em>，将你的 Angular HTML 和 TypeScript 代码转换为高效的 JavaScript 代码。
+在构建过程中编译你的应用可以在浏览器中提供更快的渲染。</p>
+<p>本指南解释了如何指定元数据并应用可用的编译器选项，以使用 AoT 编译器高效地编译你的应用。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> <a href="https://www.youtube.com/watch?v=anphffaCZrQ" target="_blank">观看 Alex Rickabaugh 在 AngularConnect 2019 大会上讲解 Angular 编译器</a>。</p>
+
+    </div>
+    <p>以下是你可能想要使用 AoT 的一些原因。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">原因</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">更快的渲染</td>
+<td align="left">使用 AoT，浏览器会下载应用的预编译版本。浏览器加载可执行代码，以便它可以立即渲染应用，而无需先等待编译应用。</td>
+</tr>
+<tr>
+<td align="left">更少的异步请求</td>
+<td align="left">编译器将外部 HTML 模板和 CSS 样式表<em>内联</em>到应用 JavaScript 中，从而消除了对这些源文件的单独 ajax 请求。</td>
+</tr>
+<tr>
+<td align="left">更小的 Angular 框架下载大小</td>
+<td align="left">如果应用已经编译，则无需下载 Angular 编译器。编译器大约占 Angular 本身的一半，因此省略它可以显著减少应用的有效负载。</td>
+</tr>
+<tr>
+<td align="left">更早地检测模板错误</td>
+<td align="left">AoT 编译器在构建步骤中检测并报告模板绑定错误，在用户看到它们之前。</td>
+</tr>
+<tr>
+<td align="left">更好的安全性</td>
+<td align="left">AoT 将 HTML 模板和组件编译为 JavaScript 文件，在它们被提供给客户端<em>很久之前</em>。由于没有模板需要读取，也没有有风险的客户端 HTML 或 JavaScript 求值，因此减少了注入攻击的机会。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="choosing-a-compiler">
+    <a href="#choosing-a-compiler" class="docs-anchor" tabindex="-1" aria-label="Link to Choosing a compiler">选择编译器</a>
+  </h2>
+  <p>Angular 提供了两种编译你的应用的方式：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">Angular 编译</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">即时 (JiT)</td>
+<td align="left">在运行时在浏览器中编译你的应用。在 Angular 8 之前，这是默认设置。</td>
+</tr>
+<tr>
+<td align="left">预先编译 (AoT)</td>
+<td align="left">在构建时编译你的应用和库。从 Angular 9 开始，这是默认设置。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>当你运行 <code><a href="cli/build">ng build</a></code>（仅构建）或 <code><a href="cli/serve">ng serve</a></code>（构建并在本地启动服务器）CLI 命令时，编译类型（JiT 或 AoT）取决于 <code>angular.json</code> 中指定的构建配置中 <code>aot</code> 属性的值。
+默认情况下，对于新的 CLI 应用，<code>aot</code> 设置为 <code>true</code>。</p>
+<p>有关更多信息，请参阅 <a href="cli">CLI command reference</a> 和 <a href="tools/cli/build">Building and serving Angular apps</a>。</p>
+
+  <h2 id="how-aot-works">
+    <a href="#how-aot-works" class="docs-anchor" tabindex="-1" aria-label="Link to How AOT works">AoT 的工作原理</a>
+  </h2>
+  <p>Angular AoT 编译器提取 <strong>metadata</strong>，以解释 Angular 应该管理的应用部分。你可以在 <strong>装饰器</strong>（如 <code>@Component()</code> 和 <code>@Input()</code>）中显式指定元数据，或在带装饰器的类的构造函数声明中隐式指定。
+元数据告诉 Angular 如何构造你的应用类的实例并在运行时与它们交互。</p>
+<p>在以下范例中，<code>@Component()</code> 元数据对象和类构造函数告诉 Angular 如何创建和显示 <code>TypicalComponent</code> 的实例。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app-typical'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;div&gt;A typical component for {{data.name}}&lt;/div&gt;'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">data</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalData</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> someService</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(SomeService);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>Angular 编译器<em>一次性</em>提取元数据，并为 <code>TypicalComponent</code> 生成一个<em>工厂</em>。
+当需要创建 <code>TypicalComponent</code> 实例时，Angular 调用该工厂，工厂会生成一个新的可视化元素，该元素绑定到组件类的新实例及其注入的依赖项。</p>
+
+  <h3 id="compilation-phases">
+    <a href="#compilation-phases" class="docs-anchor" tabindex="-1" aria-label="Link to Compilation phases">编译阶段</a>
+  </h3>
+  <p>AoT 编译有三个阶段。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left"></th>
+<th align="left">阶段</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">1</td>
+<td align="left">代码分析</td>
+<td align="left">在此阶段，TypeScript 编译器和 <em>AoT 收集器</em> 创建源码的表示形式。收集器不尝试解释它收集的元数据。它尽可能地表示元数据，并在检测到元数据语法违规时记录错误。</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">代码生成</td>
+<td align="left">在此阶段，编译器的 <code>StaticReflector</code> 解释在阶段 1 中收集的元数据，对元数据执行额外的验证，并在检测到元数据限制违规时抛出错误。</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">模板类型检查</td>
+<td align="left">在这个可选阶段，Angular *模板编译器* 使用 TypeScript 编译器来验证模板中的绑定表达式。你可以通过设置 <code>strictTemplates</code> 配置选项来显式启用此阶段；请参阅 <a href="reference/configs/angular-compiler-options">Angular 编译器选项</a>。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="metadata-restrictions">
+    <a href="#metadata-restrictions" class="docs-anchor" tabindex="-1" aria-label="Link to Metadata restrictions">元数据限制</a>
+  </h3>
+  <p>你用 TypeScript 的*子集*编写元数据，该子集必须符合以下通用约束：</p>
+
+  <ul class="docs-list">
+    <li>将 <a href="#expression-syntax-limitations">表达式语法</a> 限制为受支持的 JavaScript 子集</li>
+<li>仅在 <a href="#code-folding">代码折叠</a> 后引用导出的符号</li>
+<li>仅调用编译器<a href="#supported-classes-and-functions">支持的函数</a></li>
+<li>输入/输出和数据绑定的类成员必须是公共的或受保护的。有关为预先编译准备应用的更多指南和说明，请参阅 <a href="https://medium.com/sparkles-blog/angular-writing-aot-friendly-applications-7b64c8afbe3f" target="_blank">Angular: 编写对 AoT 友好的应用</a>。</li>
+
+  </ul>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 预先编译中的错误通常是由于元数据不符合编译器的要求（如下更详细的描述）而发生的。
+为了帮助理解和解决这些问题，请参阅 <a href="tools/cli/aot-metadata-errors">AoT 元数据错误</a>。</p>
+
+    </div>
+    
+  <h3 id="configuring-aot-compilation">
+    <a href="#configuring-aot-compilation" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring AOT compilation">配置预先编译</a>
+  </h3>
+  <p>你可以在 <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript 配置文件</a> 中提供控制编译过程的选项。
+有关可用选项的完整列表，请参阅 <a href="reference/configs/angular-compiler-options">Angular 编译器选项</a>。</p>
+
+  <h2 id="phase-1-code-analysis">
+    <a href="#phase-1-code-analysis" class="docs-anchor" tabindex="-1" aria-label="Link to Phase 1: Code analysis">阶段 1：代码分析</a>
+  </h2>
+  <p>TypeScript 编译器执行第一阶段的一些分析工作。
+它发出带有类型信息的 <code>.d.ts</code> *类型定义文件*，AoT 编译器需要这些类型信息来生成应用代码。
+同时，AoT <strong>收集器</strong> 分析 Angular 装饰器中记录的元数据，并在 <strong><code>.metadata.json</code></strong> 文件中输出元数据信息，每个 <code>.d.ts</code> 文件对应一个。</p>
+<p>你可以将 <code>.metadata.json</code> 视为装饰器的元数据的整体结构的图，它被表示为 <a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree" target="_blank">抽象语法树 (AST)</a>。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> Angular 的 <a href="https://github.com/angular/angular/blob/main/packages/compiler-cli/src/metadata/schema.ts" target="_blank">schema.ts</a> 将 JSON 格式描述为 TypeScript 接口的集合。</p>
+
+    </div>
+    
+  <h3 id="expression-syntax-limitations">
+    <a href="#expression-syntax-limitations" class="docs-anchor" tabindex="-1" aria-label="Link to Expression syntax limitations">表达式语法限制</a>
+  </h3>
+  <p>AoT 收集器只理解 JavaScript 的子集。
+使用以下有限的语法定义元数据对象：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">语法</th>
+<th align="left">范例</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">字面量对象</td>
+<td align="left"><code>{cherry: true, apple: true, mincemeat: false}</code></td>
+</tr>
+<tr>
+<td align="left">字面量数组</td>
+<td align="left"><code>['cherries', 'flour', 'sugar']</code></td>
+</tr>
+<tr>
+<td align="left">字面量数组中的展开</td>
+<td align="left"><code>['apples', 'flour', …]</code></td>
+</tr>
+<tr>
+<td align="left">调用</td>
+<td align="left"><code>bake(ingredients)</code></td>
+</tr>
+<tr>
+<td align="left">新建</td>
+<td align="left"><code>new Oven()</code></td>
+</tr>
+<tr>
+<td align="left">属性访问</td>
+<td align="left"><code>pie.slice</code></td>
+</tr>
+<tr>
+<td align="left">数组索引</td>
+<td align="left"><code>ingredients[0]</code></td>
+</tr>
+<tr>
+<td align="left">标识引用</td>
+<td align="left"><code>Component</code></td>
+</tr>
+<tr>
+<td align="left">模板字符串</td>
+<td align="left"><code><code>pie is ${multiplier} times better than cake</code></code></td>
+</tr>
+<tr>
+<td align="left">字面量字符串</td>
+<td align="left"><code>'pi'</code></td>
+</tr>
+<tr>
+<td align="left">字面量数字</td>
+<td align="left"><code>3.14153265</code></td>
+</tr>
+<tr>
+<td align="left">字面量布尔值</td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left">字面量 null</td>
+<td align="left"><code>null</code></td>
+</tr>
+<tr>
+<td align="left">支持的前缀运算符</td>
+<td align="left"><code>!cake</code></td>
+</tr>
+<tr>
+<td align="left">支持的二元运算符</td>
+<td align="left"><code>a+b</code></td>
+</tr>
+<tr>
+<td align="left">条件运算符</td>
+<td align="left"><code>a ? b : c</code></td>
+</tr>
+<tr>
+<td align="left">圆括号</td>
+<td align="left"><code>(a+b)</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>如果表达式使用不支持的语法，收集器会将错误节点写入 <code>.metadata.json</code> 文件。
+如果编译器稍后需要该元数据片段来生成应用代码，则会报告该错误。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 如果你希望 <code>ngc</code> 立即报告语法错误，而不是生成带有错误的 <code>.metadata.json</code> 文件，请在 TypeScript 配置文件中设置 <code>strictMetadataEmit</code> 选项。</p>
+
+    </div>
+    <div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"angularCompilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">  …</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "strictMetadataEmit"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> : </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>Angular 库具有此选项，以确保所有 Angular <code>.metadata.json</code> 文件都是干净的，并且在构建你自己的库时，这样做也是最佳实践。</p>
+
+  <h3 id="no-arrow-functions">
+    <a href="#no-arrow-functions" class="docs-anchor" tabindex="-1" aria-label="Link to No arrow functions">没有箭头函数</a>
+  </h3>
+  <p>AoT 编译器不支持 <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/function" target="_blank">函数表达式</a> 和 <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Functions/Arrow_functions" target="_blank">箭头函数</a>，也称为 *lambda* 函数。</p>
+<p>考虑以下组件装饰器：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [{provide: server, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">useFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Server</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()}]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span></code></pre>
+    </pre>
+  </div><p>AoT 收集器不支持元数据表达式中的箭头函数 <code>() =&gt; new Server()</code>。
+它生成一个错误节点来代替该函数。
+当编译器稍后解释此节点时，它会报告一个错误，邀请你将箭头函数转换为*导出函数*。</p>
+<p>你可以通过转换为以下形式来修复此错误：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> serverFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  return</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Server</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [{provide: server, useFactory: serverFactory}]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span></code></pre>
+    </pre>
+  </div><p>在版本 5 及更高版本中，编译器在发出 <code>.js</code> 文件时会自动执行此重写。</p>
+
+  <h3 id="code-folding">
+    <a href="#code-folding" class="docs-anchor" tabindex="-1" aria-label="Link to Code folding">代码折叠</a>
+  </h3>
+  <p>编译器只能求解对*<strong>导出</strong>*符号的引用。
+但是，收集器可以在收集期间求值表达式，并将结果记录在 <code>.metadata.json</code> 中，而不是原始表达式。
+这允许你在表达式中有限地使用未导出的符号。</p>
+<p>例如，收集器可以求值表达式 <code>1 + 2 + 3 + 4</code> 并用结果 <code>10</code> 替换它。
+这个过程称为*折叠*。
+可以以这种方式简化的表达式是*可折叠的*。</p>
+<p>收集器可以求值对模块本地 <code>const</code> 对象声明和初始化的 <code>var</code> 和 <code>let</code> 对象声明的引用，从而有效地将它们从 <code>.metadata.json</code> 文件中移除。</p>
+<p>考虑以下组件定义：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> template</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '&lt;div&gt;{{hero.name}}&lt;/div&gt;'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app-hero'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: template</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HeroComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">hero</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Hero</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>编译器无法引用 <code>template</code> 常量，因为它没有导出。
+但是，收集器可以通过内联 <code>template</code> 常量的内容，将其折叠到元数据定义中。
+效果就像你写了以下代码一样：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app-hero'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;div&gt;{{hero.name}}&lt;/div&gt;'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HeroComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">hero</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Hero</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>不再有对 <code>template</code> 的引用，因此，当编译器稍后在 <code>.metadata.json</code> 中解释*收集器*的输出时，没有什么会困扰它。</p>
+<p>你可以通过在另一个表达式中包含 <code>template</code> 常量，将此范例更进一步：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> template</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '&lt;div&gt;{{hero.name}}&lt;/div&gt;'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app-hero'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: template </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '&lt;div&gt;{{hero.title}}&lt;/div&gt;'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HeroComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">hero</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Hero</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>收集器将此表达式简化为其等效的*折叠*字符串：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;div&gt;{{hero.name}}&lt;/div&gt;&lt;div&gt;{{hero.title}}&lt;/div&gt;'</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="foldable-syntax">
+    <a href="#foldable-syntax" class="docs-anchor" tabindex="-1" aria-label="Link to Foldable syntax">可折叠的语法</a>
+  </h4>
+  <p>下表描述了收集器可以和不可以折叠哪些表达式：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">语法</th>
+<th align="left">可折叠的</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">字面量对象</td>
+<td align="left">yes</td>
+</tr>
+<tr>
+<td align="left">字面量数组</td>
+<td align="left">yes</td>
+</tr>
+<tr>
+<td align="left">字面量数组中的展开</td>
+<td align="left">no</td>
+</tr>
+<tr>
+<td align="left">调用</td>
+<td align="left">no</td>
+</tr>
+<tr>
+<td align="left">新建</td>
+<td align="left">no</td>
+</tr>
+<tr>
+<td align="left">属性访问</td>
+<td align="left">是，如果目标是可折叠的</td>
+</tr>
+<tr>
+<td align="left">数组索引</td>
+<td align="left">是，如果目标和索引都是可折叠的</td>
+</tr>
+<tr>
+<td align="left">标识引用</td>
+<td align="left">是，如果它是对本地变量的引用</td>
+</tr>
+<tr>
+<td align="left">没有替换的模板</td>
+<td align="left">yes</td>
+</tr>
+<tr>
+<td align="left">带有替换的模板</td>
+<td align="left">是，如果替换是可折叠的</td>
+</tr>
+<tr>
+<td align="left">字面量字符串</td>
+<td align="left">yes</td>
+</tr>
+<tr>
+<td align="left">字面量数字</td>
+<td align="left">yes</td>
+</tr>
+<tr>
+<td align="left">字面量布尔值</td>
+<td align="left">yes</td>
+</tr>
+<tr>
+<td align="left">字面量 null</td>
+<td align="left">yes</td>
+</tr>
+<tr>
+<td align="left">支持的前缀运算符</td>
+<td align="left">是，如果操作数是可折叠的</td>
+</tr>
+<tr>
+<td align="left">支持的二元运算符</td>
+<td align="left">是，如果左右操作数都是可折叠的</td>
+</tr>
+<tr>
+<td align="left">条件运算符</td>
+<td align="left">是，如果条件是可折叠的</td>
+</tr>
+<tr>
+<td align="left">圆括号</td>
+<td align="left">是，如果表达式是可折叠的</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>如果表达式不可折叠，收集器会将其作为 <code>.metadata.json</code> 中的 <a href="https://en.wikipedia.org/wiki/Abstract*syntax*tree" target="_blank">AST</a> 写入，以供编译器求解。</p>
+
+  <h2 id="phase-2-code-generation">
+    <a href="#phase-2-code-generation" class="docs-anchor" tabindex="-1" aria-label="Link to Phase 2: code generation">阶段 2：代码生成</a>
+  </h2>
+  <p>收集器不会尝试理解它收集并输出到 <code>.metadata.json</code> 的元数据。
+它会尽其所能地表示元数据，并在检测到元数据语法违规时记录错误。
+在代码生成阶段，由编译器来解释 <code>.metadata.json</code>。</p>
+<p>编译器理解收集器支持的所有语法形式，但如果<em>语义</em>违反了编译器规则，它可能会拒绝<em>语法上</em>正确的元数据。</p>
+
+  <h3 id="public-or-protected-symbols">
+    <a href="#public-or-protected-symbols" class="docs-anchor" tabindex="-1" aria-label="Link to Public or protected symbols">公共或受保护的符号</a>
+  </h3>
+  <p>编译器只能引用<em>导出的符号</em>。</p>
+
+  <ul class="docs-list">
+    <li><p>带装饰器的组件类成员必须是公共的或受保护的。
+  你不能把 <code>@Input()</code> 属性设为私有的。</p>
+</li>
+<li><p>数据绑定的属性（Property）也必须是公共的或受保护的</p>
+</li>
+
+  </ul>
+  
+  <h3 id="supported-classes-and-functions">
+    <a href="#supported-classes-and-functions" class="docs-anchor" tabindex="-1" aria-label="Link to Supported classes and functions">支持的类和函数</a>
+  </h3>
+  <p>只要语法有效，收集器就可以表示使用 <code>new</code> 的函数调用或对象创建。
+但是，编译器稍后可能会拒绝生成对<em>特定</em>函数的调用或创建<em>特定</em>对象。</p>
+<p>编译器只能创建某些类的实例，仅支持核心装饰器，并且仅支持调用返回表达式的宏（函数或静态方法）。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">编译器操作</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">新实例</td>
+<td align="left">编译器只允许创建 <code>@angular/core</code> 中的 <code>InjectionToken</code> 类的实例的元数据。</td>
+</tr>
+<tr>
+<td align="left">支持的装饰器</td>
+<td align="left">编译器仅支持 <a href="api/core#decorators"><code>@angular/core</code> 模块</a> 中的 Angular 装饰器的元数据。</td>
+</tr>
+<tr>
+<td align="left">函数调用</td>
+<td align="left">工厂函数必须是导出的、具名的函数。预先编译器 (AoT) 不支持用于工厂函数的 lambda 表达式（“箭头函数”）。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="functions-and-static-method-calls">
+    <a href="#functions-and-static-method-calls" class="docs-anchor" tabindex="-1" aria-label="Link to Functions and static method calls">函数和静态方法调用</a>
+  </h3>
+  <p>收集器接受任何包含单个 <code>return</code> 语句的函数或静态方法。
+但是，编译器仅支持以函数或静态方法形式存在的、返回<em>表达式</em>的宏。</p>
+<p>例如，考虑以下函数：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> wrapInArray</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">T</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">value</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> T</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> T</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [value];</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>你可以在元数据定义中调用 <code>wrapInArray</code>，因为它返回的表达式的值符合编译器限制性的 JavaScript 子集。</p>
+<p>你可以像这样使用 <code>wrapInArray()</code>：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">wrapInArray</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(TypicalComponent)</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>编译器将此用法视为你已编写了以下代码：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [TypicalComponent]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>Angular 的 <a href="api/router/RouterModule"><code>RouterModule</code></a> 导出了两个宏静态方法 <code>forRoot</code> 和 <code>forChild</code>，以帮助声明根路由和子路由。
+查看这些方法的<a href="https://github.com/angular/angular/blob/main/packages/router/src/router_module.ts#L139" title="RouterModule.forRoot" source code target="_blank">源码</a>，了解宏如何简化复杂 <a href="guide/ngmodules">NgModule</a> 的配置。</p>
+
+  <h3 id="metadata-rewriting">
+    <a href="#metadata-rewriting" class="docs-anchor" tabindex="-1" aria-label="Link to Metadata rewriting">元数据重写</a>
+  </h3>
+  <p>编译器会特殊处理包含 <code>useClass</code>、<code>useValue</code>、<code>useFactory</code> 和 <code>data</code> 字段的对象字面量，将初始化其中一个字段的表达式转换为导出的变量来替代该表达式。
+重写这些表达式的过程消除了对其中内容的所有限制，因为编译器不需要知道表达式的值 —— 它只需要能够生成对该值的引用。</p>
+<p>你可能会这样写：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalServer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [{provide: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">SERVER</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">useFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> TypicalServer}]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>如果不进行重写，这将是无效的，因为不支持 lambda 表达式，并且 <code>TypicalServer</code> 没有导出。
+为了允许这样做，编译器会自动将其重写为如下形式：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalServer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> θ0</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalServer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [{provide: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">SERVER</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, useFactory: θ0}]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TypicalModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>这允许编译器在工厂中生成对 <code>θ0</code> 的引用，而无需知道 <code>θ0</code> 的值包含什么。</p>
+<p>编译器在发出 <code>.js</code> 文件期间执行重写。
+但是，它不会重写 <code>.d.ts</code> 文件，因此 TypeScript 不会将其识别为导出项。
+并且它不会干扰 ES 模块的导出 API。</p>
+
+  <h2 id="phase-3-template-type-checking">
+    <a href="#phase-3-template-type-checking" class="docs-anchor" tabindex="-1" aria-label="Link to Phase 3: Template type checking">阶段 3：模板类型检查</a>
+  </h2>
+  <p>Angular 编译器的最有用的特性之一是能够对模板中的表达式进行类型检查，并在错误导致运行时崩溃之前捕获它们。
+在模板类型检查阶段，Angular 模板编译器使用 TypeScript 编译器来验证模板中的绑定表达式。</p>
+<p>通过在项目的 TypeScript 配置文件的 <code>"angularCompilerOptions"</code> 中添加编译器选项 <code>"fullTemplateTypeCheck"</code> 来显式启用此阶段（请参阅<a href="reference/configs/angular-compiler-options">Angular 编译器选项</a>）。</p>
+<p>当在模板绑定表达式中检测到类型错误时，模板验证会生成错误消息，类似于 TypeScript 编译器针对 <code>.ts</code> 文件中的代码报告类型错误的方式。</p>
+<p>例如，考虑以下组件：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'{{person.addresss.street}}'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  person</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>这将产生以下错误：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">my.component.ts.MyComponent.html(1,1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">): </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Property </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'addresss'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> does not exist on type </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Person'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">. Did you mean </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'address'</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?</span></span></code></pre>
+    </pre>
+  </div><p>错误消息中报告的文件名 <code>my.component.ts.MyComponent.html</code> 是一个合成文件，由模板编译器生成，其中包含 <code>MyComponent</code> 类模板的内容。
+编译器永远不会将此文件写入磁盘。
+行号和列号相对于类 <code>MyComponent</code> 的 <code>@Component</code> 注解中的模板字符串而言（在本例中为 <code>MyComponent</code>）。
+如果组件使用 <code>templateUrl</code> 而不是 <code>template</code>，则错误将在 <code>templateUrl</code> 引用的 HTML 文件中报告，而不是在合成文件中报告。</p>
+<p>错误位置是包含带有错误的插值表达式的文本节点的开头。
+如果错误在属性绑定中，例如 <code>[value]="person.address.street"</code>，则错误位置是包含错误的属性的位置。</p>
+<p>验证使用 TypeScript 类型检查器和提供给 TypeScript 编译器的选项来控制类型验证的详细程度。
+例如，如果指定了 <code>strictTypeChecks</code>，则会报告错误</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">my.component.ts.MyComponent.html(1,1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">): </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Object is possibly </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'undefined'</span></span></code></pre>
+    </pre>
+  </div><p>以及上面的错误消息。</p>
+
+  <h3 id="type-narrowing">
+    <a href="#type-narrowing" class="docs-anchor" tabindex="-1" aria-label="Link to Type narrowing">类型窄化</a>
+  </h3>
+  <p><code>ngIf</code> 指令中使用的表达式用于窄化 Angular 模板编译器中的类型联合，就像 <code>if</code> 表达式在 TypeScript 中所做的那样。
+例如，为了避免上面模板中出现 <code>Object is possibly 'undefined'</code> 错误，请修改它，以便仅当 <code>person</code> 的值已初始化时才发出插值，如下所示：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;span *ngIf="person"&gt; {{person.address.street}} &lt;/span&gt;'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  person</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>使用 <code>*ngIf</code> 允许 TypeScript 编译器推断绑定表达式中使用的 <code>person</code> 永远不会是 <code>undefined</code>。</p>
+<p>有关输入类型窄化的更多信息，请参阅<a href="guide/directives/structural-directives#directive-type-checks">改进自定义指令的模板类型检查</a>。</p>
+
+  <h3 id="non-null-type-assertion-operator">
+    <a href="#non-null-type-assertion-operator" class="docs-anchor" tabindex="-1" aria-label="Link to Non-null type assertion operator">非空类型断言操作符</a>
+  </h3>
+  <p>当使用 <code>*ngIf</code> 不方便时，或者当组件中的某些约束确保当绑定表达式被插值时表达式始终为非空时，可以使用非空类型断言操作符来抑制 <code>Object is possibly 'undefined'</code> 错误。</p>
+<p>在以下示例中，<code>person</code> 和 <code>address</code> 属性始终一起设置，这意味着如果 <code>person</code> 为非空，则 <code>address</code> 始终为非空。
+没有方便的方法向 TypeScript 和模板编译器描述此约束，但在此示例中，通过使用 <code>address!.street</code> 抑制了错误。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;span *ngIf="person"&gt; {{person.name}} lives on {{address!.street}} &lt;/span&gt;'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  person</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  address</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Address</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  setData</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">person</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">address</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Address</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.person </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> person;</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.address </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> address;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>非空断言操作符应谨慎使用，因为组件的重构可能会破坏此约束。</p>
+<p>在此示例中，建议在 <code>*ngIf</code> 中包含对 <code>address</code> 的检查，如下所示：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;span *ngIf="person &amp;&amp; address"&gt; {{person.name}} lives on {{address.street}} &lt;/span&gt;'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  person</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  address</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Address</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  setData</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">person</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">address</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Address</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.person </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> person;</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.address </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> address;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>

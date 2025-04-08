@@ -1,0 +1,510 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/common</span><div class="docs-reference-title"><div><h1>DatePipe</h1><div class="docs-api-item-label type-pipe full">pipe</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/common/src/pipes/date_pipe.ts#L219-L278" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">代码</i></a></div><section class="docs-reference-description"><p>根据语言环境规则格式化日期值。</p></section><nav class="docs-pill-row"><a class="docs-pill" href="/api/common/formatDate">formatDate</a></nav></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">  <code>
+    <span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/common/DatePipe">DatePipe</a></span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> implements</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/core/PipeTransform">PipeTransform</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><button aria-describedby="jump-msg" type="button" class="line " member-id="constructor"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">locale</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">defaultTimezone</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">defaultOptions</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/common/DatePipeConfig">DatePipeConfig</a></span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/common/DatePipe">DatePipe</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button><div class="shiki-ln-group"><button aria-describedby="jump-msg" type="button" class="line " member-id="transform"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  transform</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">value</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Date</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">format</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">timezone</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">locale</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button><button aria-describedby="jump-msg" type="button" class="line " member-id="transform"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  transform</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">value</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">format</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">timezone</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">locale</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button><button aria-describedby="jump-msg" type="button" class="line " member-id="transform"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  transform</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">value</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Date</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">format</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">timezone</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">locale</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></button></div><span class="line "><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-members"><div class="docs-reference-members"><div id="constructor" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>constructor</h3><code><a href="/api/common/DatePipe">DatePipe</a></code></header><div class="docs-reference-card-body"><div class="docs-reference-card-item "><div class="docs-function-definition"></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">locale</span><code>string</code><div class="docs-parameter-description"></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">defaultTimezone</span><code>string | null | undefined</code><div class="docs-parameter-description"></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">defaultOptions</span><code><a href="/api/common/DatePipeConfig">DatePipeConfig</a> | null | undefined</code><div class="docs-parameter-description"></div></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code><a href="/api/common/DatePipe">DatePipe</a></code></div></div></div></div><div id="transform" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>transform</h3><span>3 个重载</span></header><div class="docs-reference-card-body"><div class="docs-reference-card-item "><div class="docs-function-definition"></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">value</span><code>string | number | Date</code><div class="docs-parameter-description"><p>日期表达式：一个 <code>Date</code> 对象、一个数字（自 UTC epoch 以来的毫秒数）或一个 ISO 字符串 (<a href="https://www.w3.org/TR/NOTE-datetime">https://www.w3.org/TR/NOTE-datetime</a>)。</p></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">format</span><code>string | undefined</code><div class="docs-parameter-description"><p>要包含的日期/时间组件，使用预定义的选项或自定义格式字符串。当未提供时，<code><a href="/api/common/DatePipe">DatePipe</a></code> 使用 <code><a href="/api/common/DATE_PIPE_DEFAULT_OPTIONS">DATE_PIPE_DEFAULT_OPTIONS</a></code> 注入令牌查找值（并读取 <code>dateFormat</code> 属性）。如果未配置令牌，则 <code>mediumDate</code> 用作值。</p></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">timezone</span><code>string | undefined</code><div class="docs-parameter-description"><p>时区偏移量（例如 <code>'+0430'</code>）。当未提供时，<code><a href="/api/common/DatePipe">DatePipe</a></code> 使用 <code><a href="/api/common/DATE_PIPE_DEFAULT_OPTIONS">DATE_PIPE_DEFAULT_OPTIONS</a></code> 注入令牌查找值（并读取 <code>timezone</code> 属性）。如果未配置令牌，则最终用户的本地系统时区将用作值。</p></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">locale</span><code>string | undefined</code><div class="docs-parameter-description"><p>要使用的语言环境格式规则的语言环境代码。
+当未提供时，使用 <code><a href="/api/core/LOCALE_ID">LOCALE_ID</a></code> 的值，默认值为 <code>en-US</code>。
+请参阅<a href="guide/i18n/locale-id">设置你的应用语言环境</a>。</p></div></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code>string | null</code></div></div><div class="docs-reference-card-item "><div class="docs-function-definition"></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">value</span><code>null | undefined</code><div class="docs-parameter-description"></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">format</span><code>string | undefined</code><div class="docs-parameter-description"></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">timezone</span><code>string | undefined</code><div class="docs-parameter-description"></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">locale</span><code>string | undefined</code><div class="docs-parameter-description"></div></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code>null</code></div></div><div class="docs-reference-card-item "><div class="docs-function-definition"></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">value</span><code>string | number | Date | null | undefined</code><div class="docs-parameter-description"></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">format</span><code>string | undefined</code><div class="docs-parameter-description"></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">timezone</span><code>string | undefined</code><div class="docs-parameter-description"></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">locale</span><code>string | undefined</code><div class="docs-parameter-description"></div></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code>string | null</code></div></div></div></div></div></div><div class="docs-reference-section"><h2 id="description" class="docs-reference-section-heading"><a href="#description" aria-label="Link to Description section" tabindex="-1">说明</a></h2><div><p>根据语言环境规则格式化日期值。</p>
+<p><code><a href="/api/common/DatePipe">DatePipe</a></code> 仅当检测到输入值的纯变更时才执行。
+纯变更要么是原始类型输入值（例如 <code>String</code>、<code>Number</code>、<code>Boolean</code> 或 <code>Symbol</code>）的变更，要么是已更改的对象引用（例如 <code>Date</code>、<code>Array</code>、<code>Function</code> 或 <code>Object</code>）。</p>
+<p>请注意，修改 <code>Date</code> 对象不会导致管道再次渲染。
+要确保管道被执行，你必须创建一个新的 <code>Date</code> 对象。</p>
+<p>只有 <code>en-US</code> 语言环境数据随 Angular 一起提供。要在另一种语言中本地化日期，你必须导入相应的语言环境数据。
+有关更多信息，请参阅 <a href="guide/i18n/format-data-locale">I18n 指南</a>。</p>
+<p>格式化值的时区可以通过将其作为管道的第二个参数传入来指定，也可以通过 <code><a href="/api/common/DATE_PIPE_DEFAULT_OPTIONS">DATE_PIPE_DEFAULT_OPTIONS</a></code> 注入令牌设置默认值。作为第二个参数传入的值优先于使用注入令牌定义的值。</p></div><hr><h2>导出自</h2><ul><li><code><a href="/api/common/CommonModule">CommonModule</a></code></li></ul></div><div class="docs-reference-section"><h2 id="usage-notes" class="docs-reference-section-heading"><a href="#usage-notes" aria-label="Link to Usage Notes section" tabindex="-1">用法说明</a></h2><div><p>当输入发生变化时，此管道的结果不会重新求值。为了避免在每次变更检测周期都重新格式化日期，请将日期视为不可变对象，并在管道需要再次运行时更改引用。</p>
+
+      <h3 id="pre-defined-format-options" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#pre-defined-format-options" aria-label="Link to Pre-defined format options section" tabindex="-1">预定义的格式选项</a>
+      </h3>
+    
+      <div class="docs-table docs-scroll-track-transparent">
+        <table>
+          <thead>
+          <tr>
+<th>选项</th>
+<th>等价于</th>
+<th>范例（以 <code>en-US</code> 语言环境为例）</th>
+</tr>
+
+          </thead>
+          <tbody>
+          <tr>
+<td><code>'short'</code></td>
+<td><code>'M/d/yy, h:mm a'</code></td>
+<td><code>6/15/15, 9:03 AM</code></td>
+</tr>
+<tr>
+<td><code>'medium'</code></td>
+<td><code>'MMM d, y, h:mm:ss a'</code></td>
+<td><code>Jun 15, 2015, 9:03:01 AM</code></td>
+</tr>
+<tr>
+<td><code>'long'</code></td>
+<td><code>'MMMM d, y, h:mm:ss a z'</code></td>
+<td><code>June 15, 2015 at 9:03:01 AM GMT+1</code></td>
+</tr>
+<tr>
+<td><code>'full'</code></td>
+<td><code>'EEEE, MMMM d, y, h:mm:ss a zzzz'</code></td>
+<td><code>Monday, June 15, 2015 at 9:03:01 AM GMT+01:00</code></td>
+</tr>
+<tr>
+<td><code>'shortDate'</code></td>
+<td><code>'M/d/yy'</code></td>
+<td><code>6/15/15</code></td>
+</tr>
+<tr>
+<td><code>'mediumDate'</code></td>
+<td><code>'MMM d, y'</code></td>
+<td><code>Jun 15, 2015</code></td>
+</tr>
+<tr>
+<td><code>'longDate'</code></td>
+<td><code>'MMMM d, y'</code></td>
+<td><code>June 15, 2015</code></td>
+</tr>
+<tr>
+<td><code>'fullDate'</code></td>
+<td><code>'EEEE, MMMM d, y'</code></td>
+<td><code>Monday, June 15, 2015</code></td>
+</tr>
+<tr>
+<td><code>'shortTime'</code></td>
+<td><code>'h:mm a'</code></td>
+<td><code>9:03 AM</code></td>
+</tr>
+<tr>
+<td><code>'mediumTime'</code></td>
+<td><code>'h:mm:ss a'</code></td>
+<td><code>9:03:01 AM</code></td>
+</tr>
+<tr>
+<td><code>'longTime'</code></td>
+<td><code>'h:mm:ss a z'</code></td>
+<td><code>9:03:01 AM GMT+1</code></td>
+</tr>
+<tr>
+<td><code>'fullTime'</code></td>
+<td><code>'h:mm:ss a zzzz'</code></td>
+<td><code>9:03:01 AM GMT+01:00</code></td>
+</tr>
+
+          </tbody>
+        </table>
+      </div>
+    
+      <h3 id="custom-format-options" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#custom-format-options" aria-label="Link to Custom format options section" tabindex="-1">自定义格式选项</a>
+      </h3>
+    <p>你可以使用符号构造格式字符串，以指定日期时间值的组成部分，如下表所述。
+格式详细信息取决于语言环境。
+标有 (*) 的字段仅在给定语言环境的额外数据集中可用。</p>
+
+      <div class="docs-table docs-scroll-track-transparent">
+        <table>
+          <thead>
+          <tr>
+<th>字段类型</th>
+<th>格式</th>
+<th>说明</th>
+<th>范例值</th>
+</tr>
+
+          </thead>
+          <tbody>
+          <tr>
+<td>纪元</td>
+<td>G、GG 和 GGG</td>
+<td>缩写</td>
+<td>AD</td>
+</tr>
+<tr>
+<td></td>
+<td>GGGG</td>
+<td>宽式</td>
+<td>公元</td>
+</tr>
+<tr>
+<td></td>
+<td>GGGGG</td>
+<td>窄式</td>
+<td>A</td>
+</tr>
+<tr>
+<td>年</td>
+<td>y</td>
+<td>数值型：最少位数</td>
+<td>2、20、201、2017、20173</td>
+</tr>
+<tr>
+<td></td>
+<td>yy</td>
+<td>数值型：2 位数字 + 零填充</td>
+<td>02、20、01、17、73</td>
+</tr>
+<tr>
+<td></td>
+<td>yyy</td>
+<td>数值型：3 位数字 + 零填充</td>
+<td>002、020、201、2017、20173</td>
+</tr>
+<tr>
+<td></td>
+<td>yyyy</td>
+<td>数值型：4 位或更多数字 + 零填充</td>
+<td>0002、0020、0201、2017、20173</td>
+</tr>
+<tr>
+<td>ISO 周编号年份</td>
+<td>Y</td>
+<td>数值型：最少位数</td>
+<td>2、20、201、2017、20173</td>
+</tr>
+<tr>
+<td></td>
+<td>YY</td>
+<td>数值型：2 位数字 + 零填充</td>
+<td>02、20、01、17、73</td>
+</tr>
+<tr>
+<td></td>
+<td>YYY</td>
+<td>数值型：3 位数字 + 零填充</td>
+<td>002、020、201、2017、20173</td>
+</tr>
+<tr>
+<td></td>
+<td>YYYY</td>
+<td>数值型：4 位或更多数字 + 零填充</td>
+<td>0002、0020、0201、2017、20173</td>
+</tr>
+<tr>
+<td>月</td>
+<td>M</td>
+<td>数值型：1 位数字</td>
+<td>9、12</td>
+</tr>
+<tr>
+<td></td>
+<td>MM</td>
+<td>数值型：2 位数字 + 零填充</td>
+<td>09、12</td>
+</tr>
+<tr>
+<td></td>
+<td>MMM</td>
+<td>缩写</td>
+<td>九月</td>
+</tr>
+<tr>
+<td></td>
+<td>MMMM</td>
+<td>宽式</td>
+<td>九月</td>
+</tr>
+<tr>
+<td></td>
+<td>MMMMM</td>
+<td>窄式</td>
+<td>S</td>
+</tr>
+<tr>
+<td>独立的月份</td>
+<td>L</td>
+<td>数值型：1 位数字</td>
+<td>9、12</td>
+</tr>
+<tr>
+<td></td>
+<td>LL</td>
+<td>数值型：2 位数字 + 零填充</td>
+<td>09、12</td>
+</tr>
+<tr>
+<td></td>
+<td>LLL</td>
+<td>缩写</td>
+<td>九月</td>
+</tr>
+<tr>
+<td></td>
+<td>LLLL</td>
+<td>宽式</td>
+<td>九月</td>
+</tr>
+<tr>
+<td></td>
+<td>LLLLL</td>
+<td>窄式</td>
+<td>S</td>
+</tr>
+<tr>
+<td>ISO 年周</td>
+<td>w</td>
+<td>数值型：最少位数</td>
+<td>1... 53</td>
+</tr>
+<tr>
+<td></td>
+<td>ww</td>
+<td>数值型：2 位数字 + 零填充</td>
+<td>01... 53</td>
+</tr>
+<tr>
+<td>月周</td>
+<td>W</td>
+<td>数值型：1 位数字</td>
+<td>1... 5</td>
+</tr>
+<tr>
+<td>日</td>
+<td>d</td>
+<td>数值型：最少位数</td>
+<td>1</td>
+</tr>
+<tr>
+<td></td>
+<td>dd</td>
+<td>数值型：2 位数字 + 零填充</td>
+<td>01</td>
+</tr>
+<tr>
+<td>星期几</td>
+<td>E、EE 和 EEE</td>
+<td>缩写</td>
+<td>周二</td>
+</tr>
+<tr>
+<td></td>
+<td>EEEE</td>
+<td>宽式</td>
+<td>星期二</td>
+</tr>
+<tr>
+<td></td>
+<td>EEEEE</td>
+<td>窄式</td>
+<td>T</td>
+</tr>
+<tr>
+<td></td>
+<td>EEEEEE</td>
+<td>短</td>
+<td>周二</td>
+</tr>
+<tr>
+<td>独立显示的星期几</td>
+<td>c、cc</td>
+<td>数值型：1 位数字</td>
+<td>2</td>
+</tr>
+<tr>
+<td></td>
+<td>ccc</td>
+<td>缩写</td>
+<td>周二</td>
+</tr>
+<tr>
+<td></td>
+<td>cccc</td>
+<td>宽式</td>
+<td>星期二</td>
+</tr>
+<tr>
+<td></td>
+<td>ccccc</td>
+<td>窄式</td>
+<td>T</td>
+</tr>
+<tr>
+<td></td>
+<td>cccccc</td>
+<td>短</td>
+<td>周二</td>
+</tr>
+<tr>
+<td>时段</td>
+<td>a、aa 和 aaa</td>
+<td>缩写</td>
+<td>上午/下午 或 AM/PM</td>
+</tr>
+<tr>
+<td></td>
+<td>aaaa</td>
+<td>宽式（缺失时回退到 <code>a</code>）</td>
+<td>上午/下午</td>
+</tr>
+<tr>
+<td></td>
+<td>aaaaa</td>
+<td>窄式</td>
+<td>上午/下午</td>
+</tr>
+<tr>
+<td>时段*</td>
+<td>B、BB 和 BBB</td>
+<td>缩写</td>
+<td>中午</td>
+</tr>
+<tr>
+<td></td>
+<td>BBBB</td>
+<td>宽式</td>
+<td>上午、下午、午夜、中午、上午、下午、傍晚、晚上</td>
+</tr>
+<tr>
+<td></td>
+<td>BBBBB</td>
+<td>窄式</td>
+<td>md</td>
+</tr>
+<tr>
+<td>独立显示的时段*</td>
+<td>b、bb 和 bbb</td>
+<td>缩写</td>
+<td>中午</td>
+</tr>
+<tr>
+<td></td>
+<td>bbbb</td>
+<td>宽式</td>
+<td>上午、下午、午夜、中午、上午、下午、傍晚、晚上</td>
+</tr>
+<tr>
+<td></td>
+<td>bbbbb</td>
+<td>窄式</td>
+<td>md</td>
+</tr>
+<tr>
+<td>1-12 小时制</td>
+<td>h</td>
+<td>数值型：最少位数</td>
+<td>1、12</td>
+</tr>
+<tr>
+<td></td>
+<td>hh</td>
+<td>数值型：2 位数字 + 零填充</td>
+<td>01、12</td>
+</tr>
+<tr>
+<td>0-23 小时制</td>
+<td>H</td>
+<td>数值型：最少位数</td>
+<td>0、23</td>
+</tr>
+<tr>
+<td></td>
+<td>HH</td>
+<td>数值型：2 位数字 + 零填充</td>
+<td>00, 23</td>
+</tr>
+<tr>
+<td>分</td>
+<td>m</td>
+<td>数值型：最少位数</td>
+<td>8, 59</td>
+</tr>
+<tr>
+<td></td>
+<td>mm</td>
+<td>数值型：2 位数字 + 零填充</td>
+<td>08, 59</td>
+</tr>
+<tr>
+<td>秒</td>
+<td>s</td>
+<td>数值型：最少位数</td>
+<td>0... 59</td>
+</tr>
+<tr>
+<td></td>
+<td>ss</td>
+<td>数值型：2 位数字 + 零填充</td>
+<td>00... 59</td>
+</tr>
+<tr>
+<td>秒的小数部分</td>
+<td>S</td>
+<td>数值型：1 位数字</td>
+<td>0... 9</td>
+</tr>
+<tr>
+<td></td>
+<td>SS</td>
+<td>数值型：2 位数字 + 零填充</td>
+<td>00... 99</td>
+</tr>
+<tr>
+<td></td>
+<td>SSS</td>
+<td>数值型：3 位数字 + 零填充（= 毫秒）</td>
+<td>000... 999</td>
+</tr>
+<tr>
+<td>Zone</td>
+<td>z、zz 和 zzz</td>
+<td>简短的特定非位置格式（回退到 O）</td>
+<td>GMT-8</td>
+</tr>
+<tr>
+<td></td>
+<td>zzzz</td>
+<td>冗长的特定非位置格式（回退到 OOOO）</td>
+<td>GMT-08:00</td>
+</tr>
+<tr>
+<td></td>
+<td>Z、ZZ 和 ZZZ</td>
+<td>ISO8601 基本格式</td>
+<td>-0800</td>
+</tr>
+<tr>
+<td></td>
+<td>ZZZZ</td>
+<td>冗长的本地化 GMT 格式</td>
+<td>GMT-8:00</td>
+</tr>
+<tr>
+<td></td>
+<td>ZZZZZ</td>
+<td>ISO8601 扩展格式 + 偏移量为 0 时的 Z 指示符 (= XXXXX)</td>
+<td>-08:00</td>
+</tr>
+<tr>
+<td></td>
+<td>O、OO 和 OOO</td>
+<td>简短的本地化 GMT 格式</td>
+<td>GMT-8</td>
+</tr>
+<tr>
+<td></td>
+<td>OOOO</td>
+<td>冗长的本地化 GMT 格式</td>
+<td>GMT-08:00</td>
+</tr>
+
+          </tbody>
+        </table>
+      </div>
+    
+      <h3 id="format-examples" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#format-examples" aria-label="Link to Format examples section" tabindex="-1">格式范例</a>
+      </h3>
+    <p>这些范例将日期转换为各种格式，假设 <code>dateObj</code> 是一个 JavaScript <code>Date</code> 对象，其值为：年份：2015，月份：6，日期：15，小时：21，分钟：43，秒：11，并且给定的时间为 <code>en-US</code> 语言环境的本地时间。</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span>{{ dateObj | date }}               // output is 'Jun 15, 2015'</span></span><span class="line"><span>{{ dateObj | date:'medium' }}      // output is 'Jun 15, 2015, 9:43:11 PM'</span></span><span class="line"><span>{{ dateObj | date:'shortTime' }}   // output is '9:43 PM'</span></span><span class="line"><span>{{ dateObj | date:'mm:ss' }}       // output is '43:11'</span></span><span class="line"><span>{{ dateObj | date:"MMM dd, yyyy 'at' hh:mm a" }}  // output is 'Jun 15, 2015 at 09:43 PM'</span></span></code></pre>
+        </pre>
+      </div>
+    
+      <h3 id="usage-example" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#usage-example" aria-label="Link to Usage example section" tabindex="-1">用法范例</a>
+      </h3>
+    <p>以下组件使用日期管道以不同的格式显示当前日期。</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'date-pipe'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">   &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Today is {{today </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> date</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">   &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Or if you prefer, {{today </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> date</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'fullDate'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">   &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;The time is {{today </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> date</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'h:mm a z'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Get the current date and time as a date-time value.</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> DatePipeComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  today</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Date.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">now</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+        </pre>
+      </div>
+    </div></div></div>

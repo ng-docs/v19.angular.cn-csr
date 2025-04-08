@@ -1,0 +1,38 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/core</span><div class="docs-reference-title"><div><h1>provideExperimentalZonelessChangeDetection</h1><div class="docs-api-item-label type-function full">函数</div><div class="docs-api-item-label type-experimental full"><a href="/reference/releases#experimental">实验性的</a></div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/core/src/change_detection/scheduling/zoneless_scheduling_impl.ts#L374-L396" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">代码</i></a></div><section class="docs-reference-description"><p>为使用 <code>bootstrapApplication</code> 引导的应用提供不带 ZoneJS 的变更检测。</p></section><nav class="docs-pill-row"><a class="docs-pill" href="/api/platform-browser/bootstrapApplication">bootstrapApplication</a></nav></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">  <code>
+    <span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/core/provideExperimentalZonelessChangeDetection">provideExperimentalZonelessChangeDetection</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/core/EnvironmentProviders">EnvironmentProviders</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-members"><div id="provideExperimentalZonelessChangeDetection_0" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>provideExperimentalZonelessChangeDetection</h3><div><code><a href="/api/core/EnvironmentProviders">EnvironmentProviders</a></code></div></header><div class="docs-reference-card-body"><div class="docs-reference-card-item "><div class="docs-function-definition"><p>为使用 <code>bootstrapApplication</code> 引导的应用提供不带 ZoneJS 的变更检测。</p>
+<p>此函数允许你配置应用，使其不使用 ZoneJS 的状态/状态更改来调度应用中的变更检测。当页面上根本没有 ZoneJS，或者由于其他原因（另一个使用 ZoneJS 进行调度的 Angular 应用或某些依赖 ZoneJS 的其他库）而存在 ZoneJS 时，此函数将起作用。</p>
+<p>也可以将其添加到 <code>TestBed</code> 提供者中，以配置测试环境，使其更接近生产行为。这将有助于提高组件与不带 Zone 的变更检测兼容的信心。</p>
+<p>ZoneJS 使用浏览器事件来触发变更检测。当使用此提供者时，Angular 将改为使用 Angular API 来调度变更检测。这些 API 包括：</p>
+
+    <ul class="docs-list">
+      <li><code><a href="/api/core/ChangeDetectorRef#markForCheck">ChangeDetectorRef.markForCheck</a></code></li>
+<li><code><a href="/api/core/ComponentRef#setInput">ComponentRef.setInput</a></code></li>
+<li>更新在模板中读取的信号</li>
+<li>当绑定的宿主或模板监听器被触发时</li>
+<li>附着一个被上述操作之一标记为脏的视图</li>
+<li>移除视图</li>
+<li>注册渲染钩子（仅当渲染钩子执行上述操作之一时，模板才会刷新）</li>
+
+    </ul></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code><a href="/api/core/EnvironmentProviders">EnvironmentProviders</a></code></div></div></div></div></div><div class="docs-reference-section"><h2 id="description" class="docs-reference-section-heading"><a href="#description" aria-label="Link to Description section" tabindex="-1">描述</a></h2><div><p>为使用 <code>bootstrapApplication</code> 引导的应用提供不带 ZoneJS 的变更检测。</p>
+<p>此函数允许你配置应用，使其不使用 ZoneJS 的状态/状态更改来调度应用中的变更检测。当页面上根本没有 ZoneJS，或者由于其他原因（另一个使用 ZoneJS 进行调度的 Angular 应用或某些依赖 ZoneJS 的其他库）而存在 ZoneJS 时，此函数将起作用。</p>
+<p>也可以将其添加到 <code>TestBed</code> 提供者中，以配置测试环境，使其更接近生产行为。这将有助于提高组件与不带 Zone 的变更检测兼容的信心。</p>
+<p>ZoneJS 使用浏览器事件来触发变更检测。当使用此提供者时，Angular 将改为使用 Angular API 来调度变更检测。这些 API 包括：</p>
+
+    <ul class="docs-list">
+      <li><code><a href="/api/core/ChangeDetectorRef#markForCheck">ChangeDetectorRef.markForCheck</a></code></li>
+<li><code><a href="/api/core/ComponentRef#setInput">ComponentRef.setInput</a></code></li>
+<li>更新在模板中读取的信号</li>
+<li>当绑定的宿主或模板监听器被触发时</li>
+<li>附着一个被上述操作之一标记为脏的视图</li>
+<li>移除视图</li>
+<li>注册渲染钩子（仅当渲染钩子执行上述操作之一时，模板才会刷新）</li>
+
+    </ul></div></div><div class="docs-reference-section"><h2 id="usage-notes" class="docs-reference-section-heading"><a href="#usage-notes" aria-label="Link to Usage Notes section" tabindex="-1">用法说明</a></h2><div>
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(MyApp, {providers: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  <a href="/api/core/provideExperimentalZonelessChangeDetection">provideExperimentalZonelessChangeDetection</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]});</span></span></code></pre>
+        </pre>
+      </div>
+    <p>此 API 是实验性的。无论是其形态还是底层行为都不稳定，并且可能会在补丁版本中发生更改。目前存在已知的功能差距和 API 工效学方面的考虑。我们将根据反馈以及我们对问题和解决方案空间的理解，迭代确切的 API。</p>
+</div></div></div>

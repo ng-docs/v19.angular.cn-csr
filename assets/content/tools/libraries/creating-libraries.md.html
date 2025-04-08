@@ -1,0 +1,297 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">创建库</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/libraries/creating-libraries.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>本页概述了如何创建和发布新的库，以扩展 Angular 的功能。</p>
+<p>如果你发现需要在多个应用中解决相同的问题（或者想与其他开发者分享你的解决方案），那么就可以考虑创建一个库。
+一个简单的范例可能是一个将用户发送到你公司网站的按钮，它可以包含在你公司构建的所有应用中。</p>
+
+  <h2 id="getting-started">
+    <a href="#getting-started" class="docs-anchor" tabindex="-1" aria-label="Link to Getting started">开始使用</a>
+  </h2>
+  <p>使用 Angular CLI 在新的工作区中使用以下命令生成新的库骨架。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> new</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-workspace</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --no-create-application</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">cd</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-workspace</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> library</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-lib</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-callout docs-callout-helpful">
+      <h3>命名你的库</h3>
+      <p>如果要稍后在 npm 等公共包注册表中发布库，则应在选择库的名称时格外小心。
+请参阅<a href="tools/libraries/creating-libraries#publishing-your-library">发布你的库</a>。</p>
+<p>避免使用以 <code>ng-</code> 为前缀的名称，例如 <code>ng-library</code>。
+<code>ng-</code> 前缀是 Angular 框架及其库使用的保留关键字。
+首选 <code>ngx-</code> 前缀，这是一种约定，用于表示该库适合与 Angular 一起使用。
+对于注册表的使用者来说，这也是区分不同 JavaScript 框架库的一个极佳指示。</p>
+
+    </div>
+    <p><code>ng generate</code> 命令会在你的工作区中创建 <code>projects/my-lib</code> 文件夹，其中包含 NgModule 中的组件和服务。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 有关库项目结构方式的更多详细信息，请参阅<a href="reference/configs/file-structure">项目文件结构指南</a>的<a href="reference/configs/file-structure#library-project-files">库项目文件</a>部分。</p>
+
+    </div>
+    <p>使用单一代码仓模型，以便为多个项目使用同一个工作区。
+请参阅<a href="reference/configs/file-structure#multiple-projects">建立多项目工作区</a>。</p>
+<p>当你生成新的库时，工作区配置文件 <code>angular.json</code> 会使用 <code>library</code> 类型的项目进行更新。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">  …</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "my-lib"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "root"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"projects/my-lib"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "sourceRoot"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"projects/my-lib/src"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "projectType"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"library"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "prefix"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"lib"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:ng-packagr"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">        …</span></span></code></pre>
+    </pre>
+  </div><p>使用 CLI 命令构建、测试和检查项目：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-lib</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --configuration</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> development</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> test</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-lib</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> lint</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-lib</span></span></code></pre>
+    </pre>
+  </div><p>请注意，为项目配置的构建器与应用项目的默认构建器不同。
+除了其他事项外，此构建器还确保始终使用<a href="tools/cli/aot-compiler">预先编译器</a>构建库。</p>
+<p>为了使库代码可复用，你必须为其定义公共 API。
+这个“用户层”定义了你的库的使用者可以使用什么。
+你的库的用户应该能够通过单个导入路径访问公共功能（例如 NgModule、提供者和通用实用函数）。</p>
+<p>库的公共 API 在库文件夹的 <code>public-api.ts</code> 文件中维护。
+当你的库导入到应用中时，从此文件导出的任何内容都会公开。
+使用 NgModule 来公开服务和组件。</p>
+<p>你的库应提供用于安装和维护的文档（通常是 README 文件）。</p>
+
+  <h2 id="refactoring-parts-of-an-application-into-a-library">
+    <a href="#refactoring-parts-of-an-application-into-a-library" class="docs-anchor" tabindex="-1" aria-label="Link to Refactoring parts of an application into a library">将应用的某些部分重构为库</a>
+  </h2>
+  <p>为了使你的解决方案可复用，你需要对其进行调整，使其不依赖于特定于应用的代码。
+以下是将应用功能迁移到库中时需要考虑的一些事项。</p>
+
+  <ul class="docs-list">
+    <li><p>诸如组件和管道之类的对象声明应设计为无状态的，这意味着它们不依赖或更改外部变量。
+  如果你确实依赖于状态，则需要评估每种情况，并确定它是应用状态还是库将管理的状态。</p>
+</li>
+<li><p>组件在内部订阅的任何可观察者都应在这些组件的生命周期内进行清理和处理</p>
+</li>
+<li><p>组件应通过输入公开其交互以提供上下文，并通过输出将事件传达给其他组件</p>
+</li>
+<li><p>检查所有内部依赖。</p>
+
+  <ul class="docs-list">
+    <li>对于组件或服务中使用的自定义类或接口，请检查它们是否依赖于也需要迁移的其他类或接口</li>
+<li>同样，如果你的库代码依赖于某个服务，则该服务也需要迁移</li>
+<li>如果你的库代码或其模板依赖于其他库（例如 Angular Material），则必须使用这些依赖项配置你的库</li>
+
+  </ul>
+  </li>
+<li><p>考虑如何向客户端应用提供服务。</p>
+
+  <ul class="docs-list">
+    <li><p>服务应声明自己的提供者，而不是在 NgModule 或组件中声明提供者。
+声明提供者会使该服务具有 <em>摇树优化</em> 能力。
+这种做法使编译器可以将服务从捆绑包中排除，前提是它永远不会注入到导入库的应用中。
+有关此内容的更多信息，请参阅<a href="guide/di/lightweight-injection-tokens">可摇树优化的提供者</a>。</p>
+</li>
+<li><p>如果你注册全局服务提供者或在多个 NgModule 之间共享提供者，请使用 <a href="api/router/RouterModule">RouterModule</a> 提供的 <a href="guide/ngmodules/singleton-services"><code>forRoot()</code> 和 <code>forChild()</code> 设计模式</a></p>
+</li>
+<li><p>如果你的库提供客户端应用可能不会全部使用的可选服务，请通过使用<a href="guide/di/lightweight-injection-tokens">轻量级令牌设计模式</a>来支持这种情况下的正确摇树优化</p>
+</li>
+
+  </ul>
+  </li>
+
+  </ul>
+  
+  <h2 id="integrating-with-the-cli-using-code-generation-schematics">
+    <a href="#integrating-with-the-cli-using-code-generation-schematics" class="docs-anchor" tabindex="-1" aria-label="Link to Integrating with the CLI using code-generation schematics">使用代码生成原理图与 CLI 集成</a>
+  </h2>
+  <p>库通常包含<em>可复用代码</em>，这些代码定义了你导入到项目中的组件、服务和其他 Angular 工件（管道、指令）。
+库被打包到 npm 包中以进行发布和共享。
+该包还可以包含原理图，这些原理图提供了直接在项目中生成或转换代码的说明，就像 CLI 使用 <code>ng generate component</code> 创建通用新组件一样。
+与库打包在一起的原理图可以为 Angular CLI 提供生成组件所需的信息，该组件配置和使用该库中定义的特定特性或一组特性。
+这方面的一个范例是 <a href="https://material.angular.io/guide/schematics#navigation-schematic" target="_blank">Angular Material 的导航原理图</a>，它配置了 CDK 的 <a href="https://material.angular.io/cdk/layout/overview#breakpointobserver" target="_blank">BreakpointObserver</a>，并将其与 Material 的 <a href="https://material.angular.io/components/sidenav/overview" target="_blank">MatSideNav</a> 和 <a href="https://material.angular.io/components/toolbar/overview" target="_blank">MatToolbar</a> 组件一起使用。</p>
+<p>创建并包含以下类型的原理图：</p>
+
+  <ul class="docs-list">
+    <li>包含安装原理图，以便 <code>ng add</code> 可以将你的库添加到项目中</li>
+<li>在你的库中包含生成原理图，以便 <code>ng generate</code> 可以在项目中搭建你定义工件（组件、服务、测试）的脚手架</li>
+<li>包含更新原理图，以便 <code>ng update</code> 可以更新库的依赖项，并为新版本中的重大更改提供迁移</li>
+
+  </ul>
+  <p>库中包含的内容取决于你的任务。
+例如，你可以定义一个原理图来创建一个预先填充了罐头数据的下拉列表，以展示如何将其添加到应用中。
+如果你想要一个每次都包含不同传入值的下拉列表，你的库可以定义一个原理图来使用给定的配置创建它。
+然后，开发者可以使用 <code>ng generate</code> 为他们自己的应用配置一个实例。</p>
+<p>假设你想读取一个配置文件，然后根据该配置生成一个表单。
+如果该表单需要使用你的库的开发者进行额外的自定义，那么它最好作为原理图使用。
+但是，如果表单始终相同，并且不需要开发者进行太多自定义，那么你可以创建一个动态组件，该组件接受配置并生成表单。
+一般来说，自定义越复杂，原理图方法就越有用。</p>
+<p>有关更多信息，请参阅<a href="tools/cli/schematics">原理图概览</a>和<a href="tools/cli/schematics-for-libraries">库的原理图</a>。</p>
+
+  <h2 id="publishing-your-library">
+    <a href="#publishing-your-library" class="docs-anchor" tabindex="-1" aria-label="Link to Publishing your library">发布你的库</a>
+  </h2>
+  <p>使用 Angular CLI 和 npm 包管理器来构建和发布你的库作为 npm 包。</p>
+<p>Angular CLI 使用一个名为 <a href="https://github.com/ng-packagr/ng-packagr/blob/master/README.md" target="_blank">ng-packagr</a> 的工具，从你的已编译代码创建可以发布到 npm 的包。
+有关 <code>ng-packagr</code> 支持的发行格式以及如何为你的库选择正确格式的指南，请参阅<a href="tools/libraries/creating-libraries#publishing-libraries">使用 Ivy 构建库</a>。</p>
+<p>你应该始终使用 <code>production</code> 配置构建用于分发的库。
+这确保了生成的输出使用适当的优化和正确的 npm 包格式。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-lib</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">cd</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> dist/my-lib</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> publish</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="managing-assets-in-a-library">
+    <a href="#managing-assets-in-a-library" class="docs-anchor" tabindex="-1" aria-label="Link to Managing assets in a library">管理库中的资产</a>
+  </h2>
+  <p>在你的 Angular 库中，可分发文件可以包含其他资产，例如主题文件、Sass mixin 或文档（如变更日志）。
+有关更多信息，请参阅<a href="https://github.com/ng-packagr/ng-packagr/blob/master/docs/copy-assets.md" target="_blank">在构建过程中将资产复制到库中</a>和<a href="https://github.com/ng-packagr/ng-packagr/blob/master/docs/embed-assets-css.md" target="_blank">在组件样式中嵌入资产</a>。</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> 当包含 Sass mixin 或预编译 CSS 等其他资产时。
+你需要手动将这些添加到主入口点的 <code>package.json</code> 中的条件 <a href="tools/libraries/angular-package-format#quotexportsquot">“exports”</a> 中。</p>
+
+    </div>
+    <p><code>ng-packagr</code> 会将手写的 <code>"exports"</code> 与自动生成的 <code>"exports"</code> 合并，从而允许库作者配置额外的导出子路径或自定义条件。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"exports"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "sass"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./_index.scss"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "./theming"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "sass"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./_theming.scss"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "./prebuilt-themes/indigo-pink.css"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "style"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./prebuilt-themes/indigo-pink.css"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>上面是从 <a href="https://unpkg.com/browse/@angular/material/package.json" target="_blank">@angular/material</a> 可分发文件中提取的内容。</p>
+
+  <h2 id="peer-dependencies">
+    <a href="#peer-dependencies" class="docs-anchor" tabindex="-1" aria-label="Link to Peer dependencies">对等依赖</a>
+  </h2>
+  <p>Angular 库应将该库依赖的任何 <code>@angular/*</code> 依赖项列为对等依赖。
+这确保了当模块请求 Angular 时，它们都获得完全相同的模块。
+如果库在 <code>dependencies</code> 而不是 <code>peerDependencies</code> 中列出 <code>@angular/core</code>，则它可能会获得不同的 Angular 模块，这将导致你的应用崩溃。</p>
+
+  <h2 id="using-your-own-library-in-applications">
+    <a href="#using-your-own-library-in-applications" class="docs-anchor" tabindex="-1" aria-label="Link to Using your own library in applications">在应用中使用你自己的库</a>
+  </h2>
+  <p>你不必将你的库发布到 npm 包管理器，就可以在同一个工作区中使用它，但是你必须首先构建它。</p>
+<p>要在应用中使用你自己的库，请执行以下操作：</p>
+
+  <ul class="docs-list">
+    <li><p>构建此库。
+  在构建库之前，你无法使用它。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-lib</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>在你的应用中，通过名称从库中导入：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { myExport } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'my-lib'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div></li>
+
+  </ul>
+  
+  <h3 id="building-and-rebuilding-your-library">
+    <a href="#building-and-rebuilding-your-library" class="docs-anchor" tabindex="-1" aria-label="Link to Building and rebuilding your library">构建和重新构建你的库</a>
+  </h3>
+  <p>如果你尚未将你的库作为 npm 包发布，然后又从 npm 将该包安装回你的应用中，那么构建步骤非常重要。
+例如，如果你克隆了你的 git 仓库并运行 <code>npm install</code>，那么如果尚未构建你的库，你的编辑器会将 <code>my-lib</code> 导入显示为丢失。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 当你在 Angular 应用中从库导入某些内容时，Angular 会查找库名称和磁盘上位置之间的映射表。
+当你安装库包时，映射表位于 <code>node_modules</code> 文件夹中。
+当你构建自己的库时，它必须在你的 <code>tsconfig</code> 路径中找到映射表。</p>
+
+    </div>
+    <p>使用 Angular CLI 生成库会自动将其路径添加到 <code>tsconfig</code> 文件中。
+Angular CLI 使用 <code>tsconfig</code> 路径来告知构建体系在哪里可以找到该库。</p>
+<p>有关更多信息，请参阅 <a href="https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping" target="_blank">路径映射概览</a>。</p>
+<p>如果你发现对库的更改未反映在你的应用中，则你的应用可能正在使用该库的旧版本构建。</p>
+<p>你可以在每次更改库时都重新构建它，但是这个额外的步骤会花费时间。
+<em>增量构建</em> 功能改进了库开发体验。
+每次文件更改时，都会执行部分构建，从而发出已修改的文件。</p>
+<p>增量构建可以在你的开发环境中作为后台进程运行。
+要利用此特性，请将 <code>--watch</code> 标志添加到 build 命令中：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-lib</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --watch</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> CLI <code>build</code> 命令对库使用与其他应用不同的构建器并调用不同的构建工具。</p>
+
+    </div>
+    
+  <ul class="docs-list">
+    <li>应用的构建体系 <code>@angular-devkit/build-angular</code> 基于 <code>webpack</code>，并且包含在所有新的 Angular CLI 项目中</li>
+<li>库的构建体系基于 <code>ng-packagr</code>。
+  仅当你使用 <code>ng generate library my-lib</code> 添加库时，它才会被添加到你的依赖项中。</li>
+
+  </ul>
+  <p>这两个构建体系支持不同的东西，即使在它们支持相同的东西时，它们也会以不同的方式执行这些操作。
+这意味着 TypeScript 源码在构建的库中可能产生与构建的应用中不同的 JavaScript 代码。</p>
+<p>因此，依赖于库的应用应仅使用指向<em>已构建库</em>的 TypeScript 路径映射。
+TypeScript 路径映射<em>不应</em>指向库源码 <code>.ts</code> 文件。</p>
+
+  <h2 id="publishing-libraries">
+    <a href="#publishing-libraries" class="docs-anchor" tabindex="-1" aria-label="Link to Publishing libraries">发布库</a>
+  </h2>
+  <p>发布库时可以使用两种分发格式：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">分发格式</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">Partial-Ivy（推荐）</td>
+<td align="left">包含可移植代码，这些代码可以被使用任何 Angular v12 及更高版本构建的 Ivy 应用使用。</td>
+</tr>
+<tr>
+<td align="left">Full-Ivy</td>
+<td align="left">包含私有的 Angular Ivy 指令，这些指令不能保证在不同版本的 Angular 中都能正常工作。此格式要求库和应用使用<em>完全</em>相同的 Angular 版本构建。此格式适用于所有库和应用代码都直接从源码构建的环境。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>对于发布到 npm，请使用 partial-Ivy 格式，因为它在 Angular 的补丁版本之间是稳定的。</p>
+<p>如果要发布到 npm，请避免使用 full-Ivy 代码编译库，因为生成的 Ivy 指令不是 Angular 公共 API 的一部分，因此可能会在补丁版本之间发生更改。</p>
+
+  <h2 id="ensuring-library-version-compatibility">
+    <a href="#ensuring-library-version-compatibility" class="docs-anchor" tabindex="-1" aria-label="Link to Ensuring library version compatibility">确保库版本兼容性</a>
+  </h2>
+  <p>用于构建应用的 Angular 版本应始终与用于构建其任何依赖库的 Angular 版本相同或更高。
+例如，如果你的库使用 Angular 版本 13，则依赖于该库的应用应使用 Angular 版本 13 或更高版本。
+Angular 不支持为应用使用更早的版本。</p>
+<p>如果你打算将你的库发布到 npm，请通过在 <code>tsconfig.prod.json</code> 中设置 <code>"compilationMode": "partial"</code> 来使用 partial-Ivy 代码进行编译。
+这种 partial 格式在不同版本的 Angular 之间是稳定的，因此可以安全地发布到 npm。
+具有此格式的代码在应用构建期间使用相同版本的 Angular 编译器进行处理，从而确保应用及其所有库都使用单个版本的 Angular。</p>
+<p>如果要发布到 npm，请避免使用 full-Ivy 代码编译库，因为生成的 Ivy 指令不是 Angular 公共 API 的一部分，因此可能会在补丁版本之间发生更改。</p>
+<p>如果你以前从未在 npm 中发布过包，则必须创建一个用户帐户。
+阅读 <a href="https://docs.npmjs.com/getting-started/publishing-npm-packages" target="_blank">发布 npm 包</a> 了解更多信息。</p>
+
+  <h2 id="consuming-partial-ivy-code-outside-the-angular-cli">
+    <a href="#consuming-partial-ivy-code-outside-the-angular-cli" class="docs-anchor" tabindex="-1" aria-label="Link to Consuming partial-Ivy code outside the Angular CLI">在 Angular CLI 之外使用 partial-Ivy 代码</a>
+  </h2>
+  <p>应用从 npm 将许多 Angular 库安装到其 <code>node_modules</code> 目录中。
+但是，这些库中的代码不能与构建的应用一起直接打捆，因为它尚未完全编译。
+要完成编译，请使用 Angular linker。</p>
+<p>对于不使用 Angular CLI 的应用，linker 可以作为 <a href="https://babeljs.io" target="_blank">Babel</a> 插件使用。
+该插件要从 <code>@angular/compiler-cli/linker/babel</code> 导入。</p>
+<p>Angular linker Babel 插件支持构建缓存，这意味着库只需要由 linker 处理一次，而无需考虑其他 npm 操作。</p>
+<p>通过使用 <a href="https://webpack.js.org/loaders/babel-loader/#options" target="_blank">babel-loader</a> 将 linker 注册为 <a href="https://babeljs.io" target="_blank">Babel</a> 插件，从而将该插件集成到自定义 <a href="https://webpack.js.org" target="_blank">webpack</a> 构建中的示例。</p>
+<div class="docs-code" path="adev/src/content/examples/angular-linker-plugin/webpack.config.mjs" visiblelines="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18" header="webpack.config.mjs">
+    <div class="docs-code-header"><h3>webpack.config.mjs</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> linkerPlugin </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/compiler-cli/linker/babel'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> default</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  module: {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    rules: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        test:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> /</span><span style="--shiki-light:#22863A;--shiki-light-font-weight:bold;--shiki-dark:#85E89D;--shiki-dark-font-weight:bold">\.</span><span style="--shiki-light:#032F62;--shiki-dark:#DBEDFF">m</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?</span><span style="--shiki-light:#032F62;--shiki-dark:#DBEDFF">js</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">$</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">/</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        use: {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          loader: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'babel-loader'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          options: {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            plugins: [linkerPlugin],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            compact: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            cacheDirectory: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> Angular CLI 会自动集成 linker 插件，因此，如果你的库的使用者正在使用 CLI，他们可以从 npm 安装 Ivy 原生库，而无需任何额外的配置。</p>
+
+    </div>
+    

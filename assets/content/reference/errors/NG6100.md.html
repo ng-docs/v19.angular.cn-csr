@@ -1,0 +1,28 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">NgModule.id 设置为 module.id 反模式</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG6100.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>将 <code>module.id</code> 用作 NgModule 的 <code>id</code> 是一种常见的反模式，并且可能在你的代码中没有实际用途。</p>
+<p>可以使用 <code>id</code> 声明 NgModule：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  id: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my_module'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>声明 <code>id</code> 使 NgModule 可以通过 <code>getNgModuleById()</code> 操作进行查找。此功能很少使用，主要用于非常特定的捆绑场景，在这些场景中，惰性加载 NgModule 而无需获取对它们的直接引用。在大多数 Angular 代码中，应该使用 ES 动态 <code>import()</code> (<code>import('./path/to/module')</code>) 来代替，因为它提供了对正在加载的 NgModule 的直接引用，而无需全局注册的副作用。</p>
+<p>如果你不使用 <code>getNgModuleById</code>，则无需为你的 NgModules 提供 <code>id</code>。提供一个 <code>id</code> 有一个明显的缺点：它会使 NgModule 无法进行摇树优化，这可能会对你的捆绑包大小产生影响。</p>
+<p>特别是，指定 <code>id: module.id</code> 的模式源于对 <code>@NgModule.id</code> 的误解。在早期版本的 Angular 中，有时需要在 <code>@Component</code> 元数据中包含 property <code>moduleId: module.id</code>。</p>
+<p>将 <code>module.id</code> 用于 <code>@NgModule.id</code> 可能是由于 <code>@Component.moduleId</code> 和 <code>@NgModule.id</code> 之间的混淆造成的。<code>module.id</code> 通常对 <code>getNgModuleById()</code> 操作没有用，因为 <code>id</code> 需要是一个众所周知的字符串，而 <code>module.id</code> 通常对使用者是不透明的。</p>
+
+  <h2 id="debugging-the-error">
+    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">调试错误</a>
+  </h2>
+  <p>你可以从你的 NgModules 中删除 <code>id: module.id</code> 声明。编译器会忽略此声明，并改为发出此警告。</p>

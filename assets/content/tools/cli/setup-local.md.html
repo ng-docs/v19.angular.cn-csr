@@ -1,0 +1,177 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">建立本地环境和工作区</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/setup-local.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>本指南介绍如何使用 <a href="cli" title="CLI" command reference>Angular CLI</a> 为 Angular 开发建立你的环境。
+它包括有关安装 CLI、创建初始工作区和入门应用以及在本地运行该应用以验证你的设置的信息。</p>
+
+    <div class="docs-callout docs-callout-helpful">
+      <h3>无需本地设置即可试用 Angular</h3>
+      <p>如果你是 Angular 新手，不妨从 <a href="tutorials/learn-angular">立即试用！</a> 开始，它会在你的浏览器中介绍 Angular 的要点。
+这个独立的教程利用了用于在线开发的交互式 <a href="https://stackblitz.com" target="_blank">StackBlitz</a> 环境。
+在你准备好之前，你无需建立本地环境。</p>
+
+    </div>
+    
+  <h2 id="before-you-start">
+    <a href="#before-you-start" class="docs-anchor" tabindex="-1" aria-label="Link to Before you start">开始之前</a>
+  </h2>
+  <p>要使用 Angular CLI，你应该熟悉以下内容：</p>
+
+    <nav class="docs-pill-row">
+      
+    <a class="docs-pill" href="https://developer.mozilla.org/docs/Web/JavaScript/A_re-introduction_to_JavaScript" target="_blank">
+      JavaScript<docs-icon class="docs-icon-small">open_in_new</docs-icon>
+    </a>
+    
+    <a class="docs-pill" href="https://developer.mozilla.org/docs/Learn/HTML/Introduction_to_HTML" target="_blank">
+      HTML<docs-icon class="docs-icon-small">open_in_new</docs-icon>
+    </a>
+    
+    <a class="docs-pill" href="https://developer.mozilla.org/docs/Learn/CSS/First_steps" target="_blank">
+      CSS<docs-icon class="docs-icon-small">open_in_new</docs-icon>
+    </a>
+    
+
+    </nav>
+    <p>你应该熟悉命令行界面 (CLI) 工具的用法，并对命令 Shell 有一个大致的了解。
+了解 <a href="https://www.typescriptlang.org" target="_blank">TypeScript</a> 会有所帮助，但不是必需的。</p>
+
+  <h2 id="dependencies">
+    <a href="#dependencies" class="docs-anchor" tabindex="-1" aria-label="Link to Dependencies">依赖</a>
+  </h2>
+  <p>要在你的本地系统上安装 Angular CLI，你需要安装 <a href="https://nodejs.org/" target="_blank">Node.js</a>。
+Angular CLI 使用 Node 及其相关的包管理器 npm，在浏览器之外安装和运行 JavaScript 工具。</p>
+<p><a href="https://nodejs.org/en/download" target="_blank">下载并安装 Node.js</a>，其中也将包含 <code>npm</code> CLI。
+Angular 需要 <a href="https://nodejs.org/en/about/previous-releases" target="_blank">active LTS 或 maintenance LTS</a> 版本的 Node.js。
+有关更多信息，请参阅 <a href="reference/versions">Angular 的版本兼容性</a> 指南。</p>
+
+  <h2 id="install-the-angular-cli">
+    <a href="#install-the-angular-cli" class="docs-anchor" tabindex="-1" aria-label="Link to Install the Angular CLI">安装 Angular CLI</a>
+  </h2>
+  <p>要安装 Angular CLI，请打开终端窗口并运行以下命令：</p>
+<div class="docs-code-multifile">
+    <div class="docs-code" header="npm">
+    <div class="docs-code-header"><h3>npm</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">npm install </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">g @angular</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">/</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">cli</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code" header="pnpm">
+    <div class="docs-code-header"><h3>pnpm</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">pnpm install </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">g @angular</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">/</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">cli</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code" header="yarn">
+    <div class="docs-code-header"><h3>yarn</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">yarn global add @angular</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">/</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">cli</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code" header="bun">
+    <div class="docs-code-header"><h3>bun</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">bun install </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">g @angular</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">/</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">cli</span></span></code></pre>
+    </pre>
+  </div>
+    </div>
+  <h3 id="powershell-execution-policy">
+    <a href="#powershell-execution-policy" class="docs-anchor" tabindex="-1" aria-label="Link to Powershell execution policy">Powershell 执行策略</a>
+  </h3>
+  <p>在 Windows 客户端计算机上，默认情况下禁用 PowerShell 脚本的执行，因此上述命令可能会失败并出现错误。
+要允许执行 PowerShell 脚本（npm 全局二进制文件需要这样做），你必须设置以下<a href="https://docs.microsoft.com/powershell/module/microsoft.powershell.core/about/about_execution_policies">执行策略</a>：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Set-ExecutionPolicy</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -Scope</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> CurrentUser</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -ExecutionPolicy</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> RemoteSigned</span></span></code></pre>
+    </pre>
+  </div><p>仔细阅读执行命令后显示的消息，并按照说明进行操作。确保你了解设置执行策略的含义。</p>
+
+  <h3 id="unix-permissions">
+    <a href="#unix-permissions" class="docs-anchor" tabindex="-1" aria-label="Link to Unix permissions">Unix 权限</a>
+  </h3>
+  <p>在某些类 Unix 的设置中，全局脚本可能归 root 用户所有，因此上述命令可能会失败并出现权限错误。
+使用 <code>sudo</code> 以 root 用户身份执行命令，并在出现提示时输入你的密码：</p>
+<div class="docs-code-multifile">
+    <div class="docs-code" header="npm">
+    <div class="docs-code-header"><h3>npm</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">sudo npm install </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">g @angular</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">/</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">cli</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code" header="pnpm">
+    <div class="docs-code-header"><h3>pnpm</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">sudo pnpm install </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">g @angular</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">/</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">cli</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code" header="yarn">
+    <div class="docs-code-header"><h3>yarn</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">sudo yarn global add @angular</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">/</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">cli</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code" header="bun">
+    <div class="docs-code-header"><h3>bun</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">sudo bun install </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">g @angular</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">/</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">cli</span></span></code></pre>
+    </pre>
+  </div>
+    </div><p>确保你了解以 root 身份运行命令的含义。</p>
+
+  <h2 id="create-a-workspace-and-initial-application">
+    <a href="#create-a-workspace-and-initial-application" class="docs-anchor" tabindex="-1" aria-label="Link to Create a workspace and initial application">创建一个工作区和初始应用</a>
+  </h2>
+  <p>你在 Angular <strong>工作区</strong>的上下文中开发应用。</p>
+<p>要创建一个新的工作区和初始入门应用，请运行 CLI 命令 <code>ng new</code> 并提供名称 <code>my-app</code>，如此处所示，然后回答有关要包含的功能的提示：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> new</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-app</span></span></code></pre>
+    </pre>
+  </div><p>Angular CLI 安装必要的 Angular npm 包和其他依赖项。
+这可能需要几分钟。</p>
+<p>CLI 在一个与工作区同名的新目录中创建一个新的工作区和一个小的欢迎应用，随时可以运行。
+导航到新目录，以便后续命令使用此工作区。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">cd</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-app</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="run-the-application">
+    <a href="#run-the-application" class="docs-anchor" tabindex="-1" aria-label="Link to Run the application">运行应用</a>
+  </h2>
+  <p>Angular CLI 包含一个开发服务器，供你在本地构建和启动你的应用。运行以下命令：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> serve</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --open</span></span></code></pre>
+    </pre>
+  </div><p><code>ng serve</code> 命令启动服务器，监视你的文件，并在你更改这些文件时重建应用并重新加载浏览器。</p>
+<p><code>--open</code>（或仅 <code>-o</code>）选项会自动打开你的浏览器并访问 <code>http://localhost:4200/</code> 以查看生成的应用。</p>
+
+  <h2 id="workspaces-and-project-files">
+    <a href="#workspaces-and-project-files" class="docs-anchor" tabindex="-1" aria-label="Link to Workspaces and project files">工作区和项目文件</a>
+  </h2>
+  <p><a href="cli/new"><code>ng new</code></a> 命令创建一个 <a href="reference/configs/workspace-config">Angular 工作区</a> 文件夹，并在其中生成一个新的应用。
+一个工作区可以包含多个应用和库。
+<a href="cli/new"><code>ng new</code></a> 命令创建的初始应用位于工作区的根目录下。
+当你在现有工作区中生成额外的应用或库时，默认情况下它会进入 <code>projects/</code> 子文件夹。</p>
+<p>新生成的应用包含根组件和模板的源文件。
+每个应用都有一个 <code>src</code> 文件夹，其中包含其组件、数据和资产。</p>
+<p>你可以直接编辑生成的文件，或者使用 CLI 命令添加和修改它们。
+使用 <a href="cli/generate"><code>ng generate</code></a> 命令为其他组件、指令、管道、服务等添加新文件。
+诸如 <a href="cli/add"><code>ng add</code></a> 和 <a href="cli/generate"><code>ng generate</code></a> 之类的命令（用于创建或操作应用和库）必须从工作区内执行。
+相比之下，诸如 <code>ng new</code> 之类的命令必须在工作区<em>外部</em>执行，因为它们将创建一个新的工作区。</p>
+
+  <h2 id="next-steps">
+    <a href="#next-steps" class="docs-anchor" tabindex="-1" aria-label="Link to Next steps">后续步骤</a>
+  </h2>
+  
+  <ul class="docs-list">
+    <li><p>了解有关生成的工作区的 <a href="reference/configs/file-structure">文件结构</a> 和 <a href="reference/configs/workspace-config">配置</a> 的更多信息。</p>
+</li>
+<li><p>使用 <a href="cli/test"><code>ng test</code></a> 测试你的新应用。</p>
+</li>
+<li><p>使用 <a href="cli/generate"><code>ng generate</code></a> 生成样板代码，例如组件、指令和管道。</p>
+</li>
+<li><p>使用 <a href="cli/deploy"><code>ng deploy</code></a> 部署你的新应用，使其对真实用户可用。</p>
+</li>
+<li><p>使用 <a href="cli/e2e"><code>ng e2e</code></a> 建立并运行你的应用的端到端测试。</p>
+</li>
+
+  </ul>
+  

@@ -1,0 +1,265 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular 编译器选项</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/configs/angular-compiler-options.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>当你使用<a href="tools/cli/aot-compiler">预先编译 (AoT)</a> 时，你可以通过在<a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript 配置文件</a>中指定 Angular 编译器选项来控制应用的编译方式。</p>
+<p>Angular 选项对象 <code>angularCompilerOptions</code> 是 <code>compilerOptions</code> 对象的同级对象，后者为 TypeScript 编译器提供标准选项。</p>
+<div class="docs-code" path="adev/src/content/examples/angular-compiler-options/tsconfig.json" visiblelines="1,2,3,4,24,25,26,27,30,31" header="tsconfig.json">
+    <div class="docs-code-header"><h3>tsconfig.json</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* To learn more about this file see: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "compileOnSave"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "compilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "baseUrl"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "outDir"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./dist/out-tsc"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "forceConsistentCasingInFileNames"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "strict"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "noImplicitOverride"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "noPropertyAccessFromIndexSignature"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "noImplicitReturns"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "noFallthroughCasesInSwitch"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "sourceMap"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "declaration"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "downlevelIteration"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "experimentalDecorators"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "moduleResolution"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"node"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "importHelpers"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "target"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"es2020"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "module"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"es2020"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "lib"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "es2020"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "dom"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "angularCompilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "enableI18nLegacyMessageIdFormat"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "strictInjectionParameters"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "strictInputAccessModifiers"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "strictTemplates"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="configuration-inheritance-with-extends">
+    <a href="#configuration-inheritance-with-extends" class="docs-anchor" tabindex="-1" aria-label="Link to Configuration inheritance with <code>extends</code>">使用 <code>extends</code> 进行配置继承</a>
+  </h2>
+  <p>与 TypeScript 编译器类似，Angular AoT 编译器也支持 TypeScript 配置文件的 <code>angularCompilerOptions</code> 部分中的 <code>extends</code>。
+<code>extends</code> 属性位于顶层，与 <code>compilerOptions</code> 和 <code>angularCompilerOptions</code> 并列。</p>
+<p>TypeScript 配置可以使用 <code>extends</code> 属性从另一个文件继承设置。
+来自基础文件的配置选项会先加载，然后被继承配置文件中的选项覆盖。</p>
+<p>例如：</p>
+<div class="docs-code" path="adev/src/content/examples/angular-compiler-options/tsconfig.app.json" visiblelines="1,2,3,4,6,29,30,31,34,35" header="tsconfig.app.json">
+    <div class="docs-code-header"><h3>tsconfig.app.json</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* To learn more about this file see: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "extends"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./tsconfig.json"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "compilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "outDir"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./out-tsc/app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "types"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: []</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    },</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "files"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/main.ts"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ],</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "include"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.d.ts"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ],</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "exclude"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/test.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.spec.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*-specs.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.avoid.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.0.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.1.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.1b.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.2.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.3.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.4.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.5.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.6.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/*.7.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "src/**/testing"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ],</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "angularCompilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "strictTemplates"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "preserveWhitespaces"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "sourceMap"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      "declaration"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div><p>更多信息，请参阅<a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">《TypeScript 手册》</a>。</p>
+
+  <h2 id="template-options">
+    <a href="#template-options" class="docs-anchor" tabindex="-1" aria-label="Link to Template options">模板选项</a>
+  </h2>
+  <p>以下选项可用于配置 Angular AoT 编译器。</p>
+
+  <h3 id="annotationsas">
+    <a href="#annotationsas" class="docs-anchor" tabindex="-1" aria-label="Link to <code>annotationsAs</code>"><code>annotationsAs</code></a>
+  </h3>
+  <p>修改发出 Angular 专用注解的方式以改进摇树优化。
+非 Angular 注解不受影响。
+可以是 <code>static fields</code> 或 <code>decorators</code> 之一。默认值为 <code>static fields</code>。</p>
+
+  <ul class="docs-list">
+    <li><p>默认情况下，编译器会将装饰器替换为类中的静态字段，这允许像 <a href="https://github.com/google/closure-compiler" target="_blank">Closure compiler</a> 这样的高级摇树优化器删除未使用的类</p>
+</li>
+<li><p><code>decorators</code> 值将装饰器保留在原位，这使得编译速度更快。
+  TypeScript 发出对 <code>__decorate</code> 辅助函数的调用。
+  使用 <code>--emitDecoratorMetadata</code> 进行运行时反射。</p>
+<p>提示：生成的代码无法正确进行摇树优化。</p>
+</li>
+
+  </ul>
+  
+  <h3 id="annotateforclosurecompiler">
+    <a href="#annotateforclosurecompiler" class="docs-anchor" tabindex="-1" aria-label="Link to <code>annotateForClosureCompiler</code>"><code>annotateForClosureCompiler</code></a>
+  </h3>
+  <!-- vale Angular.Angular_Spelling = NO -->
+
+<p>当为 <code>true</code> 时，使用 <a href="https://github.com/angular/tsickle" target="_blank">Tsickle</a> 来使用 <a href="https://jsdoc.app" target="_blank">JSDoc</a> 注释来注解发出的 JavaScript，<a href="https://github.com/google/closure-compiler" target="_blank">Closure Compiler</a> 需要这些注释。
+默认为 <code>false</code>。</p>
+<!-- vale Angular.Angular_Spelling = YES -->
+
+
+  <h3 id="compilationmode">
+    <a href="#compilationmode" class="docs-anchor" tabindex="-1" aria-label="Link to <code>compilationMode</code>"><code>compilationMode</code></a>
+  </h3>
+  <p>指定要使用的编译模式。
+以下模式可用：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">模式</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>'full'</code></td>
+<td align="left">根据当前正在使用的 Angular 版本生成完全 AoT 编译的代码。</td>
+</tr>
+<tr>
+<td align="left"><code>'partial'</code></td>
+<td align="left">以稳定的中间形式生成代码，适用于已发布的库。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>默认值为 <code>'full'</code>。</p>
+<p>对于大多数应用来说，<code>'full'</code> 是正确的编译模式。</p>
+<p>对于独立发布的库（例如 NPM 包），请使用 <code>'partial'</code>。
+<code>'partial'</code> 编译输出一种稳定的中间格式，这种格式可以更好地支持由以不同于库的 Angular 版本构建的应用使用。
+与应用一起在 “HEAD” 构建的库，以及在单一代码仓中使用相同 Angular 版本的库可以使用 <code>'full'</code>，因为不存在版本偏差的风险。</p>
+
+  <h3 id="disableexpressionlowering">
+    <a href="#disableexpressionlowering" class="docs-anchor" tabindex="-1" aria-label="Link to <code>disableExpressionLowering</code>"><code>disableExpressionLowering</code></a>
+  </h3>
+  <p>当为 <code>true</code>（默认值）时，转换注解中正在使用或可能正在使用的代码，以允许从模板工厂模块导入它。
+有关更多信息，请参阅<a href="tools/cli/aot-compiler#metadata-rewriting">元数据重写</a>。</p>
+<p>当为 <code>false</code> 时，禁用此重写，需要手动完成重写。</p>
+
+  <h3 id="disabletypescriptversioncheck">
+    <a href="#disabletypescriptversioncheck" class="docs-anchor" tabindex="-1" aria-label="Link to <code>disableTypeScriptVersionCheck</code>"><code>disableTypeScriptVersionCheck</code></a>
+  </h3>
+  <p>当为 <code>true</code> 时，编译器不会查看 TypeScript 版本，并且在使用不受支持的 TypeScript 版本时不会报告错误。
+不建议这样做，因为不受支持的 TypeScript 版本可能具有未定义的行为。
+默认为 <code>false</code>。</p>
+
+  <h3 id="enablei18nlegacymessageidformat">
+    <a href="#enablei18nlegacymessageidformat" class="docs-anchor" tabindex="-1" aria-label="Link to <code>enableI18nLegacyMessageIdFormat</code>"><code>enableI18nLegacyMessageIdFormat</code></a>
+  </h3>
+  <p>指示 Angular 模板编译器为通过 <code>i18n</code> 属性在模板中标记的消息创建旧式 ID。
+有关标记消息以进行本地化的更多信息，请参阅<a href="guide/i18n/prepare#mark-text-in-component-template" title="Mark" text in component template - prepare for translation | angular>标记要翻译的文本</a>。</p>
+<p>除非你的项目依赖于先前使用旧式 ID 创建的翻译，否则请将此选项设置为 <code>false</code>。
+默认为 <code>true</code>。</p>
+<p>pre-Ivy 消息提取工具为提取的消息 ID 创建了各种旧式格式。
+这些消息格式存在一些问题，例如空格处理以及依赖于模板原始 HTML 中的信息。</p>
+<p>新的消息格式对空格更改更具弹性，在所有翻译文件格式中都相同，并且可以直接从对 <code>$localize</code> 的调用创建。
+这允许应用代码中的 <code>$localize</code> 消息使用与组件模板中相同的 <code>i18n</code> 消息相同的 ID。</p>
+
+  <h3 id="enableresourceinlining">
+    <a href="#enableresourceinlining" class="docs-anchor" tabindex="-1" aria-label="Link to <code>enableResourceInlining</code>"><code>enableResourceInlining</code></a>
+  </h3>
+  <p>当为 <code>true</code> 时，将所有 <code>@Component</code> 装饰器中的 <code>templateUrl</code> 和 <code>styleUrls</code> 属性替换为 <code>template</code> 和 <code>styles</code> 属性中的内联内容。</p>
+<p>启用后，<code>ngc</code> 的 <code>.js</code> 输出不包含任何惰性加载的模板或样式 URL。</p>
+<p>对于使用 Angular CLI 创建的库项目，开发配置默认为 <code>true</code>。</p>
+
+  <h3 id="enablelegacytemplate">
+    <a href="#enablelegacytemplate" class="docs-anchor" tabindex="-1" aria-label="Link to <code>enableLegacyTemplate</code>"><code>enableLegacyTemplate</code></a>
+  </h3>
+  <p>当为 <code>true</code> 时，启用已弃用的 <code>&lt;template&gt;</code> 元素来代替 <code>&lt;ng-template&gt;</code>。
+默认为 <code>false</code>。
+某些第三方 Angular 库可能需要此选项。</p>
+
+  <h3 id="flatmoduleid">
+    <a href="#flatmoduleid" class="docs-anchor" tabindex="-1" aria-label="Link to <code>flatModuleId</code>"><code>flatModuleId</code></a>
+  </h3>
+  <p>用于导入扁平模块的模块 ID（当 <code>flatModuleOutFile</code> 为 <code>true</code> 时）。
+模板编译器创建的引用在从扁平模块导入符号时使用此模块名称。
+如果 <code>flatModuleOutFile</code> 为 <code>false</code>，则忽略此选项。</p>
+
+  <h3 id="flatmoduleoutfile">
+    <a href="#flatmoduleoutfile" class="docs-anchor" tabindex="-1" aria-label="Link to <code>flatModuleOutFile</code>"><code>flatModuleOutFile</code></a>
+  </h3>
+  <p>当为 <code>true</code> 时，生成给定文件名的扁平模块索引和相应的扁平模块元数据。
+用于创建与 <code>@angular/core</code> 和 <code>@angular/common</code> 类似打包的扁平模块。
+当使用此选项时，库的 <code>package.json</code> 应该引用创建的扁平模块索引，而不是库索引文件。</p>
+<p>仅生成一个 <code>.metadata.json</code> 文件，其中包含从库索引导出的符号所需的所有元数据。
+在创建的 <code>.ngfactory.js</code> 文件中，扁平模块索引用于导入符号。符号包括来自库索引的公共 API 和隐藏的内部符号。</p>
+<p>默认情况下，在 <code>files</code> 字段中提供的 <code>.ts</code> 文件被假定为库索引。
+如果指定了多个 <code>.ts</code> 文件，则使用 <code>libraryIndex</code> 来选择要使用的文件。
+如果提供了多个 <code>.ts</code> 文件但没有 <code>libraryIndex</code>，则会产生错误。</p>
+<p>使用给定的 <code>flatModuleOutFile</code> 名称在与库索引 <code>.d.ts</code> 文件相同的位置创建一个扁平模块索引 <code>.d.ts</code> 和 <code>.js</code>。</p>
+<p>例如，如果一个库使用 <code>public_api.ts</code> 文件作为模块的库索引，则 <code>tsconfig.json</code> <code>files</code> 字段将为 <code>["public_api.ts"]</code>。
+然后可以将 <code>flatModuleOutFile</code> 选项设置为例如 <code>"index.js"</code>，这将生成 <code>index.d.ts</code> 和 <code>index.metadata.json</code> 文件。
+库的 <code>package.json</code> 的 <code>module</code> 字段将为 <code>"index.js"</code>，而 <code>typings</code> 字段将为 <code>"index.d.ts"</code>。</p>
+
+  <h3 id="fulltemplatetypecheck">
+    <a href="#fulltemplatetypecheck" class="docs-anchor" tabindex="-1" aria-label="Link to <code>fullTemplateTypeCheck</code>"><code>fullTemplateTypeCheck</code></a>
+  </h3>
+  <p>当为 <code>true</code>（推荐值）时，启用模板编译器的<a href="tools/cli/aot-compiler#binding-expression-validation">绑定表达式验证</a>阶段。此阶段使用 TypeScript 来验证绑定表达式。
+有关更多信息，请参阅<a href="tools/cli/template-typecheck">模板类型检查</a>。</p>
+<p>默认为 <code>false</code>，但是当你使用 Angular CLI 命令 <code>ng new --strict</code> 时，它在新项目的配置中被设置为 <code>true</code>。</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> <code>fullTemplateTypeCheck</code> 选项已在 Angular 13 中弃用，取而代之的是 <code>strictTemplates</code> 系列编译器选项。</p>
+
+    </div>
+    
+  <h3 id="generatecodeforlibraries">
+    <a href="#generatecodeforlibraries" class="docs-anchor" tabindex="-1" aria-label="Link to <code>generateCodeForLibraries</code>"><code>generateCodeForLibraries</code></a>
+  </h3>
+  <p>当为 <code>true</code> 时，为具有相应 <code>.metadata.json</code> 文件的 <code>.d.ts</code> 文件创建工厂文件（<code>.ngfactory.js</code> 和 <code>.ngstyle.js</code>）。默认值为 <code>true</code>。</p>
+<p>当为 <code>false</code> 时，仅为 <code>.ts</code> 文件创建工厂文件。
+当使用工厂摘要时，请执行此操作。</p>
+
+  <h3 id="preservewhitespaces">
+    <a href="#preservewhitespaces" class="docs-anchor" tabindex="-1" aria-label="Link to <code>preserveWhitespaces</code>"><code>preserveWhitespaces</code></a>
+  </h3>
+  <p>当为 <code>false</code>（默认值）时，从已编译的模板中删除空白文本节点，这将导致发出的模板工厂模块更小。
+设置为 <code>true</code> 以保留空白文本节点。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 当使用水合时，建议你使用 <code>preserveWhitespaces: false</code>，这是默认值。如果你选择通过将 <code>preserveWhitespaces: true</code> 添加到你的 tsconfig 来启用保留空格，则你可能会遇到水合问题。这还不是完全支持的配置。确保服务器和客户端 tsconfig 文件之间也保持一致设置。有关更多详细信息，请参阅<a href="guide/hydration#preserve-whitespaces">水合指南</a>。</p>
+
+    </div>
+    
+  <h3 id="skipmetadataemit">
+    <a href="#skipmetadataemit" class="docs-anchor" tabindex="-1" aria-label="Link to <code>skipMetadataEmit</code>"><code>skipMetadataEmit</code></a>
+  </h3>
+  <p>当为 <code>true</code> 时，不生成 <code>.metadata.json</code> 文件。
+默认为 <code>false</code>。</p>
+<p><code>.metadata.json</code> 文件包含模板编译器从 <code>.ts</code> 文件中所需的信息，这些信息未包含在 TypeScript 编译器生成的 <code>.d.ts</code> 文件中。
+例如，此信息包括注解的内容，例如组件的模板，TypeScript 会将其发出到 <code>.js</code> 文件，但不会发出到 <code>.d.ts</code> 文件。</p>
+<p>当使用工厂摘要时，你可以设置为 <code>true</code>，因为工厂摘要包含 <code>.metadata.json</code> 文件中信息的副本。</p>
+<p>如果你正在使用 TypeScript 的 <code>--outFile</code> 选项，请设置为 <code>true</code>，因为元数据文件对于这种样式的 TypeScript 输出无效。
+Angular 社区不建议将 <code>--outFile</code> 与 Angular 一起使用。
+请改用捆绑器，例如 <a href="https://webpack.js.org" target="_blank">webpack</a>。</p>
+
+  <h3 id="skiptemplatecodegen">
+    <a href="#skiptemplatecodegen" class="docs-anchor" tabindex="-1" aria-label="Link to <code>skipTemplateCodegen</code>"><code>skipTemplateCodegen</code></a>
+  </h3>
+  <p>当为 <code>true</code> 时，不会发出 <code>.ngfactory.js</code> 和 <code>.ngstyle.js</code> 文件。
+这将关闭大多数模板编译器功能，并禁用模板诊断信息的报告。</p>
+<p>可用于指示模板编译器生成 <code>.metadata.json</code> 文件，以便与 <code>npm</code> 包一起分发。 这避免了生成无法分发到 <code>npm</code> 的 <code>.ngfactory.js</code> 和 <code>.ngstyle.js</code> 文件。</p>
+<p>对于使用 Angular CLI 创建的库项目，开发配置默认为 <code>true</code>。</p>
+
+  <h3 id="strictmetadataemit">
+    <a href="#strictmetadataemit" class="docs-anchor" tabindex="-1" aria-label="Link to <code>strictMetadataEmit</code>"><code>strictMetadataEmit</code></a>
+  </h3>
+  <p>当为 <code>true</code> 时，如果 <code>"skipMetadataEmit"</code> 为 <code>false</code>，则向 <code>.metadata.json</code> 文件报告错误。
+默认为 <code>false</code>。
+仅当 <code>"skipMetadataEmit"</code> 为 <code>false</code> 且 <code>"skipTemplateCodegen"</code> 为 <code>true</code> 时使用。</p>
+<p>此选项旨在验证为与 <code>npm</code> 包捆绑而发出的 <code>.metadata.json</code> 文件。
+验证非常严格，并且可能会针对元数据发出错误，而这些元数据在模板编译器使用时永远不会产生错误。
+你可以选择通过在记录符号的注释中包含 <code>@dynamic</code> 来禁止此选项为导出的符号发出的错误。</p>
+<p><code>.metadata.json</code> 文件包含错误是有效的。
+如果元数据用于确定注解的内容，则模板编译器会报告这些错误。
+元数据收集器无法预测哪些符号旨在用于注解中。 它会抢先在导出的符号的元数据中包含错误节点。
+然后，如果使用了这些符号，模板编译器可以使用错误节点来报告错误。</p>
+<p>如果库的客户端打算在注解中使用符号，则模板编译器通常不会报告此错误。 它会在客户端实际使用该符号后才报告。
+此选项允许在库的构建阶段检测这些错误，例如，在生成 Angular 库本身时使用。</p>
+<p>对于使用 Angular CLI 创建的库项目，开发配置默认为 <code>true</code>。</p>
+
+  <h3 id="strictinjectionparameters">
+    <a href="#strictinjectionparameters" class="docs-anchor" tabindex="-1" aria-label="Link to <code>strictInjectionParameters</code>"><code>strictInjectionParameters</code></a>
+  </h3>
+  <p>当为 <code>true</code> 时，会为注入类型无法确定的提供的参数报告错误。
+当为 <code>false</code> 时，对于带有 <code>@Injectable</code> 标记且类型无法求解的类的构造函数参数，会产生警告。
+建议值为 <code>true</code>，但默认值为 <code>false</code>。</p>
+<p>当你使用 Angular CLI 命令 <code>ng new --strict</code> 时，它在已创建项目的配置中设置为 <code>true</code>。</p>
+
+  <h3 id="stricttemplates">
+    <a href="#stricttemplates" class="docs-anchor" tabindex="-1" aria-label="Link to <code>strictTemplates</code>"><code>strictTemplates</code></a>
+  </h3>
+  <p>当为 <code>true</code> 时，启用<a href="tools/cli/template-typecheck#strict-mode">严格模板类型检查</a>。</p>
+<p>此选项启用的严格性标志允许你打开和关闭特定类型的严格模板类型检查。
+请参阅<a href="tools/cli/template-typecheck#troubleshooting-template-errors">排查模板错误</a>。</p>
+<p>当你使用 Angular CLI 命令 <code>ng new --strict</code> 时，它在新项目的配置中设置为 <code>true</code>。</p>
+
+  <h3 id="strictstandalone">
+    <a href="#strictstandalone" class="docs-anchor" tabindex="-1" aria-label="Link to <code>strictStandalone</code>"><code>strictStandalone</code></a>
+  </h3>
+  <p>当为 <code>true</code> 时，如果组件、指令或管道不是独立的，则报告错误。</p>
+
+  <h3 id="trace">
+    <a href="#trace" class="docs-anchor" tabindex="-1" aria-label="Link to <code>trace</code>"><code>trace</code></a>
+  </h3>
+  <p>当为 <code>true</code> 时，在编译模板时打印额外信息。
+默认为 <code>false</code>。</p>
+
+  <h2 id="command-line-options">
+    <a href="#command-line-options" class="docs-anchor" tabindex="-1" aria-label="Link to Command line options">命令行选项</a>
+  </h2>
+  <p>大多数时候，你都是使用<a href="reference/configs/angular-compiler-options">Angular CLI</a>间接与 Angular 编译器交互。 在调试某些问题时，你可能会发现直接调用 Angular 编译器很有用。
+你可以使用 <code>@angular/compiler-cli</code> npm 包提供的 <code>ngc</code> 命令从命令行调用编译器。</p>
+<p><code>ngc</code> 命令是 TypeScript 的 <code>tsc</code> 编译器命令的包装器。 Angular 编译器主要通过 <code>tsconfig.json</code> 配置，而 Angular CLI 主要通过 <code>angular.json</code> 配置。</p>
+<p>除了配置文件之外，你还可以使用 <a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html" target="_blank"><code>tsc</code> 命令行选项</a>来配置 <code>ngc</code>。</p>

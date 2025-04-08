@@ -1,0 +1,347 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">表达式语法</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/templates/expression-syntax.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular 表达式基于 JavaScript，但在一些关键方面有所不同。本指南将介绍 Angular 表达式和标准 JavaScript 之间的异同。</p>
+
+  <h2 id="value-literals">
+    <a href="#value-literals" class="docs-anchor" tabindex="-1" aria-label="Link to Value literals">字面量值</a>
+  </h2>
+  <p>Angular 支持 JavaScript 的 <a href="https://developer.mozilla.org/en-US/docs/Glossary/Literal" target="_blank">字面量值</a> 的子集。</p>
+
+  <h3 id="supported-value-literals">
+    <a href="#supported-value-literals" class="docs-anchor" tabindex="-1" aria-label="Link to Supported value literals">支持的字面量值</a>
+  </h3>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>字面量类型</th>
+<th>范例值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>字符串</td>
+<td><code>'Hello'</code>, <code>"World"</code></td>
+</tr>
+<tr>
+<td>布尔值</td>
+<td><code>true</code>, <code>false</code></td>
+</tr>
+<tr>
+<td>数字</td>
+<td><code>123</code>, <code>3.14</code></td>
+</tr>
+<tr>
+<td>对象</td>
+<td><code>{name: 'Alice'}</code></td>
+</tr>
+<tr>
+<td>数组</td>
+<td><code>['Onion', 'Cheese', 'Garlic']</code></td>
+</tr>
+<tr>
+<td>null</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td>模板字符串</td>
+<td><code>`Hello ${name}`</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="unsupported-literals">
+    <a href="#unsupported-literals" class="docs-anchor" tabindex="-1" aria-label="Link to Unsupported literals">不支持的字面量</a>
+  </h3>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>字面量类型</th>
+<th>范例值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>RegExp</td>
+<td><code>/\d+/</code></td>
+</tr>
+<tr>
+<td>带标签的模板字符串</td>
+<td><code>tag`Hello ${name}`</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="globals">
+    <a href="#globals" class="docs-anchor" tabindex="-1" aria-label="Link to Globals">全局变量</a>
+  </h2>
+  <p>Angular 表达式支持以下<a href="https://developer.mozilla.org/en-US/docs/Glossary/Global_object" target="_blank">全局变量</a>：</p>
+
+  <ul class="docs-list">
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined" target="_blank">undefined</a></li>
+<li><a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#any" target="_blank">$any</a></li>
+
+  </ul>
+  <p>不支持其他 JavaScript 全局变量。常见的 JavaScript 全局变量包括 <code>Number</code>、<code>Boolean</code>、<code>NaN</code>、<code>Infinity</code>、<code>parseInt</code> 等。</p>
+
+  <h2 id="local-variables">
+    <a href="#local-variables" class="docs-anchor" tabindex="-1" aria-label="Link to Local variables">局部变量</a>
+  </h2>
+  <p>在特定上下文中，Angular 会自动提供特殊的局部变量以在表达式中使用。这些特殊变量始终以美元符号 (<code>$</code>) 开头。</p>
+<p>例如，<code>@for</code> 控制块会创建多个与循环信息相对应的局部变量，例如 <code>$index</code>。</p>
+
+  <h2 id="what-operators-are-supported">
+    <a href="#what-operators-are-supported" class="docs-anchor" tabindex="-1" aria-label="Link to What operators are supported?">支持哪些操作符？</a>
+  </h2>
+  
+  <h3 id="supported-operators">
+    <a href="#supported-operators" class="docs-anchor" tabindex="-1" aria-label="Link to Supported operators">支持的操作符</a>
+  </h3>
+  <p>Angular 支持来自标准 JavaScript 的以下操作符。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>操作符</th>
+<th>范例</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>加法 / 连接</td>
+<td><code>1 + 2</code></td>
+</tr>
+<tr>
+<td>减法</td>
+<td><code>52 - 3</code></td>
+</tr>
+<tr>
+<td>乘法</td>
+<td><code>41 * 6</code></td>
+</tr>
+<tr>
+<td>除法</td>
+<td><code>20 / 4</code></td>
+</tr>
+<tr>
+<td>求余（取模）</td>
+<td><code>17 % 5</code></td>
+</tr>
+<tr>
+<td>圆括号</td>
+<td><code>9 * (8 + 4)</code></td>
+</tr>
+<tr>
+<td>条件（三元）</td>
+<td><code>a &gt; b ? true : false</code></td>
+</tr>
+<tr>
+<td>与（逻辑与）</td>
+<td><code>&amp;&amp;</code></td>
+</tr>
+<tr>
+<td>或（逻辑或）</td>
+<td><code>||</code></td>
+</tr>
+<tr>
+<td>非（逻辑非）</td>
+<td><code>!</code></td>
+</tr>
+<tr>
+<td>空值合并</td>
+<td><code>const foo = null ?? 'default'</code></td>
+</tr>
+<tr>
+<td>比较运算符</td>
+<td><code>&lt;</code>、<code>&lt;=</code>、<code>&gt;</code>、<code>&gt;=</code>、<code>==</code>、<code>===</code>、<code>!==</code></td>
+</tr>
+<tr>
+<td>一元取反</td>
+<td><code>const y = -x</code></td>
+</tr>
+<tr>
+<td>一元加</td>
+<td><code>const x = +y</code></td>
+</tr>
+<tr>
+<td>属性访问器</td>
+<td><code>person['name'] = 'Mirabel'</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>此外，Angular 表达式还支持以下非标准操作符：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>操作符</th>
+<th>范例</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td><a href="/guide/templates/pipes">管道</a></td>
+<td><code>{{ total | currency }}</code></td>
+</tr>
+<tr>
+<td>可选链式调用*</td>
+<td><code>someObj.someProp?.nestedProp</code></td>
+</tr>
+<tr>
+<td>非空断言（TypeScript）</td>
+<td><code>someObj!.someProp</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>*注意：可选链式调用的行为与标准 JavaScript 版本不同，如果 Angular 可选链式调用操作符的左侧是 <code>null</code> 或 <code>undefined</code>，它将返回 <code>null</code> 而不是 <code>undefined</code>。</p>
+
+  <h3 id="unsupported-operators">
+    <a href="#unsupported-operators" class="docs-anchor" tabindex="-1" aria-label="Link to Unsupported operators">不支持的操作符</a>
+  </h3>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>操作符</th>
+<th>范例</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>所有位运算符</td>
+<td><code>&amp;</code>、<code>&amp;=</code>、<code>~</code>、<code>|=</code>、<code>^=</code> 等。</td>
+</tr>
+<tr>
+<td>赋值运算符</td>
+<td><code>=</code></td>
+</tr>
+<tr>
+<td>对象解构</td>
+<td><code>const { name } = person</code></td>
+</tr>
+<tr>
+<td>数组解构</td>
+<td><code>const [firstItem] = items</code></td>
+</tr>
+<tr>
+<td>逗号运算符</td>
+<td><code>x = (x++, x)</code></td>
+</tr>
+<tr>
+<td>typeof</td>
+<td><code>typeof 42</code></td>
+</tr>
+<tr>
+<td>void</td>
+<td><code>void 1</code></td>
+</tr>
+<tr>
+<td>in</td>
+<td><code>'model' in car</code></td>
+</tr>
+<tr>
+<td>instanceof</td>
+<td><code>car instanceof Automobile</code></td>
+</tr>
+<tr>
+<td>new</td>
+<td><code>new Car()</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="lexical-context-for-expressions">
+    <a href="#lexical-context-for-expressions" class="docs-anchor" tabindex="-1" aria-label="Link to Lexical context for expressions">表达式的词法上下文</a>
+  </h2>
+  <p>Angular 表达式是在组件类的上下文中求值的，以及任何相关的 <a href="/guide/templates/variables">模板变量</a>、局部变量和全局变量。</p>
+<p>当引用类成员时，总是默认使用 <code>this</code>。</p>
+
+  <h2 id="declarations">
+    <a href="#declarations" class="docs-anchor" tabindex="-1" aria-label="Link to Declarations">对象声明</a>
+  </h2>
+  <p>一般来说，Angular 表达式不支持对象声明。这包括但不限于：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>对象声明</th>
+<th>范例</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>变量</td>
+<td><code>let label = 'abc'</code>，<code>const item = 'apple'</code></td>
+</tr>
+<tr>
+<td>函数</td>
+<td><code>function myCustomFunction() { }</code></td>
+</tr>
+<tr>
+<td>箭头函数</td>
+<td><code>() =&gt; { }</code></td>
+</tr>
+<tr>
+<td>类</td>
+<td><code>class Rectangle { }</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+    <header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">事件监听器语句</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/templates/expression-syntax.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>事件处理程序是<strong>语句</strong>而不是表达式。虽然它们支持与 Angular 表达式相同的所有语法，但有两个主要区别：</p>
+
+    <ol class="docs-ordered-list">
+      <li>语句<strong>确实支持</strong>赋值运算符（但不支持解构赋值）</li>
+<li>语句<strong>不支持</strong>管道</li>
+
+    </ol>
+    

@@ -1,0 +1,62 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">使用 <code>@Input</code> 的组件通信</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/learn-angular/steps/8-input/README.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>有时应用开发需要你将数据发送到组件中。这些数据可以用来定制组件，或者从父组件向子组件发送信息。</p>
+<p>Angular 使用一个叫做 <code>Input</code> 的概念。这类似于其他框架中的 <code>props</code>。要创建一个 <code>Input</code> 属性（Property），请使用 <code>@Input</code> 装饰器。</p>
+<p>在本活动中，你将学习如何使用 <code>@Input</code> 装饰器向组件发送信息。</p>
+<hr>
+
+<p>要创建一个 <code>Input</code> 属性（Property），请将 <code>@Input</code> 装饰器添加到组件类的属性（property）上：</p>
+<div class="docs-code" header="user.component.ts">
+    <div class="docs-code-header"><h3>user.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UserComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">occupation</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>当你准备好通过 <code>Input</code> 传入一个值时，可以使用 Attribute 语法在模板中设置值。这是一个范例：</p>
+<div class="docs-code" header="app.component.ts">
+    <div class="docs-code-header"><h3>app.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-user</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> occupation</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Angular Developer"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-user</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>请确保在你的 <code>UserComponent</code> 中绑定属性（property） <code>occupation</code>。</p>
+<div class="docs-code" header="user.component.ts">
+    <div class="docs-code-header"><h3>user.component.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;The user's occupation is {{occupation}}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span></code></pre>
+    </pre>
+  </div>
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="define-an-input-property">
+    <a href="#define-an-input-property" class="docs-anchor" tabindex="-1" aria-label="Link to Define an <code>@Input</code> property">定义一个 <code>@Input</code> 属性（Property）</a>
+  </h3>
+  
+      <p>更新 <code>user.component.ts</code> 中的代码，在 <code>UserComponent</code> 上定义一个名为 <code>name</code> 的 <code>Input</code> 属性（Property）。现在，将初始值设置为 <code>empty string</code>。请务必更新模板以在句子末尾插值 <code>name</code> 属性（property）。</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="pass-a-value-to-the-input-property">
+    <a href="#pass-a-value-to-the-input-property" class="docs-anchor" tabindex="-1" aria-label="Link to Pass a value to the <code>@Input</code> property">向 <code>@Input</code> 属性（Property）传递一个值</a>
+  </h3>
+  
+      <p>更新 <code>app.component.ts</code> 中的代码，传入 <code>name</code> 属性（property），其值为 <code>"Simran"</code>。<br></p>
+<p>当代码成功更新后，应用将显示 <code>The user's name is Simran</code>。</p>
+
+    </li>
+    
+    </ol>
+    <p>虽然这很棒，但这只是组件通信的一个方向。如果你想从子组件向父组件发送信息和数据呢？查看下一课以了解更多信息。</p>
+<p><span class="docs-emoji">附注：你做得太棒了 - 继续加油 🎉</span></p>

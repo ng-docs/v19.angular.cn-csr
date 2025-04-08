@@ -1,0 +1,206 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">增量式水合</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/incremental-hydration.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+    <div class="docs-alert docs-alert-tip">
+    <p><strong>提示：</strong> 增量式水合目前正处于<a href="/reference/releases#developer-preview">开发者预览</a>阶段。</p>
+
+    </div>
+    <p><strong>增量式水合</strong>是一种高级的<a href="guide/hydration">水合</a>类型，它可以使应用的某些部分保持脱水状态，并<em>按需</em><em>增量式</em>地触发这些部分的水合。</p>
+
+  <h2 id="why-use-incremental-hydration">
+    <a href="#why-use-incremental-hydration" class="docs-anchor" tabindex="-1" aria-label="Link to Why use incremental hydration?">为什么要使用增量式水合？</a>
+  </h2>
+  <p>增量式水合是一种性能改进，它构建于完整的应用水合之上。它可以生成更小的初始捆绑包，同时仍然提供与完整应用水合体验相当的最终用户体验。更小的捆绑包可以缩短初始加载时间，从而减少<a href="https://web.dev/fid" target="_blank">首次输入延迟 (FID)</a> 和 <a href="https://web.dev/cls" target="_blank">累积布局偏移 (CLS)</a>。</p>
+<p>增量式水合还允许你对以前可能不可延迟的内容使用可延迟视图 (<code>@defer</code>)。具体来说，你现在可以对首屏内容使用可延迟视图。在增量式水合之前，将 <code>@defer</code> 控制块放在首屏之上会导致占位符内容渲染，然后被 <code>@defer</code> 控制块的主模板内容替换。这将导致布局偏移。增量式水合意味着 <code>@defer</code> 控制块的主模板将在水合时渲染，而不会发生布局偏移。</p>
+
+  <h2 id="how-do-you-enable-incremental-hydration-in-angular">
+    <a href="#how-do-you-enable-incremental-hydration-in-angular" class="docs-anchor" tabindex="-1" aria-label="Link to How do you enable incremental hydration in Angular?">如何在 Angular 中启用增量式水合？</a>
+  </h2>
+  <p>你可以为已经使用带水合功能的服务端渲染 (SSR) 的应用启用增量式水合。请按照<a href="guide/ssr">Angular SSR 指南</a>启用服务端渲染，并首先按照<a href="guide/hydration">Angular 水合指南</a>启用水合。</p>
+<p>通过将 <code>withIncrementalHydration()</code> 函数添加到 <code>provideClientHydration</code> 提供者中，启用增量式水合。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  bootstrapApplication,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  provideClientHydration,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  withIncrementalHydration,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppComponent, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provideClientHydration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withIncrementalHydration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>增量式水合依赖于并自动启用<a href="guide/hydration#capturing-and-replaying-events">事件重放</a>。如果你的列表中已经有 <code>withEventReplay()</code>，则在启用增量式水合后，可以安全地将其删除。</p>
+
+  <h2 id="how-does-incremental-hydration-work">
+    <a href="#how-does-incremental-hydration-work" class="docs-anchor" tabindex="-1" aria-label="Link to How does incremental hydration work?">增量式水合是如何工作的？</a>
+  </h2>
+  <p>增量式水合构建于完整的应用<a href="guide/hydration">水合</a>、<a href="guide/defer">可延迟视图</a>和<a href="guide/hydration#capturing-and-replaying-events">事件重放</a>之上。借助增量式水合，你可以向 <code>@defer</code> 控制块添加额外的触发器，以定义增量式水合边界。向 defer 控制块添加 <code>hydrate</code> 触发器会告知 Angular，它应该在服务端渲染期间加载该 defer 控制块的依赖项，并渲染主模板而不是 <code>@placeholder</code>。当客户端渲染时，依赖项仍然是延迟加载的，并且 defer 控制块内容保持脱水状态，直到其 <code>hydrate</code> 触发器触发。该触发器告诉 defer 控制块获取其依赖项并水合内容。在水合过程完成之前，用户触发的任何浏览器事件（特别是那些与组件中注册的侦听器匹配的事件）都会排队，并在水合过程完成后重放。</p>
+
+  <h2 id="controlling-hydration-of-content-with-triggers">
+    <a href="#controlling-hydration-of-content-with-triggers" class="docs-anchor" tabindex="-1" aria-label="Link to Controlling hydration of content with triggers">使用触发器控制内容的水合</a>
+  </h2>
+  <p>你可以指定<strong>水合触发器</strong>，以控制 Angular 何时加载和水合延迟内容。这些是可以在常规 <code>@defer</code> 触发器之外使用的附加触发器。</p>
+<p>每个 <code>@defer</code> 控制块可以有多个水合事件触发器，用分号 (<code>;</code>) 分隔。当<em>任何</em>触发器触发时，Angular 都会触发水合。</p>
+<p>有三种类型的水合触发器：<code>hydrate on</code>、<code>hydrate when</code> 和 <code>hydrate never</code>。</p>
+
+  <h3 id="hydrate-on">
+    <a href="#hydrate-on" class="docs-anchor" tabindex="-1" aria-label="Link to <code>hydrate on</code>"><code>hydrate on</code></a>
+  </h3>
+  <p><code>hydrate on</code> 指定了何时为 <code>@defer</code> 控制块触发水合的条件。</p>
+<p>可用的触发器如下：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>触发器</th>
+<th>描述</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td><a href="#hydrate-on-idle"><code>hydrate on idle</code></a></td>
+<td>当浏览器空闲时触发。</td>
+</tr>
+<tr>
+<td><a href="#hydrate-on-viewport"><code>hydrate on viewport</code></a></td>
+<td>当指定内容进入视口时触发</td>
+</tr>
+<tr>
+<td><a href="#hydrate-on-interaction"><code>hydrate on interaction</code></a></td>
+<td>当用户与指定元素交互时触发</td>
+</tr>
+<tr>
+<td><a href="#hydrate-on-hover"><code>hydrate on hover</code></a></td>
+<td>当鼠标悬停在指定区域上方时触发</td>
+</tr>
+<tr>
+<td><a href="#hydrate-on-immediate"><code>hydrate on immediate</code></a></td>
+<td>在非延迟内容完成渲染后立即触发</td>
+</tr>
+<tr>
+<td><a href="#hydrate-on-timer"><code>hydrate on timer</code></a></td>
+<td>在特定持续时间后触发</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h4 id="hydrate-on-idle">
+    <a href="#hydrate-on-idle" class="docs-anchor" tabindex="-1" aria-label="Link to <code>hydrate on idle</code>"><code>hydrate on idle</code></a>
+  </h4>
+  <p><code>hydrate on idle</code> 触发器在浏览器达到空闲状态后（基于 <code>requestIdleCallback</code>）加载可延迟视图的依赖项并水合内容。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (hydrate on idle) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">large-cmp</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Large component placeholder&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="hydrate-on-viewport">
+    <a href="#hydrate-on-viewport" class="docs-anchor" tabindex="-1" aria-label="Link to <code>hydrate on viewport</code>"><code>hydrate on viewport</code></a>
+  </h4>
+  <p>当指定内容使用 <a href="https://developer.mozilla.org/docs/Web/API/Intersection_Observer_API" target="_blank">Intersection Observer API</a> 进入视口时，<code>hydrate on viewport</code> 触发器会加载可延迟视图的依赖项并水合应用的相应页面。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (hydrate on viewport) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">large-cmp</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Large component placeholder&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="hydrate-on-interaction">
+    <a href="#hydrate-on-interaction" class="docs-anchor" tabindex="-1" aria-label="Link to <code>hydrate on interaction</code>"><code>hydrate on interaction</code></a>
+  </h4>
+  <p>当用户通过 <code>click</code> 或 <code>keydown</code> 事件与指定元素交互时，<code>hydrate on interaction</code> 触发器会加载可延迟视图的依赖项并水合内容。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (hydrate on interaction) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">large-cmp</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Large component placeholder&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="hydrate-on-hover">
+    <a href="#hydrate-on-hover" class="docs-anchor" tabindex="-1" aria-label="Link to <code>hydrate on hover</code>"><code>hydrate on hover</code></a>
+  </h4>
+  <p>当鼠标通过 <code>mouseover</code> 和 <code>focusin</code> 事件悬停在触发区域上方时，<code>hydrate on hover</code> 触发器会加载可延迟视图的依赖项并水合内容。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (hydrate on hover) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">large-cmp</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Large component placeholder&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="hydrate-on-immediate">
+    <a href="#hydrate-on-immediate" class="docs-anchor" tabindex="-1" aria-label="Link to <code>hydrate on immediate</code>"><code>hydrate on immediate</code></a>
+  </h4>
+  <p><code>hydrate on immediate</code> 触发器会立即加载可延迟视图的依赖项并水合内容。这意味着延迟控制块会在所有其他非延迟内容完成渲染后立即加载。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (hydrate on immediate) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">large-cmp</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Large component placeholder&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="hydrate-on-timer">
+    <a href="#hydrate-on-timer" class="docs-anchor" tabindex="-1" aria-label="Link to <code>hydrate on timer</code>"><code>hydrate on timer</code></a>
+  </h4>
+  <p><code>hydrate on timer</code> 触发器会在指定的持续时间后加载可延迟视图的依赖项并水合内容。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (hydrate on </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">timer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(500ms)) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">large-cmp</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Large component placeholder&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>持续时间参数必须以毫秒 (<code>ms</code>) 或秒 (<code>s</code>) 为单位指定。</p>
+
+  <h3 id="hydrate-when">
+    <a href="#hydrate-when" class="docs-anchor" tabindex="-1" aria-label="Link to <code>hydrate when</code>"><code>hydrate when</code></a>
+  </h3>
+  <p><code>hydrate when</code> 触发器接受自定义条件表达式，并在条件变为真值时加载可延迟视图的依赖项并水合内容。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (hydrate when condition) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">large-cmp</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Large component placeholder&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-note">
+    <p><strong>注意：</strong> <code>hydrate when</code> 条件仅在它们是最顶层的脱水 <code>@defer</code> 控制块时触发。为触发器提供的条件在父组件中指定，父组件需要先存在才能触发。如果父控制块已脱水，则 Angular 尚无法求解该表达式。</p>
+
+    </div>
+    
+  <h3 id="hydrate-never">
+    <a href="#hydrate-never" class="docs-anchor" tabindex="-1" aria-label="Link to <code>hydrate never</code>"><code>hydrate never</code></a>
+  </h3>
+  <p><code>hydrate never</code> 允许用户指定 defer 控制块中的内容应无限期地保持脱水状态，从而有效地变为静态内容。请注意，这仅适用于初始渲染。在后续的客户端渲染期间，带有 <code>hydrate never</code> 的 <code>@defer</code> 控制块仍会获取依赖项，因为水合仅适用于服务端渲染内容的初始加载。在下面的示例中，后续的客户端渲染将在视口中加载 <code>@defer</code> 控制块依赖项。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (on viewport; hydrate never) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">large-cmp</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Large component placeholder&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-note">
+    <p><strong>注意：</strong> 使用 <code>hydrate never</code> 会阻止给定 <code>@defer</code> 控制块的整个嵌套子树的水合。没有其他 <code>hydrate</code> 触发器会为嵌套在该控制块下的内容触发。</p>
+
+    </div>
+    
+  <h2 id="hydrate-triggers-alongside-regular-triggers">
+    <a href="#hydrate-triggers-alongside-regular-triggers" class="docs-anchor" tabindex="-1" aria-label="Link to Hydrate triggers alongside regular triggers">水合触发器与常规触发器并用</a>
+  </h2>
+  <p>水合触发器是在 <code>@defer</code> 控制块上与常规触发器一起使用的附加触发器。水合是一种初始加载优化，这意味着水合触发器仅适用于该初始加载。任何后续的客户端渲染仍将使用常规触发器。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (on idle; hydrate on interaction) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">example-cmp</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Example Placeholder&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>在此范例中，在初始加载时，<code>hydrate on interaction</code> 生效。与 <code>&lt;example-cmp /&gt;</code> 组件交互时将触发水合。在任何后续的客户端渲染的页面加载中，例如，当用户单击加载包含此组件的页面的 routerLink 时，<code>on idle</code> 将生效。</p>
+
+  <h2 id="how-does-incremental-hydration-work-with-nested-defer-blocks">
+    <a href="#how-does-incremental-hydration-work-with-nested-defer-blocks" class="docs-anchor" tabindex="-1" aria-label="Link to How does incremental hydration work with nested <code>@defer</code> blocks?">增量式水合如何与嵌套的 <code>@defer</code> 控制块一起工作？</a>
+  </h2>
+  <p>Angular 的组件和依赖体系是分层的，这意味着水合任何组件都需要其所有父组件也进行水合。因此，如果嵌套的脱水 <code>@defer</code> 控制块集合的子 <code>@defer</code> 控制块触发了水合，则水合将从最顶层的脱水 <code>@defer</code> 控制块向下触发到触发的子项，并按该顺序触发。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (hydrate on interaction) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">parent-block-cmp</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  @defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (hydrate on hover) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">child-block-cmp</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Child placeholder&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Parent Placeholder&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>在上面的范例中，悬停在嵌套的 <code>@defer</code> 控制块上会触发水合。带有 <code>&lt;parent-block-cmp /&gt;</code> 的父 <code>@defer</code> 控制块首先水合，然后带有 <code>&lt;child-block-cmp /&gt;</code> 的子 <code>@defer</code> 控制块在之后水合。</p>
+
+  <h2 id="constraints">
+    <a href="#constraints" class="docs-anchor" tabindex="-1" aria-label="Link to Constraints">约束</a>
+  </h2>
+  <p>增量式水合与完整的应用水合具有相同的约束，包括对直接 DOM 操纵的限制和需要有效的 HTML 结构。请访问<a href="guide/hydration#constraints">水合指南约束</a>部分以了解更多详细信息。</p>
+
+  <h2 id="do-i-still-need-to-specify-placeholder-blocks">
+    <a href="#do-i-still-need-to-specify-placeholder-blocks" class="docs-anchor" tabindex="-1" aria-label="Link to Do I still need to specify <code>@placeholder</code> blocks?">我是否仍然需要指定 <code>@placeholder</code> 控制块？</a>
+  </h2>
+  <p>是的。<code>@placeholder</code> 控制块内容不用于增量式水合，但在后续的客户端渲染情况下，<code>@placeholder</code> 仍然是必要的。如果你的内容不在作为初始加载一部分的路由上，则任何导航到具有 <code>@defer</code> 控制块内容的路由都会像常规 <code>@defer</code> 控制块一样渲染。因此，在这些客户端渲染情况下，会渲染 <code>@placeholder</code>。</p>

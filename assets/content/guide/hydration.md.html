@@ -1,0 +1,217 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">水合</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/hydration.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+  <h2 id="what-is-hydration">
+    <a href="#what-is-hydration" class="docs-anchor" tabindex="-1" aria-label="Link to What is hydration">什么是水合？</a>
+  </h2>
+  <p>水合是指在客户端恢复服务器端渲染的应用的过程。 这包括重用服务器渲染的 DOM 结构、持久化应用状态、传输服务器已检索的应用数据以及其他过程。</p>
+
+  <h2 id="why-is-hydration-important">
+    <a href="#why-is-hydration-important" class="docs-anchor" tabindex="-1" aria-label="Link to Why is hydration important?">为什么水合很重要？</a>
+  </h2>
+  <p>水合通过避免重新创建 DOM 节点的多余工作来提高应用性能。 Angular 会尝试在运行时将现有 DOM 元素与应用结构进行匹配，并在可能的情况下复用 DOM 节点。 这样可以提高性能，这种性能提升可以使用 <a href="https://web.dev/learn-core-web-vitals/" target="_blank">Core Web Vitals (CWV)</a> 统计数据来衡量，例如减少首次输入延迟 (<a href="https://web.dev/fid/" target="_blank">FID</a>) 和最大内容ful Paint (<a href="https://web.dev/lcp/" target="_blank">LCP</a>) 以及累积布局偏移 (<a href="https://web.dev/cls/" target="_blank">CLS</a>)。 改进这些指标也会影响 SEO 性能等方面。</p>
+<p>如果未启用水合，服务器端渲染的 Angular 应用将销毁并重新渲染应用的 DOM，这可能会导致可见的 UI 闪烁。 这种重新渲染可能会对 <a href="https://web.dev/learn-core-web-vitals/" target="_blank">Core Web Vitals</a>（如 <a href="https://web.dev/lcp/" target="_blank">LCP</a>）产生负面影响，并导致布局偏移。 启用水合功能可以复用现有 DOM 并防止闪烁。</p>
+
+  <h2 id="how-do-you-enable-hydration-in-angular">
+    <a href="#how-do-you-enable-hydration-in-angular" class="docs-anchor" tabindex="-1" aria-label="Link to How do you enable hydration in Angular">如何在 Angular 中启用水合</a>
+  </h2>
+  <p>水合只能为服务器端渲染 (SSR) 应用启用。 请首先遵循 <a href="guide/ssr">Angular SSR 指南</a> 以启用服务器端渲染。</p>
+
+  <h3 id="using-angular-cli">
+    <a href="#using-angular-cli" class="docs-anchor" tabindex="-1" aria-label="Link to Using Angular CLI">使用 Angular CLI</a>
+  </h3>
+  <p>如果你已使用 Angular CLI 启用 SSR（通过在应用创建期间启用或稍后通过 <code>ng add @angular/ssr</code> 启用），则启用水合的代码应已包含在你的应用中。</p>
+
+  <h3 id="manual-setup">
+    <a href="#manual-setup" class="docs-anchor" tabindex="-1" aria-label="Link to Manual setup">手动设置</a>
+  </h3>
+  <p>如果你有自定义设置并且未使用 Angular CLI 启用 SSR，则可以通过访问你的主应用组件或模块并从 <code>@angular/platform-browser</code> 导入 <code>provideClientHydration</code> 来手动启用水合。 然后，你需要将该提供者添加到应用的引导提供者列表中。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  bootstrapApplication,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  provideClientHydration,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppComponent, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provideClientHydration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>或者，如果你使用的是 NgModules，则可以将 <code>provideClientHydration</code> 添加到根应用模块的提供者列表中。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {provideClientHydration} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {NgModule} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [AppComponent],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  exports: [AppComponent],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  bootstrap: [AppComponent],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provideClientHydration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> 确保 <code>provideClientHydration()</code> 调用也包含在用于在<strong>服务器</strong>上引导应用的提供者集合中。 在具有默认项目结构（由 <code>ng new</code> 命令生成）的应用中，向根 <code>AppModule</code> 添加调用应该就足够了，因为服务器模块会导入此模块。 如果你使用自定义设置，请将 <code>provideClientHydration()</code> 调用添加到服务器引导配置中的提供者列表。</p>
+
+    </div>
+    
+  <h3 id="verify-that-hydration-is-enabled">
+    <a href="#verify-that-hydration-is-enabled" class="docs-anchor" tabindex="-1" aria-label="Link to Verify that hydration is enabled">验证是否已启用水合</a>
+  </h3>
+  <p>配置水合并启动服务器后，在浏览器中加载你的应用。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 在水合完全工作之前，你可能需要修复直接 DOM 操纵的实例，方法是切换到 Angular 构造或使用 <code>ngSkipHydration</code>。 有关更多详细信息，请参阅 <a href="#constraints">约束</a>、<a href="#direct-dom-manipulation">直接 DOM 操纵</a> 和 <a href="#how-to-skip-hydration-for-particular-components">如何跳过特定组件的水合</a>。</p>
+
+    </div>
+    <p>在开发模式下运行应用时，你可以通过在浏览器中打开开发者工具并查看控制台来确认是否启用水合。 你应该会看到一条消息，其中包含与水合相关的统计信息，例如已水合的组件和节点数。 Angular 根据页面上渲染的所有组件（包括来自第三方库的组件）计算统计信息。</p>
+<p>你还可以使用 <a href="tools/devtools">Angular DevTools 浏览器扩展程序</a> 来查看页面上组件的水合状态。 Angular DevTools 还允许启用一个叠加层，以指示页面的哪些部分已水合。 如果存在水合不匹配错误，DevTools 还会突出显示导致错误的组件。</p>
+
+  <h2 id="capturing-and-replaying-events">
+    <a href="#capturing-and-replaying-events" class="docs-anchor" tabindex="-1" aria-label="Link to Capturing and replaying events">捕获和重放事件</a>
+  </h2>
+  <p>当应用在服务器上渲染时，一旦生成的 HTML 加载，它就会在浏览器中可见。 用户可能会认为他们可以与页面进行交互，但在水合完成之前，事件侦听器不会附着。 从 v18 开始，你可以启用“事件重放”特性，该特性允许捕获在水合之前发生的所有事件，并在水合完成后重放这些事件。 你可以使用 <code>withEventReplay()</code> 函数启用它，例如：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {provideClientHydration, withEventReplay} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(App, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    provideClientHydration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withEventReplay</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="how-event-replay-works">
+    <a href="#how-event-replay-works" class="docs-anchor" tabindex="-1" aria-label="Link to How event replay works">事件重放的工作原理</a>
+  </h3>
+  <p>事件重放是一项特性，它通过捕获在水合过程完成之前触发的用户事件来改善用户体验。 然后，将重放这些事件，确保不会丢失任何交互。</p>
+<p>事件重放分为三个主要阶段：</p>
+
+  <ul class="docs-list">
+    <li><p><strong>捕获用户交互</strong><br>
+在 <strong>水合</strong> 之前，事件重放会捕获并存储用户可能执行的所有交互，例如单击和其他浏览器原生事件。</p>
+</li>
+<li><p><strong>存储事件</strong><br>
+<strong>事件契约</strong> 将之前步骤中记录的所有交互保存在内存中，确保它们不会丢失以供稍后重放。</p>
+</li>
+<li><p><strong>重新启动事件</strong><br>
+一旦 <strong>水合</strong> 完成，Angular 就会重新调用捕获的事件。</p>
+</li>
+
+  </ul>
+  <p>事件重放支持<em>原生浏览器事件</em>，例如 <code>click</code>、<code>mouseover</code> 和 <code>focusin</code>。 如果你想了解更多关于 JSAction（为事件重放提供支持的库）的信息，你可以<a href="https://github.com/angular/angular/tree/main/packages/core/primitives/event-dispatch#readme" target="_blank">在 readme 上</a>阅读更多内容。</p>
+<hr>
+<p>此特性确保一致的用户体验，防止在水合之前执行的用户操作被忽略。 注意：如果你启用了 <a href="guide/incremental-hydration">增量水合</a>，则事件重放会在底层自动启用。</p>
+
+  <h2 id="constraints">
+    <a href="#constraints" class="docs-anchor" tabindex="-1" aria-label="Link to Constraints">约束</a>
+  </h2>
+  <p>水合对你的应用施加了一些在未启用水合时不存在的约束。 你的应用在服务器和客户端上都必须具有相同的生成 DOM 结构。 水合过程希望 DOM 树在两个位置都具有相同的结构。 这还包括 Angular 在服务器上渲染期间生成的空格和注释节点。 这些空格和节点必须存在于服务器端渲染过程生成的 HTML 中。</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> 服务器端渲染操作生成的 HTML <strong>绝不能</strong> 在服务器和客户端之间更改。</p>
+
+    </div>
+    <p>如果服务器和客户端 DOM 树结构之间存在不匹配，则水合过程在尝试匹配预期内容与 DOM 中实际存在的内容时会遇到问题。 使用原生 DOM API 执行直接 DOM 操纵的组件是最常见的罪魁祸首。</p>
+
+  <h3 id="direct-dom-manipulation">
+    <a href="#direct-dom-manipulation" class="docs-anchor" tabindex="-1" aria-label="Link to Direct DOM Manipulation">直接 DOM 操纵</a>
+  </h3>
+  <p>如果你有使用原生 DOM API 或使用 <code>innerHTML</code> 或 <code>outerHTML</code> 操纵 DOM 的组件，则水合过程将遇到错误。 DOM 操纵成为问题的特定情况包括访问 <code>document</code>、查询特定元素以及使用 <code>appendChild</code> 注入其他节点等情况。 分离 DOM 节点并将它们移动到其他位置也会导致错误。</p>
+<p>这是因为 Angular 不知道这些 DOM 更改，并且无法在水合过程中求解它们。 Angular 将期望某种结构，但在尝试水合时会遇到不同的结构。 这种不匹配将导致水合失败并抛出 DOM 不匹配错误（<a href="#errors">请参见下文</a>）。</p>
+<p>最好重构你的组件以避免此类 DOM 操纵。 如果可以，请尝试使用 Angular API 来完成这项工作。 如果你无法重构此行为，请使用 <code>ngSkipHydration</code> 属性（<a href="#how-to-skip-hydration-for-particular-components">如下所述</a>），直到你可以重构为水合友好的解决方案。</p>
+
+  <h3 id="valid-html-structure">
+    <a href="#valid-html-structure" class="docs-anchor" tabindex="-1" aria-label="Link to Valid HTML structure">有效的 HTML 结构</a>
+  </h3>
+  <p>在某些情况下，如果你的组件模板没有有效的 HTML 结构，则可能会在水合期间导致 DOM 不匹配错误。</p>
+<p>例如，以下是此问题的一些最常见情况。</p>
+
+  <ul class="docs-list">
+    <li>没有 <code>&lt;tbody&gt;</code> 的 <code>&lt;table&gt;</code></li>
+<li><code>&lt;p&gt;</code> 里面的 <code>&lt;div&gt;</code></li>
+<li>另一个 <code>&lt;a&gt;</code> 里面的 <code>&lt;a&gt;</code></li>
+
+  </ul>
+  <p>如果你不确定你的 HTML 是否有效，你可以使用 <a href="https://validator.w3.org/" target="_blank">语法验证器</a> 来检查它。</p>
+
+    <div class="docs-alert docs-alert-note">
+    <p><strong>注意：</strong> 虽然 HTML 标准不要求表格内有 <code>&lt;tbody&gt;</code> 元素，但现代浏览器会在未声明 <code>&lt;tbody&gt;</code> 元素的表格中自动创建一个。 由于这种不一致性，请始终在表格中显式声明 <code>&lt;tbody&gt;</code> 元素，以避免水合错误。</p>
+
+    </div>
+    
+  <h3 id="preserve-whitespaces-configuration">
+    <a href="#preserve-whitespaces-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Preserve Whitespaces Configuration">保留空格配置</a>
+  </h3>
+  <p>使用水合特性时，我们建议对 <code>preserveWhitespaces</code> 使用默认设置 <code>false</code>。 如果你的 tsconfig 中没有此设置，则该值将为 <code>false</code>，并且无需进行任何更改。 如果你选择通过将 <code>preserveWhitespaces: true</code> 添加到 tsconfig 来启用保留空格，则可能会遇到水合问题。 这还不是完全支持的配置。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 确保在服务器的 <code>tsconfig.server.json</code> 和浏览器构建的 <code>tsconfig.app.json</code> 中<strong>一致地</strong>设置此设置。 不匹配的值将导致水合中断。</p>
+
+    </div>
+    <p>如果你选择在 tsconfig 中设置此设置，我们建议仅在 <code>tsconfig.app.json</code> 中设置它，默认情况下 <code>tsconfig.server.json</code> 将从中继承它。</p>
+
+  <h3 id="custom-or-noop-zonejs-are-not-yet-supported">
+    <a href="#custom-or-noop-zonejs-are-not-yet-supported" class="docs-anchor" tabindex="-1" aria-label="Link to Custom or Noop Zone.js are not yet supported">尚不支持自定义或 Noop Zone.js</a>
+  </h3>
+  <p>水合依赖于来自 Zone.js 的信号，当 Zone.js 在应用内部变得稳定时，Angular 就可以在服务器端启动序列化过程，或在客户端启动水合后清理，以移除那些仍然无人认领的 DOM 节点。</p>
+<p>提供自定义的或“noop” Zone.js 实现可能会导致“stable”事件的时序不同，从而过早或过晚地触发序列化或清理。这还不是完全受支持的配置，你可能需要在自定义 Zone.js 实现中调整 <code>onStable</code> 事件的时序。</p>
+
+  <h2 id="errors">
+    <a href="#errors" class="docs-anchor" tabindex="-1" aria-label="Link to Errors">错误</a>
+  </h2>
+  <p>你可能会遇到几种与水合相关的错误，从节点不匹配到在无效宿主节点上使用 <code>ngSkipHydration</code> 的情况。可能发生的最常见的错误情况是由于使用原生 API 直接操纵 DOM，导致水合无法在客户端找到或匹配服务器渲染的预期 DOM 树结构。你可能遇到的另一种情况在前面的<a href="#valid-html-structure">有效的 HTML 结构</a>一节中提到过。因此，请确保你的模板中的 HTML 使用有效的结构，这样你就可以避免这种错误情况。</p>
+<p>有关水合相关错误的完整参考，请访问<a href="/errors">错误参考指南</a>。</p>
+
+  <h2 id="how-to-skip-hydration-for-particular-components">
+    <a href="#how-to-skip-hydration-for-particular-components" class="docs-anchor" tabindex="-1" aria-label="Link to How to skip hydration for particular components">如何跳过特定组件的水合</a>
+  </h2>
+  <p>由于上述某些问题（如<a href="#direct-dom-manipulation">直接 DOM 操纵</a>），某些组件在启用水合后可能无法正常工作。作为一种变通方法，你可以将 <code>ngSkipHydration</code> 属性添加到组件的标签中，以跳过整个组件的水合。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-example</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSkipHydration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span></code></pre>
+    </pre>
+  </div><p>或者，你可以将 <code>ngSkipHydration</code> 设置为宿主绑定。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  host: {ngSkipHydration: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'true'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ExampleComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p><code>ngSkipHydration</code> 属性将强制 Angular 跳过整个组件及其子组件的水合。使用此属性意味着该组件的行为将如同未启用水合一样，这意味着它将销毁并重新渲染自身。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 这将修复渲染问题，但也意味着对于此组件（及其子组件），你将无法获得水合的好处。你需要调整组件的实现以避免破坏水合的模式（即直接 DOM 操纵），以便能够移除跳过水合的注解。</p>
+
+    </div>
+    <p><code>ngSkipHydration</code> 属性只能在组件宿主节点上使用。如果将此属性添加到其他节点，Angular 将抛出错误。</p>
+<p>请记住，将 <code>ngSkipHydration</code> 属性添加到你的根应用组件将有效地禁用整个应用的水合。请谨慎并认真考虑使用此属性。它旨在作为最后的变通方法。破坏水合的组件应被视为需要修复的错误。</p>
+
+  <h2 id="hydration-timing-and-application-stability">
+    <a href="#hydration-timing-and-application-stability" class="docs-anchor" tabindex="-1" aria-label="Link to Hydration Timing and Application Stability">水合时序和应用稳定性</a>
+  </h2>
+  <p>应用稳定性是水合过程的重要组成部分。水合和任何水合后处理仅在应用报告稳定性后才会发生。有许多方法可以延迟稳定性。示例包括设置超时和间隔、未求解的 Promise 和待处理的微任务。在这些情况下，你可能会遇到<a href="errors/NG0506">应用保持不稳定</a>错误，这表明你的应用在 10 秒后仍未达到稳定状态。如果你发现你的应用没有立即水合，请查看是什么影响了应用稳定性，并进行重构以避免造成这些延迟。</p>
+
+  <h2 id="i18n">
+    <a href="#i18n" class="docs-anchor" tabindex="-1" aria-label="Link to I18N">I18N</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 对水合的国际化支持目前处于<a href="/reference/releases#developer-preview">开发者预览</a>阶段。默认情况下，Angular 将跳过使用 i18n 控制块的组件的水合，从而有效地从头开始重新渲染这些组件。</p>
+
+    </div>
+    <p>要为 i18n 控制块启用水合，你可以将 <a href="/api/platform-browser/withI18nSupport"><code>withI18nSupport</code></a> 添加到你的 <code>provideClientHydration</code> 调用中。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  bootstrapApplication,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  provideClientHydration,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  withI18nSupport,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppComponent, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provideClientHydration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withI18nSupport</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="consistent-rendering-across-server-side-and-client-side">
+    <a href="#consistent-rendering-across-server-side-and-client-side" class="docs-anchor" tabindex="-1" aria-label="Link to Consistent rendering across server-side and client-side">服务器端和客户端之间一致的渲染</a>
+  </h2>
+  <p>避免引入 <code>@if</code> 控制块和其他条件语句，这些语句在服务器端渲染时显示的内容与客户端渲染时不同，例如将 <code>@if</code> 控制块与 Angular 的 <code>isPlatformBrowser</code> 函数一起使用。这些渲染差异会导致布局偏移，从而对最终用户体验和核心 Web 指标产生负面影响。</p>
+
+  <h2 id="third-party-libraries-with-dom-manipulation">
+    <a href="#third-party-libraries-with-dom-manipulation" class="docs-anchor" tabindex="-1" aria-label="Link to Third Party Libraries with DOM Manipulation">使用 DOM 操纵的第三方库</a>
+  </h2>
+  <p>有许多第三方库依赖 DOM 操纵才能渲染。D3 图表就是一个典型的例子。这些库在没有水合的情况下可以工作，但当启用水合时，它们可能会导致 DOM 不匹配错误。目前，如果你在使用这些库之一时遇到 DOM 不匹配错误，你可以将 <code>ngSkipHydration</code> 属性添加到使用该库进行渲染的组件。</p>
+
+  <h2 id="third-party-scripts-with-dom-manipulation">
+    <a href="#third-party-scripts-with-dom-manipulation" class="docs-anchor" tabindex="-1" aria-label="Link to Third Party Scripts with DOM Manipulation">使用 DOM 操纵的第三方脚本</a>
+  </h2>
+  <p>许多第三方脚本（如广告跟踪器和分析）会在水合发生之前修改 DOM。这些脚本可能会导致水合错误，因为页面不再与 Angular 期望的结构匹配。尽可能优先考虑将此类脚本推迟到水合之后执行。考虑使用 <a href="api/core/afterNextRender"><code>AfterNextRender</code></a> 将脚本延迟到水合后处理发生之后。</p>
+
+  <h2 id="incremental-hydration">
+    <a href="#incremental-hydration" class="docs-anchor" tabindex="-1" aria-label="Link to Incremental Hydration">增量式水合</a>
+  </h2>
+  <p>增量式水合是一种高级水合形式，可以更精细地控制水合发生的时间。有关更多信息，请参阅<a href="guide/incremental-hydration">增量式水合指南</a>。</p>

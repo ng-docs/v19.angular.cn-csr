@@ -1,0 +1,23 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">服务器响应中没有水合信息</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0505.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>当客户端启用水合时，如果服务器响应不包含水合逻辑所依赖的关于应用的特殊序列化信息，就会发生此错误。</p>
+<p>当 <code>provideClientHydration()</code> 函数包含在应用配置的客户端部分，但配置的服务器部分中缺少它时，可能会发生这种情况。</p>
+<p>在具有默认项目结构（由 <code>ng new</code> 生成）的应用中，<code>provideClientHydration()</code> 调用会被添加到主 <code>AppModule</code> 的 <code>providers</code> 数组（它被导入到服务器模块中），或者添加到一组同时包含在客户端和服务器配置中的提供者中。</p>
+<p>如果你有一个自定义设置，其中客户端和服务器配置是独立的，并且不共享通用的提供者集合，请确保 <code>provideClientHydration()</code> 也包含在用于在服务器上引导应用的提供者集合中。</p>
+<p>有关水合的更多信息，请参见 <a href="guide/hydration">本指南</a>。</p>
+
+  <h2 id="debugging-the-error">
+    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">调试错误</a>
+  </h2>
+  <p>验证 <code>provideClientHydration()</code> 调用是否包含在用于在服务器上引导应用的一组提供者中。</p>

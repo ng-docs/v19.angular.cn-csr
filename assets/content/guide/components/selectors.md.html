@@ -1,0 +1,119 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">组件选择器</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/components/selectors.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+    <div class="docs-alert docs-alert-tip">
+    <p><strong>提示：</strong> 本指南假定你已阅读过<a href="essentials">要点指南</a>。 如果你是 Angular 新手，请先阅读它。</p>
+
+    </div>
+    <p>每个组件都定义了一个 <a href="https://developer.mozilla.org/docs/Web/CSS/CSS_selectors" target="_blank">CSS 选择器</a>，它决定了组件的使用方式：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'profile-photo'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ProfilePhoto</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>你可以通过在<em>其他</em>组件的模板中创建一个匹配的 HTML 元素来使用组件：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">profile-photo</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">button</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Upload a new profile photo&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">button</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UserProfile</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p><strong>Angular 在编译时静态地匹配选择器</strong>。 在运行时更改 DOM（通过 Angular 绑定或使用 DOM API）不会影响渲染的组件。</p>
+<p><strong>一个元素只能精确匹配一个组件选择器。</strong> 如果多个组件选择器匹配单个元素，Angular 将报告错误。</p>
+<p><strong>组件选择器区分大小写。</strong></p>
+
+  <h2 id="types-of-selectors">
+    <a href="#types-of-selectors" class="docs-anchor" tabindex="-1" aria-label="Link to Types of selectors">选择器的类型</a>
+  </h2>
+  <p>在组件选择器中，Angular 支持有限的 <a href="https://developer.mozilla.org/docs/Web/CSS/CSS_Selectors" target="_blank">基本 CSS 选择器类型</a>的子集：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th><strong>选择器类型</strong></th>
+<th><strong>描述</strong></th>
+<th><strong>范例</strong></th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>类型选择器</td>
+<td>根据元素的 HTML 标签名或节点名进行匹配。</td>
+<td><code>profile-photo</code></td>
+</tr>
+<tr>
+<td>属性选择器</td>
+<td>根据 HTML 属性的存在与否以及（可选）该属性的精确值来匹配元素。</td>
+<td><code>[dropzone]</code> <code>[type="reset"]</code></td>
+</tr>
+<tr>
+<td>类选择器</td>
+<td>根据 CSS 类的存在与否来匹配元素。</td>
+<td><code>.menu-item</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>对于属性值，Angular 支持使用等于 (<code>=</code>) 操作符匹配精确的属性值。 Angular 不支持其他属性值操作符。</p>
+<p>Angular 组件选择器不支持组合器，包括 <a href="https://developer.mozilla.org/docs/Web/CSS/Descendant_combinator" target="_blank">后代组合器</a> 或 <a href="https://developer.mozilla.org/docs/Web/CSS/Child_combinator" target="_blank">子组合器</a>。</p>
+<p>Angular 组件选择器不支持指定 <a href="https://developer.mozilla.org/docs/Web/SVG/Namespaces_Crash_Course" target="_blank">命名空间</a>。</p>
+
+  <h3 id="the-not-pseudo-class">
+    <a href="#the-not-pseudo-class" class="docs-anchor" tabindex="-1" aria-label="Link to The <code>:not</code> pseudo-class"><code>:not</code> 伪类</a>
+  </h3>
+  <p>Angular 支持 <a href="https://developer.mozilla.org/docs/Web/CSS/:not" target="_blank"><code>:not</code> 伪类</a>。 你可以将此伪类附加到任何其他选择器，以缩小组件的选择器匹配的元素范围。 例如，你可以定义一个 <code>[dropzone]</code> 属性选择器，并阻止匹配 <code>textarea</code> 元素：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'[dropzone]:not(textarea)'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> DropZone</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>Angular 在组件选择器中不支持任何其他伪类或伪元素。</p>
+
+  <h3 id="combining-selectors">
+    <a href="#combining-selectors" class="docs-anchor" tabindex="-1" aria-label="Link to Combining selectors">组合选择器</a>
+  </h3>
+  <p>你可以通过连接多个选择器来组合它们。 例如，你可以匹配指定了 <code>type="reset"</code> 的 <code>&lt;button&gt;</code> 元素：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'button[type="reset"]'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ResetButton</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>你还可以使用逗号分隔的列表定义多个选择器：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'drop-zone, [dropzone]'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> DropZone</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>对于列表中与<em>任何</em>选择器匹配的每个元素，Angular 都会创建一个组件。</p>
+
+  <h2 id="choosing-a-selector">
+    <a href="#choosing-a-selector" class="docs-anchor" tabindex="-1" aria-label="Link to Choosing a selector">选择选择器</a>
+  </h2>
+  <p>绝大多数组件都应使用自定义元素名称作为其选择器。 所有自定义元素名称都应包含连字符，如 <a href="https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name" target="_blank">HTML 规范</a>中所述。 默认情况下，如果 Angular 遇到与任何可用组件都不匹配的自定义标签名称，则会报告错误，从而防止因组件名称拼写错误而导致的错误。</p>
+<p>有关在 Angular 模板中使用 <a href="https://developer.mozilla.org/docs/Web/Web_Components" target="_blank">原生自定义元素</a>的详细信息，请参阅<a href="guide/components/advanced-configuration">高级组件配置</a>。</p>
+
+  <h3 id="selector-prefixes">
+    <a href="#selector-prefixes" class="docs-anchor" tabindex="-1" aria-label="Link to Selector prefixes">选择器前缀</a>
+  </h3>
+  <p>Angular 团队建议为项目中定义的所有自定义组件使用简短且一致的前缀。 例如，如果你要使用 Angular 构建 YouTube，则可以将组件前缀设置为 <code>yt-</code>，组件如 <code>yt-menu</code>、<code>yt-player</code> 等。 像这样对选择器进行命名空间划分可以立即清楚地表明特定组件的来源。 默认情况下，Angular CLI 使用 <code>app-</code>。</p>
+<p>Angular 将 <code>ng</code> 选择器前缀用于其自己的框架 API。 永远不要将 <code>ng</code> 用作你自己的自定义组件的选择器前缀。</p>
+
+  <h3 id="when-to-use-an-attribute-selector">
+    <a href="#when-to-use-an-attribute-selector" class="docs-anchor" tabindex="-1" aria-label="Link to When to use an attribute selector">何时使用属性选择器</a>
+  </h3>
+  <p>当你想在标准原生元素上创建组件时，应该考虑使用属性选择器。 例如，如果你想创建一个自定义按钮组件，则可以通过使用属性选择器来利用标准 <code>&lt;button&gt;</code> 元素：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'button[yt-upload]'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">   ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> YouTubeUploadButton</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>这种方法允许组件的使用者直接使用元素的所有标准 API，而无需额外的工作。 这对于 ARIA 属性（如 <code>aria-label</code>）尤其有价值。</p>
+<p>当 Angular 遇到与可用组件不匹配的自定义属性时，不会报告错误。 当将组件与属性选择器一起使用时，使用者可能会忘记导入组件或其 NgModule，从而导致组件无法渲染。 有关更多信息，请参阅<a href="guide/components/importing">导入和使用组件</a>。</p>
+<p>定义属性选择器的组件应使用小写的、短划线分隔的属性。 你可以遵循上面描述的相同前缀建议。</p>

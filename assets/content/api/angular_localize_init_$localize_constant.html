@@ -1,0 +1,60 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/localize/init</span><div class="docs-reference-title"><div><h1>$localize</h1><div class="docs-api-item-label type-constant full">常量</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/localize/src/localize/src/localize.ts#L146-L161" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">代码</i></a></div><section class="docs-reference-description"><p>标记要本地化的模板字面量字符串。</p></section></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">  <code>
+    <span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> <a href="/api/localize/init/$localize">$localize</a></span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LocalizeFn</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-section"><h2 id="description" class="docs-reference-section-heading"><a href="#description" aria-label="Link to Description section" tabindex="-1">说明</a></h2><div><p>标记要本地化的模板字面量字符串。</p>
+<p>例如：</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"><a href="/api/localize/init/$localize">$localize</a> </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`some string to localize`</span></span></code></pre>
+        </pre>
+      </div>
+    <p><strong>提供 meaning、description 和 id</strong></p>
+<p>你可以选择性地为一个本地化的字符串指定一个或多个 <code>meaning</code>、<code>description</code> 和 <code>id</code>，方法是在字符串前面加上一个冒号分隔的控制块，格式如下：</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/localize/init/$localize">$localize</a></span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`:meaning|description@@id:source message text`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/localize/init/$localize">$localize</a></span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`:meaning|:source message text`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/localize/init/$localize">$localize</a></span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`:description:source message text`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/localize/init/$localize">$localize</a></span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`:@@id:source message text`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+        </pre>
+      </div>
+    <p>这种格式与 Angular 模板中用于 <code>i18n</code> 标记的格式相同。请参阅 <a href="guide/i18n/prepare#mark-text-in-component-template">Angular i18n 指南</a>。</p>
+<p><strong>命名占位符</strong></p>
+<p>如果模板字面量字符串包含表达式，那么这些表达式将自动与占位符名称关联。</p>
+<p>例如：</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"><a href="/api/localize/init/$localize">$localize</a> </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`Hi ${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">name</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}! There are ${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">items</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">length</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">} items.`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+        </pre>
+      </div>
+    <p>将生成消息源 <code>Hi {$PH}! There are {$PH_1} items</code>。</p>
+<p>推荐的做法是为每个表达式关联的占位符命名。</p>
+<p>要做到这一点，请在表达式之后直接提供用 <code>:</code> 字符包裹的占位符名称。这些占位符名称将从渲染后的本地化字符串中剥离出来。</p>
+<p>例如，要将 <code>items.length</code> 表达式占位符命名为 <code>itemCount</code>，你可以这样写：</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"><a href="/api/localize/init/$localize">$localize</a> </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`There are ${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">items</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">length</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}:itemCount: items`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+        </pre>
+      </div>
+    <p><strong>转义冒号标记</strong></p>
+<p>如果你需要在标记字符串的开头直接使用 <code>:</code> 字符（该字符串没有元数据块），或者在没有名称的替换表达式之后直接使用 <code>:</code> 字符，则必须通过在 <code>:</code> 前面加上反斜杠来转义它：</p>
+<p>例如：</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// message has a metadata block so no need to escape colon</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"><a href="/api/localize/init/$localize">$localize</a> </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`:some description::this message starts with a colon (:)`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// no metadata block so the colon must be escaped</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"><a href="/api/localize/init/$localize">$localize</a> </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">this message starts with a colon (:)`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+        </pre>
+      </div>
+    
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// named substitution so no need to escape colon</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"><a href="/api/localize/init/$localize">$localize</a> </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">label</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}:label:: ${}`</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// anonymous substitution so colon must be escaped</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"><a href="/api/localize/init/$localize">$localize</a> </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">label</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ${}`</span></span></code></pre>
+        </pre>
+      </div>
+    <p><strong>处理本地化的字符串：</strong></p>
+<p>有三种场景：</p>
+
+    <ul class="docs-list">
+      <li><p><strong>编译时内联</strong>：<code><a href="/api/localize/init/$localize">$localize</a></code> 标记在编译时由转译器转换，移除该标记，并使用从提供给转译工具的翻译集合中获得的已翻译字面量字符串替换模板字面量字符串。</p>
+</li>
+<li><p><strong>运行时求值</strong>：<code><a href="/api/localize/init/$localize">$localize</a></code> 标记是一个运行时函数，它使用运行时加载的翻译集合中的字符串替换和重排模板字面量字符串的各个部分（静态字符串和表达式）。</p>
+</li>
+<li><p><strong>直通式求值</strong>：<code><a href="/api/localize/init/$localize">$localize</a></code> 标记是一个运行时函数，它只是对原始模板字面量字符串求值，而不对其各个部分应用任何翻译。此版本用于开发期间或不需要翻译本地化模板字面量的地方。</p>
+</li>
+
+    </ul></div></div></div>

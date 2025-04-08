@@ -1,0 +1,120 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">不带 ZoneJS 的 Angular (Zoneless)</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/zoneless.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+  <h2 id="why-use-zoneless">
+    <a href="#why-use-zoneless" class="docs-anchor" tabindex="-1" aria-label="Link to Why use Zoneless?">为什么要使用 Zoneless？</a>
+  </h2>
+  <p>移除 ZoneJS 依赖的主要优势有：</p>
+
+  <ul class="docs-list">
+    <li><strong>性能提升</strong>：ZoneJS 使用 DOM 事件和异步任务作为应用状态<em>可能</em>已更新的指示器，并随后触发应用同步，以便在应用的视图上运行变更检测。ZoneJS 无法洞察应用状态是否真的发生了变化，因此这种同步被触发的频率高于必要频率。</li>
+<li><strong>改进的核心 Web 指标</strong>：ZoneJS 带来了相当大的开销，包括有效负载大小和启动时间成本。</li>
+<li><strong>改进的调试体验</strong>：ZoneJS 使代码调试更加困难。使用 ZoneJS 时，堆栈跟踪更难理解。当代码由于在 Angular Zone 之外而中断时，也很难理解。</li>
+<li><strong>更好的生态系统兼容性</strong>：ZoneJS 通过修补浏览器 API 来工作，但不会自动修补每个新的浏览器 API。某些 API 无法有效地修补，例如 <code>async</code>/<code>await</code>，并且必须降级才能与 ZoneJS 一起使用。有时，生态系统中的库也与 ZoneJS 修补原生 API 的方式不兼容。移除 ZoneJS 作为依赖项，通过消除复杂性来源、猴子补丁和持续维护，确保了更好的长期兼容性。</li>
+
+  </ul>
+  
+  <h2 id="enabling-zoneless-in-an-application">
+    <a href="#enabling-zoneless-in-an-application" class="docs-anchor" tabindex="-1" aria-label="Link to Enabling Zoneless in an application">在应用中启用 Zoneless</a>
+  </h2>
+  <p>用于启用 Zoneless 的 API 目前是实验性的。无论是其形态还是底层行为都不稳定，并且可能会在补丁版本中发生变化。目前已知存在特性差距，包括缺乏符合工效学的 API，这会阻止应用在使用服务器端渲染时过早地进行序列化。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// standalone bootstrap</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(MyApp, {providers: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  provideExperimentalZonelessChangeDetection</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]});</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// NgModule bootstrap</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">platformBrowser</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppModule);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provideExperimentalZonelessChangeDetection</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="removing-zonejs">
+    <a href="#removing-zonejs" class="docs-anchor" tabindex="-1" aria-label="Link to Removing ZoneJS">移除 ZoneJS</a>
+  </h2>
+  <p>Zoneless 应用应从构建中完全移除 ZoneJS，以减小捆绑包大小。ZoneJS 通常通过 <code>angular.json</code> 中的 <code>polyfills</code> 选项加载，包括 <code>build</code> 和 <code>test</code> 目标。从两者中移除 <code>zone.js</code> 和 <code>zone.js/testing</code> 以便从构建中移除它。使用显式 <code>polyfills.ts</code> 文件的项目应从文件中移除 <code>import 'zone.js';</code> 和 <code>import 'zone.js/testing';</code>。</p>
+<p>从构建中移除 ZoneJS 后，也不再需要 <code>zone.js</code> 依赖项，并且可以完全移除该包：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> uninstall</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> zone.js</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="requirements-for-zoneless-compatibility">
+    <a href="#requirements-for-zoneless-compatibility" class="docs-anchor" tabindex="-1" aria-label="Link to Requirements for Zoneless compatibility">Zoneless 兼容性的要求</a>
+  </h2>
+  <p>Angular 依赖于来自核心 API 的通知，以确定何时运行变更检测以及在哪些视图上运行。
+这些通知包括：</p>
+
+  <ul class="docs-list">
+    <li><code>ChangeDetectorRef.markForCheck</code>（由 <code>AsyncPipe</code> 自动调用）</li>
+<li><code>ComponentRef.setInput</code></li>
+<li>更新在模板中读取的信号</li>
+<li>绑定的宿主或模板侦听器回调</li>
+<li>附着一个被上述某项标记为脏的视图</li>
+
+  </ul>
+  
+  <h3 id="onpush-compatible-components">
+    <a href="#onpush-compatible-components" class="docs-anchor" tabindex="-1" aria-label="Link to <code>OnPush</code>-compatible components">兼容 <code>OnPush</code> 的组件</a>
+  </h3>
+  <p>确保组件正在使用上述正确的通知机制的一种方法是使用 <a href="/best-practices/skipping-subtrees#using-onpush">ChangeDetectionStrategy.OnPush</a>。</p>
+<p><code>OnPush</code> 变更检测策略不是必要条件，但它是应用组件实现 zoneless 兼容性的推荐步骤。库组件并非总是可以使用 <code>ChangeDetectionStrategy.OnPush</code>。当库组件是可能使用 <code>ChangeDetectionStrategy.Default</code> 的用户组件的宿主时，它不能使用 <code>OnPush</code>，因为如果子组件不兼容 <code>OnPush</code> 并且依赖 ZoneJS 来触发变更检测，这将阻止子组件刷新。只要组件在需要运行变更检测时通知 Angular（调用 <code>markForCheck</code>、使用信号、<code>AsyncPipe</code> 等），组件就可以使用 <code>Default</code> 策略。作为用户组件的宿主意味着使用诸如 <code>ViewContainerRef.createComponent</code> 之类的 API，而不仅仅是托管来自用户组件的模板的一部分（即内容投影或使用模板引用输入）。</p>
+
+  <h3 id="remove-ngzoneonmicrotaskempty-ngzoneonunstable-ngzoneisstable-or-ngzoneonstable">
+    <a href="#remove-ngzoneonmicrotaskempty-ngzoneonunstable-ngzoneisstable-or-ngzoneonstable" class="docs-anchor" tabindex="-1" aria-label="Link to Remove <code>NgZone.onMicrotaskEmpty</code>, <code>NgZone.onUnstable</code>, <code>NgZone.isStable</code>, or <code>NgZone.onStable</code>">移除 <code>NgZone.onMicrotaskEmpty</code>、<code>NgZone.onUnstable</code>、<code>NgZone.isStable</code> 或 <code>NgZone.onStable</code></a>
+  </h3>
+  <p>应用和库需要移除对 <code>NgZone.onMicrotaskEmpty</code>、<code>NgZone.onUnstable</code> 和 <code>NgZone.onStable</code> 的使用。
+当应用启用 zoneless 变更检测时，这些可观察者将永远不会发出值。同样，<code>NgZone.isStable</code> 将始终为 <code>true</code>，不应用作代码执行的条件。</p>
+<p><code>NgZone.onMicrotaskEmpty</code> 和 <code>NgZone.onStable</code> 可观察者最常用于等待 Angular 完成变更检测，然后再执行任务。相反，如果需要等待单次变更检测，则可以用 <code>afterNextRender</code> 替换它们；如果存在可能跨越多个变更检测轮次的某些条件，则可以用 <code>afterRender</code> 替换它们。在其他情况下，使用这些可观察者是因为它们碰巧很熟悉，并且具有与所需时序相似的时序。可以使用更直接或更直接的 DOM API 来代替，例如当代码需要等待某些 DOM 状态时（而不是通过 Angular 的渲染钩子间接等待），可以使用 <code>MutationObserver</code>。</p>
+
+    <div class="docs-callout docs-callout-helpful">
+      <h3>NgZone.run 和 NgZone.runOutsideAngular 与 Zoneless 兼容</h3>
+      <p><code>NgZone.run</code> 和 <code>NgZone.runOutsideAngular</code> 不需要为了代码与 Zoneless 应用兼容而被移除。事实上，移除这些调用可能会导致仍然依赖 ZoneJS 的应用中所使用的库的性能下降。</p>
+
+    </div>
+    
+  <h3 id="pendingtasks-for-server-side-rendering-ssr">
+    <a href="#pendingtasks-for-server-side-rendering-ssr" class="docs-anchor" tabindex="-1" aria-label="Link to <code>PendingTasks</code> for Server Side Rendering (SSR)">用于服务器端渲染 (SSR) 的 <code>PendingTasks</code></a>
+  </h3>
+  <p>如果您正在 Angular 中使用 SSR，您可能知道它依赖 ZoneJS 来帮助确定应用何时“稳定”并且可以序列化。如果存在应阻止序列化的异步任务，则不使用 ZoneJS 的应用必须使用 <a href="/api/core/PendingTasks">PendingTasks</a> 服务让 Angular 知道这些任务。序列化将等待所有待处理任务都被移除的第一个时刻。</p>
+<p>待处理任务的两个最直接的用法是 <code>run</code> 方法：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> taskService</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(PendingTasks);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">taskService.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">run</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">async</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> someResult</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> await</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> doSomeWorkThatNeedsToBeRendered</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.someState.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(someResult);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>对于更复杂的用例，您可以手动添加和移除待处理任务：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> taskService</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(PendingTasks);</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> taskCleanup</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> taskService.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">add</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">try</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  await</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> doSomeWorkThatNeedsToBeRendered</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">catch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // handle error</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">finally</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  taskCleanup</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>此外，<code>rxjs-interop</code> 中的 <a href="/api/core/rxjs-interop/pendingUntilEvent#">pendingUntilEvent</a> 辅助函数确保应用保持不稳定状态，直到可观察者发出值、完成、出错或取消订阅。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">readonly myObservableState </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> someObservable.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">pipe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">pendingUntilEvent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span></code></pre>
+    </pre>
+  </div><p>该框架也在内部使用此服务，以防止在异步任务完成之前进行序列化。这些任务包括但不限于正在进行的 Router 导航和未完成的 <code>HttpClient</code> 请求。</p>
+
+  <h2 id="testing-and-debugging">
+    <a href="#testing-and-debugging" class="docs-anchor" tabindex="-1" aria-label="Link to Testing and Debugging">测试与排查</a>
+  </h2>
+  
+  <h3 id="using-zoneless-in-testbed">
+    <a href="#using-zoneless-in-testbed" class="docs-anchor" tabindex="-1" aria-label="Link to Using Zoneless in <code>TestBed</code>">在 <code>TestBed</code> 中使用 Zoneless</a>
+  </h3>
+  <p>zoneless 提供者函数也可以与 <code>TestBed</code> 一起使用，以帮助确保被测组件与 Zoneless Angular 应用兼容。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">TestBed.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">configureTestingModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provideExperimentalZonelessChangeDetection</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> fixture</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> TestBed.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">createComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(MyComponent);</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">await</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> fixture.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">whenStable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span></code></pre>
+    </pre>
+  </div><p>为了确保测试具有与生产代码最相似的行为，请尽可能避免使用 <code>fixture.detectChanges()</code>。当 Angular 可能原本没有计划变更检测时，这将强制运行变更检测。测试应确保这些通知正在发生，并允许 Angular 处理何时同步状态，而不是手动强制其在测试中发生。</p>
+<p>对于现有的测试套件，使用 <code>fixture.detectChanges()</code> 是一种常见的模式，并且可能不值得费力将其转换为 <code>await fixture.whenStable()</code>。<code>TestBed</code> 仍然会强制执行 fixture 的组件与 <code>OnPush</code> 兼容，并且如果发现模板值在没有变更通知的情况下被更新（即 <code>fixture.componentInstance.someValue = 'newValue';</code>），则会抛出 <code>ExpressionChangedAfterItHasBeenCheckedError</code>。如果该组件在生产环境中使用，则应通过更新组件以使用信号来管理状态或调用 <code>ChangeDetectorRef.markForCheck()</code> 来解决此问题。如果该组件仅用作测试包装器，并且从不在应用中使用，则可以使用 <code>fixture.changeDetectorRef.markForCheck()</code>。</p>
+
+  <h3 id="debug-mode-check-to-ensure-updates-are-detected">
+    <a href="#debug-mode-check-to-ensure-updates-are-detected" class="docs-anchor" tabindex="-1" aria-label="Link to Debug-mode check to ensure updates are detected">调试模式检查以确保检测到更新</a>
+  </h3>
+  <p>Angular 还提供了一个额外的工具，以帮助验证应用是否以 zoneless 兼容的方式更新状态。<code>provideExperimentalCheckNoChangesForDebug</code> 可用于定期检查，以确保在没有通知的情况下没有绑定被更新。如果存在未通过 zoneless 变更检测刷新的已更新绑定，Angular 将抛出 <code>ExpressionChangedAfterItHasBeenCheckedError</code>。</p>

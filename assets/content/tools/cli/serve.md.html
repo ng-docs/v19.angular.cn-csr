@@ -1,0 +1,56 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">为开发提供 Angular 应用服务</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/serve.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>你可以使用 <code>ng serve</code> 命令为你的 Angular CLI 应用启动服务器。这将编译你的应用，跳过不必要的优化，启动一个开发服务器，并自动重建和热重载任何后续更改。你可以通过按 <code>Ctrl+C</code> 停止服务器。</p>
+<p><code>ng serve</code> 仅为 <code>angular.json</code> 中指定的默认项目中的 <code>serve</code> 目标执行构建器。
+虽然这里可以使用任何构建器，但最常见（也是默认）的构建器是 <code>@angular-devkit/build-angular:dev-server</code>。</p>
+<p>你可以通过查找特定项目的 <code>serve</code> 目标来确定哪个构建器正被用于该项目。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // `ng serve` invokes the Architect target named `serve`.</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "serve"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:dev-server"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">          // ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* ... */</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        "test"</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* ... */</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>本页讨论了 <code>@angular-devkit/build-angular:dev-server</code> 的用法和选项。</p>
+
+  <h2 id="proxying-to-a-backend-server">
+    <a href="#proxying-to-a-backend-server" class="docs-anchor" tabindex="-1" aria-label="Link to Proxying to a backend server">代理到后端服务器</a>
+  </h2>
+  <p>通过将文件传递给 <code>--proxy-config</code> 构建选项，使用 <a href="https://webpack.js.org/configuration/dev-server/#devserverproxy" target="_blank">代理支持</a> 将某些 URL 重定向到后端服务器。例如，要将所有对 <code>http://localhost:4200/api</code> 的调用重定向到在 <code>http://localhost:3000/api</code> 上运行的服务器，请执行以下步骤。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>在你的项目的 <code>src/</code> 文件夹中创建一个文件 <code>proxy.conf.json</code>。</p>
+</li>
+<li><p>将以下内容添加到新的代理文件：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">   "/api"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">     "target"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"http://localhost:3000"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">     "secure"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">   }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>在 CLI 配置文件 <code>angular.json</code> 中，将 <code>proxyConfig</code> 选项添加到 <code>serve</code> 目标：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">   "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">     "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">       "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">         "serve"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">           "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:dev-server"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">           "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">             "proxyConfig"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/proxy.conf.json"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">           }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">         }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">       }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">     }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">   }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>要使用此代理配置运行开发服务器，请调用 <code>ng serve</code>。</p>
+</li>
+
+    </ol>
+    <p>编辑代理配置文件以添加配置选项；以下是一些示例。 有关所有选项的详细描述，当使用 <code>@angular-devkit/build-angular:browser</code> 时，请参阅 <a href="https://webpack.js.org/configuration/dev-server/#devserverproxy" target="_blank">webpack DevServer 文档</a>；当使用 <code>@angular-devkit/build-angular:browser-esbuild</code> 或 <code>@angular-devkit/build-angular:application</code> 时，请参阅 <a href="https://vite.dev/config/server-options#server-proxy" target="_blank">Vite DevServer 文档</a>。</p>
+<p>注意：如果你编辑了代理配置文件，则必须重新启动 <code>ng serve</code> 进程以使更改生效。</p>
+
+  <h2 id="localhost-resolution">
+    <a href="#localhost-resolution" class="docs-anchor" tabindex="-1" aria-label="Link to <code>localhost</code> resolution"><code>localhost</code> 求解</a>
+  </h2>
+  <p>从 Node 版本 17 开始，Node 将<em>不</em>总是将 <code>http://localhost:&lt;port&gt;</code> 求解为 <code>http://127.0.0.1:&lt;port&gt;</code>，具体取决于每台机器的配置。</p>
+<p>如果你使用代理并以 <code>localhost</code> URL 为目标时收到 <code>ECONNREFUSED</code> 错误，则可以通过将目标从 <code>http://localhost:&lt;port&gt;</code> 更新为 <code>http://127.0.0.1:&lt;port&gt;</code> 来解决此问题。</p>
+<p>有关更多信息，请参阅 <a href="https://github.com/chimurai/http-proxy-middleware#nodejs-17-econnrefused-issue-with-ipv6-and-localhost-705" target="_blank"><code>http-proxy-middleware</code> 文档</a>。</p>

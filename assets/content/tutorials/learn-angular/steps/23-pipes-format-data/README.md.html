@@ -1,0 +1,79 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">使用管道格式化数据</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/learn-angular/steps/23-pipes-format-data/README.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>你可以通过配置管道来进一步使用它们。可以通过向管道传递选项来配置管道。</p>
+<p>在本活动中，你将使用一些管道和管道参数。</p>
+<hr>
+
+<p>要向管道传递参数，请使用 <code>:</code> 语法，后跟参数值。这是一个范例：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`{{ date | date:'medium' }}`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div><p>输出是 <code>Jun 15, 2015, 9:43:11 PM</code>。</p>
+<p>是时候自定义一些管道输出了：</p>
+
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="format-a-number-with-decimalpipe">
+    <a href="#format-a-number-with-decimalpipe" class="docs-anchor" tabindex="-1" aria-label="Link to Format a number with <code>DecimalPipe</code>">使用 <code>DecimalPipe</code> 格式化数字</a>
+  </h3>
+  
+      <p>在 <code>app.component.ts</code> 中，更新模板以包含 <code>decimal</code> 管道的参数。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    ...</span></span><span class="line highlighted"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    &lt;li&gt;Number with "decimal" {{ num | number:"3.2-2" }}&lt;/li&gt;</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span></code></pre>
+    </pre>
+  </div><p>注意：那是什么格式？ <code>DecimalPipe</code> 的参数名为 <code>digitsInfo</code>，此参数使用以下格式：<code>{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}</code></p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="format-a-date-with-datepipe">
+    <a href="#format-a-date-with-datepipe" class="docs-anchor" tabindex="-1" aria-label="Link to Format a date with <code>DatePipe</code>">使用 <code>DatePipe</code> 格式化日期</a>
+  </h3>
+  
+      <p>现在，更新模板以使用 <code>date</code> 管道。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    ...</span></span><span class="line highlighted"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    &lt;li&gt;Date with "date" {{ birthday | date: 'medium' }}&lt;/li&gt;</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span></code></pre>
+    </pre>
+  </div><p>为了增加乐趣，请尝试 <code>date</code> 的一些不同参数。更多信息可以在 <a href="guide/templates/pipes">Angular 文档</a> 中找到。</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="format-a-currency-with-currencypipe">
+    <a href="#format-a-currency-with-currencypipe" class="docs-anchor" tabindex="-1" aria-label="Link to Format a currency with <code>CurrencyPipe</code>">使用 <code>CurrencyPipe</code> 格式化货币</a>
+  </h3>
+  
+      <p>对于你的最后一个任务，更新模板以使用 <code>currency</code> 管道。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    ...</span></span><span class="line highlighted"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    &lt;li&gt;Currency with "currency" {{ cost | currency }}&lt;/li&gt;</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span></code></pre>
+    </pre>
+  </div><p>你也可以尝试 <code>currency</code> 的不同参数。更多信息可以在 <a href="guide/templates/pipes">Angular 文档</a> 中找到。</p>
+
+    </li>
+    
+    </ol>
+    <p>管道用得真棒。到目前为止，你已经取得了很大的进步。</p>
+<p>还有更多内置管道可以在你的应用中使用。你可以在 <a href="guide/templates/pipes">Angular 文档</a> 中找到列表。</p>
+<p>如果内置管道不能满足你的需求，你还可以创建一个自定义管道。查看下一课以了解更多信息。</p>

@@ -1,0 +1,156 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">创建自定义路由匹配</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/routing/routing-with-urlmatcher.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular 路由器支持强大的匹配策略，你可以用它来帮助用户导航你的应用。
+这种匹配策略支持静态路由、带参数的变量路由、通配符路由等等。
+此外，你还可以为 URL 更复杂的情况构建自己的自定义模式匹配。</p>
+<p>在本教程中，你将使用 Angular 的 <code>UrlMatcher</code> 构建一个自定义路由匹配器。
+这个匹配器会在 URL 中查找 Twitter 句柄。</p>
+
+  <h2 id="objectives">
+    <a href="#objectives" class="docs-anchor" tabindex="-1" aria-label="Link to Objectives">目标</a>
+  </h2>
+  <p>实现 Angular 的 <code>UrlMatcher</code> 以创建一个自定义路由匹配器。</p>
+
+  <h2 id="create-a-sample-application">
+    <a href="#create-a-sample-application" class="docs-anchor" tabindex="-1" aria-label="Link to Create a sample application">创建一个范例应用</a>
+  </h2>
+  <p>使用 Angular CLI，创建一个新的应用，<em>angular-custom-route-match</em>。
+除了默认的 Angular 应用框架之外，你还将创建一个 <em>profile</em> 组件。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>创建一个新的 Angular 项目，<em>angular-custom-route-match</em>。</p>
+<pre><code class="language-shell">ng new angular-custom-route-match
+</code></pre>
+<p>当提示 <code>Would you like to add Angular routing?</code> 时，选择 <code>Y</code>。</p>
+<p>当提示 <code>Which stylesheet format would you like to use?</code> 时，选择 <code>CSS</code>。</p>
+<p>稍等片刻，新的项目 <code>angular-custom-route-match</code> 就准备好了。</p>
+</li>
+<li><p>从你的终端，导航到 <code>angular-custom-route-match</code> 目录。</p>
+</li>
+<li><p>创建一个组件，<em>profile</em>。</p>
+<pre><code class="language-shell">ng generate component profile
+</code></pre>
+</li>
+<li><p>在你的代码编辑器中，找到文件 <code>profile.component.html</code>，并将占位符内容替换为以下 HTML。</p>
+<div class="docs-code" path="adev/src/content/examples/routing-with-urlmatcher/src/app/profile/profile.component.html" header="src/app/profile/profile.component.html">
+    <div class="docs-code-header"><h3>src/app/profile/profile.component.html</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Hello {{ username }}!</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>在你的代码编辑器中，找到文件 <code>app.component.html</code>，并将占位符内容替换为以下 HTML。</p>
+<div class="docs-code" path="adev/src/content/examples/routing-with-urlmatcher/src/app/app.component.html" header="src/app/app.component.html">
+    <div class="docs-code-header"><h3>src/app/app.component.html</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Routing with Custom Matching&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">Navigate to &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/@Angular"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;my profile&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div></li>
+
+    </ol>
+    
+  <h2 id="configure-your-routes-for-your-application">
+    <a href="#configure-your-routes-for-your-application" class="docs-anchor" tabindex="-1" aria-label="Link to Configure your routes for your application">为你的应用配置路由</a>
+  </h2>
+  <p>在你的应用框架就位后，接下来需要将路由功能添加到 <code>app.config.ts</code> 文件中。
+作为此过程的一部分，你将创建一个自定义 URL 匹配器，用于在 URL 中查找 Twitter 句柄。
+此句柄由前导的 <code>@</code> 符号标识。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>在你的代码编辑器中，打开你的 <code>app.config.ts</code> 文件。</p>
+</li>
+<li><p>为 Angular 的 <code>provideRouter</code> 和 <code>withComponentInputBinding</code> 以及应用路由添加一个 <code>import</code> 语句。</p>
+<pre><code class="language-ts">import {provideRouter, withComponentInputBinding} from '@angular/router';
+
+import {routes} from './app.routes';
+</code></pre>
+</li>
+<li><p>在 providers 数组中，添加一个 <code>provideRouter(routes, withComponentInputBinding())</code> 语句。</p>
+</li>
+<li><p>通过将以下代码添加到应用路由中来定义自定义路由匹配器。</p>
+<div class="docs-code" path="adev/src/content/examples/routing-with-urlmatcher/src/app/app.routes.ts" visiblelines="5,6,7,8,9,10,11,12,13,14" header="src/app/app.routes.ts">
+    <div class="docs-code-header"><h3>src/app/app.routes.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {Routes, UrlSegment} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/router'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {ProfileComponent} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './profile/profile.component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> routes</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Routes</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    matcher</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">url</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">      if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (url.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">length</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> ===</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> url[</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">].path.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">match</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">/</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">^</span><span style="--shiki-light:#032F62;--shiki-dark:#DBEDFF">@</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">[\w]</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+$</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">/</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">gm</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)) {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {consumed: url, posParams: {username: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UrlSegment</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(url[</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">].path.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">slice</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">), {})}};</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">      return</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    component: ProfileComponent,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">];</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div></li>
+
+    </ol>
+    <p>这个自定义匹配器是一个执行以下任务的函数：</p>
+
+  <ul class="docs-list">
+    <li>该匹配器验证该数组是否仅包含一个片段</li>
+<li>该匹配器使用正则表达式来确保用户名的格式匹配</li>
+<li>如果存在匹配项，则该函数返回整个 URL，并将 <code>username</code> 路由参数定义为路径的子字符串</li>
+<li>如果不存在匹配项，则该函数返回 null，并且路由器继续查找与 URL 匹配的其他路由</li>
+
+  </ul>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 自定义 URL 匹配器的行为方式与任何其他路由定义相同。像使用任何其他路由一样定义子路由或惰性加载路由。</p>
+
+    </div>
+    
+  <h2 id="reading-the-route-parameters">
+    <a href="#reading-the-route-parameters" class="docs-anchor" tabindex="-1" aria-label="Link to Reading the route parameters">读取路由参数</a>
+  </h2>
+  <p>在自定义匹配器就位后，你现在可以在 <code>profile</code> 组件中绑定路由参数。</p>
+<p>在你的代码编辑器中，打开你的 <code>profile.component.ts</code> 文件，并创建一个与 <code>username</code> 参数匹配的 <code>Input</code>。
+我们之前在 <code>provideRouter</code> 中添加了 <code>withComponentInputBinding</code> 特性。这允许 <code>Router</code> 将信息直接绑定到路由组件。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() username</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">!</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: string;</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="test-your-custom-url-matcher">
+    <a href="#test-your-custom-url-matcher" class="docs-anchor" tabindex="-1" aria-label="Link to Test your custom URL matcher">测试你的自定义 URL 匹配器</a>
+  </h2>
+  <p>在你的代码就位后，你现在可以测试你的自定义 URL 匹配器。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>从终端窗口中，运行 <code>ng serve</code> 命令。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> serve</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>打开浏览器访问 <code>http://localhost:4200</code>。</p>
+<p>你应该看到一个单页 Web 应用，其中包含一个句子，内容为 <code>Navigate to my profile</code>。</p>
+</li>
+<li><p>点击 <strong>my profile</strong> 超链接。</p>
+<p>页面上会出现一个新句子，内容为 <code>Hello, Angular!</code>。</p>
+</li>
+
+    </ol>
+    
+  <h2 id="next-steps">
+    <a href="#next-steps" class="docs-anchor" tabindex="-1" aria-label="Link to Next steps">后续步骤</a>
+  </h2>
+  <p>当你的应用中具有动态 URL 时，使用 Angular Router 进行模式匹配为你提供了很大的灵活性。
+要了解有关 Angular Router 的更多信息，请参阅以下主题：</p>
+
+    <nav class="docs-pill-row">
+      
+    <a class="docs-pill" href="guide/routing/common-router-tasks">
+      应用内路由和导航
+    </a>
+    
+    <a class="docs-pill" href="api/router/Router">
+      Router API
+    </a>
+    
+
+    </nav>
+    
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 此内容基于 <a href="https://medium.com/@brandontroberts/custom-route-matching-with-the-angular-router-fbdd48665483" target="_blank">Custom Route Matching with the Angular Router</a>，作者为 <a href="https://twitter.com/brandontroberts" target="_blank">Brandon Roberts</a>。</p>
+
+    </div>
+    

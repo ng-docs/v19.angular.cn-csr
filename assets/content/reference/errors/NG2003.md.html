@@ -1,0 +1,21 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">缺少令牌</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG2003.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>在编译时，构造函数参数没有注入令牌。 <a href="api/core/InjectionToken">InjectionTokens</a> 是可以在依赖注入提供者中使用的令牌。</p>
+
+  <h2 id="debugging-the-error">
+    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">调试错误</a>
+  </h2>
+  <p>查看抛出错误的参数以及该类的所有用法。
+当构造函数使用原始类型（如 <code>string</code>、<code>number</code>、<code>boolean</code> 和 <code>Object</code>）定义参数时，通常会抛出此错误。</p>
+<p>使用来自 <code>@angular/core</code> 的 <code>@Injectable</code> 方法或 <code>@Inject</code> 装饰器，以确保你注入的类型是具体化的（具有运行时表示形式）。确保向此装饰器添加提供者，这样你就不会抛出 <a href="errors/NG0201">NG0201：未找到提供者</a>。</p>

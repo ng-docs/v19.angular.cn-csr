@@ -1,0 +1,43 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/core</span><div class="docs-reference-title"><div><h1>@let</h1><div class="docs-api-item-label type-block full">控制块</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/tools/manual_api_docs/blocks/let.md#L0-L0" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">代码</i></a></div><section class="docs-reference-description"><p><code>@let</code> 允许你定义一个局部变量并在整个模板中复用它。</p>
+
+      <h2 id="syntax" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#syntax" aria-label="Link to Syntax section" tabindex="-1">语法</a>
+      </h2>
+    
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">= </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">user.name;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> data </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">= </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">data$ </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> async</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+        </pre>
+      </div>
+    
+      <h2 id="description" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#description" aria-label="Link to Description section" tabindex="-1">描述</a>
+      </h2>
+    <p><code>@let</code> 对象声明类似于 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let">JavaScript 的 <code>let</code></a>，并且它们的值可以是任何有效的 Angular 表达式。每次执行模板时，这些表达式都会被重新求值。</p>
+<p>与 JavaScript 变量类似，用 <code>@let</code> 声明的变量可以用于：</p>
+
+    <ul class="docs-list">
+      <li>在它们被声明之后</li>
+<li>在相同作用域和嵌套作用域的范围内</li>
+
+    </ul>
+    
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> user </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">= </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">user$ </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> async</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (user) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Hello, {{user.name}}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">user-avatar</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> [photo]</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"user.photo"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">/&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">ul</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    @for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (snack </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">of</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> user.favoriteSnacks; track snack.id) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">li</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;{{snack.name}}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">li</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">ul</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">button</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> (click)</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"update(user)"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Update profile&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">button</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+        </pre>
+      </div>
+    
+      <h2 id="syntax-definition" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#syntax-definition" aria-label="Link to Syntax definition section" tabindex="-1">语法定义</a>
+      </h2>
+    <p><code>@let</code> 语法的正式定义为：</p>
+
+    <ul class="docs-list">
+      <li><code>@let</code> 关键字。</li>
+<li>后面跟着一个或多个空格，不包括换行符。</li>
+<li>后面跟着一个有效的 JavaScript 名称和零个或多个空格。</li>
+<li>后面跟着 = 符号和零个或多个空格。</li>
+<li>后面跟着一个 Angular 表达式，它可以是多行的。</li>
+<li>以 <code>;</code> 符号结尾。</li>
+
+    </ul>
+    <p>提示：关于此特性的全面描述，请参见<a href="guide/templates/variables#local-template-variables-with-let">模板指南</a>。</p></section></header></div>

@@ -1,0 +1,140 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">使用轻量级注入令牌优化客户端应用的大小</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/di/lightweight-injection-tokens.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>本页概述了一种依赖注入技术，建议库开发人员使用。
+使用<em>轻量级注入令牌</em>设计库，有助于优化使用你的库的客户端应用的捆绑包大小。</p>
+<p>你可以管理组件和可注入服务之间的依赖结构，以通过使用可摇树优化的提供者来优化捆绑包大小。
+这通常确保了如果应用从未使用过所提供的组件或服务，编译器可以从捆绑包中删除其代码。</p>
+<p>由于 Angular 存储注入令牌的方式，未使用的组件或服务仍有可能最终出现在捆绑包中。
+本页介绍了一种依赖注入设计模式，该模式通过使用轻量级注入令牌来支持正确的摇树优化。</p>
+<p>轻量级注入令牌设计模式对于库开发人员尤其重要。
+它可以确保当应用仅使用库的某些功能时，可以从客户端应用的捆绑包中删除未使用的代码。</p>
+<p>当应用使用你的库时，你的库可能提供了一些客户端应用未使用的服务。
+在这种情况下，应用开发人员应该期望该服务被摇树优化，并且不增加已编译应用的大小。
+由于应用开发人员无法了解或补救库中的摇树优化问题，因此库开发人员有责任这样做。
+为了防止保留未使用的组件，你的库应使用轻量级注入令牌设计模式。</p>
+
+  <h2 id="when-tokens-are-retained">
+    <a href="#when-tokens-are-retained" class="docs-anchor" tabindex="-1" aria-label="Link to When tokens are retained">何时保留令牌</a>
+  </h2>
+  <p>为了更好地解释发生令牌保留的条件，请考虑一个提供库卡片组件的库。
+此组件包含一个主体，并且可以包含一个可选的标头：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">lib-card</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">lib-header</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;…&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">lib-header</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">lib-card</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;;</span></span></code></pre>
+    </pre>
+  </div><p>在可能的实现中，<code>&lt;lib-card&gt;</code> 组件使用 <code>@ContentChild()</code> 或 <code>@ContentChildren()</code> 来获取 <code>&lt;lib-header&gt;</code> 和 <code>&lt;lib-body&gt;</code>，如下所示：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'lib-header'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LibHeaderComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'lib-card'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LibCardComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ContentChild</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(LibHeaderComponent) </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">header</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LibHeaderComponent</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">null</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>由于 <code>&lt;lib-header&gt;</code> 是可选的，因此该元素可以以最小形式 <code>&lt;lib-card&gt;&lt;/lib-card&gt;</code> 出现在模板中。
+在这种情况下，未使用 <code>&lt;lib-header&gt;</code>，你可能希望对其进行摇树优化，但事实并非如此。
+这是因为 <code>LibCardComponent</code> 实际上包含对 <code>LibHeaderComponent</code> 的两个引用：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ContentChild</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(LibHeaderComponent) </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">header</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: LibHeaderComponent;</span></span></code></pre>
+    </pre>
+  </div>
+  <ul class="docs-list">
+    <li>其中一个引用在<em>类型位置</em>——也就是说，它将 <code>LibHeaderComponent</code> 指定为类型：<code>header: LibHeaderComponent;</code>。</li>
+<li>另一个引用在<em>值位置</em>——也就是说，LibHeaderComponent 是 <code>@ContentChild()</code> 参数装饰器的值：<code>@ContentChild(LibHeaderComponent)</code>。</li>
+
+  </ul>
+  <p>编译器以不同的方式处理这些位置的令牌引用：</p>
+
+  <ul class="docs-list">
+    <li>编译器在从 TypeScript 转换后会擦除<em>类型位置</em>引用，因此它们对摇树优化没有影响。</li>
+<li>编译器必须在运行时保留<em>值位置</em>引用，这<strong>阻止</strong>组件被摇树优化。</li>
+
+  </ul>
+  <p>在此范例中，编译器保留了值位置中出现的 <code>LibHeaderComponent</code> 令牌。
+即使应用实际上在任何地方都没有使用 <code>&lt;lib-header&gt;</code>，这也阻止了引用的组件被摇树优化。
+如果 <code>LibHeaderComponent</code> 的代码、模板和样式组合变得太大，则不必要地包含它会显着增加客户端应用的大小。</p>
+
+  <h2 id="when-to-use-the-lightweight-injection-token-pattern">
+    <a href="#when-to-use-the-lightweight-injection-token-pattern" class="docs-anchor" tabindex="-1" aria-label="Link to When to use the lightweight injection token pattern">何时使用轻量级注入令牌模式</a>
+  </h2>
+  <p>当组件用作注入令牌时，会出现摇树优化问题。
+在以下两种情况下可能会发生这种情况：</p>
+
+  <ul class="docs-list">
+    <li>该令牌在<a href="guide/components/queries#content-queries">内容查询</a>的值位置中使用。</li>
+<li>该令牌用作构造函数注入的类型说明符。</li>
+
+  </ul>
+  <p>在以下范例中，<code>OtherComponent</code> 令牌的两种用法都会导致保留 <code>OtherComponent</code>，从而阻止在未使用它时进行摇树优化：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Optional</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">other</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> OtherComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {}</span></span><span class="line"></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ContentChild</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(OtherComponent) </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">other</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> OtherComponent</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>尽管仅用作类型说明符的令牌在转换为 JavaScript 时会被删除，但运行时需要用于依赖注入的所有令牌。
+这些有效地将 <code>constructor(@Optional() other: OtherComponent)</code> 更改为 <code>constructor(@Optional() @Inject(OtherComponent) other)</code>。
+现在，该令牌处于值位置，这会导致摇树优化器保留引用。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 库应为所有服务使用<a href="guide/di/dependency-injection#providing-dependency">可摇树优化的提供者</a>，在根级别而不是在组件或模块中提供依赖项。</p>
+
+    </div>
+    
+  <h2 id="using-lightweight-injection-tokens">
+    <a href="#using-lightweight-injection-tokens" class="docs-anchor" tabindex="-1" aria-label="Link to Using lightweight injection tokens">使用轻量级注入令牌</a>
+  </h2>
+  <p>轻量级注入令牌设计模式包括使用小型抽象类作为注入令牌，并在稍后阶段提供实际的实现。
+抽象类被保留，不进行摇树优化，但是它很小，并且对应用大小没有实质性影响。</p>
+<p>以下范例展示了这对于 <code>LibHeaderComponent</code> 的工作方式：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">abstract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LibHeaderToken</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'lib-header'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    {provide: LibHeaderToken, useExisting: LibHeaderComponent}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LibHeaderComponent</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> extends</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LibHeaderToken</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'lib-card'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LibCardComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ContentChild</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(LibHeaderToken) </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">header</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LibHeaderToken</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">null</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>在此范例中，<code>LibCardComponent</code> 实现不再在类型位置或值位置引用 <code>LibHeaderComponent</code>。
+这使得可以对 <code>LibHeaderComponent</code> 进行完整的摇树优化。
+<code>LibHeaderToken</code> 被保留，但它只是一个对象声明，没有具体的实现。
+它很小，并且在编译后保留时不会对应用大小产生实质性影响。</p>
+<p>相反，<code>LibHeaderComponent</code> 本身实现了抽象的 <code>LibHeaderToken</code> 类。
+你可以安全地在组件定义中使用该令牌作为提供者，从而允许 Angular 正确注入具体类型。</p>
+<p>总而言之，轻量级注入令牌模式包括以下内容：</p>
+
+    <ol class="docs-ordered-list">
+      <li>一个轻量级注入令牌，它表示为一个抽象类。</li>
+<li>一个实现抽象类的组件定义。</li>
+<li>轻量级模式的注入，使用 <code>@ContentChild()</code> 或 <code>@ContentChildren()</code>。</li>
+<li>轻量级注入令牌实现中的提供者，它将轻量级注入令牌与实现相关联。</li>
+
+    </ol>
+    
+  <h3 id="use-the-lightweight-injection-token-for-api-definition">
+    <a href="#use-the-lightweight-injection-token-for-api-definition" class="docs-anchor" tabindex="-1" aria-label="Link to Use the lightweight injection token for API definition">使用轻量级注入令牌进行 API 定义</a>
+  </h3>
+  <p>注入轻量级注入令牌的组件可能需要在注入的类中调用方法。
+该令牌现在是一个抽象类。由于可注入组件实现了该类，因此你还必须在抽象轻量级注入令牌类中声明一个抽象方法。
+该方法的实现及其所有代码开销都位于可以进行摇树优化的可注入组件中。
+如果子组件存在，这使父组件可以以类型安全的方式与子组件通信。</p>
+<p>例如，<code>LibCardComponent</code> 现在查询 <code>LibHeaderToken</code> 而不是 <code>LibHeaderComponent</code>。
+以下范例展示了该模式如何使 <code>LibCardComponent</code> 与 <code>LibHeaderComponent</code> 通信，而无需实际引用 <code>LibHeaderComponent</code>：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">abstract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LibHeaderToken</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  abstract</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> doSomething</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'lib-header'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    {provide: LibHeaderToken, useExisting: LibHeaderComponent}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LibHeaderComponent</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> extends</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LibHeaderToken</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  doSomething</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // Concrete implementation of `doSomething`</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'lib-card'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LibCardComponent</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> implement</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AfterContentInit</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ContentChild</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(LibHeaderToken) </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">header</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LibHeaderToken</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">null</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  ngAfterContentInit</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#24292E;--shiki-dark:#79B8FF">this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.header </span><span style="--shiki-light:#24292E;--shiki-dark:#F97583">!==</span><span style="--shiki-light:#24292E;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#79B8FF">      this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.header?.</span><span style="--shiki-light:#24292E;--shiki-dark:#B392F0">doSomething</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>在此范例中，父组件查询令牌以获取子组件，并在子组件存在时存储生成的组件引用。
+在调用子组件中的方法之前，父组件会检查子组件是否存在。
+如果子组件已被摇树优化，则没有对其的运行时引用，也不会调用其方法。</p>
+
+  <h3 id="naming-your-lightweight-injection-token">
+    <a href="#naming-your-lightweight-injection-token" class="docs-anchor" tabindex="-1" aria-label="Link to Naming your lightweight injection token">命名你的轻量级注入令牌</a>
+  </h3>
+  <p>轻量级注入令牌仅对组件有用。
+Angular 风格指南建议你使用 “Component” 后缀命名组件。
+范例 “LibHeaderComponent” 遵循此约定。</p>
+<p>你应该保持组件及其令牌之间的关系，同时仍然区分它们。
+推荐的风格是使用组件基本名称和后缀 “<code>Token</code>” 来命名你的轻量级注入令牌：“<code>LibHeaderToken</code>”。</p>

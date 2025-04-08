@@ -1,0 +1,79 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">端到端测试</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/end-to-end.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>端到端 (E2E) 测试是一种用于断言你的整个应用从开始到结束或<em>“端到端”</em>都能按预期工作的测试形式。E2E 测试与单元测试的不同之处在于，它与代码的底层实现细节完全解耦。它通常用于以模拟用户与应用交互的方式来验证应用。本页是关于如何使用 Angular CLI 开始在 Angular 中进行端到端测试的指南。</p>
+
+  <h2 id="set-up-e2e-testing">
+    <a href="#set-up-e2e-testing" class="docs-anchor" tabindex="-1" aria-label="Link to Set Up E2E Testing">建立 E2E 测试</a>
+  </h2>
+  <p>Angular CLI 下载并安装运行 Angular 应用的端到端测试所需的一切。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> e2e</span></span></code></pre>
+    </pre>
+  </div><p><code>ng e2e</code> 命令将首先检查你的项目以查找 "e2e" 目标。如果找不到，CLI 将提示你想要使用哪个 e2e 包，并引导你完成建立过程。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Cannot</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> find</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "e2e"</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> target</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> for</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> the</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> specified</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> project.</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">You</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> can</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> a</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> package</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> that</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> implements</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> these</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> capabilities.</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">For</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> example:</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Cypress:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @cypress/schematic</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Nightwatch:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @nightwatch/schematics</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">WebdriverIO:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @wdio/schematics</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Playwright:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> playwright-ng-schematics</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Puppeteer:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @puppeteer/ng-schematics</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Would</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> you</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> like</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> to</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> a</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> package</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> with</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "e2e"</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> capabilities</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> now?</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">No</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">❯</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Cypress</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Nightwatch</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">WebdriverIO</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Playwright</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Puppeteer</span></span></code></pre>
+    </pre>
+  </div><p>如果你在上面的列表中没有找到想要使用的测试运行器，你可以使用 <code>ng add</code> 手动添加一个包。</p>
+
+  <h2 id="running-e2e-tests">
+    <a href="#running-e2e-tests" class="docs-anchor" tabindex="-1" aria-label="Link to Running E2E Tests">运行 E2E 测试</a>
+  </h2>
+  <p>既然你的应用已经配置了端到端测试，我们现在可以运行相同的命令来执行你的测试。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> e2e</span></span></code></pre>
+    </pre>
+  </div><p>请注意，使用任何集成的 e2e 包运行测试都没有什么“特别”之处。<code>ng e2e</code> 命令实际上只是在底层运行 <code>e2e</code> 构建器。你始终可以<a href="tools/cli/cli-builder#creating-a-builder">创建你自己的自定义构建器</a>，命名为 <code>e2e</code>，并使用 <code>ng e2e</code> 运行它。</p>
+
+  <h2 id="more-information-on-end-to-end-testing-tools">
+    <a href="#more-information-on-end-to-end-testing-tools" class="docs-anchor" tabindex="-1" aria-label="Link to More information on end-to-end testing tools">关于端到端测试工具的更多信息</a>
+  </h2>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">测试工具</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">Cypress</td>
+<td align="left"><a href="https://docs.cypress.io/guides/end-to-end-testing/writing-your-first-end-to-end-test" target="_blank">Cypress 入门</a></td>
+</tr>
+<tr>
+<td align="left">Nightwatch</td>
+<td align="left"><a href="https://nightwatchjs.org/guide/writing-tests/introduction.html" target="_blank">Nightwatch 入门</a></td>
+</tr>
+<tr>
+<td align="left">WebdriverIO</td>
+<td align="left"><a href="https://webdriver.io/docs/gettingstarted" target="_blank">Webdriver.io 入门</a></td>
+</tr>
+<tr>
+<td align="left">Playwright</td>
+<td align="left"><a href="https://playwright.dev/docs/writing-tests" target="_blank">Playwright 入门</a></td>
+</tr>
+<tr>
+<td align="left">Puppeteer</td>
+<td align="left"><a href="https://pptr.dev" target="_blank">Puppeteer 入门</a></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  

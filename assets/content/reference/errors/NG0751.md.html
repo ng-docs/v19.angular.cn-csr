@@ -1,0 +1,16 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">@defer 在启用 HMR 时的行为</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0751.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>热模块替换 (HMR) 是一种开发服务器使用的技术，用于在仅更改应用的一部分时避免重新加载整个页面。</p>
+<p>当在 Angular 中启用 HMR 时，所有 <code>@defer</code> 控制块依赖项都会被急性加载，而不是等待配置的触发条件（客户端专用和增量水合触发器）。这是 HMR 正常运行所必需的，可以在运行时替换应用中的组件，而无需重新加载整个页面。注意：defer 控制块的实际渲染在 HMR 模式下会遵循触发条件。</p>
+<p>如果你想在开发模式下测试 <code>@defer</code> 控制块的行为，并确保在满足触发条件时加载必要的依赖项，你可以禁用 HMR 模式，如<a href="/tools/cli/build-system-migration#hot-module-replacement"><code>本文档</code></a>中所述。</p>

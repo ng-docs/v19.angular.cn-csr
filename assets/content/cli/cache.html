@@ -1,0 +1,47 @@
+<div class="docs-cli"><div class="docs-reference-cli-content"><header class="docs-reference-header"><span class="docs-reference-category">CLI</span><div class="docs-reference-title"><div><h1> cache</h1><div class="docs-api-item-label type-command full">命令</div></div></div></header><div class="docs-code docs-reference-cli-toc"><pre class="docs-mini-scroll-track"><code><div class="shiki line cli">ng cache<button member-id="Options" class="shiki-ln-line-option">[options]</button></div></code></pre></div><div><p>默认情况下，Angular CLI 会在磁盘上保存许多可缓存的操作。</p>
+<p>当你重新运行相同的构建时，构建体系会恢复先前构建的状态，并复用先前执行的操作，从而减少构建和测试你的应用和库所需的时间。</p>
+<p>要修改默认缓存设置，请将 <code>cli.cache</code> 对象添加到你的<a href="reference/configs/workspace-config">工作区配置</a>中。
+该对象位于文件顶层 <code>cli.cache</code> 下，在 <code>projects</code> 部分之外。</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "$schema"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./node_modules/@angular/cli/lib/config/schema.json"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "version"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "cli"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "cache"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      // ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+        </pre>
+      </div>
+    <p>欲知详情，请参阅<a href="reference/configs/workspace-config#cache-options">缓存选项</a>。</p>
+
+      <h3 id="cache-environments" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#cache-environments" aria-label="Link to Cache environments section" tabindex="-1">缓存环境</a>
+      </h3>
+    <p>默认情况下，磁盘缓存仅对本地环境启用。环境的值可以是以下之一：</p>
+
+    <ul class="docs-list">
+      <li><code>all</code> - 允许在所有机器上使用磁盘缓存。</li>
+<li><code>local</code> - 仅允许在开发机器上使用磁盘缓存。</li>
+<li><code>ci</code> - 仅允许在持续集成 (CI) 系统上使用磁盘缓存。</li>
+
+    </ul>
+    <p>要将环境设置更改为 <code>all</code>，请运行以下命令：</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> config</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> cli.cache.environment</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> all</span></span></code></pre>
+        </pre>
+      </div>
+    <p>欲知详情，请参阅<a href="reference/configs/workspace-config#cache-options">缓存选项</a>中的 <code>environment</code>。</p>
+<div class="alert is-helpful">
+
+<p>Angular CLI 检查 <code>CI</code> 环境变量的存在与否及其值，以确定它在哪个环境中运行。</p>
+</div>
+
+
+      <h3 id="cache-path" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#cache-path" aria-label="Link to Cache path section" tabindex="-1">缓存路径</a>
+      </h3>
+    <p>默认情况下，<code>.angular/cache</code> 用作存储缓存结果的基本目录。</p>
+<p>要将此路径更改为 <code>.cache/ng</code>，请运行以下命令：</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> config</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> cli.cache.path</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ".cache/ng"</span></span></code></pre>
+        </pre>
+      </div>
+    </div><h3>子命令</h3><p>此命令具有以下子命令</p><ul><li><a href="cli/cache/clean">clean</a></li><li><a href="cli/cache/disable">disable</a></li><li><a href="cli/cache/enable">enable</a></li><li><a href="cli/cache/info">info</a></li></ul></div><div class="docs-reference-members"><h2 id="options" class="docs-reference-section-heading"><a href="#options" aria-label="Link to Options section" tabindex="-1">选项</a></h2><div class="docs-reference-member-card"><div class="docs-reference-card-body"><div class="docs-ref-content"><div class="docs-ref-option-and-description"><div class="docs-reference-option"><code>help</code></div><div><p>在控制台中显示此命令的帮助消息。</p>
+</div></div><div class="docs-reference-type-and-default"><span>值类型</span><code>boolean</code></div></div></div></div></div></div>

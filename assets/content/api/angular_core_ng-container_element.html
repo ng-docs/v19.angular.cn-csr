@@ -1,0 +1,83 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/core</span><div class="docs-reference-title"><div><h1>ng-container</h1><div class="docs-api-item-label type-element full">element</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/tools/manual_api_docs/elements/ng-container.md#L0-L0" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">代码</i></a></div><section class="docs-reference-description"><p>一个特殊元素，可以容纳结构型指令，而无需向 DOM 添加新元素。</p>
+<p><code>&lt;ng-container&gt;</code> 允许我们使用结构型指令，而无需任何额外的元素，从而确保所应用的 DOM 更改仅是由指令本身决定的那些。</p>
+<p>这不仅提高了性能（即使只是稍微地），因为浏览器最终渲染的元素更少，而且对于获得更简洁的 DOM 和类似的样式也可能是一笔宝贵的资产。</p>
+<p>例如，它可以使我们能够使用结构型指令，而不会破坏依赖于精确 DOM 结构的样式（例如，当我们使用 flex 容器、margin、子组合选择器等时获得的样式）。</p>
+
+      <h2 id="usage-notes" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#usage-notes" aria-label="Link to Usage notes section" tabindex="-1">用例说明</a>
+      </h2>
+    
+      <h3 id="with-ngifs" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#with-ngifs" aria-label="Link to With `*NgIf`s section" tabindex="-1">与 <code data-skip-anchor>*NgIf</code> 一起使用</a>
+      </h3>
+    <p><code>&lt;ng-container&gt;</code> 的一个常见用例是与 <code>*ngIf</code> 结构型指令一起使用。通过使用这个特殊元素，我们可以生成非常干净的模板，易于理解和使用。</p>
+<p>例如，我们可能希望有多个元素有条件地显示，但它们不需要都在同一个根元素下。这可以通过将它们包装在这样一个控制块中轻松完成：</p>
+<code-example format="html" language="html">
+
+<p>&lt;ng-container *ngIf="condition"&gt;
+  …
+&lt;/ng-container&gt;</p>
+</code-example>
+
+<p>这也可以使用 <code>else</code> 语句以及 <code>&lt;ng-template&gt;</code> 来扩充，如下所示：</p>
+<code-example format="html" language="html">
+
+<p>&lt;ng-container *ngIf="condition; else templateA"&gt;
+  …
+&lt;/ng-container&gt;
+&lt;ng-template #templateA&gt;
+  …
+&lt;/ng-template&gt;</p>
+</code-example>
+
+
+      <h3 id="combination-of-multiple-structural-directives" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#combination-of-multiple-structural-directives" aria-label="Link to Combination of multiple structural directives section" tabindex="-1">多个结构型指令的组合</a>
+      </h3>
+    <p>多个结构型指令不能在同一个元素上使用；如果需要利用多个结构型指令，建议每个结构型指令使用一个 <code>&lt;ng-container&gt;</code>。</p>
+<p>最常见的场景是与 <code>*ngIf</code> 和 <code>*ngFor</code> 一起使用。例如，假设我们有一个条目列表，但每个条目只有在特定条件为真时才需要显示。我们可能会尝试这样的操作：</p>
+<code-example format="html" language="html">
+
+<p>&lt;ul&gt;
+  &lt;li *ngFor="let item of items" *ngIf="item.isValid"&gt;
+    {{ item.name }}
+  &lt;/li&gt;
+&lt;/ul&gt;</p>
+</code-example>
+
+<p>正如我们所说，这将不起作用，我们可以做的是简单地将其中一个结构型指令移动到一个 <code>&lt;ng-container&gt;</code> 元素，然后它将包装另一个结构型指令，就像这样：</p>
+<code-example format="html" language="html">
+
+<p>&lt;ul&gt;
+  &lt;ng-container *ngFor="let item of items"&gt;
+    &lt;li *ngIf="item.isValid"&gt;
+      {{ item.name }}
+    &lt;/li&gt;
+  &lt;/ng-container&gt;
+&lt;/ul&gt;</p>
+</code-example>
+
+<p>这将按预期工作，而不会在 DOM 中引入任何新的不必要的元素。</p>
+<p>更多信息请参见<a href="guide/directives/structural-directives#one-structural-directive-per-element">每个元素一个结构型指令</a>。</p>
+
+      <h3 id="use-alongside-ngtemplateoutlet" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#use-alongside-ngtemplateoutlet" aria-label="Link to Use alongside ngTemplateOutlet section" tabindex="-1">与 ngTemplateOutlet 一起使用</a>
+      </h3>
+    <p><code>NgTemplateOutlet</code> 指令可以应用于任何元素，但在大多数情况下，它应用于 <code>&lt;ng-container&gt;</code> 元素。通过将两者结合起来，我们可以获得一个非常清晰且易于遵循的 HTML 和 DOM 结构，其中不需要额外的元素，并且模板视图在需要的地方被实例化。</p>
+<p>例如，假设我们有一个大型 HTML，其中一小部分需要在不同的地方重复使用。一个简单的解决方案是定义一个包含我们重复 HTML 的 <code>&lt;ng-template&gt;</code>，并在需要的地方通过使用 <code>&lt;ng-container&gt;</code> 和 <code>NgTemplateOutlet</code> 来渲染它。</p>
+<p>像这样:</p>
+<code-example format="html" language="html">
+
+<p>&lt;!-- … --&gt;</p>
+<p>&lt;ng-container *ngTemplateOutlet="tmpl; context: {$implicit: 'Hello'}"&gt;
+&lt;/ng-container&gt;</p>
+<p>&lt;!-- … --&gt;</p>
+<p>&lt;ng-container *ngTemplateOutlet="tmpl; context: {$implicit: 'World'}"&gt;
+&lt;/ng-container&gt;</p>
+<p>&lt;!-- … --&gt;</p>
+<p>&lt;ng-template #tmpl let-text&gt;
+  &lt;h1&gt;{{ text }}&lt;/h1&gt;
+&lt;/ng-template&gt;</p>
+</code-example>
+
+<p>有关 <code>NgTemplateOutlet</code> 的更多信息，请参阅<a href="api/common/NgTemplateOutlet"><code>NgTemplateOutlet</code> 的 API 文档页面</a>。</p></section></header></div>

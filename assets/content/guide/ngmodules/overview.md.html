@@ -1,0 +1,136 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">NgModules</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/ngmodules/overview.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> Angular 团队建议所有新代码都使用<a href="guide/components/anatomy-of-components#-imports-in-the-component-decorator">独立组件</a>，而不是 <code>NgModule</code>。使用本指南来理解用 <code>@NgModule</code> 构建的现有代码。</p>
+
+    </div>
+    <p>NgModule 是一个用 <code>@NgModule</code> 装饰器标记的类。此装饰器接受<em>元数据</em>，告知 Angular 如何编译组件模板和配置依赖注入。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {NgModule} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Metadata goes here</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenuModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>NgModule 有两个主要职责：</p>
+
+  <ul class="docs-list">
+    <li>声明属于此 NgModule 的组件、指令和管道</li>
+<li>为导入此 NgModule 的组件、指令和管道，向注入器中添加提供者</li>
+
+  </ul>
+  
+  <h2 id="declarations">
+    <a href="#declarations" class="docs-anchor" tabindex="-1" aria-label="Link to Declarations">声明</a>
+  </h2>
+  <p><code>@NgModule</code> 元数据的 <code>declarations</code> 属性声明了属于此 NgModule 的组件、指令和管道。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  /* ... */</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // CustomMenu and CustomMenuItem are components.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [CustomMenu, CustomMenuItem],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenuModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>在上面的范例中，组件 <code>CustomMenu</code> 和 <code>CustomMenuItem</code> 属于 <code>CustomMenuModule</code>。</p>
+<p><code>declarations</code> 属性还接受组件、指令和管道的<em>数组</em>。而这些数组，反过来，也可以包含其他数组。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> MENU_COMPONENTS</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [CustomMenu, CustomMenuItem];</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> WIDGETS</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">MENU_COMPONENTS</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, CustomSlider];</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  /* ... */</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // This NgModule declares all of CustomMenu, CustomMenuItem,</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // CustomSlider, and CustomCheckbox.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">WIDGETS</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, CustomCheckbox],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenuModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>如果 Angular 发现任何组件、指令或管道在多个 NgModule 中声明，它将报告错误。</p>
+<p>任何组件、指令或管道都必须显式标记为 <code>standalone: false</code> 才能在 NgModule 中声明。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Mark this component as `standalone: false` so that it can be declared in an NgModule.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  standalone: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  /* ... */</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenu</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* ... */</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="imports">
+    <a href="#imports" class="docs-anchor" tabindex="-1" aria-label="Link to imports">imports</a>
+  </h3>
+  <p>在 NgModule 中声明的组件可能依赖于其他组件、指令和管道。将这些依赖项添加到 <code>@NgModule</code> 元数据的 <code>imports</code> 属性。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  /* ... */</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // CustomMenu and CustomMenuItem depend on the PopupTrigger and SelectorIndicator components.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [PopupTrigger, SelectionIndicator],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [CustomMenu, CustomMenuItem],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenuModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p><code>imports</code> 数组接受其他 NgModule，以及独立的组件、指令和管道。</p>
+
+  <h3 id="exports">
+    <a href="#exports" class="docs-anchor" tabindex="-1" aria-label="Link to exports">exports</a>
+  </h3>
+  <p>NgModule 可以<em>导出</em>其声明的组件、指令和管道，以便它们可用于其他组件和 NgModule。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [PopupTrigger, SelectionIndicator],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [CustomMenu, CustomMenuItem],</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Make CustomMenu and CustomMenuItem available to</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // components and NgModules that import CustomMenuModule.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  exports: [CustomMenu, CustomMenuItem],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenuModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>但是，<code>exports</code> 属性不限于声明。NgModule 还可以导出它导入的任何其他组件、指令、管道和 NgModule。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [PopupTrigger, SelectionIndicator],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [CustomMenu, CustomMenuItem],</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Also make PopupTrigger available to any component or NgModule that imports CustomMenuModule.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  exports: [CustomMenu, CustomMenuItem, PopupTrigger],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenuModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="ngmodule-providers">
+    <a href="#ngmodule-providers" class="docs-anchor" tabindex="-1" aria-label="Link to <code>NgModule</code> providers"><code>NgModule</code> 提供者</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-tip">
+    <p><strong>提示：</strong> 有关依赖注入和提供者的信息，请参阅<a href="guide/di">依赖注入指南</a>。</p>
+
+    </div>
+    <p><code>NgModule</code> 可以为注入的依赖项指定 <code>providers</code>。这些提供者可用于：</p>
+
+  <ul class="docs-list">
+    <li>任何导入此 NgModule 的独立组件、指令或管道，以及</li>
+<li>导入此 NgModule 的<em>其他</em> NgModule 的 <code>declarations</code> 和 <code>providers</code>。</li>
+
+  </ul>
+  <div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [PopupTrigger, SelectionIndicator],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [CustomMenu, CustomMenuItem],</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Provide the OverlayManager service</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [OverlayManager],</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  /* ... */</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CustomMenuModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [CustomMenuModule],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [UserProfile],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [UserDataClient],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UserProfileModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span></code></pre>
+    </pre>
+  </div><p>在上面的范例中：</p>
+
+  <ul class="docs-list">
+    <li><code>CustomMenuModule</code> 提供了 <code>OverlayManager</code>。</li>
+<li><code>CustomMenu</code> 和 <code>CustomMenuItem</code> 组件可以注入 <code>OverlayManager</code>，因为它们在 <code>CustomMenuModule</code> 中声明。</li>
+<li><code>UserProfile</code> 可以注入 <code>OverlayManager</code>，因为它的 NgModule 导入了 <code>CustomMenuModule</code>。</li>
+<li><code>UserDataClient</code> 可以注入 <code>OverlayManager</code>，因为它的 NgModule 导入了 <code>CustomMenuModule</code>。</li>
+
+  </ul>
+  
+  <h3 id="the-forroot-and-forchild-pattern">
+    <a href="#the-forroot-and-forchild-pattern" class="docs-anchor" tabindex="-1" aria-label="Link to The <code>forRoot</code> and <code>forChild</code> pattern"><code>forRoot</code> 和 <code>forChild</code> 模式</a>
+  </h3>
+  <p>一些 NgModule 定义了一个静态的 <code>forRoot</code> 方法，该方法接受一些配置并返回一个提供者数组。“<code>forRoot</code>” 这个名称是一种约定，表明这些提供者旨在启动期间专门添加到应用的<em>根</em>模块。</p>
+<p>以这种方式包含的任何提供者都会被急性加载，从而增加初始页面加载的 JavaScript 捆绑包大小。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">boorstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(MyApplicationRoot, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    CustomMenuModule.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forRoot</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* some config */</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>类似地，一些 NgModule 可能会定义一个静态的 <code>forChild</code>，它表明这些提供者旨在添加到应用分层结构中的组件。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  /* ... */</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    CustomMenuModule.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forChild</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* some config */</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UserProfile</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* ... */</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="bootstrapping-an-application">
+    <a href="#bootstrapping-an-application" class="docs-anchor" tabindex="-1" aria-label="Link to Bootstrapping an application">启动应用</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> Angular 团队建议所有新代码都使用 <a href="api/platform-browser/bootstrapApplication">bootstrapApplication</a> 而不是 <code>bootstrapModule</code>。使用本指南来理解用 <code>@NgModule</code> 启动的现有应用。</p>
+
+    </div>
+    <p><code>@NgModule</code> 装饰器接受一个可选的 <code>bootstrap</code> 数组，其中可能包含一个或多个组件。</p>
+<p>你可以使用 <a href="https://angular.dev/api/core/PlatformRef#bootstrapModule" target="_blank"><code>bootstrapModule</code></a> 方法从 <a href="api/platform-browser/platformBrowser"><code>platformBrowser</code></a> 或 <a href="api/platform-server/platformServer"><code>platformServer</code></a> 启动 Angular 应用。运行时，此函数会在页面上查找任何 CSS 选择器与列出的组件匹配的元素，并在页面上渲染这些组件。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {platformBrowser} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  bootstrap: [MyApplication],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyApplicationModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">platformBrowser</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(MyApplicationModule);</span></span></code></pre>
+    </pre>
+  </div><p><code>bootstrap</code> 中列出的组件会自动包含在 NgModule 的声明中。</p>
+<p>当你从 NgModule 启动应用时，此模块收集的 <code>providers</code> 及其 <code>imports</code> 的所有 <code>providers</code> 都会被急性加载，并且可用于为整个应用注入。</p>

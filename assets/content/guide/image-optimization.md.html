@@ -1,0 +1,492 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">NgOptimizedImage 入门</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/image-optimization.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p><code>NgOptimizedImage</code> 指令可以轻松应用加载图片时的性能最佳实践。</p>
+<p>该指令通过以下方式确保 <a href="http://web.dev/lcp" target="_blank">最大内容绘制 (LCP)</a> 图片的加载优先级：</p>
+
+  <ul class="docs-list">
+    <li>自动在 <code>&lt;img&gt;</code> 标签上设置 <code>fetchpriority</code> 属性</li>
+<li>默认情况下惰性加载其他图片</li>
+<li>在文档头部自动生成预连接 link 标签</li>
+<li>自动生成 <code>srcset</code> 属性</li>
+<li>如果应用正在使用 SSR，则生成 <a href="https://developer.mozilla.org/docs/Web/HTML/Link_types/preload" target="_blank">preload hint</a></li>
+
+  </ul>
+  <p>除了优化 LCP 图片的加载之外，<code>NgOptimizedImage</code> 还强制执行许多图片最佳实践，例如：</p>
+
+  <ul class="docs-list">
+    <li>使用 <a href="https://web.dev/image-cdns/#how-image-cdns-use-urls-to-indicate-optimization-options" target="_blank">图片 CDN URL 来应用图片优化</a></li>
+<li>通过要求 <code>width</code> 和 <code>height</code> 来防止布局偏移</li>
+<li>在 <code>width</code> 或 <code>height</code> 设置不正确时发出警告</li>
+<li>在渲染时图片会发生视觉扭曲时发出警告</li>
+
+  </ul>
+  <p>如果你在 CSS 中使用背景图片，请<a href="#how-to-migrate-your-background-image">从这里开始</a>。</p>
+<p><strong>注意：尽管 <code>NgOptimizedImage</code> 指令在 Angular v15 中成为稳定特性，但它已被向后移植，并且在 v13.4.0 和 v14.3.0 版本中也作为稳定特性提供。</strong></p>
+
+  <h2 id="getting-started">
+    <a href="#getting-started" class="docs-anchor" tabindex="-1" aria-label="Link to Getting Started">开始上手</a>
+  </h2>
+  
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="import-ngoptimizedimage-directive">
+    <a href="#import-ngoptimizedimage-directive" class="docs-anchor" tabindex="-1" aria-label="Link to Import <code>NgOptimizedImage</code> directive">导入 <code>NgOptimizedImage</code> 指令</a>
+  </h3>
+  
+      <p>从 <code>@angular/common</code> 导入 <code>NgOptimizedImage</code> 指令：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { NgOptimizedImage } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/common'</span></span></code></pre>
+    </pre>
+  </div><p>并将其包含到独立组件或 NgModule 的 <code>imports</code> 数组中：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">imports</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  NgOptimizedImage,</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span></code></pre>
+    </pre>
+  </div>
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="optional-set-up-a-loader">
+    <a href="#optional-set-up-a-loader" class="docs-anchor" tabindex="-1" aria-label="Link to (Optional) Set up a Loader">（可选）建立加载器</a>
+  </h3>
+  
+      <p>为了使用 NgOptimizedImage，图片加载器并非<strong>必要</strong>，但是将加载器与图片 CDN 结合使用可以启用强大的性能特性，包括为你的图片自动生成 <code>srcset</code>。</p>
+<p>有关建立加载器的简要指南，请参见本页末尾的<a href="#configuring-an-image-loader-for-ngoptimizedimage">配置图片加载器</a>部分。</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="enable-the-directive">
+    <a href="#enable-the-directive" class="docs-anchor" tabindex="-1" aria-label="Link to Enable the directive">启用该指令</a>
+  </h3>
+  
+      <p>要激活 <code>NgOptimizedImage</code> 指令，请将图片的 <code>src</code> 属性替换为 <code>ngSrc</code>。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSrc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"cat.jpg"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div><p>如果你正在使用<a href="#built-in-loaders">内置的第三方加载器</a>，请确保从 <code>src</code> 中省略基本 URL 路径，因为加载器会自动预先添加该路径。</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="mark-images-as-priority">
+    <a href="#mark-images-as-priority" class="docs-anchor" tabindex="-1" aria-label="Link to Mark images as <code>priority</code>">将图片标记为 <code>priority</code></a>
+  </h3>
+  
+      <p>始终将页面上的<a href="https://web.dev/lcp/#what-elements-are-considered" target="_blank">LCP 图片</a>标记为 <code>priority</code>，以优先加载它。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSrc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"cat.jpg"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> width</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"400"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> height</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"200"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> priority</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div><p>将图片标记为 <code>priority</code> 会应用以下优化：</p>
+
+  <ul class="docs-list">
+    <li>设置 <code>fetchpriority=high</code>（在此处阅读有关优先级提示的更多信息：<a href="https://web.dev/priority-hints" target="_blank">here</a>）</li>
+<li>设置 <code>loading=eager</code>（在此处阅读有关原生惰性加载的更多信息：<a href="https://web.dev/browser-level-image-lazy-loading" target="_blank">here</a>）</li>
+<li>如果<a href="guide/ssr">在服务器上渲染</a>，则自动生成 <a href="https://developer.mozilla.org/docs/Web/HTML/Link_types/preload" target="_blank">preload link 元素</a>。</li>
+
+  </ul>
+  <p>如果 LCP 元素是不具有 <code>priority</code> 属性的图片，Angular 会在开发期间显示警告。页面的 LCP 元素可能会因多种因素而异（例如用户屏幕的尺寸），因此一个页面可能有多张图片应标记为 <code>priority</code>。 有关更多详细信息，请参见 <a href="https://web.dev/css-web-vitals/#images-and-largest-contentful-paint-lcp" target="_blank">CSS for Web Vitals</a>。</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="include-width-and-height">
+    <a href="#include-width-and-height" class="docs-anchor" tabindex="-1" aria-label="Link to Include Width and Height">包含宽度和高度</a>
+  </h3>
+  
+      <p>为了防止<a href="https://web.dev/css-web-vitals/#images-and-layout-shifts" target="_blank">与图片相关的布局偏移</a>，NgOptimizedImage 要求你为图片指定高度和宽度，如下所示：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSrc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"cat.jpg"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> width</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"400"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> height</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"200"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div><p>对于<strong>响应式图片</strong>（你已设置样式以使其相对于视口放大和缩小的图片），<code>width</code> 和 <code>height</code> 属性应为图片文件的固有大小。对于响应式图片，设置 <code>sizes</code> 的值也很重要，<a href="#responsive-images">请点击此处</a>。</p>
+<p>对于<strong>固定大小的图片</strong>，<code>width</code> 和 <code>height</code> 属性应反映图片所需的渲染大小。这些属性的纵横比应始终与图片的固有纵横比匹配。</p>
+<p>注意：如果你不知道图片的大小，请考虑使用“fill mode”来继承父容器的大小，如下所述。</p>
+
+    </li>
+    
+    </ol>
+    
+  <h2 id="using-fill-mode">
+    <a href="#using-fill-mode" class="docs-anchor" tabindex="-1" aria-label="Link to Using <code>fill</code> mode">使用 <code>fill</code> 模式</a>
+  </h2>
+  <p>如果希望图片填充包含元素，可以使用 <code>fill</code> 属性。 当你想实现“背景图片”行为时，这通常很有用。 当你不知道图片的确切宽度和高度，但你有一个已知大小的父容器，并且希望将图片放入其中时，它也很有用（请参阅下面的“object-fit”）。</p>
+<p>将 <code>fill</code> 属性添加到图片时，你不需要也不应包含 <code>width</code> 和 <code>height</code>，如本例所示：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSrc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"cat.jpg"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> fill</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div><p>你可以使用 <a href="https://developer.mozilla.org/docs/Web/CSS/object-fit" target="_blank">object-fit</a> CSS 属性来更改图片填充其容器的方式。 如果你使用 <code>object-fit: "contain"</code> 设置图片的样式，则图片将保持其纵横比并被“letterboxed”以适合元素。 如果你设置 <code>object-fit: "cover"</code>，则元素将保持其纵横比，完全填充元素，并且某些内容可能会被“裁剪”掉。</p>
+<p>有关上述内容的视觉范例，请参见 <a href="https://developer.mozilla.org/docs/Web/CSS/object-fit" target="_blank">MDN object-fit 文档。</a></p>
+<p>你还可以使用 <a href="https://developer.mozilla.org/docs/Web/CSS/object-position" target="_blank">object-position 属性</a>来设置图片的样式，以调整其在包含元素中的位置。</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> 为了使“填充”图片正确渲染，其父元素<strong>必须</strong>使用 <code>position: "relative"</code>、<code>position: "fixed"</code> 或 <code>position: "absolute"</code> 设置样式。</p>
+
+    </div>
+    
+  <h2 id="how-to-migrate-your-background-image">
+    <a href="#how-to-migrate-your-background-image" class="docs-anchor" tabindex="-1" aria-label="Link to How to migrate your background image">如何迁移你的背景图片</a>
+  </h2>
+  <p>这是一个从 <code>background-image</code> 迁移到 <code>NgOptimizedImage</code> 的简单分步过程。 对于这些步骤，我们将把具有图片背景的元素称为“包含元素”：</p>
+
+    <ol class="docs-ordered-list">
+      <li>从包含元素中删除 <code>background-image</code> 样式。</li>
+<li>确保包含元素具有 <code>position: "relative"</code>、<code>position: "fixed"</code> 或 <code>position: "absolute"</code>。</li>
+<li>创建一个新的图片元素作为包含元素的子元素，使用 <code>ngSrc</code> 以启用 <code>NgOptimizedImage</code> 指令。</li>
+<li>为该元素赋予 <code>fill</code> 属性。 不要包含 <code>height</code> 和 <code>width</code>。</li>
+<li>如果您认为此图片可能是您的 <a href="https://web.dev/lcp/" target="_blank">LCP 元素</a>，请将 <code>priority</code> 属性添加到图像元素。</li>
+
+    </ol>
+    <p>您可以按照<a href="#using-fill-mode">使用填充模式</a>部分中的描述，调整背景图像填充容器的方式。</p>
+
+  <h2 id="using-placeholders">
+    <a href="#using-placeholders" class="docs-anchor" tabindex="-1" aria-label="Link to Using placeholders">使用占位符</a>
+  </h2>
+  
+  <h3 id="automatic-placeholders">
+    <a href="#automatic-placeholders" class="docs-anchor" tabindex="-1" aria-label="Link to Automatic placeholders">自动占位符</a>
+  </h3>
+  <p>如果您使用的 CDN 或图像托管服务提供自动调整图像大小的功能，则 NgOptimizedImage 可以为您的图像显示自动低分辨率占位符。通过将 <code>placeholder</code> 属性添加到您的图像中来利用此特性：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSrc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"cat.jpg"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> width</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"400"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> height</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"200"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div><p>添加此属性会自动使用您指定的图像加载器请求第二个较小版本的图像。此小图像将在您的图像加载时应用为带有 CSS 模糊的 <code>background-image</code> 样式。如果未提供图像加载器，则无法生成占位符图像，并且会抛出错误。</p>
+<p>生成的占位符的默认大小为 30px 宽。您可以通过在 <code>IMAGE_CONFIG</code> 提供者中指定像素值来更改此大小，如下所示：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    provide: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">IMAGE_CONFIG</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    useValue: {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      placeholderResolution: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">40</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span></code></pre>
+    </pre>
+  </div><p>如果您希望模糊占位符周围有锐利边缘，可以将图像包裹在带有 <code>overflow: hidden</code> 样式的包含 <code>&lt;div&gt;</code> 中。只要 <code>&lt;div&gt;</code> 与图像大小相同（例如通过使用 <code>width: fit-content</code> 样式），占位符的“模糊边缘”就会被隐藏。</p>
+
+  <h3 id="data-url-placeholders">
+    <a href="#data-url-placeholders" class="docs-anchor" tabindex="-1" aria-label="Link to Data URL placeholders">Data URL 占位符</a>
+  </h3>
+  <p>您还可以使用 base64 <a href="https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URLs" target="_blank">data URL</a>（无需图像加载器）来指定占位符。data url 格式为 <code>data:image/[imagetype];[data]</code>，其中 <code>[imagetype]</code> 是图像格式（如 <code>png</code>），<code>[data]</code> 是图像的 base64 编码。可以使用命令行或 JavaScript 完成该编码。有关特定命令，请参阅 <a href="https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URLs#encoding_data_into_base64_format" target="_blank">MDN 文档</a>。下面显示了一个带有截断数据的 data URL 占位符的示例：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  ngSrc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"cat.jpg"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  width</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"400"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  height</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"200"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"data:image/png;base64,iVBORw0K..."</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">/&gt;</span></span></code></pre>
+    </pre>
+  </div><p>但是，大型 data URL 会增加 Angular 捆绑包的大小并减慢页面加载速度。如果您无法使用图像加载器，Angular 团队建议将 base64 占位符图像保持在 4KB 以下，并仅在关键图像上使用它们。除了减小占位符尺寸外，还可以考虑更改保存图像时使用的图像格式或参数。在非常低的分辨率下，这些参数会对文件大小产生很大影响。</p>
+
+  <h3 id="non-blurred-placeholders">
+    <a href="#non-blurred-placeholders" class="docs-anchor" tabindex="-1" aria-label="Link to Non-blurred placeholders">非模糊占位符</a>
+  </h3>
+  <p>默认情况下，NgOptimizedImage 会对图像占位符应用 CSS 模糊效果。要渲染没有模糊的占位符，请提供一个 <code>placeholderConfig</code> 参数，该参数带有一个包含 <code>blur</code> 属性的对象，并将其设置为 false。例如：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  ngSrc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"cat.jpg"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  width</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"400"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  height</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"200"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  [placeholderConfig]</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"{blur: false}"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">/&gt;</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="adjusting-image-styling">
+    <a href="#adjusting-image-styling" class="docs-anchor" tabindex="-1" aria-label="Link to Adjusting image styling">调整图像样式</a>
+  </h2>
+  <p>根据图像的样式，添加 <code>width</code> 和 <code>height</code> 属性可能会导致图像渲染方式不同。如果您的图像样式以扭曲的纵横比渲染图像，<code>NgOptimizedImage</code> 会向您发出警告。</p>
+<p>您通常可以通过将 <code>height: auto</code> 或 <code>width: auto</code> 添加到图像样式中来解决此问题。有关更多信息，请参阅 <a href="https://web.dev/patterns/web-vitals-patterns/images/img-tag" target="_blank">web.dev 上关于 <code>&lt;img&gt;</code> 标签的文章</a>。</p>
+<p>如果图像上的 <code>width</code> 和 <code>height</code> 属性阻止您使用 CSS 以您想要的方式调整图像大小，请考虑改用 <code>fill</code> 模式，并设置图像父元素的样式。</p>
+
+  <h2 id="performance-features">
+    <a href="#performance-features" class="docs-anchor" tabindex="-1" aria-label="Link to Performance Features">性能特性</a>
+  </h2>
+  <p>NgOptimizedImage 包含许多旨在提高应用加载性能的特性。本节将介绍这些特性。</p>
+
+  <h3 id="add-resource-hints">
+    <a href="#add-resource-hints" class="docs-anchor" tabindex="-1" aria-label="Link to Add resource hints">添加资源提示</a>
+  </h3>
+  <p>用于图像来源的 <a href="https://web.dev/preconnect-and-dns-prefetch" target="_blank"><code>preconnect</code> 资源提示</a> 可确保 LCP 图像尽快加载。</p>
+<p>预连接 link 会为作为参数提供给<a href="#optional-set-up-a-loader">加载器</a>的域自动生成。如果无法自动识别图像来源，并且未检测到 LCP 图像的预连接 link，则 <code>NgOptimizedImage</code> 将在开发期间发出警告。在这种情况下，您应该手动将资源提示添加到 <code>index.html</code>。在文档的 <code>&lt;head&gt;</code> 中，添加一个带有 <code>rel="preconnect"</code> 的 <code>link</code> 标签，如下所示：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">link</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> rel</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"preconnect"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> href</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"https://my.cdn.origin"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span></code></pre>
+    </pre>
+  </div><p>要禁用预连接警告，请注入 <code>PRECONNECT_CHECK_BLOCKLIST</code> 令牌：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {provide: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">PRECONNECT_CHECK_BLOCKLIST</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, useValue: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'https://your-domain.com'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span></code></pre>
+    </pre>
+  </div><p>有关自动预连接生成的更多信息，请参阅<a href="#why-is-a-preconnect-element-not-being-generated-for-my-image-domain">此处</a>。</p>
+
+  <h3 id="request-images-at-the-correct-size-with-automatic-srcset">
+    <a href="#request-images-at-the-correct-size-with-automatic-srcset" class="docs-anchor" tabindex="-1" aria-label="Link to Request images at the correct size with automatic <code>srcset</code>">使用自动 <code>srcset</code> 请求正确尺寸的图片</a>
+  </h3>
+  <p>定义 <a href="https://developer.mozilla.org/docs/Web/API/HTMLImageElement/srcset" target="_blank"><code>srcset</code> 属性</a> 可确保浏览器为用户的视口请求大小合适的图像，从而避免浪费时间下载过大的图像。<code>NgOptimizedImage</code> 会根据图像标签上 <a href="https://developer.mozilla.org/docs/Web/API/HTMLImageElement/sizes" target="_blank"><code>sizes</code> 属性</a> 的存在与否和值，为图像生成适当的 <code>srcset</code>。</p>
+
+  <h4 id="fixed-size-images">
+    <a href="#fixed-size-images" class="docs-anchor" tabindex="-1" aria-label="Link to Fixed-size images">固定大小图像</a>
+  </h4>
+  <p>如果您的图像应该是“固定”大小的（即在各种设备上大小相同，除了 <a href="https://web.dev/codelab-density-descriptors/" target="_blank">像素密度</a>），则无需设置 <code>sizes</code> 属性。可以从图像的 width 和 height 属性自动生成 <code>srcset</code>，而无需进一步输入。</p>
+<p>生成的 srcset 示例：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ...</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> srcset</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"image-400w.jpg 1x, image-800w.jpg 2x"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="responsive-images">
+    <a href="#responsive-images" class="docs-anchor" tabindex="-1" aria-label="Link to Responsive images">响应式图像</a>
+  </h4>
+  <p>如果您的图像应该是响应式的（即根据视口大小增长和缩小），那么您将需要定义一个 <a href="https://developer.mozilla.org/docs/Web/API/HTMLImageElement/sizes" target="_blank"><code>sizes</code> 属性</a> 以生成 <code>srcset</code>。</p>
+<p>如果您以前没有使用过 <code>sizes</code>，一个好的开始是根据视口宽度进行设置。例如，如果您的 CSS 导致图像填充 100% 的视口宽度，请将 <code>sizes</code> 设置为 <code>100vw</code>，浏览器将选择 <code>srcset</code> 中最接近视口宽度的图像（在考虑像素密度之后）。如果您的图像仅可能占据屏幕的一半（例如：在侧边栏中），请将 <code>sizes</code> 设置为 <code>50vw</code>，以确保浏览器选择较小的图像。等等。</p>
+<p>如果您发现以上内容未涵盖您期望的图像行为，请参阅有关<a href="#advanced-sizes-values">高级 sizes 值</a>的文档。</p>
+<p>请注意，<code>NgOptimizedImage</code> 会自动将 <code>"auto"</code> 前置到提供的 <code>sizes</code> 值。这是一种优化，可以提高在支持 <code>sizes="auto"</code> 的浏览器上选择 srcset 的准确性，而会被不支持的浏览器忽略。</p>
+<p>默认情况下，响应式断点为：</p>
+<p><code>[16, 32, 48, 64, 96, 128, 256, 384, 640, 750, 828, 1080, 1200, 1920, 2048, 3840]</code></p>
+<p>如果您想自定义这些断点，可以使用 <code>IMAGE_CONFIG</code> 提供者来完成：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    provide: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">IMAGE_CONFIG</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    useValue: {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      breakpoints: [</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">16</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">48</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">96</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">128</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">384</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">640</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">750</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">828</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1080</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1200</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1920</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span></code></pre>
+    </pre>
+  </div><p>如果您想手动定义 <code>srcset</code> 属性，可以使用 <code>ngSrcset</code> 属性提供您自己的属性：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSrc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"hero.jpg"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSrcset</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"100w, 200w, 300w"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div><p>如果存在 <code>ngSrcset</code> 属性，则 <code>NgOptimizedImage</code> 会根据包含的 sizes 生成并设置 <code>srcset</code>。请勿在 <code>ngSrcset</code> 中包含图像文件名 - 该指令会从 <code>ngSrc</code> 推断此信息。该指令同时支持宽度描述符（例如 <code>100w</code>）和密度描述符（例如 <code>1x</code>）。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSrc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"hero.jpg"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSrcset</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"100w, 200w, 300w"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> sizes</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"50vw"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="disabling-automatic-srcset-generation">
+    <a href="#disabling-automatic-srcset-generation" class="docs-anchor" tabindex="-1" aria-label="Link to Disabling automatic srcset generation">禁用自动 srcset 生成</a>
+  </h3>
+  <p>要为单个图像禁用 srcset 生成，您可以在图像上添加 <code>disableOptimizedSrcset</code> 属性：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSrc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"about.jpg"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> disableOptimizedSrcset</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="disabling-image-lazy-loading">
+    <a href="#disabling-image-lazy-loading" class="docs-anchor" tabindex="-1" aria-label="Link to Disabling image lazy loading">禁用图像惰性加载</a>
+  </h3>
+  <p>默认情况下，<code>NgOptimizedImage</code> 为所有未标记为 <code>priority</code> 的图像设置 <code>loading=lazy</code>。您可以通过设置 <code>loading</code> 属性为非 priority 图像禁用此行为。此属性接受以下值：<code>eager</code>、<code>auto</code> 和 <code>lazy</code>。<a href="https://developer.mozilla.org/docs/Web/API/HTMLImageElement/loading#value" target="_blank">有关详细信息，请参阅标准图像 <code>loading</code> 属性的文档</a>。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSrc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"cat.jpg"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> width</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"400"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> height</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"200"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> loading</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"eager"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="advanced-sizes-values">
+    <a href="#advanced-sizes-values" class="docs-anchor" tabindex="-1" aria-label="Link to Advanced 'sizes' values">高级 'sizes' 值</a>
+  </h3>
+  <p>您可能希望在不同尺寸的屏幕上以不同的宽度显示图像。此模式的一个常见示例是基于网格或列的布局，该布局在移动设备上渲染单列，在较大设备上渲染两列。您可以使用 <code>sizes</code> 属性以“媒体查询”语法捕获此行为，如下所示：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSrc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"cat.jpg"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> width</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"400"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> height</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"200"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> sizes</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"(max-width: 768px) 100vw, 50vw"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div><p>上面示例中的 <code>sizes</code> 属性表示“我希望此图像在宽度小于 768px 的设备上占据 100% 的屏幕宽度。否则，我希望它占据 50% 的屏幕宽度。”</p>
+<p>有关 <code>sizes</code> 属性的其他信息，请参阅 <a href="https://web.dev/learn/design/responsive-images/#sizes" target="_blank">web.dev</a> 或 <a href="https://developer.mozilla.org/docs/Web/API/HTMLImageElement/sizes" target="_blank">mdn</a>。</p>
+
+  <h2 id="configuring-an-image-loader-for-ngoptimizedimage">
+    <a href="#configuring-an-image-loader-for-ngoptimizedimage" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring an image loader for <code>NgOptimizedImage</code>">为 <code>NgOptimizedImage</code> 配置图片加载器</a>
+  </h2>
+  <p>“加载器”是一个为给定图像文件生成 <a href="https://web.dev/image-cdns/#how-image-cdns-use-urls-to-indicate-optimization-options" target="_blank">图像转换 URL</a> 的函数。在适当的时候，<code>NgOptimizedImage</code> 会为图像设置大小、格式和图像质量转换。</p>
+<p><code>NgOptimizedImage</code> 既提供了一个不应用任何转换的通用加载器，也为各种第三方图片服务提供了加载器。它还支持编写你自己的自定义加载器。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">加载器类型</th>
+<th align="left">行为</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">通用加载器</td>
+<td align="left">通用加载器返回的 URL 将始终与 <code>src</code> 的值匹配。换句话说，此加载器不应用任何转换。使用 Angular 为图片提供服务的站点是此加载器的主要预期用例。</td>
+</tr>
+<tr>
+<td align="left">第三方图片服务的加载器</td>
+<td align="left">第三方图片服务的加载器返回的 URL 将遵循该特定图片服务使用的 API 约定。</td>
+</tr>
+<tr>
+<td align="left">自定义加载器</td>
+<td align="left">自定义加载器的行为由其开发者定义。如果你的图片服务不受 <code>NgOptimizedImage</code> 预配置的加载器支持，则应使用自定义加载器。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>根据 Angular 应用常用的图片服务，<code>NgOptimizedImage</code> 提供了预配置的加载器，以支持以下图片服务：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">图片服务</th>
+<th align="left">Angular API</th>
+<th align="left">文档</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">Cloudflare 图片大小调整</td>
+<td align="left"><code>provideCloudflareLoader</code></td>
+<td align="left"><a href="https://developers.cloudflare.com/images/image-resizing/" target="_blank">文档</a></td>
+</tr>
+<tr>
+<td align="left">Cloudinary</td>
+<td align="left"><code>provideCloudinaryLoader</code></td>
+<td align="left"><a href="https://cloudinary.com/documentation/resizing_and_cropping" target="_blank">文档</a></td>
+</tr>
+<tr>
+<td align="left">ImageKit</td>
+<td align="left"><code>provideImageKitLoader</code></td>
+<td align="left"><a href="https://docs.imagekit.io/" target="_blank">文档</a></td>
+</tr>
+<tr>
+<td align="left">Imgix</td>
+<td align="left"><code>provideImgixLoader</code></td>
+<td align="left"><a href="https://docs.imgix.com/" target="_blank">文档</a></td>
+</tr>
+<tr>
+<td align="left">Netlify</td>
+<td align="left"><code>provideNetlifyLoader</code></td>
+<td align="left"><a href="https://docs.netlify.com/image-cdn/overview/" target="_blank">文档</a></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>要使用<strong>通用加载器</strong>，无需进行额外的代码更改。这是默认行为。</p>
+
+  <h3 id="built-in-loaders">
+    <a href="#built-in-loaders" class="docs-anchor" tabindex="-1" aria-label="Link to Built-in Loaders">内置加载器</a>
+  </h3>
+  <p>要使用<strong>第三方图片服务</strong>的现有加载器，请将你选择的服务的提供者工厂添加到 <code>providers</code> 数组。在下面的示例中，使用了 Imgix 加载器：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  provideImgixLoader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'https://my.base.url/'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span></code></pre>
+    </pre>
+  </div><p>你的图片资产的基本 URL 应作为参数传递给提供者工厂。对于大多数站点，此基本 URL 应与以下模式之一匹配：</p>
+
+  <ul class="docs-list">
+    <li><a href="https://yoursite.yourcdn.com" target="_blank">https://yoursite.yourcdn.com</a></li>
+<li><a href="https://subdomain.yoursite.com" target="_blank">https://subdomain.yoursite.com</a></li>
+<li><a href="https://subdomain.yourcdn.com/yoursite" target="_blank">https://subdomain.yourcdn.com/yoursite</a></li>
+
+  </ul>
+  <p>你可以在相应 CDN 提供商的文档中了解有关基本 URL 结构的更多信息。</p>
+
+  <h3 id="custom-loaders">
+    <a href="#custom-loaders" class="docs-anchor" tabindex="-1" aria-label="Link to Custom Loaders">自定义加载器</a>
+  </h3>
+  <p>要使用<strong>自定义加载器</strong>，请将你的加载器函数作为 <code>IMAGE_LOADER</code> DI 令牌的值提供。在下面的示例中，自定义加载器函数返回一个以 <code>https://example.com</code> 开头的 URL，其中包含 <code>src</code> 和 <code>width</code> 作为 URL 参数。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    provide: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">IMAGE_LOADER</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    useValue</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">config</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ImageLoaderConfig</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">      return</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> `https://example.com/images?src=${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">config</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">.</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">src</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}&amp;width=${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">config</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">.</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">width</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span></code></pre>
+    </pre>
+  </div><p><code>NgOptimizedImage</code> 指令的加载器函数接受一个类型为 <code>ImageLoaderConfig</code>（来自 <code>@angular/common</code>）的对象作为其参数，并返回图片资产的绝对 URL。<code>ImageLoaderConfig</code> 对象包含 <code>src</code> 属性，以及可选的 <code>width</code> 和 <code>loaderParams</code> 属性。</p>
+
+    <div class="docs-alert docs-alert-note">
+    <p><strong>注意：</strong> 即使 <code>width</code> 属性可能并不总是存在，自定义加载器也必须使用它来支持请求各种宽度的图片，以便 <code>ngSrcset</code> 正常工作。</p>
+
+    </div>
+    
+  <h3 id="the-loaderparams-property">
+    <a href="#the-loaderparams-property" class="docs-anchor" tabindex="-1" aria-label="Link to The <code>loaderParams</code> Property"><code>loaderParams</code> 属性</a>
+  </h3>
+  <p><code>NgOptimizedImage</code> 指令支持一个额外的属性，名为 <code>loaderParams</code>，它专门用于支持自定义加载器的使用。<code>loaderParams</code> 属性接受一个包含任意属性的对象作为值，并且自身不做任何事情。<code>loaderParams</code> 中的数据会添加到传递给你的自定义加载器的 <code>ImageLoaderConfig</code> 对象中，并可用于控制加载器的行为。</p>
+<p><code>loaderParams</code> 的常见用途是控制高级图片 CDN 功能。</p>
+
+  <h3 id="example-custom-loader">
+    <a href="#example-custom-loader" class="docs-anchor" tabindex="-1" aria-label="Link to Example custom loader">自定义加载器范例</a>
+  </h3>
+  <p>下面展示了一个自定义加载器函数的示例。此示例函数连接了 <code>src</code> 和 <code>width</code>，并使用 <code>loaderParams</code> 来控制自定义 CDN 的圆角功能：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> myCustomLoader</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">config</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ImageLoaderConfig</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> url </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> `https://example.com/images/${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">config</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">.</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">src</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}?`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> queryParams </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [];</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (config.width) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    queryParams.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">push</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`w=${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">config</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">.</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">width</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (config.loaderParams?.roundedCorners) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    queryParams.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">push</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'mask=corners&amp;corner-radius=5'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> url </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> queryParams.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">join</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&amp;'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre>
+    </pre>
+  </div><p>请注意，在上面的示例中，我们发明了 'roundedCorners' 属性名称来控制自定义加载器的功能。然后，我们可以在创建图片时使用此功能，如下所示：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ngSrc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"profile.jpg"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> width</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"300"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> height</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"300"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> [loaderParams]</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"{roundedCorners: true}"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="frequently-asked-questions">
+    <a href="#frequently-asked-questions" class="docs-anchor" tabindex="-1" aria-label="Link to Frequently Asked Questions">常见问题解答</a>
+  </h2>
+  
+  <h3 id="does-ngoptimizedimage-support-the-background-image-css-property">
+    <a href="#does-ngoptimizedimage-support-the-background-image-css-property" class="docs-anchor" tabindex="-1" aria-label="Link to Does NgOptimizedImage support the <code>background-image</code> css property?">NgOptimizedImage 是否支持 <code>background-image</code> css 属性？</a>
+  </h3>
+  <p>NgOptimizedImage 不直接支持 <code>background-image</code> css 属性，但它旨在轻松适应将图片作为另一个元素的背景的用例。</p>
+<p>有关从 <code>background-image</code> 迁移到 <code>NgOptimizedImage</code> 的分步过程，请参阅上面的<a href="#how-to-migrate-your-background-image">如何迁移你的背景图片</a>部分。</p>
+
+  <h3 id="why-cant-i-use-src-with-ngoptimizedimage">
+    <a href="#why-cant-i-use-src-with-ngoptimizedimage" class="docs-anchor" tabindex="-1" aria-label="Link to Why can't I use <code>src</code> with <code>NgOptimizedImage</code>?">为什么我不能将 <code>src</code> 与 <code>NgOptimizedImage</code> 一起使用？</a>
+  </h3>
+  <p>选择 <code>ngSrc</code> 属性作为 NgOptimizedImage 的触发器是出于浏览器加载图片方式的技术考虑。NgOptimizedImage 对 <code>loading</code> 属性进行编程更改——如果浏览器在进行这些更改之前看到 <code>src</code> 属性，它将开始急性加载图片文件，并且加载更改将被忽略。</p>
+
+  <h3 id="why-is-a-preconnect-element-not-being-generated-for-my-image-domain">
+    <a href="#why-is-a-preconnect-element-not-being-generated-for-my-image-domain" class="docs-anchor" tabindex="-1" aria-label="Link to Why is a preconnect element not being generated for my image domain?">为什么没有为我的图片域生成预连接元素？</a>
+  </h3>
+  <p>预连接生成是基于对你的应用的静态分析执行的。这意味着图片域必须直接包含在加载器参数中，如下例所示：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  provideImgixLoader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'https://my.base.url/'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span></code></pre>
+    </pre>
+  </div><p>如果你使用变量将域字符串传递给加载器，或者你没有使用加载器，则静态分析将无法识别该域，并且不会生成预连接 link。在这种情况下，你应该手动将预连接 link 添加到文档头部，如<a href="#add-resource-hints">上面所述</a>。</p>
+
+  <h3 id="can-i-use-two-different-image-domains-in-the-same-page">
+    <a href="#can-i-use-two-different-image-domains-in-the-same-page" class="docs-anchor" tabindex="-1" aria-label="Link to Can I use two different image domains in the same page?">我可以在同一页面中使用两个不同的图片域吗？</a>
+  </h3>
+  <p><a href="#configuring-an-image-loader-for-ngoptimizedimage">图片加载器</a>提供者模式旨在尽可能简单，以适应在组件中仅使用单个图片 CDN 的常见用例。但是，仍然可以使用单个提供者来管理多个图片 CDN。</p>
+<p>为此，我们建议编写一个<a href="#custom-loaders">自定义图片加载器</a>，它使用<a href="#the-loaderparams-property"><code>loaderParams</code> 属性</a>来传递一个标志，该标志指定应使用哪个图片 CDN，然后根据该标志调用相应的加载器。</p>
+
+  <h3 id="can-you-add-a-new-built-in-loader-for-my-preferred-cdn">
+    <a href="#can-you-add-a-new-built-in-loader-for-my-preferred-cdn" class="docs-anchor" tabindex="-1" aria-label="Link to Can you add a new built-in loader for my preferred CDN?">你能为我首选的 CDN 添加一个新的内置加载器吗？</a>
+  </h3>
+  <p>出于维护原因，我们目前不计划在 Angular 代码仓中支持额外的内置加载器。相反，我们鼓励开发者将任何额外的图片加载器作为第三方软件包发布。</p>
+
+  <h3 id="can-i-use-this-with-the-picture-tag">
+    <a href="#can-i-use-this-with-the-picture-tag" class="docs-anchor" tabindex="-1" aria-label="Link to Can I use this with the <code><picture></code> tag">我可以将其与 <code>&lt;picture&gt;</code> 标签一起使用吗</a>
+  </h3>
+  <p>不，但这已在我们的路线图上，敬请关注。</p>
+<p>如果您正在等待这个特性，请在 Github issue <a href="https://github.com/angular/angular/issues/56594" target="_blank">这里</a> 投赞成票。</p>
+
+  <h3 id="how-do-i-find-my-lcp-image-with-chrome-devtools">
+    <a href="#how-do-i-find-my-lcp-image-with-chrome-devtools" class="docs-anchor" tabindex="-1" aria-label="Link to How do I find my LCP image with Chrome DevTools?">如何使用 Chrome DevTools 找到我的 LCP 图像？</a>
+  </h3>
+  
+    <ol class="docs-ordered-list">
+      <li><p>使用 Chrome DevTools 的性能标签页，点击左上角的“开始分析并重新加载页面”按钮。它看起来像一个页面刷新图标。</p>
+</li>
+<li><p>这将触发你的 Angular 应用的性能分析快照。</p>
+</li>
+<li><p>一旦性能分析结果可用，在时序部分选择 “LCP”。</p>
+</li>
+<li><p>底部面板中应该会出现一个摘要条目。你可以在 “相关节点” 行中找到 LCP 元素。点击它将在“元素”面板中显示该元素。</p>
+</li>
+
+    </ol>
+    <img alt="LCP in the Chrome DevTools" src="assets/images/guide/image-optimization/devtools-lcp.png">
+
+<p>注意：这仅识别您正在测试的页面视口内的 LCP 元素。还建议使用移动设备模拟来识别较小屏幕的 LCP 元素。</p>

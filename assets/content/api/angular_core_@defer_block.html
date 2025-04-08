@@ -1,0 +1,105 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/core</span><div class="docs-reference-title"><div><h1>@defer</h1><div class="docs-api-item-label type-block full">控制块</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/tools/manual_api_docs/blocks/defer.md#L0-L0" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">代码</i></a></div><section class="docs-reference-description"><p>一种<a href="api/core/@defer">控制块</a>类型，可用于为组件、指令和管道（在组件模板中使用）惰性加载 JavaScript。</p>
+
+      <h2 id="syntax" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#syntax" aria-label="Link to Syntax section" tabindex="-1">语法</a>
+      </h2>
+    
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ( on </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">trigger</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; when </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">condition</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; prefetch on </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">trigger</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; prefetch when </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">condition</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ) {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  &lt;!-- deferred template fragment --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">calendar-cmp</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@placeholder</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ( minimum</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">duration</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ) {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  &lt;!--</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> placeholder template fragment </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">--&gt;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  &lt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">p</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">Placeholder</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;/</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">p</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@loading</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ( minimum</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">duration</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; after</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">duration</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ) {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  &lt;!--</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> loading template fragment </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">--&gt;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  &lt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">img alt</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"loading image"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> src</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"loading.gif"</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@error</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  &lt;!-- error template fragment --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;An loading error occurred&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+        </pre>
+      </div>
+    
+      <h2 id="description" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#description" aria-label="Link to Description section" tabindex="-1">描述</a>
+      </h2>
+    
+      <h3 id="blocks" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#blocks" aria-label="Link to Blocks section" tabindex="-1">控制块</a>
+      </h3>
+    <p>defer 控制块中受支持的 section。注意：只有 @defer 控制块模板片段是惰性加载的。其余可选控制块是急性加载的。</p>
+
+      <div class="docs-table docs-scroll-track-transparent">
+        <table>
+          <thead>
+          <tr>
+<th>控制块</th>
+<th>描述</th>
+</tr>
+
+          </thead>
+          <tbody>
+          <tr>
+<td><code>@defer</code></td>
+<td>惰性加载的控制块的内容</td>
+</tr>
+<tr>
+<td><code>@placeholder</code></td>
+<td>在惰性加载之前显示的内容（可选）</td>
+</tr>
+<tr>
+<td><code>@loading</code></td>
+<td>在惰性加载期间显示的内容（可选）</td>
+</tr>
+<tr>
+<td><code>@error</code></td>
+<td>当惰性加载错误发生时显示的内容（可选）</td>
+</tr>
+
+          </tbody>
+        </table>
+      </div>
+    <h3>触发器</h3>
+
+<p>触发器为惰性加载发生时提供条件。有些允许使用模板引用变量作为可选参数。用分号分隔多个触发器。</p>
+
+      <div class="docs-table docs-scroll-track-transparent">
+        <table>
+          <thead>
+          <tr>
+<th>trigger</th>
+<th>Triggers...</th>
+</tr>
+
+          </thead>
+          <tbody>
+          <tr>
+<td><code>on idle</code></td>
+<td>当浏览器报告空闲状态时（默认）</td>
+</tr>
+<tr>
+<td><code>on viewport(&lt;elementRef&gt;?)</code></td>
+<td>当元素进入视口时</td>
+</tr>
+<tr>
+<td><code>on interaction(&lt;elementRef&gt;?)</code></td>
+<td>当点击、触碰或聚焦时</td>
+</tr>
+<tr>
+<td><code>on hover(&lt;elementRef&gt;?)</code></td>
+<td>当元素已被悬停时</td>
+</tr>
+<tr>
+<td><code>on immediate</code></td>
+<td>当页面完成渲染时</td>
+</tr>
+<tr>
+<td><code>on timer(&lt;duration&gt;)</code></td>
+<td>在特定超时之后</td>
+</tr>
+<tr>
+<td><code>when &lt;condition&gt;</code></td>
+<td>当自定义条件时</td>
+</tr>
+
+          </tbody>
+        </table>
+      </div>
+    <h2>预取</h2>
+
+<p>配置在 <code>@defer</code> 参数中使用的 defer 控制块的预取，但不影响渲染。渲染由标准的 <code>on</code> 和 <code>when</code> 条件处理。用分号分隔多个预取配置。</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@defer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (prefetch on </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">trigger</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; prefetch when </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">condition</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  &lt;!-- deferred template fragment --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+        </pre>
+      </div>
+    <p>在<a href="guide/defer">惰性加载指南</a>中了解更多。</p></section></header></div>

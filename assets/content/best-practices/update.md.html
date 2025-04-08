@@ -1,0 +1,77 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">让你的 Angular 项目保持更新</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/best-practices/update.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>正如 Web 和整个 Web 生态系统一样，Angular 也在持续改进。Angular 在持续改进的同时，也非常注重稳定性，并力求让更新变得简单直接。让你的 Angular 应用保持更新，就能让你享用前沿的新特性，以及各种优化和缺陷修复。</p>
+<p>本文档包含一些信息和资源，以帮助你让你的 Angular 应用和库保持更新。</p>
+<p>关于我们的版本控制策略和实践（包括支持和弃用实践，以及发布时间表）的信息，请参阅 <a href="reference/releases" title="Angular" versioning and releases>Angular 版本控制与发布</a>。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 如果你目前正在使用 AngularJS，请参阅 <a href="https://angular.io/guide/upgrade" title="Upgrading" from angular js target="_blank">从 AngularJS 升级</a>。
+<em>AngularJS</em> 是所有 v1.x 版本的 Angular 的名称。</p>
+
+    </div>
+    
+  <h2 id="getting-notified-of-new-releases">
+    <a href="#getting-notified-of-new-releases" class="docs-anchor" tabindex="-1" aria-label="Link to Getting notified of new releases">获取新版本发布的通知</a>
+  </h2>
+  <p>要在新版本发布时收到通知，请在 X（以前的 Twitter）上关注 <a href="https://x.com/angular" title="@angular" on x target="_blank">@angular</a>，或订阅 <a href="https://blog.angular.dev" title="Angular" blog target="_blank">Angular 博客</a>。</p>
+
+  <h2 id="learning-about-new-features">
+    <a href="#learning-about-new-features" class="docs-anchor" tabindex="-1" aria-label="Link to Learning about new features">了解新特性</a>
+  </h2>
+  <p>有哪些新东西？有哪些变化？我们在 Angular 博客的 <a href="https://blog.angular.dev/" title="Angular" blog - release announcements target="_blank">版本发布公告</a> 中分享你需要了解的最重要的信息。</p>
+<p>要查看按版本组织的完整更改列表，请参阅 <a href="https://github.com/angular/angular/blob/main/CHANGELOG.md" title="Angular" change log target="_blank">Angular 变更日志</a>。</p>
+
+  <h2 id="checking-your-version-of-angular">
+    <a href="#checking-your-version-of-angular" class="docs-anchor" tabindex="-1" aria-label="Link to Checking your version of Angular">检查你的 Angular 版本</a>
+  </h2>
+  <p>要检查你的应用的 Angular 版本，请在你的项目目录中使用 <code>ng version</code> 命令。</p>
+
+  <h2 id="finding-the-current-version-of-angular">
+    <a href="#finding-the-current-version-of-angular" class="docs-anchor" tabindex="-1" aria-label="Link to Finding the current version of Angular">查找 Angular 的当前版本</a>
+  </h2>
+  <p>Angular 最新的稳定发布版本显示在 <a href="https://www.npmjs.com/package/@angular/core" title="Angular" on npm target="_blank">npm</a> 的 “Version” 下。例如，<code>16.2.4</code>。</p>
+<p>你还可以使用 CLI 命令 <a href="cli/update"><code>ng update</code></a> 找到 Angular 的最新版本。
+默认情况下，<a href="cli/update"><code>ng update</code></a>（不带附加参数）会列出可用于你的更新。</p>
+
+  <h2 id="updating-your-environment-and-apps">
+    <a href="#updating-your-environment-and-apps" class="docs-anchor" tabindex="-1" aria-label="Link to Updating your environment and apps">更新你的环境和应用</a>
+  </h2>
+  <p>为了使更新变得简单，我们在交互式的 <a href="update-guide">Angular 更新指南</a> 中提供了完整的说明。</p>
+<p>Angular 更新指南根据你指定的当前版本和目标版本提供自定义的更新说明。它包括基本和高级更新路径，以匹配你的应用的复杂性。它还包括故障排除信息和任何推荐的手动更改，以帮助你充分利用新版本。</p>
+<p>对于简单的更新，你只需要 CLI 命令 <a href="cli/update"><code>ng update</code></a>。不带附加参数，<a href="cli/update"><code>ng update</code></a> 会列出可用于你的更新，并提供将你的应用更新到最新版本的推荐步骤。</p>
+<p><a href="reference/releases#versioning" title="Angular" release practices, versioning>Angular 版本控制与发布</a> 描述了你可以根据版本的版本号预期的更改级别。它还描述了受支持的更新路径。</p>
+
+  <h2 id="resource-summary">
+    <a href="#resource-summary" class="docs-anchor" tabindex="-1" aria-label="Link to Resource summary">资源摘要</a>
+  </h2>
+  
+  <ul class="docs-list">
+    <li><p>发布公告：
+  <a href="https://blog.angular.dev/" title="Angular" blog announcements about recent releases target="_blank">Angular 博客 - 版本发布公告</a></p>
+</li>
+<li><p>发布详情：
+  <a href="https://github.com/angular/angular/blob/main/CHANGELOG.md" title="Angular" change log target="_blank">Angular 变更日志</a></p>
+</li>
+<li><p>更新说明：
+  <a href="update-guide">Angular 更新指南</a></p>
+</li>
+<li><p>更新命令参考：
+  <a href="cli/update">Angular CLI <code>ng update</code> 命令参考</a></p>
+</li>
+<li><p>版本控制、发布、支持和弃用实践：
+  <a href="reference/releases" title="Angular" versioning and releases>Angular 版本控制与发布</a></p>
+</li>
+
+  </ul>
+  

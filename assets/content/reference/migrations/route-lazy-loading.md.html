@@ -1,0 +1,61 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">迁移到惰性加载路由</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/migrations/route-lazy-loading.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>这个原理图帮助开发者将急性加载的组件路由转换为惰性加载路由。这允许构建过程将生产捆绑包拆分成更小的块，以避免包含所有路由的大型 JS 捆绑包，这会对应用的初始页面加载产生负面影响。</p>
+<p>使用以下命令运行原理图：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/core:route-lazy-loading</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="path-config-option">
+    <a href="#path-config-option" class="docs-anchor" tabindex="-1" aria-label="Link to <code>path</code> config option"><code>path</code> 配置选项</a>
+  </h3>
+  <p>默认情况下，迁移将应用于整个应用。如果想将此迁移应用于文件子集，可以传递 path 参数，如下所示：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/core:route-lazy-loading</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --path</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> src/app/sub-component</span></span></code></pre>
+    </pre>
+  </div><p>path 参数的值是项目内的相对路径。</p>
+
+  <h3 id="how-does-it-work">
+    <a href="#how-does-it-work" class="docs-anchor" tabindex="-1" aria-label="Link to How does it work?">它是如何工作的？</a>
+  </h3>
+  <p>原理图将尝试查找应用路由的所有定义位置：</p>
+
+  <ul class="docs-list">
+    <li><code>RouterModule.forRoot</code> 和 <code>RouterModule.forChild</code></li>
+<li><code>Router.resetConfig</code></li>
+<li><code>provideRouter</code></li>
+<li><code>provideRoutes</code></li>
+<li>类型为 <code>Routes</code> 或 <code>Route[]</code> 的变量（例如 <code>const routes: Routes = [{...}]</code>）</li>
+
+  </ul>
+  <p>迁移将检查路由中的所有组件，检查它们是否是独立的和急性加载的，如果是，则将其转换为惰性加载路由。</p>
+
+  <h4 id="before">
+    <a href="#before" class="docs-anchor" tabindex="-1" aria-label="Link to Before">之前</a>
+  </h4>
+  <div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// app.module.ts</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { HomeComponent } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './home/home.component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    RouterModule.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forRoot</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">([</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        path: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'home'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // HomeComponent is standalone and eagerly loaded</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        component: HomeComponent,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ]),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="after">
+    <a href="#after" class="docs-anchor" tabindex="-1" aria-label="Link to After">之后</a>
+  </h4>
+  <div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// app.module.ts</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    RouterModule.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forRoot</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">([</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        path: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'home'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // ↓ HomeComponent is now lazy loaded</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">        loadComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'./home/home.component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">then</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">m</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> m.HomeComponent),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ]),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>此迁移还将收集有关在 NgModule 中声明的所有组件的信息，并输出使用它们的路由列表（包括文件的相应位置）。请考虑使这些组件成为独立的，然后再次运行此迁移。你可以使用现有的迁移（参见 <a href="https://angular.dev/reference/migrations/standalone" target="_blank">https://angular.dev/reference/migrations/standalone</a>）将这些组件转换为独立的。</p>

@@ -1,0 +1,152 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">构建你的第一个 Angular 应用</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/first-app/intro/README.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>本教程包含多个课程，它们将介绍开始使用 Angular 编码所需的 Angular 概念。</p>
+<p>你可以根据自己的意愿选择学习任意数量的课程，并且可以按任何顺序学习。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 喜欢视频？我们还为本教程准备了完整的 <a href="https://youtube.com/playlist?list=PL1w1q3fL4pmj9k1FrJ3Pe91EPub2_h4jF&amp;si=1q9889ulHp8VZ0e7" target="_blank">YouTube 课程</a>！</p>
+
+    </div>
+    
+    <div class="docs-video-container">
+      <iframe class="docs-video" src="https://www.youtube.com/embed/xAT0lHYhHMY?si=cKUW_MGn3MesFT7o" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen credentialless title="Video player"></iframe>
+    </div>
+    
+  <h2 id="before-you-start">
+    <a href="#before-you-start" class="docs-anchor" tabindex="-1" aria-label="Link to Before you start">开始之前</a>
+  </h2>
+  <p>为了获得最佳的教程体验，请查看以下要求，确保你已做好充分准备。</p>
+
+  <h3 id="your-experience">
+    <a href="#your-experience" class="docs-anchor" tabindex="-1" aria-label="Link to Your experience">你的经验</a>
+  </h3>
+  <p>本教程中的课程假定你具有以下经验：</p>
+
+    <ol class="docs-ordered-list">
+      <li>通过直接编辑 HTML 创建了 HTML 网页。</li>
+<li>使用 JavaScript 编写过网站内容。</li>
+<li>阅读过层叠样式表 (CSS) 内容，并了解选择器的使用方式。</li>
+<li>使用过命令行指令在计算机上执行任务。</li>
+
+    </ol>
+    
+  <h3 id="your-equipment">
+    <a href="#your-equipment" class="docs-anchor" tabindex="-1" aria-label="Link to Your equipment">你的设备</a>
+  </h3>
+  <p>这些课程可以使用 Angular 工具的本地安装或在我们的嵌入式编辑器中完成。本地 Angular 开发可以在 Windows、MacOS 或基于 Linux 的系统上完成。</p>
+
+    <div class="docs-alert docs-alert-note">
+    <p><strong>注意：</strong> 请留意像这样的提示，它们会指出可能仅适用于本地编辑器的步骤。</p>
+
+    </div>
+    
+  <h2 id="conceptual-preview-of-your-first-angular-app">
+    <a href="#conceptual-preview-of-your-first-angular-app" class="docs-anchor" tabindex="-1" aria-label="Link to Conceptual preview of your first Angular app">你的第一个 Angular 应用的概念预览</a>
+  </h2>
+  <p>本教程中的课程将创建一个 Angular 应用，用于列出租房并显示各个房屋的详细信息。
+此应用使用了许多 Angular 应用通用的特性。</p>
+<img alt="Output of homes landing page" src="assets/images/tutorials/first-app/homes-app-landing-page.png">
+
+
+  <h2 id="local-development-environment">
+    <a href="#local-development-environment" class="docs-anchor" tabindex="-1" aria-label="Link to Local development environment">本地开发环境</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-note">
+    <p><strong>注意：</strong> 此步骤仅适用于你的本地环境！</p>
+
+    </div>
+    <p>在你想要用于本教程的计算机上的命令行工具中执行这些步骤。</p>
+
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="identify-the-version-of-nodejs-that-angular-requires">
+    <a href="#identify-the-version-of-nodejs-that-angular-requires" class="docs-anchor" tabindex="-1" aria-label="Link to Identify the version of <code>node.js</code> that Angular requires">确定 Angular 所需的 <code>node.js</code> 版本</a>
+  </h3>
+  
+      <p>Angular 需要 Node 的 active LTS 或 maintenance LTS 版本。让我们确认你的 <code>node.js</code> 版本。有关特定版本要求的信息，请参阅 <a href="https://unpkg.com/browse/@angular/core@15.1.5/package.json" target="_blank">package.json 文件</a>中的 engines 属性。</p>
+<p>从 <strong>终端</strong> 窗口中：</p>
+
+    <ol class="docs-ordered-list">
+      <li>运行以下命令：<code>node --version</code></li>
+<li>确认显示的版本号符合要求。</li>
+
+    </ol>
+    
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="install-the-correct-version-of-nodejs-for-angular">
+    <a href="#install-the-correct-version-of-nodejs-for-angular" class="docs-anchor" tabindex="-1" aria-label="Link to Install the correct version of <code>node.js</code> for Angular">安装适用于 Angular 的正确版本的 <code>node.js</code></a>
+  </h3>
+  
+      <p>如果你没有安装 <code>node.js</code> 版本，请按照 <a href="https://nodejs.org/en/download/" target="_blank">nodejs.org 上的安装说明</a>进行安装</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="install-the-latest-version-of-angular">
+    <a href="#install-the-latest-version-of-angular" class="docs-anchor" tabindex="-1" aria-label="Link to Install the latest version of Angular">安装最新版本的 Angular</a>
+  </h3>
+  
+      <p>在安装了 <code>node.js</code> 和 <code>npm</code> 之后，下一步是安装 <a href="tools/cli">Angular CLI</a>，它为高效的 Angular 开发提供了工具。</p>
+<p>从 <strong>终端</strong> 窗口运行以下命令：<code>npm install -g @angular/cli</code>。</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="install-integrated-development-environment-ide">
+    <a href="#install-integrated-development-environment-ide" class="docs-anchor" tabindex="-1" aria-label="Link to Install integrated development environment (IDE)">安装集成开发环境 (IDE)</a>
+  </h3>
+  
+      <p>你可以自由使用任何你喜欢的工具来构建 Angular 应用。我们推荐以下工具：</p>
+
+    <ol class="docs-ordered-list">
+      <li><a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a></li>
+<li>作为一个可选但推荐的步骤，你可以通过安装 <a href="https://marketplace.visualstudio.com/items?itemName=Angular.ng-template" target="_blank">Angular 语言服务</a>来进一步改善你的开发者体验</li>
+<li><a href="https://www.jetbrains.com/webstorm/" target="_blank">WebStorm</a></li>
+
+    </ol>
+    
+    </li>
+    
+    </ol>
+    <p>有关本课程涵盖主题的更多信息，请访问：</p>
+
+    <nav class="docs-pill-row">
+      
+    <a class="docs-pill" href="/overview">
+      什么是 Angular
+    </a>
+    
+    <a class="docs-pill" href="/tools/cli/setup-local">
+      建立本地环境和工作区
+    </a>
+    
+    <a class="docs-pill" href="/cli">
+      Angular CLI 参考
+    </a>
+    
+
+    </nav>
+    

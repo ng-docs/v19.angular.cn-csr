@@ -1,0 +1,34 @@
+<div class="docs-cli"><div class="docs-reference-cli-content"><header class="docs-reference-header"><span class="docs-reference-category">CLI</span><div class="docs-reference-title"><div><h1> update</h1><div class="docs-api-item-label type-command full">命令</div></div></div></header><div class="docs-code docs-reference-cli-toc"><pre class="docs-mini-scroll-track"><code><div class="shiki line cli">ng update<button member-id="Arguments" class="shiki-ln-line-argument">ng [packages..]</button><button member-id="Options" class="shiki-ln-line-option">[options]</button></div></code></pre></div><div><p>通过运行以下命令，对核心框架和 CLI 的当前稳定版本执行基本更新。</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span>ng update @angular/cli @angular/core</span></span></code></pre>
+        </pre>
+      </div>
+    <p>要更新到下一个 Beta 版或预发布版本，请使用 <code>--next</code> 选项。</p>
+<p>要从一个主版本更新到另一个主版本，请使用以下格式</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span>ng update @angular/cli@^&lt;major_version&gt; @angular/core@^&lt;major_version&gt;</span></span></code></pre>
+        </pre>
+      </div>
+    <p>我们建议你始终更新到最新的补丁版本，因为它包含自初始主版本发布以来我们发布的所有修复程序。
+例如，使用以下命令获取最新的 10.x.x 版本并使用它进行更新。</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span>ng update @angular/cli@^10 @angular/core@^10</span></span></code></pre>
+        </pre>
+      </div>
+    <p>有关更新应用的详细信息和指南，请参阅交互式<a href="https://update.angular.dev/">Angular 更新指南</a>。</p>
+</div></div><div class="docs-reference-members"><h2 id="arguments" class="docs-reference-section-heading"><a href="#arguments" aria-label="Link to Arguments section" tabindex="-1">参数</a></h2><div class="docs-reference-member-card"><div class="docs-reference-card-body"><div class="docs-ref-content"><div class="docs-ref-option-and-description"><div class="docs-reference-option"><code>packages</code></div><div><p>要更新的软件包的名称。</p>
+</div></div><div class="docs-reference-type-and-default"><span>值类型</span><code>array</code><span>默认值</span></div></div><div class="docs-ref-content"><div class="docs-ref-option-and-description"><div class="docs-reference-option"><code>packages</code></div><div><p>要更新的软件包的名称。</p>
+</div></div><div class="docs-reference-type-and-default"><span>值类型</span><code>string</code><span>默认值</span></div></div></div></div><h2 id="options" class="docs-reference-section-heading"><a href="#options" aria-label="Link to Options section" tabindex="-1">选项</a></h2><div class="docs-reference-member-card"><div class="docs-reference-card-body"><div class="docs-ref-content"><div class="docs-ref-option-and-description"><div class="docs-reference-option"><code>allow-dirty</code></div><div><p>当存储库包含已修改或未跟踪的文件时，是否允许更新。</p>
+</div></div><div class="docs-reference-type-and-default"><span>值类型</span><code>boolean</code><span>默认值</span><code>false</code></div></div><div class="docs-ref-content"><div class="docs-ref-option-and-description"><div class="docs-reference-option"><code>create-commits</code><div class="docs-reference-option-aliases"><span>别名</span><code>C </code></div></div><div><p>为更新和迁移创建源码控制提交。</p>
+</div></div><div class="docs-reference-type-and-default"><span>值类型</span><code>boolean</code><span>默认值</span><code>false</code></div></div><div class="docs-ref-content"><div class="docs-ref-option-and-description"><div class="docs-reference-option"><code>force</code></div><div><p>忽略对等依赖版本不匹配。</p>
+</div></div><div class="docs-reference-type-and-default"><span>值类型</span><code>boolean</code><span>默认值</span><code>false</code></div></div><div class="docs-ref-content"><div class="docs-ref-option-and-description"><div class="docs-reference-option"><code>from</code></div><div><p>要从中迁移的版本。仅在更新单个软件包时可用，并且仅在使用“migrate-only”时可用。</p>
+</div></div><div class="docs-reference-type-and-default"><span>值类型</span><code>string</code></div></div><div class="docs-ref-content"><div class="docs-ref-option-and-description"><div class="docs-reference-option"><code>help</code></div><div><p>在控制台中显示此命令的帮助消息。</p>
+</div></div><div class="docs-reference-type-and-default"><span>值类型</span><code>boolean</code></div></div><div class="docs-ref-content"><div class="docs-ref-option-and-description"><div class="docs-reference-option"><code>migrate-only</code></div><div><p>仅执行迁移，不更新已安装的版本。</p>
+</div></div><div class="docs-reference-type-and-default"><span>值类型</span><code>boolean</code></div></div><div class="docs-ref-content"><div class="docs-ref-option-and-description"><div class="docs-reference-option"><code>name</code></div><div><p>要运行的迁移的名称。仅在更新单个软件包时可用。</p>
+</div></div><div class="docs-reference-type-and-default"><span>值类型</span><code>string</code></div></div><div class="docs-ref-content"><div class="docs-ref-option-and-description"><div class="docs-reference-option"><code>next</code></div><div><p>使用预发布版本，包括 Beta 版和 RCs。</p>
+</div></div><div class="docs-reference-type-and-default"><span>值类型</span><code>boolean</code><span>默认值</span><code>false</code></div></div><div class="docs-ref-content"><div class="docs-ref-option-and-description"><div class="docs-reference-option"><code>to</code></div><div><p>应用迁移的版本上限。仅在更新单个软件包时可用，并且仅在使用“migrate-only”选项时可用。需要指定“from”。默认为检测到的已安装版本。</p>
+</div></div><div class="docs-reference-type-and-default"><span>值类型</span><code>string</code></div></div><div class="docs-ref-content"><div class="docs-ref-option-and-description"><div class="docs-reference-option"><code>verbose</code></div><div><p>显示有关执行期间内部操作的其他详细信息。</p>
+</div></div><div class="docs-reference-type-and-default"><span>值类型</span><code>boolean</code><span>默认值</span><code>false</code></div></div></div></div></div></div>

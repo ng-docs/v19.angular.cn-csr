@@ -1,0 +1,35 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">调试测试</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/testing/debugging.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>如果你的测试没有像预期的那样工作，你可以在浏览器中检查和调试它们。</p>
+<p>在浏览器中调试规范，就像调试应用一样。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>显示 Karma 浏览器窗口。
+ 如果你在这一步需要帮助，请参阅 <a href="guide/testing#set-up-testing">建立测试环境</a>。</p>
+</li>
+<li><p>点击 <strong>DEBUG</strong> 按钮以打开新的浏览器标签页并重新运行测试。</p>
+</li>
+<li><p>打开浏览器的 <strong>开发者工具</strong>。在 Windows 上，按 <code>Ctrl-Shift-I</code>。在 macOS 上，按 <code>Command-Option-I</code>。</p>
+</li>
+<li><p>选择 <strong>Sources</strong> 部分。</p>
+</li>
+<li><p>按 <code>Control/Command-P</code>，然后开始输入你的测试文件的名称以打开它。</p>
+</li>
+<li><p>在测试中设置一个断点。</p>
+</li>
+<li><p>刷新浏览器，并注意它是如何在断点处停止的。</p>
+</li>
+
+    </ol>
+    <img alt="Karma debugging" src="assets/images/guide/testing/karma-1st-spec-debug.png">

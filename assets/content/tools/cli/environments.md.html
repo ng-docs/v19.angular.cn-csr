@@ -1,0 +1,116 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">配置应用环境</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/environments.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>你可以为你的项目定义不同的命名构建配置，例如 <code>development</code> 和 <code>staging</code>，它们具有不同的默认值。</p>
+<p>每个命名的配置都可以为适用于各种构建器目标的任何选项设置默认值，例如 <code>build</code>、<code>serve</code> 和 <code>test</code>。
+<a href="tools/cli">Angular CLI</a> 的 <code>build</code>、<code>serve</code> 和 <code>test</code> 命令随后可以使用适用于你的目标环境的相应版本来替换文件。</p>
+
+  <h2 id="angular-cli-configurations">
+    <a href="#angular-cli-configurations" class="docs-anchor" tabindex="-1" aria-label="Link to Angular CLI configurations">Angular CLI 配置</a>
+  </h2>
+  <p>Angular CLI 构建器支持 <code>configurations</code> 对象，该对象允许基于命令行上提供的配置来覆盖构建器的特定选项。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:browser"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            // By default, disable source map generation.</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "sourceMap"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "configurations"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            // For the `debug` configuration, enable source maps.</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "debug"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "sourceMap"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        },</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">        …</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>你可以使用 <code>--configuration</code> 选项选择要使用的配置。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --configuration</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> debug</span></span></code></pre>
+    </pre>
+  </div><p>配置可以应用于任何 Angular CLI 构建器。可以使用逗号分隔符指定多个配置。配置按顺序应用，冲突的选项使用最后一个配置中的值。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --configuration</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> debug,production,customer-facing</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="configure-environment-specific-defaults">
+    <a href="#configure-environment-specific-defaults" class="docs-anchor" tabindex="-1" aria-label="Link to Configure environment-specific defaults">配置特定于环境的默认值</a>
+  </h2>
+  <p><code>@angular-devkit/build-angular:browser</code> 支持文件替换，这是一种在执行构建之前替换源文件的选项。
+将此选项与 <code>--configuration</code> 结合使用，可以为你的应用配置特定于环境的数据。</p>
+<p>首先<a href="cli/generate/environments">生成环境</a>以创建 <code>src/environments/</code> 目录，并将项目配置为使用文件替换。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> environments</span></span></code></pre>
+    </pre>
+  </div><p>项目的 <code>src/environments/</code> 目录包含基本配置文件 <code>environment.ts</code>，它为生产环境提供默认配置。
+你可以在特定于目标的配置文件中，为其他环境（如 <code>development</code> 和 <code>staging</code>）覆盖默认值。</p>
+<p>例如：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span>my-app/src/environments</span></span><span class="line"><span>├── environment.development.ts</span></span><span class="line"><span>├── environment.staging.ts</span></span><span class="line"><span>└── environment.ts</span></span></code></pre>
+    </pre>
+  </div><p>基本文件 <code>environment.ts</code> 包含默认环境设置。
+例如：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> environment</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  production: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre>
+    </pre>
+  </div><p>当未指定环境时，<code>build</code> 命令将此用作构建目标。
+你可以添加更多变量，可以作为环境对象上的附加属性，也可以作为单独的对象。
+例如，以下代码将变量的默认值添加到默认环境中：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> environment</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  production: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  apiUrl: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'http://my-prod-url'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre>
+    </pre>
+  </div><p>你可以添加特定于目标的配置文件，例如 <code>environment.development.ts</code>。
+以下内容为开发构建目标设置默认值：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> environment</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  production: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  apiUrl: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'http://my-dev-url'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="using-environment-specific-variables-in-your-app">
+    <a href="#using-environment-specific-variables-in-your-app" class="docs-anchor" tabindex="-1" aria-label="Link to Using environment-specific variables in your app">在你的应用中使用特定于环境的变量</a>
+  </h2>
+  <p>要使用你定义的环境配置，你的组件必须导入原始环境文件：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { environment } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './environments/environment'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div><p>这确保了 build 和 serve 命令可以找到特定构建目标的配置。</p>
+<p>组件文件 (<code>app.component.ts</code>) 中的以下代码使用在配置文件中定义的环境变量。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { environment } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './../environments/environment'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Fetches from `http://my-prod-url` in production, `http://my-dev-url` in development.</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">fetch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(environment.apiUrl);</span></span></code></pre>
+    </pre>
+  </div><p>主要的 CLI 配置文件 <code>angular.json</code> 在每个构建目标的配置中都包含一个 <code>fileReplacements</code> 部分，它允许你将 TypeScript 程序中的任何文件替换为该文件的特定于目标的版本。
+这对于在以特定环境（如生产或暂存环境）为目标的构建中包含特定于目标的代码或变量非常有用。</p>
+<p>默认情况下，不替换任何文件，但是 <code>ng generate environments</code> 会自动建立此配置。
+你可以通过直接编辑 <code>angular.json</code> 配置来更改或添加特定构建目标的文件替换。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"configurations"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "development"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "fileReplacements"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "replace"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/environments/environment.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "with"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/environments/environment.development.ts"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ],</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">        …</span></span></code></pre>
+    </pre>
+  </div><p>这意味着，当你使用 <code>ng build --configuration development</code> 构建开发配置时，<code>src/environments/environment.ts</code> 文件将被替换为该文件的特定于目标的版本 <code>src/environments/environment.development.ts</code>。</p>
+<p>要添加暂存环境，请创建 <code>src/environments/environment.ts</code> 的副本，名为 <code>src/environments/environment.staging.ts</code>，然后将 <code>staging</code> 配置添加到 <code>angular.json</code> 中：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"configurations"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "development"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">…</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "production"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">…</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "staging"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "fileReplacements"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "replace"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/environments/environment.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "with"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/environments/environment.staging.ts"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span></code></pre>
+    </pre>
+  </div><p>你也可以向此目标环境添加更多配置选项。
+你的构建支持的任何选项都可以在构建目标配置中被覆盖。</p>
+<p>要使用暂存配置进行构建，请运行以下命令：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --configuration</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> staging</span></span></code></pre>
+    </pre>
+  </div><p>默认情况下，<code>build</code> 目标包括 <code>production</code> 和 <code>development</code> 配置，并且 <code>ng serve</code> 使用应用的开发版本构建。
+如果设置 <code>buildTarget</code> 选项，你还可以配置 <code>ng serve</code> 以使用目标构建配置：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"serve"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:dev-server"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">…</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "configurations"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "development"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // Use the `development` configuration of the `build` target.</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "buildTarget"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"my-app:build:development"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "production"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // Use the `production` configuration of the `build` target.</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "buildTarget"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"my-app:build:production"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "defaultConfiguration"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"development"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span></code></pre>
+    </pre>
+  </div><p><code>defaultConfiguration</code> 选项指定默认情况下使用哪个配置。
+当未设置 <code>defaultConfiguration</code> 时，将直接使用 <code>options</code> 而不进行修改。</p>

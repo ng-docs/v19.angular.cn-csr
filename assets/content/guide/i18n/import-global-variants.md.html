@@ -1,0 +1,43 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">导入语言环境数据的全局变体</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/i18n/import-global-variants.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>如果你使用带有 <code>--localize</code> 选项运行 <a href="cli/build" title="ng" build | cli angular><code>ng build</code></a> 命令，<a href="cli" title="CLI" overview and command reference | angular>Angular CLI</a> 会自动包含语言环境数据。</p>
+<!--todo: replace with docs-code -->
+
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --localize</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> Angular 的初始安装已经包含美国英语 (<code>en-US</code>) 的语言环境数据。
+当你将 <code>--localize</code> 选项与 <a href="cli/build" title="ng" build | cli angular><code>ng build</code></a> 命令一起使用时，<a href="cli" title="CLI" overview and command reference | angular>Angular CLI</a> 会自动包含语言环境数据并设置 <code>LOCALE_ID</code> 值。</p>
+
+    </div>
+    <p>npm 上的 <code>@angular/common</code> 包包含语言环境数据文件。
+语言环境数据的全局变体在 <code>@angular/common/locales/global</code> 中可用。</p>
+
+  <h2 id="import-example-for-french">
+    <a href="#import-example-for-french" class="docs-anchor" tabindex="-1" aria-label="Link to <code>import</code> example for French">法语的 <code>import</code> 范例</a>
+  </h2>
+  <p>例如，你可以在引导启动应用的 <code>main.ts</code> 中导入法语 (<code>fr</code>) 的全局变体。</p>
+<div class="docs-code" path="adev/src/content/examples/i18n/src/main.ts" visiblelines="0" header="src/main.ts (import locale)">
+    <div class="docs-code-header"><h3>src/main.ts (导入语言环境)</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/common/locales/global/fr'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {provideProtractorTestingSupport} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {bootstrapApplication} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {AppComponent} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './app/app.component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppComponent, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    provideProtractorTestingSupport</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(), </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// essential for e2e testing</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 在 <code>NgModules</code> 应用中，你需要在你的 <code>app.module</code> 中导入它。</p>
+
+    </div>
+    

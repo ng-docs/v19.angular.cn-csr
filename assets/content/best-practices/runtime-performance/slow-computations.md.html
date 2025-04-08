@@ -1,0 +1,43 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">慢速计算</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/best-practices/runtime-performance/slow-computations.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>在每个变更检测周期，Angular 同步地：</p>
+
+  <ul class="docs-list">
+    <li>除非另有规定，否则根据每个组件的检测策略，求值所有组件中的所有模板表达式</li>
+<li>执行 <code>ngDoCheck</code>、<code>ngAfterContentChecked</code>、<code>ngAfterViewChecked</code> 和 <code>ngOnChanges</code> 生命周期钩子。
+模板或生命周期钩子中的单个慢速计算可能会减慢整个变更检测过程，因为 Angular 会按顺序运行这些计算。</li>
+
+  </ul>
+  
+  <h2 id="identifying-slow-computations">
+    <a href="#identifying-slow-computations" class="docs-anchor" tabindex="-1" aria-label="Link to Identifying slow computations">识别慢速计算</a>
+  </h2>
+  <p>你可以使用 Angular DevTools 的性能分析器来识别重计算。在性能时间线中，单击一个条形以预览特定的变更检测周期。这将显示一个条形图，其中显示了框架在每个组件的变更检测中花费了多长时间。当你单击一个组件时，你可以预览 Angular 在求值其模板和生命周期钩子时花费了多长时间。</p>
+<img alt="Angular DevTools profiler preview showing slow computation" src="assets/images/best-practices/runtime-performance/slow-computations.png">
+
+<p>例如，在前面的屏幕截图中，选择了第二个记录的变更检测周期。Angular 在此周期中花费了超过 573 毫秒，其中大部分时间花费在 <code>EmployeeListComponent</code> 中。在详细信息面板中，你可以看到 Angular 花费了超过 297 毫秒来求值 <code>EmployeeListComponent</code> 的模板。</p>
+
+  <h2 id="optimizing-slow-computations">
+    <a href="#optimizing-slow-computations" class="docs-anchor" tabindex="-1" aria-label="Link to Optimizing slow computations">优化慢速计算</a>
+  </h2>
+  <p>以下是几种消除慢速计算的技术：</p>
+
+  <ul class="docs-list">
+    <li><strong>优化底层算法</strong>。这是推荐的方法。如果可以加快导致问题的算法，则可以加快整个变更检测机制。</li>
+<li><strong>使用纯管道进行缓存</strong>。你可以将重计算移至纯<a href="guide/pipes">管道</a>。仅当 Angular 检测到其输入与上次 Angular 调用它时相比发生了更改时，Angular 才会重新求值纯管道。</li>
+<li><strong>使用备忘化</strong>。<a href="https://en.wikipedia.org/wiki/Memoization" target="_blank">备忘化</a>是一种类似于纯管道的技术，不同之处在于纯管道仅保留计算的最后一个结果，而备忘化可以存储多个结果。</li>
+<li><strong>避免在生命周期钩子中进行重绘/回流</strong>。某些<a href="https://web.dev/avoid-large-complex-layouts-and-layout-thrashing/" target="_blank">操作</a>会导致浏览器同步地重新计算页面的布局或重新渲染它。由于回流和重绘通常很慢，因此你应避免在每个变更检测周期中执行它们。</li>
+
+  </ul>
+  <p>纯管道和备忘化具有不同的权衡。与备忘化相比，纯管道是 Angular 内置的概念，备忘化是一种用于缓存函数结果的通用软件工程实践。如果你使用不同的参数频繁调用重计算，则备忘化的内存开销可能很大。</p>

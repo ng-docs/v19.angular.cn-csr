@@ -1,0 +1,107 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">为其他测试环境添加组件测试工具支持</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/testing/component-harnesses-testing-environments.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+  <h2 id="before-you-start">
+    <a href="#before-you-start" class="docs-anchor" tabindex="-1" aria-label="Link to Before you start">开始之前</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-tip">
+    <p><strong>提示：</strong> 本指南假定你已阅读过<a href="guide/testing/component-harnesses-overview">组件测试工具概览指南</a>。如果你是组件测试工具的新手，请先阅读该指南。</p>
+
+    </div>
+    
+  <h3 id="when-does-adding-support-for-a-test-environment-make-sense">
+    <a href="#when-does-adding-support-for-a-test-environment-make-sense" class="docs-anchor" tabindex="-1" aria-label="Link to When does adding support for a test environment make sense?">什么时候为测试环境添加支持才有意义？</a>
+  </h3>
+  <p>要在以下环境中使用组件测试工具，你可以使用 Angular CDK 的两个内置环境：</p>
+
+  <ul class="docs-list">
+    <li>单元测试</li>
+<li>WebDriver 端到端测试</li>
+
+  </ul>
+  <p>要使用受支持的测试环境，请阅读<a href="guide/testing/creating-component-harnesses">为你的组件创建测试工具指南</a>。</p>
+<p>否则，要为其他环境添加支持，你需要定义如何与 DOM 元素交互以及 DOM 交互在你的环境中如何工作。继续阅读以了解更多信息。</p>
+
+  <h3 id="cdk-installation">
+    <a href="#cdk-installation" class="docs-anchor" tabindex="-1" aria-label="Link to CDK Installation">CDK 安装</a>
+  </h3>
+  <p><a href="https://material.angular.io/cdk/categories" target="_blank">组件开发工具包 (CDK)</a> 是一组用于构建组件的行为原语。要使用组件测试工具，请首先从 npm 安装 <code>@angular/cdk</code>。你可以使用 Angular CLI 从终端执行此操作：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/cdk</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="creating-a-testelement-implementation">
+    <a href="#creating-a-testelement-implementation" class="docs-anchor" tabindex="-1" aria-label="Link to Creating a <code>TestElement</code> implementation">创建 <code>TestElement</code> 实现</a>
+  </h2>
+  <p>每个测试环境都必须定义一个 <code>TestElement</code> 实现。<code>TestElement</code> 接口充当 DOM 元素的环境无关表示。它使测试工具能够与 DOM 元素进行交互，而无需考虑底层环境。由于某些环境不支持与 DOM 元素同步交互（例如 WebDriver），因此所有 <code>TestElement</code> 方法都是异步的，并返回一个 <code>Promise</code>，其中包含操作的结果。</p>
+<p><code>TestElement</code> 提供了许多与底层 DOM 交互的方法，例如 <code>blur()</code>、<code>click()</code>、<code>getAttribute()</code> 等。 有关方法的完整列表，请参阅<a href="https://material.angular.io/cdk/testing/api#TestElement" target="_blank">TestElement API 参考页</a>。</p>
+<p><code>TestElement</code> 接口主要由类似于 <code>HTMLElement</code> 上可用方法的方法组成。大多数测试环境中都存在类似的方法，这使得方法的实现非常简单。但是，在实现 <code>sendKeys</code> 方法时，需要注意一个重要的区别，即 <code>TestKey</code> 枚举中的键代码可能与测试环境中使用的键代码不同。环境作者应维护从 <code>TestKey</code> 代码到特定测试环境中使用的代码的映射表。</p>
+<p>Angular CDK 中的 <a href="https://github.com/angular/components/blob/main/src/cdk/testing/testbed/unit-test-element.ts#L33" target="_blank">UnitTestElement</a> 和 <a href="https://github.com/angular/components/blob/main/src/cdk/testing/selenium-webdriver/selenium-webdriver-keys.ts#L16" target="_blank">SeleniumWebDriverElement</a> 实现是此接口实现的良好范例。</p>
+
+  <h2 id="creating-a-harnessenvironment-implementation">
+    <a href="#creating-a-harnessenvironment-implementation" class="docs-anchor" tabindex="-1" aria-label="Link to Creating a <code>HarnessEnvironment</code> implementation">创建 <code>HarnessEnvironment</code> 实现</a>
+  </h2>
+  <p>测试作者使用 <code>HarnessEnvironment</code> 创建组件测试工具实例以用于测试。<code>HarnessEnvironment</code> 是一个抽象类，必须对其进行扩展才能为新环境创建具体的子类。当支持新的测试环境时，请创建一个 <code>HarnessEnvironment</code> 子类，该子类为所有抽象成员添加具体实现。</p>
+<p><code>HarnessEnvironment</code> 具有一个泛型类型参数：<code>HarnessEnvironment&lt;E&gt;</code>。 此参数 <code>E</code> 表示环境的原始元素类型。 例如，对于单元测试环境，此参数是 Element。</p>
+<p>以下是必须实现的抽象方法：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">方法</th>
+<th align="left">描述</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>abstract getDocumentRoot(): E</code></td>
+<td align="left">获取环境的根元素（例如 <code>document.body</code>）。</td>
+</tr>
+<tr>
+<td align="left"><code>abstract createTestElement(element: E): TestElement</code></td>
+<td align="left">为给定的原始元素创建 <code>TestElement</code>。</td>
+</tr>
+<tr>
+<td align="left"><code>abstract createEnvironment(element: E): HarnessEnvironment</code></td>
+<td align="left">创建以给定原始元素为根的 <code>HarnessEnvironment</code>。</td>
+</tr>
+<tr>
+<td align="left"><code>abstract getAllRawElements(selector: string): Promise&lt;E[]&gt;</code></td>
+<td align="left">获取环境中根元素下与给定选择器匹配的所有原始元素。</td>
+</tr>
+<tr>
+<td align="left"><code>abstract forceStabilize(): Promise&lt;void&gt;</code></td>
+<td align="left">获取一个 <code>Promise</code>，当 <code>NgZone</code> 稳定时，该 <code>Promise</code> 会求解。此外，如果适用，则告知 <code>NgZone</code> 稳定（例如，在 <code>fakeAsync</code> 测试中调用 <code>flush()</code>）。</td>
+</tr>
+<tr>
+<td align="left"><code>abstract waitForTasksOutsideAngular(): Promise&lt;void&gt;</code></td>
+<td align="left">获取一个 <code>Promise</code>，当 <code>NgZone</code> 的父 Zone 稳定时，该 <code>Promise</code> 会求解。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>除了实现缺失的方法之外，此类还应为测试作者提供一种获取 <code>ComponentHarness</code> 实例的方法。你应该定义一个受保护的构造函数，并提供一个名为 <code>loader</code> 的静态方法，该方法返回 <code>HarnessLoader</code> 实例。这允许测试作者编写如下代码：<code>SomeHarnessEnvironment.loader().getHarness(...)</code>。根据特定环境的需求，该类可以提供几种不同的静态方法或需要传递参数。（例如，<code>TestbedHarnessEnvironment</code> 上的 <code>loader</code> 方法接受 <code>ComponentFixture</code>，并且该类提供了其他静态方法，分别名为 <code>documentRootLoader</code> 和 <code>harnessForFixture</code>）。</p>
+<p>Angular CDK 中的 <a href="https://github.com/angular/components/blob/main/src/cdk/testing/testbed/testbed-harness-environment.ts#L89" target="_blank"><code>TestbedHarnessEnvironment</code></a> 和 <a href="https://github.com/angular/components/blob/main/src/cdk/testing/selenium-webdriver/selenium-web-driver-harness-environment.ts#L71" target="_blank">SeleniumWebDriverHarnessEnvironment</a> 实现是此接口实现的良好范例。</p>
+
+  <h2 id="handling-auto-change-detection">
+    <a href="#handling-auto-change-detection" class="docs-anchor" tabindex="-1" aria-label="Link to Handling auto change detection">处理自动变更检测</a>
+  </h2>
+  <p>为了支持 <code>manualChangeDetection</code> 和并行 API，你的环境应安装一个用于自动变更检测状态的处理程序。</p>
+<p>当你的环境想要开始处理自动变更检测状态时，它可以调用 <code>handleAutoChangeDetectionStatus(handler)</code>。处理程序函数将接收一个 <code>AutoChangeDetectionStatus</code>，它具有两个属性 <code>isDisabled</code> 和 <code>onDetectChangesNow()</code>。有关更多信息，请参阅 <a href="https://material.angular.io/cdk/testing/api#AutoChangeDetectionStatus" target="_blank">AutoChangeDetectionStatus API 参考页</a>。
+如果你的环境想要停止处理自动变更检测状态，它可以调用 <code>stopHandlingAutoChangeDetectionStatus()</code>。</p>

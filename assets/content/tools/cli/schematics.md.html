@@ -1,0 +1,124 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">使用原理图生成代码</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/schematics.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>原理图是一个基于模板的代码生成器，支持复杂的逻辑。
+它是一组用于通过生成或修改代码来转换软件项目的指令集。
+原理图被打包到集合中，并使用 npm 安装。</p>
+<p>原理图集合可以成为创建、修改和维护任何软件项目的强大工具，但对于自定义 Angular 项目以满足你所在组织的特定需求尤其有用。
+例如，你可以使用原理图，使用预定义的模板或布局来生成常用 UI 模式或特定组件。
+使用原理图来强化架构规则和约定，使你的项目保持一致性和互操作性。</p>
+
+  <h2 id="schematics-for-the-angular-cli">
+    <a href="#schematics-for-the-angular-cli" class="docs-anchor" tabindex="-1" aria-label="Link to Schematics for the Angular CLI">Angular CLI 的原理图</a>
+  </h2>
+  <p>原理图是 Angular 生态系统的一部分。
+Angular CLI 使用原理图将转换应用于 Web 应用项目。
+你可以修改这些原理图，并定义新的原理图来执行诸如更新代码以修复依赖项中的重大更改，或者向现有项目添加新的配置选项或框架等操作。</p>
+<p>包含在 <code>@schematics/angular</code> 集合中的原理图默认由命令 <code>ng generate</code> 和 <code>ng add</code> 运行。
+该软件包包含命名的原理图，这些原理图配置了可用于 CLI 的 <code>ng generate</code> 子命令的选项，例如 <code>ng generate component</code> 和 <code>ng generate service</code>。<code>ng generate</code> 的子命令是相应原理图的简写形式。
+要使用长格式指定和生成特定的原理图或原理图集合，请使用：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-schematic-collection:my-schematic-name</span></span></code></pre>
+    </pre>
+  </div><p>or</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-schematic-name</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --collection</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> collection-name</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="configuring-cli-schematics">
+    <a href="#configuring-cli-schematics" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring CLI schematics">配置 CLI 原理图</a>
+  </h3>
+  <p>与原理图关联的 JSON 模式会告知 Angular CLI 命令和子命令有哪些可用选项，并确定默认值。
+可以通过在命令行上为选项提供不同的值来覆盖这些默认值。
+有关如何更改工作区的生成选项默认值的信息，请参阅<a href="reference/configs/workspace-config">工作区配置</a>。</p>
+<p>CLI 用于生成项目和项目部件的默认原理图的 JSON 模式收集在 <a href="https://github.com/angular/angular-cli/tree/main/packages/schematics/angular" target="_blank"><code>@schematics/angular</code></a> 包中。
+该模式描述了 CLI 可用于每个 <code>ng generate</code> 子命令的选项，如 <code>--help</code> 输出中所示。</p>
+
+  <h2 id="developing-schematics-for-libraries">
+    <a href="#developing-schematics-for-libraries" class="docs-anchor" tabindex="-1" aria-label="Link to Developing schematics for libraries">为库开发原理图</a>
+  </h2>
+  <p>作为库开发人员，你可以创建自己的自定义原理图集合，以将你的库与 Angular CLI 集成。</p>
+
+  <ul class="docs-list">
+    <li><em>添加原理图</em> 让开发人员可以使用 <code>ng add</code> 在 Angular 工作区中安装你的库</li>
+<li><em>Generation 原理图</em> 可以告知 <code>ng generate</code> 子命令如何修改项目、添加配置和脚本，以及搭建在你的库中定义的工件</li>
+<li><em>update 原理图</em> 可以告知 <code>ng update</code> 命令如何在发布新版本时更新库的依赖项并针对重大更改进行调整</li>
+
+  </ul>
+  <p>有关这些原理图的外观以及如何创建它们的更多详细信息，请参阅：</p>
+
+    <nav class="docs-pill-row">
+      
+    <a class="docs-pill" href="tools/cli/schematics-authoring">
+      编写原理图
+    </a>
+    
+    <a class="docs-pill" href="tools/cli/schematics-for-libraries">
+      库的原理图
+    </a>
+    
+
+    </nav>
+    
+  <h3 id="add-schematics">
+    <a href="#add-schematics" class="docs-anchor" tabindex="-1" aria-label="Link to Add schematics">Add 原理图</a>
+  </h3>
+  <p><em>add 原理图</em> 通常与库一起提供，以便可以使用 <code>ng add</code> 将库添加到现有项目中。
+<code>add</code> 命令使用你的包管理器下载新的依赖项，并调用作为原理图实现的安装脚本。</p>
+<p>例如，<a href="https://material.angular.io/guide/schematics" target="_blank"><code>@angular/material</code></a> 原理图告知 <code>add</code> 命令安装和建立 Angular Material 和主题，并注册可以使用 <code>ng generate</code> 创建的新 starter 组件。
+将此原理图作为你自己的 add 原理图的示例和模型。</p>
+<p>合作伙伴和第三方库也通过 add 原理图支持 Angular CLI。
+例如，<code>@ng-bootstrap/schematics</code> 将 <a href="https://ng-bootstrap.github.io" target="_blank">ng-bootstrap</a> 添加到应用，而 <code>@clr/angular</code> 安装并建立 <a href="https://clarity.design/documentation/get-started" target="_blank">VMWare 的 Clarity</a>。</p>
+<p><em>add 原理图</em> 还可以使用配置更改来更新项目，添加额外的依赖项（例如腻子脚本），或搭建特定于包的初始化代码。
+例如，<code>@angular/pwa</code> 原理图通过添加应用清单和 Service Worker 将你的应用变成 PWA。</p>
+
+  <h3 id="generation-schematics">
+    <a href="#generation-schematics" class="docs-anchor" tabindex="-1" aria-label="Link to Generation schematics">Generation 原理图</a>
+  </h3>
+  <p>Generation 原理图是 <code>ng generate</code> 命令的指令。
+已记录的子命令使用默认的 Angular generation 原理图，但你可以指定不同的原理图（代替子命令）来生成在你的库中定义的工件。</p>
+<p>例如，Angular Material 为其定义的 UI 组件提供 generation 原理图。
+以下命令使用这些原理图之一来渲染一个 Angular Material <code>&lt;mat-table&gt;</code>，该表已预先配置了用于排序和分页的数据源。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/material:table</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">component-nam</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">e</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="update-schematics">
+    <a href="#update-schematics" class="docs-anchor" tabindex="-1" aria-label="Link to Update schematics">Update 原理图</a>
+  </h3>
+  <p><code>ng update</code> 命令可用于更新工作区的库依赖项。
+ 如果你不提供任何选项或使用 help 选项，该命令将检查你的工作区并建议要更新的库。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">We</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> analyzed</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> your</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> package.json,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> there</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> are</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> some</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> packages</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> to</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update:</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    Name</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                                      Version</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                     Command</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> to</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    ‐-------------------------------------------------------------------------------</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    @angular/cdk</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                       7.2.2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> -</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 7.3.1</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">           ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/cdk</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    @angular/cli</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                       7.2.3</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> -</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 7.3.0</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">           ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/cli</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    @angular/core</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                      7.2.2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> -</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 7.2.3</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">           ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/core</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    @angular/material</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                  7.2.2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> -</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 7.3.1</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">           ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/material</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    rxjs</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                                      6.3.3</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> -</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 6.4.0</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">           ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> rxjs</span></span></code></pre>
+    </pre>
+  </div><p>如果将一组要更新的库传递给命令，它将更新这些库、它们的对等依赖项以及依赖于它们的对等依赖项。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 如果存在不一致（例如，如果对等依赖项无法通过简单的 <a href="https://semver.io" target="_blank">semver</a> 范围匹配），则该命令会生成错误，并且不会更改工作区中的任何内容。</p>
+
+    </div>
+    <p>我们建议你不要默认强制更新所有依赖项。
+请先尝试更新特定的依赖项。</p>
+<p>有关 <code>ng update</code> 命令如何工作的更多信息，请参阅<a href="https://github.com/angular/angular-cli/blob/main/docs/specifications/update.md" target="_blank">Update Command</a>。</p>
+<p>如果你创建了库的新版本，其中引入了潜在的重大更改，则可以提供 <em>update 原理图</em>，以使 <code>ng update</code> 命令能够自动求解正在更新的项目中的任何此类更改。</p>
+<p>例如，假设你要更新 Angular Material 库。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/material</span></span></code></pre>
+    </pre>
+  </div><p>此命令更新工作区的 <code>package.json</code> 中的 <code>@angular/material</code> 及其依赖项 <code>@angular/cdk</code>。
+如果任一软件包包含涵盖从现有版本迁移到新版本的 update 原理图，则该命令会在你的工作区上运行该原理图。</p>

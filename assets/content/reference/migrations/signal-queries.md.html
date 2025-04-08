@@ -1,0 +1,101 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">迁移到信号查询</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/migrations/signal-queries.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular 为查询引入了改进的 API，这些 API 在 v19 版本中被认为是可用于生产环境的。
+在<a href="guide/signals/queries">专用指南</a>中阅读更多关于信号查询及其优势的信息。</p>
+<p>为了支持希望使用信号查询的现有团队，Angular 团队提供了一个自动化迁移，将现有的装饰器查询字段转换为新的 API。</p>
+<p>使用以下命令运行原理图：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/core:signal-queries-migration</span></span></code></pre>
+    </pre>
+  </div><p>或者，此迁移在 VSCode 中作为<a href="https://code.visualstudio.com/docs/typescript/typescript-refactoring#_refactoring" target="_blank">代码重构操作</a>提供。
+安装最新版本的 VSCode 扩展，然后单击例如 <code>@ViewChild</code> 字段。
+在下面的<a href="#vscode-extension">章节</a>中查看更多详细信息。</p>
+
+  <h2 id="what-does-the-migration-change">
+    <a href="#what-does-the-migration-change" class="docs-anchor" tabindex="-1" aria-label="Link to What does the migration change?">迁移会更改什么？</a>
+  </h2>
+  
+    <ol class="docs-ordered-list">
+      <li><code>@ViewChild()</code>、<code>@ViewChildren</code>、<code>@ContentChild</code> 和 <code>@ContentChildren</code> 类成员
+已更新为其信号等效项。</li>
+<li>你的应用中对已迁移查询的引用已更新为调用信号。<ul class="docs-list">
+    <li>这包括模板、宿主绑定或 TypeScript 代码中的引用。</li>
+
+  </ul>
+  </li>
+
+    </ol>
+    <p><strong>之前</strong></p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {Component, ContentChild} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`Has ref: {{someRef ? 'Yes' : 'No'}}`</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ContentChild</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'someRef'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">ref</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ElementRef</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">|</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">undefined</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  someMethod</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.ref) {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.ref.nativeElement;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p><strong>之后</strong></p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {Component, contentChild} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`Has ref: {{someRef() ? 'Yes' : 'No'}}`</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> ref</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> contentChild</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ElementRef</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'someRef'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  someMethod</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> ref</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ref</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (ref) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      ref.nativeElement;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="configuration-options">
+    <a href="#configuration-options" class="docs-anchor" tabindex="-1" aria-label="Link to Configuration options">配置选项</a>
+  </h2>
+  <p>此迁移支持一些选项，用于根据你的特定需求微调迁移。</p>
+
+  <h3 id="--path">
+    <a href="#--path" class="docs-anchor" tabindex="-1" aria-label="Link to <code>--path</code>"><code>--path</code></a>
+  </h3>
+  <p>默认情况下，迁移将更新你的整个 Angular CLI 工作区。
+你可以使用此选项将迁移限制为特定的子目录。</p>
+
+  <h3 id="--best-effort-mode">
+    <a href="#--best-effort-mode" class="docs-anchor" tabindex="-1" aria-label="Link to <code>--best-effort-mode</code>"><code>--best-effort-mode</code></a>
+  </h3>
+  <p>默认情况下，迁移会跳过无法安全迁移的查询。
+迁移会尝试尽可能安全地重构代码。</p>
+<p>启用 <code>--best-effort-mode</code> 标志后，迁移会积极尝试尽可能多地迁移，即使这可能会破坏你的构建。</p>
+
+  <h3 id="--insert-todos">
+    <a href="#--insert-todos" class="docs-anchor" tabindex="-1" aria-label="Link to <code>--insert-todos</code>"><code>--insert-todos</code></a>
+  </h3>
+  <p>启用后，迁移将为无法迁移的查询添加 TODO。
+TODO 将包括跳过查询的原因。例如：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// TODO: Skipped for migration because:</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//  Your application code writes to the query. This prevents migration.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ViewChild</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'ref'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) ref</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ElementRef;</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="--analysis-dir">
+    <a href="#--analysis-dir" class="docs-anchor" tabindex="-1" aria-label="Link to <code>--analysis-dir</code>"><code>--analysis-dir</code></a>
+  </h3>
+  <p>在大型项目中，你可以使用此选项来减少要分析的文件数量。
+默认情况下，无论 <code>--path</code> 选项如何，迁移都会分析整个工作区，以便更新受迁移的查询对象声明影响的所有引用。</p>
+<p>使用此选项，你可以将分析限制为子文件夹。请注意，这意味着将静默跳过此目录之外的任何引用，这可能会破坏你的构建。</p>
+
+  <h2 id="vscode-extension">
+    <a href="#vscode-extension" class="docs-anchor" tabindex="-1" aria-label="Link to VSCode extension">VSCode 扩展</a>
+  </h2>
+  <p>
+  <img src="assets/images/migrations/signal-queries-vscode.png" alt="Screenshot of the VSCode extension and clicking on an `@ViewChild` field" title="Screenshot of the VSCode extension and clicking on an `@ViewChild` field." class="docs-image">
+  </p>
+<p>此迁移在 VSCode 中作为<a href="https://code.visualstudio.com/docs/typescript/typescript-refactoring#_refactoring" target="_blank">代码重构操作</a>提供。</p>
+<p>要通过 VSCode 使用迁移，请安装最新版本的 VSCode 扩展，然后单击：</p>
+
+  <ul class="docs-list">
+    <li>在 <code>@ViewChild</code>、<code>@ViewChildren</code>、<code>@ContentChild</code> 或 <code>@ContentChildren</code> 字段上。</li>
+<li>在指令/组件上</li>
+
+  </ul>
+  <p>然后，等待黄色的灯泡 VSCode 重构按钮出现。
+通过此按钮，你可以选择信号查询迁移。</p>

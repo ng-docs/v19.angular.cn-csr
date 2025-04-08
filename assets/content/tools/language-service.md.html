@@ -1,0 +1,175 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular 语言服务</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/language-service.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular 语言服务为代码编辑器提供了一种在 Angular 模板中获取代码完成、错误、提示和导航的方法。
+它适用于独立 HTML 文件中的外部模板，也适用于内联模板。</p>
+
+  <h2 id="configuring-compiler-options-for-the-angular-language-service">
+    <a href="#configuring-compiler-options-for-the-angular-language-service" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring compiler options for the Angular Language Service">为 Angular 语言服务配置编译器选项</a>
+  </h2>
+  <p>要启用最新的语言服务特性，请在 <code>tsconfig.json</code> 中设置 <code>strictTemplates</code> 选项，方法是将 <code>strictTemplates</code> 设置为 <code>true</code>，如下例所示：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"angularCompilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "strictTemplates"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>欲知详情，参阅<a href="reference/configs/angular-compiler-options">Angular 编译器选项</a>指南。</p>
+
+  <h2 id="features">
+    <a href="#features" class="docs-anchor" tabindex="-1" aria-label="Link to Features">特性</a>
+  </h2>
+  <p>你的编辑器会自动检测到你正在打开 Angular 文件。
+然后，它会使用 Angular 语言服务读取你的 <code>tsconfig.json</code> 文件，找到你的应用中的所有模板，然后为你打开的任何模板提供语言服务。</p>
+<p>语言服务包括：</p>
+
+  <ul class="docs-list">
+    <li>代码完成列表</li>
+<li>AoT 诊断消息</li>
+<li>快速信息</li>
+<li>转到定义</li>
+
+  </ul>
+  
+  <h3 id="autocompletion">
+    <a href="#autocompletion" class="docs-anchor" tabindex="-1" aria-label="Link to Autocompletion">自动完成</a>
+  </h3>
+  <p>自动完成可以通过在你键入时为你提供上下文可能性和提示来加快你的开发时间。
+此范例展示了插值中的自动完成。
+当你键入时，可以按 Tab 键完成。</p>
+<img alt="autocompletion" src="assets/images/guide/language-service/language-completion.gif">
+
+<p>元素中也有代码完成。
+你作为组件选择器拥有的任何元素都将显示在代码完成列表中。</p>
+
+  <h3 id="error-checking">
+    <a href="#error-checking" class="docs-anchor" tabindex="-1" aria-label="Link to Error checking">错误检查</a>
+  </h3>
+  <p>Angular 语言服务可以预先警告你代码中的错误。
+在本范例中，Angular 不知道 <code>orders</code> 是什么或来自哪里。</p>
+<img alt="error checking" src="assets/images/guide/language-service/language-error.gif">
+
+
+  <h3 id="quick-info-and-navigation">
+    <a href="#quick-info-and-navigation" class="docs-anchor" tabindex="-1" aria-label="Link to Quick info and navigation">快速信息和导航</a>
+  </h3>
+  <p>快速信息功能使你可以悬停以查看组件、指令和模块的来源。
+然后，你可以单击“转到定义”或按 F12 直接转到定义。</p>
+<img alt="navigation" src="assets/images/guide/language-service/language-navigation.gif">
+
+
+  <h2 id="angular-language-service-in-your-editor">
+    <a href="#angular-language-service-in-your-editor" class="docs-anchor" tabindex="-1" aria-label="Link to Angular Language Service in your editor">编辑器中的 Angular 语言服务</a>
+  </h2>
+  <p>Angular 语言服务目前以扩展形式提供，用于 <a href="https://code.visualstudio.com" target="_blank">Visual Studio Code</a>、<a href="https://www.jetbrains.com/webstorm" target="_blank">WebStorm</a>、<a href="https://www.sublimetext.com" target="_blank">Sublime Text</a> 和 <a href="https://www.eclipse.org/eclipseide" target="_blank">Eclipse IDE</a>。</p>
+
+  <h3 id="visual-studio-code">
+    <a href="#visual-studio-code" class="docs-anchor" tabindex="-1" aria-label="Link to Visual Studio Code">Visual Studio Code</a>
+  </h3>
+  <p>在 <a href="https://code.visualstudio.com" target="_blank">Visual Studio Code</a> 中，从 <a href="https://marketplace.visualstudio.com/items?itemName=Angular.ng-template" target="_blank">Extensions: Marketplace</a> 安装扩展。
+使用左侧菜单窗格上的“扩展”图标从编辑器打开 Marketplace，或使用 VS 快速打开（Mac 上为 ⌘+P，Windows 上为 CTRL+P）并键入“? ext”。
+在 Marketplace 中，搜索 Angular Language Service 扩展，然后单击“<strong>安装</strong>”按钮。</p>
+<p>Visual Studio Code 与 Angular 语言服务的集成由 Angular 团队维护和分发。</p>
+
+  <h3 id="visual-studio">
+    <a href="#visual-studio" class="docs-anchor" tabindex="-1" aria-label="Link to Visual Studio">Visual Studio</a>
+  </h3>
+  <p>在 <a href="https://visualstudio.microsoft.com" target="_blank">Visual Studio</a> 中，从 <a href="https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.AngularLanguageService" target="_blank">Extensions: Marketplace</a> 安装扩展。
+通过在顶部菜单窗格上选择“扩展”，然后选择“管理扩展”从编辑器打开 Marketplace。
+在 Marketplace 中，搜索 Angular Language Service 扩展，然后单击“<strong>安装</strong>”按钮。</p>
+<p>Visual Studio 与 Angular 语言服务的集成由 Microsoft 维护和分发，并得到 Angular 团队的帮助。
+请<a href="https://github.com/microsoft/vs-ng-language-service" target="_blank">在此处</a>查看项目。</p>
+
+  <h3 id="webstorm">
+    <a href="#webstorm" class="docs-anchor" tabindex="-1" aria-label="Link to WebStorm">WebStorm</a>
+  </h3>
+  <p>在 <a href="https://www.jetbrains.com/webstorm" target="_blank">WebStorm</a> 中，启用插件 <a href="https://plugins.jetbrains.com/plugin/6971-angular-and-angularjs" target="_blank">Angular and AngularJS</a>。</p>
+<p>自 WebStorm 2019.1 起，不再需要 <code>@angular/language-service</code>，应从你的 <code>package.json</code> 中删除。</p>
+
+  <h3 id="sublime-text">
+    <a href="#sublime-text" class="docs-anchor" tabindex="-1" aria-label="Link to Sublime Text">Sublime Text</a>
+  </h3>
+  <p>在 <a href="https://www.sublimetext.com" target="_blank">Sublime Text</a> 中，语言服务仅在作为插件安装时才支持内联模板。
+你需要一个自定义的 Sublime 插件（或对当前插件的修改）才能在 HTML 文件中实现代码完成。</p>
+<p>要将语言服务用于内联模板，你必须首先添加一个扩展以允许 TypeScript，然后安装 Angular Language Service 插件。
+从 TypeScript 2.3 开始，TypeScript 具有语言服务可以使用的插件模型。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>在本地 <code>node_modules</code> 目录中安装最新版本的 TypeScript：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --save-dev</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> typescript</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>在同一位置安装 Angular Language Service 包：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --save-dev</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/language-service</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>安装软件包后，将以下内容添加到项目 <code>tsconfig.json</code> 的 <code>"compilerOptions"</code> 部分。</p>
+<div class="docs-code" header="tsconfig.json">
+    <div class="docs-code-header"><h3>tsconfig.json</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"plugins"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">     {</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"name"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular/language-service"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ]</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>在编辑器的用户首选项（<code>Cmd+,</code> 或 <code>Ctrl+,</code>）中，添加以下内容：</p>
+<div class="docs-code" header="Sublime Text user preferences">
+    <div class="docs-code-header"><h3>Sublime Text 用户偏好设置</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"typescript-tsdk"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"&lt;path to your folder&gt;/node_modules/typescript/lib"</span></span></code></pre>
+    </pre>
+  </div></li>
+
+    </ol>
+    <p>这使 Angular 语言服务可以在 <code>.ts</code> 文件中提供诊断和代码完成。</p>
+
+  <h3 id="eclipse-ide">
+    <a href="#eclipse-ide" class="docs-anchor" tabindex="-1" aria-label="Link to Eclipse IDE">Eclipse IDE</a>
+  </h3>
+  <p>可以直接安装包含 Angular Language Server 的“Eclipse IDE for Web and JavaScript developers”软件包，或者从其他 Eclipse IDE 软件包中使用“Help &gt; Eclipse Marketplace”查找并安装 <a href="https://marketplace.eclipse.org/content/wild-web-developer-html-css-javascript-typescript-nodejs-angular-json-yaml-kubernetes-xml" target="_blank">Eclipse Wild Web Developer</a>。</p>
+
+  <h3 id="neovim">
+    <a href="#neovim" class="docs-anchor" tabindex="-1" aria-label="Link to Neovim">Neovim</a>
+  </h3>
+  <p>Angular 语言服务可以通过使用 <a href="https://github.com/neovim/nvim-lspconfig" target="_blank">nvim-lspconfig</a> 插件与 Neovim 一起使用。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p><a href="https://github.com/neovim/nvim-lspconfig?tab=readme-ov-file#install" target="_blank">安装 nvim-lspconfig</a></p>
+</li>
+<li><p><a href="https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#angularls" target="_blank">配置 angularls 以用于 nvim-lspconfig</a></p>
+</li>
+
+    </ol>
+    
+  <h2 id="how-the-language-service-works">
+    <a href="#how-the-language-service-works" class="docs-anchor" tabindex="-1" aria-label="Link to How the Language Service works">语言服务工作原理</a>
+  </h2>
+  <p>当你在编辑器中使用语言服务时，编辑器会启动一个单独的语言服务进程，并通过 <a href="https://en.wikipedia.org/wiki/Remote_procedure_call" target="_blank">RPC</a>，使用 <a href="https://microsoft.github.io/language-server-protocol" target="_blank">Language Server Protocol</a> 与之通信。
+当你在编辑器中输入时，编辑器会将信息发送到语言服务进程，以跟踪你的项目状态。</p>
+<p>当你在模板中触发补全列表时，编辑器首先将模板解析为 HTML <a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree" target="_blank">抽象语法树 (AST)</a>。
+Angular 编译器会解释该树以确定上下文：模板所属的模块、当前作用域、组件选择器以及光标在模板 AST 中的位置。
+然后，它可以确定可能位于该位置的符号。</p>
+<p>如果你在插值中，情况会稍微复杂一些。
+如果你在 <code>div</code> 中有一个 <code>{{data.---}}</code> 的插值，并且需要在 <code>data.---</code> 之后获得补全列表，那么编译器就无法使用 HTML AST 来找到答案。
+HTML AST 只能告诉编译器，这里有一些文本，其字符为 "<code>{{data.---}}</code>"。
+这时，模板解析器会生成一个表达式 AST，它位于模板 AST 中。
+然后，Angular 语言服务会查看上下文中的 <code>data.---</code>，询问 TypeScript 语言服务 <code>data</code> 的成员是什么，并返回可能的列表。</p>
+
+  <h2 id="more-information">
+    <a href="#more-information" class="docs-anchor" tabindex="-1" aria-label="Link to More information">更多信息</a>
+  </h2>
+  
+  <ul class="docs-list">
+    <li>有关实现的更多深入信息，请参阅 <a href="https://github.com/angular/angular/blob/main/packages/language-service/src" target="_blank">Angular 语言服务源码</a></li>
+<li>有关设计考虑和意图的更多信息，请参阅 <a href="https://github.com/angular/vscode-ng-language-service/wiki/Design" target="_blank">此处的设计文档</a></li>
+
+  </ul>
+  

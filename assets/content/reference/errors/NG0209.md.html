@@ -1,0 +1,14 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">无效的多重提供者</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0209.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>当 Angular 运行时注入一个旨在与 <code>multi: true</code> 一起使用的令牌时，但却找到了一个非数组，就会抛出此错误。例如，<code>ENVIRONMENT_INITIALIZER</code> 应该像 <code>{provide: ENVIRONMENT_INITIALIZER, multi: true, useValue: () =&gt; {...}}</code> 这样提供。</p>

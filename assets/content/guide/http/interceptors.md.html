@@ -1,0 +1,167 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">拦截器</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/http/interceptors.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p><code>HttpClient</code> 支持一种被称为<em>拦截器</em>的中间件形式。</p>
+
+    <div class="docs-alert docs-alert-tldr">
+    <p><strong>要点：</strong> 拦截器是一种中间件，它允许从各个请求中抽象出围绕重试、缓存、日志记录和身份验证的通用模式。</p>
+
+    </div>
+    <p><code>HttpClient</code> 支持两种类型的拦截器：函数式和基于依赖注入的。我们建议使用函数式拦截器，因为它们具有更可预测的行为，尤其是在复杂的设置中。本指南中的示例使用函数式拦截器，我们在结尾的单独部分中介绍了<a href="#di-based-interceptors">基于依赖注入的拦截器</a>。</p>
+
+  <h2 id="interceptors">
+    <a href="#interceptors" class="docs-anchor" tabindex="-1" aria-label="Link to Interceptors">拦截器</a>
+  </h2>
+  <p>拦截器通常是你可以为每个请求运行的函数，并且具有广泛的能力来影响请求和响应的内容和整体流程。你可以安装多个拦截器，它们形成一个拦截器链，其中每个拦截器在将请求或响应转发到链中的下一个拦截器之前处理该请求或响应。</p>
+<p>你可以使用拦截器来实现各种常见模式，例如：</p>
+
+  <ul class="docs-list">
+    <li>向特定 API 的传出请求添加身份验证标头。</li>
+<li>使用指数退避重试失败的请求。</li>
+<li>缓存响应一段时间，或直到被变更失效。</li>
+<li>自定义响应的解析。</li>
+<li>测量服务器响应时间并记录它们。</li>
+<li>在网络操作正在进行时，驱动 UI 元素（例如加载动画）。</li>
+<li>收集和批量处理在特定时间范围内发出的请求。</li>
+<li>在可配置的截止时间或超时后自动使请求失败。</li>
+<li>定期轮询服务器并刷新结果。</li>
+
+  </ul>
+  
+  <h2 id="defining-an-interceptor">
+    <a href="#defining-an-interceptor" class="docs-anchor" tabindex="-1" aria-label="Link to Defining an interceptor">定义拦截器</a>
+  </h2>
+  <p>拦截器的基本形式是一个函数，它接收传出的 <code>HttpRequest</code> 和一个 <code>next</code> 函数，该函数表示拦截器链中的下一个处理步骤。</p>
+<p>例如，这个 <code>loggingInterceptor</code> 将在转发请求之前将传出的请求 URL 记录到 <code>console.log</code> 中：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> loggingInterceptor</span><span style="--shiki-light:#6F42C1;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#FFAB70">req</span><span style="--shiki-light:#6F42C1;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpRequest</span><span style="--shiki-light:#6F42C1;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#79B8FF">unknown</span><span style="--shiki-light:#6F42C1;--shiki-dark:#E1E4E8">&gt;, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#FFAB70">next</span><span style="--shiki-light:#6F42C1;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpHandlerFn</span><span style="--shiki-light:#6F42C1;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#6F42C1;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Observable</span><span style="--shiki-light:#6F42C1;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">HttpEvent</span><span style="--shiki-light:#6F42C1;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#79B8FF">unknown</span><span style="--shiki-light:#6F42C1;--shiki-dark:#E1E4E8">&gt;&gt; {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#E1E4E8">  console</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(req.url);</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  return</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> next</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(req);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>为了使此拦截器实际拦截请求，你必须配置 <code>HttpClient</code> 以使用它。</p>
+
+  <h2 id="configuring-interceptors">
+    <a href="#configuring-interceptors" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring interceptors">配置拦截器</a>
+  </h2>
+  <p>在通过依赖注入配置 <code>HttpClient</code> 时，你可以通过使用 <code>withInterceptors</code> 特性来声明要使用的一组拦截器：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppComponent, {providers: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  provideHttpClient</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    withInterceptors</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">([loggingInterceptor, cachingInterceptor]),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  )</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]});</span></span></code></pre>
+    </pre>
+  </div><p>你配置的拦截器按照你在提供者中列出的顺序链接在一起。在上面的示例中，<code>loggingInterceptor</code> 将处理请求，然后将其转发到 <code>cachingInterceptor</code>。</p>
+
+  <h3 id="intercepting-response-events">
+    <a href="#intercepting-response-events" class="docs-anchor" tabindex="-1" aria-label="Link to Intercepting response events">拦截响应事件</a>
+  </h3>
+  <p>拦截器可以转换由 <code>next</code> 返回的 <code>HttpEvent</code> 的 <code>Observable</code> 流，以便访问或操纵响应。由于此流包含所有响应事件，因此可能需要检查每个事件的 <code>.type</code> 以识别最终的响应对象。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> loggingInterceptor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">req</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpRequest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">unknown</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">next</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpHandlerFn</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Observable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">HttpEvent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">unknown</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&gt; {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  return</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> next</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(req).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">pipe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">tap</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">event</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (event.type </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">===</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> HttpEventType.Response) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(req.url, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'returned a response with status'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, event.status);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }));</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-tip">
+    <p><strong>提示：</strong> 拦截器自然地将响应与其传出的请求关联起来，因为它们在捕获请求对象的闭包中转换响应流。</p>
+
+    </div>
+    
+  <h2 id="modifying-requests">
+    <a href="#modifying-requests" class="docs-anchor" tabindex="-1" aria-label="Link to Modifying requests">修改请求</a>
+  </h2>
+  <p><code>HttpRequest</code> 和 <code>HttpResponse</code> 实例的大多数方面都是<em>不可变的</em>，拦截器无法直接修改它们。相反，拦截器通过使用 <code>.clone()</code> 操作克隆这些对象，并指定应在新实例中变更哪些属性来应用变更。这可能涉及到对值本身执行不可变更新（例如 <code>HttpHeaders</code> 或 <code>HttpParams</code>）。</p>
+<p>例如，要向请求添加标头：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> reqWithHeader</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> req.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">clone</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  headers: req.headers.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'X-New-Header'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'new header value'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>如果将相同的 <code>HttpRequest</code> 多次提交到拦截器链，则此不可变性允许大多数拦截器是幂等的。这可能是由于多种原因造成的，包括在失败后重试请求时。</p>
+
+    <div class="docs-alert docs-alert-critical">
+    <p><strong>重要提示：</strong> 请求或响应的主体<strong>不</strong>受深度变更的保护。如果拦截器必须变更主体，请注意处理在同一请求上多次运行的情况。</p>
+
+    </div>
+    
+  <h2 id="dependency-injection-in-interceptors">
+    <a href="#dependency-injection-in-interceptors" class="docs-anchor" tabindex="-1" aria-label="Link to Dependency injection in interceptors">拦截器中的依赖注入</a>
+  </h2>
+  <p>拦截器在注册它们的注入器的<em>注入上下文</em>中运行，并且可以使用 Angular 的 <code>inject</code> API 来检索依赖。</p>
+<p>例如，假设一个应用有一个名为 <code>AuthService</code> 的服务，它为传出的请求创建身份验证令牌。拦截器可以注入并使用此服务：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> authInterceptor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">req</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpRequest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">unknown</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">next</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpHandlerFn</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Inject the current `AuthService` and use it to get an authentication token:</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> authToken</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AuthService).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getAuthToken</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Clone the request to add the authentication header.</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> newReq</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> req.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">clone</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    headers: req.headers.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">append</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'X-Authentication-Token'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, authToken),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  });</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  return</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> next</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(newReq);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="request-and-response-metadata">
+    <a href="#request-and-response-metadata" class="docs-anchor" tabindex="-1" aria-label="Link to Request and response metadata">请求和响应元数据</a>
+  </h2>
+  <p>通常，在请求中包含一些信息是很有用的，这些信息不会发送到后端，而是专门用于拦截器。<code>HttpRequest</code> 有一个 <code>.context</code> 对象，它将这种元数据存储为 <code>HttpContext</code> 的实例。此对象充当类型化的映射表，其键的类型为 <code>HttpContextToken</code>。</p>
+<p>为了阐明此体系的工作原理，让我们使用元数据来控制是否为给定请求启用缓存拦截器。</p>
+
+  <h3 id="defining-context-tokens">
+    <a href="#defining-context-tokens" class="docs-anchor" tabindex="-1" aria-label="Link to Defining context tokens">定义上下文令牌</a>
+  </h3>
+  <p>为了存储缓存拦截器是否应将特定请求缓存在该请求的 <code>.context</code> 映射表中，请定义一个新的 <code>HttpContextToken</code> 作为键：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> CACHING_ENABLED</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpContextToken</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">boolean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;(() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre>
+    </pre>
+  </div><p>提供的函数为尚未显式设置值的请求创建令牌的默认值。使用函数可确保如果令牌的值是对象或数组，则每个请求都会获得自己的实例。</p>
+
+  <h3 id="reading-the-token-in-an-interceptor">
+    <a href="#reading-the-token-in-an-interceptor" class="docs-anchor" tabindex="-1" aria-label="Link to Reading the token in an interceptor">在拦截器中读取令牌</a>
+  </h3>
+  <p>然后，拦截器可以读取令牌，并根据其值选择是否应用缓存逻辑：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> cachingInterceptor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">req</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpRequest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">unknown</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">next</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpHandlerFn</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Observable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">HttpEvent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">unknown</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&gt; {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (req.context.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">CACHING_ENABLED</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)) {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // apply caching logic</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    return</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> ...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">else</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // caching has been disabled for this request</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    return</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> next</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(req);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="setting-context-tokens-when-making-a-request">
+    <a href="#setting-context-tokens-when-making-a-request" class="docs-anchor" tabindex="-1" aria-label="Link to Setting context tokens when making a request">在发出请求时设置上下文令牌</a>
+  </h3>
+  <p>通过 <code>HttpClient</code> API 发出请求时，你可以为 <code>HttpContextToken</code> 提供值：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> data$</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> http.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/sensitive/data'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  context: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpContext</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">CACHING_ENABLED</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>拦截器可以从请求的 <code>HttpContext</code> 中读取这些值。</p>
+
+  <h3 id="the-request-context-is-mutable">
+    <a href="#the-request-context-is-mutable" class="docs-anchor" tabindex="-1" aria-label="Link to The request context is mutable">请求上下文是可变的</a>
+  </h3>
+  <p>与 <code>HttpRequest</code> 的其他属性不同，关联的 <code>HttpContext</code> 是<em>可变的</em>。如果拦截器更改了稍后重试的请求的上下文，则当同一拦截器再次运行时，它将观察到上下文变更。如果需要，这对于在多次重试中传递状态很有用。</p>
+
+  <h2 id="synthetic-responses">
+    <a href="#synthetic-responses" class="docs-anchor" tabindex="-1" aria-label="Link to Synthetic responses">合成响应</a>
+  </h2>
+  <p>大多数拦截器将仅在转换请求或响应时调用 <code>next</code> 处理程序，但这并非严格要求。本节讨论拦截器可以结合更高级行为的几种方式。</p>
+<p>拦截器不是必须调用 <code>next</code>。相反，他们可以选择通过其他机制构造响应，例如从缓存中或通过替代机制发送请求。</p>
+<p>可以使用 <code>HttpResponse</code> 构造函数构造响应：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> resp</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpResponse</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  body: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'response body'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="di-based-interceptors">
+    <a href="#di-based-interceptors" class="docs-anchor" tabindex="-1" aria-label="Link to DI-based interceptors">基于 DI 的拦截机制</a>
+  </h2>
+  <p><code>HttpClient</code> 还支持拦截器，这些拦截器被定义为可注入类，并通过依赖注入体系进行配置。基于依赖注入的拦截器的功能与函数式拦截器的功能相同，但配置机制不同。</p>
+<p>基于 DI 的拦截器是一个实现了 <code>HttpInterceptor</code> 接口的可注入类：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Injectable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> LoggingInterceptor</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> implements</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpInterceptor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  intercept</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">req</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpRequest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">handler</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HttpHandler</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Observable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">HttpEvent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&gt; {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Request URL: '</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> req.url);</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> handler.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">handle</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(req);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>基于 DI 的拦截机制通过依赖注入多提供者进行配置：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppComponent, {providers: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  provideHttpClient</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // DI-based interceptors must be explicitly enabled.</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    withInterceptorsFromDi</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ),</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {provide: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">HTTP_INTERCEPTORS</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, useClass: LoggingInterceptor, multi: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]});</span></span></code></pre>
+    </pre>
+  </div><p>基于 DI 的拦截机制按照其提供者注册的顺序运行。在具有广泛且分层的 DI 配置的应用中，此顺序可能很难预测。</p>

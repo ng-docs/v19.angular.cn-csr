@@ -1,0 +1,35 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">缺少值访问器</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG01203.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>对于所有自定义表单控件，你都必须注册一个值访问器。</p>
+<p>这是一个如何提供值访问器的范例：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    provide: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">NG_VALUE_ACCESSOR</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    useExisting: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forwardRef</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> MyInputField),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    multi: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="debugging-the-error">
+    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">调试此错误</a>
+  </h2>
+  <p>如上所述，你的控件本应具有值访问器，但却缺少一个。然而，在实践中，发生这种情况的原因有很多。以下是导致此错误的一些已知问题列表。</p>
+
+    <ol class="docs-ordered-list">
+      <li>如果你<strong>定义了</strong>一个自定义表单控件，你是否记得提供一个值访问器？</li>
+<li>你是否将 <code>ngModel</code> 放在了没有值的元素或<strong>无效元素</strong>上（例如 <code>&lt;div [(ngModel)]="foo"&gt;</code>）？</li>
+<li>你是否正在使用在 <code>NgModule</code> 内部声明的自定义表单控件？如果是，请确保你正在<strong>导入</strong>该 <code>NgModule</code>。</li>
+<li>你是否正在将 <code>ngModel</code> 与第三方自定义表单控件一起使用？检查该控件是否提供了值访问器。如果未提供，请在该控件的元素上使用 <strong><code>ngDefaultControl</code></strong>。</li>
+<li>你是否正在<strong>测试</strong>自定义表单控件？请务必配置你的测试床，以便了解该控件。你可以使用 <code>Testbed.configureTestingModule</code> 来做到这一点。</li>
+<li>你是否正在将 <strong>Nx 和模块联邦</strong> 与 webpack 结合使用？你的 <code>webpack.config.js</code> 可能需要<a href="https://github.com/angular/angular/issues/43821#issuecomment-1054845431" target="_blank">额外的配置</a>，以确保 forms 包是共享的。</li>
+
+    </ol>
+    

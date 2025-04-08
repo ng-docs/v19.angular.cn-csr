@@ -1,0 +1,406 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular 包格式</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/libraries/angular-package-format.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>本文档介绍了 Angular 包格式 (APF)。
+APF 是 Angular 专用规范，用于 npm 包的结构和格式，所有第一方 Angular 包（<code>@angular/core</code>、<code>@angular/material</code> 等）和大多数第三方 Angular 库都使用它。</p>
+<p>APF 使程序包能够在大多数使用 Angular 的常见场景下无缝工作。
+使用 APF 的程序包与 Angular 团队以及更广泛的 JavaScript 生态系统提供的工具兼容。
+建议第三方库开发人员遵循相同的 npm 包格式。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> APF 与 Angular 的其余部分一起进行版本控制，并且每个主要版本都会改进包格式。
+你可以在此<a href="https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview" target="_blank">google 文档</a>中找到 v13 之前的规范版本。</p>
+
+    </div>
+    
+  <h2 id="why-specify-a-package-format">
+    <a href="#why-specify-a-package-format" class="docs-anchor" tabindex="-1" aria-label="Link to Why specify a package format?">为什么要指定包格式？</a>
+  </h2>
+  <p>在当今的 JavaScript 环境中，开发人员以多种不同的方式使用包，使用许多不同的工具链（webpack、Rollup、esbuild 等）。
+这些工具可能理解并需要不同的输入 - 有些工具可能能够处理最新的 ES 语言版本，而另一些工具可能受益于直接使用较旧的 ES 版本。</p>
+<p>Angular 发布格式支持所有常用的开发工具和工作流程，并强调优化，从而减小应用负载大小或加快开发迭代周期（构建时间）。</p>
+<p>开发人员可以依靠 Angular CLI 和 <a href="https://github.com/ng-packagr/ng-packagr" target="_blank">ng-packagr</a>（Angular CLI 使用的构建工具）来生成 Angular 包格式的包。
+有关更多详细信息，请参阅<a href="tools/libraries/creating-libraries">创建库</a>指南。</p>
+
+  <h2 id="file-layout">
+    <a href="#file-layout" class="docs-anchor" tabindex="-1" aria-label="Link to File layout">文件布局</a>
+  </h2>
+  <p>以下范例显示了 <code>@angular/core</code> 包文件布局的简化版本，并解释了包中每个文件的用途。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">node_modules/@angular/core</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">├── README.md</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">├── package.json</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">├── index.d.ts</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">├── fesm2022</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">│   ├── core.mjs</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">│   ├── core.mjs.map</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">│   ├── testing.mjs</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">│   └── testing.mjs.map</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">└── testing</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    └── index.d.ts</span></span></code></pre>
+    </pre>
+  </div><p>下表描述了 <code>node_modules/@angular/core</code> 下的文件布局，并带有注解以描述文件和目录的用途：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">文件</th>
+<th align="left">用途</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>README.md</code></td>
+<td align="left">程序包 README，由 npmjs Web UI 使用。</td>
+</tr>
+<tr>
+<td align="left"><code>package.json</code></td>
+<td align="left">主要的 <code>package.json</code>，描述了程序包本身以及所有可用的入口点和代码格式。此文件包含运行时和工具用于执行模块解析的 "exports" 映射表。</td>
+</tr>
+<tr>
+<td align="left"><code>index.d.ts</code></td>
+<td align="left">主入口点 <code>@angular/core</code> 的捆绑 <code>.d.ts</code>。</td>
+</tr>
+<tr>
+<td align="left"><code>fesm2022/</code> <br> &nbsp;&nbsp;─ <code>core.mjs</code> <br> &nbsp;&nbsp;─ <code>core.mjs.map</code> <br> &nbsp;&nbsp;─ <code>testing.mjs</code> <br> &nbsp;&nbsp;─ <code>testing.mjs.map</code></td>
+<td align="left">所有入口点的代码，采用扁平化 (FESM) ES2022 格式，以及源码映射。</td>
+</tr>
+<tr>
+<td align="left"><code>testing/</code></td>
+<td align="left">表示 "testing" 入口点的目录。</td>
+</tr>
+<tr>
+<td align="left"><code>testing/index.d.ts</code></td>
+<td align="left"><code>@angular/core/testing</code> 入口点的捆绑 <code>.d.ts</code>。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="packagejson">
+    <a href="#packagejson" class="docs-anchor" tabindex="-1" aria-label="Link to <code>package.json</code>"><code>package.json</code></a>
+  </h2>
+  <p>主要的 <code>package.json</code> 包含重要的程序包元数据，包括以下内容：</p>
+
+  <ul class="docs-list">
+    <li><p>它<a href="#esm-declaration">声明</a>该程序包采用 EcmaScript 模块 (ESM) 格式</p>
+</li>
+<li><p>它包含一个 <a href="#exports"><code>"exports"</code> 字段</a>，用于定义所有入口点的可用源码格式</p>
+</li>
+<li><p>它包含<a href="#legacy-resolution-keys">键</a>，这些键定义了主要 <code>@angular/core</code> 入口点的可用源码格式，适用于不理解 <code>"exports"</code> 的工具。
+  这些键被认为是已弃用的，并且可能会随着整个生态系统中对 <code>"exports"</code> 的支持而删除。</p>
+</li>
+<li><p>它声明了程序包是否包含<a href="#side-effects">副作用</a></p>
+</li>
+
+  </ul>
+  
+  <h3 id="esm-declaration">
+    <a href="#esm-declaration" class="docs-anchor" tabindex="-1" aria-label="Link to ESM declaration">ESM 对象声明</a>
+  </h3>
+  <p>顶层 <code>package.json</code> 包含以下键：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"module"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>这会通知解析器，程序包中的代码正在使用 EcmaScript 模块，而不是 CommonJS 模块。</p>
+
+  <h3 id="quotexportsquot">
+    <a href="#quotexportsquot" class="docs-anchor" tabindex="-1" aria-label="Link to <code>&quot;exports&quot;</code>"><code>"exports"</code></a>
+  </h3>
+  <p><code>"exports"</code> 字段具有以下结构：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"exports"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "./schematics/*"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./schematics/*.js"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "./package.json"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./package.json"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "types"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./core.d.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./fesm2022/core.mjs"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "./testing"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "types"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./testing/testing.d.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./fesm2022/testing.mjs"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>主要关注的是 <code>"."</code> 和 <code>"./testing"</code> 键，它们分别定义了 <code>@angular/core</code> 主入口点和 <code>@angular/core/testing</code> 辅助入口点的可用代码格式。
+对于每个入口点，可用的格式为：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">格式</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">类型定义 (<code>.d.ts</code> 文件)</td>
+<td align="left">当依赖于给定的软件包时，TypeScript 会使用 <code>.d.ts</code> 文件。</td>
+</tr>
+<tr>
+<td align="left"><code>default</code></td>
+<td align="left">扁平化为单个源码的 ES2022 代码。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>知道这些键的工具可能会优先从 <code>"exports"</code> 中选择所需的代码格式。</p>
+<p>库可能希望公开额外的静态文件，这些文件未被基于 JavaScript 的入口点的导出捕获，例如 Sass mixin 或预编译的 CSS。</p>
+<p>有关更多信息，请参阅<a href="tools/libraries/creating-libraries#managing-assets-in-a-library">在库中管理资产</a>。</p>
+
+  <h3 id="legacy-resolution-keys">
+    <a href="#legacy-resolution-keys" class="docs-anchor" tabindex="-1" aria-label="Link to Legacy resolution keys">旧版解析键</a>
+  </h3>
+  <p>除了 <code>"exports"</code> 之外，顶层 <code>package.json</code> 还为不支持 <code>"exports"</code> 的解析器定义了旧版模块解析键。
+对于 <code>@angular/core</code>，这些是：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "module"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./fesm2022/core.mjs"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "typings"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./core.d.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>如前面的代码片段所示，模块解析器可以使用这些键来加载特定的代码格式。</p>
+
+  <h3 id="side-effects">
+    <a href="#side-effects" class="docs-anchor" tabindex="-1" aria-label="Link to Side effects">副作用</a>
+  </h3>
+  <p><code>package.json</code> 的最后一个功能是声明该软件包是否具有<a href="#sideeffects-flag">副作用</a>。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "sideEffects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>大多数 Angular 软件包不应依赖于顶层副作用，因此应包含此声明。</p>
+
+  <h2 id="entrypoints-and-code-splitting">
+    <a href="#entrypoints-and-code-splitting" class="docs-anchor" tabindex="-1" aria-label="Link to Entrypoints and code splitting">入口点和代码拆分</a>
+  </h2>
+  <p>Angular 软件包格式中的软件包包含一个主入口点和零个或多个辅助入口点（例如，<code>@angular/common/http</code>）。
+入口点有多种功能。</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>它们定义了用户从中导入代码的模块标识符（例如，<code>@angular/core</code> 和 <code>@angular/core/testing</code>）。</p>
+<p>用户通常将这些入口点视为不同的符号组，它们具有不同的用途或功能。</p>
+<p>特定的入口点可能仅用于特殊目的，例如测试。
+ 可以将此类 API 从主入口点中分离出来，以减少意外或错误使用它们的可能性。</p>
+</li>
+<li><p>它们定义了可以惰性加载代码的粒度。</p>
+<p>许多现代构建工具仅能够在 ES 模块级别进行“代码拆分”（也称为惰性加载）。
+ Angular 软件包格式主要为每个入口点使用单个“扁平” ES 模块。这意味着大多数构建工具无法将具有单个入口点的代码拆分为多个输出块。</p>
+</li>
+
+    </ol>
+    <p>APF 软件包的通用规则是为尽可能小的逻辑连接代码集使用入口点。
+例如，Angular Material 软件包将每个逻辑组件或组件集作为单独的入口点发布 - 按钮一个入口点，选项卡一个入口点，等等。
+这样就可以根据需要分别惰性加载每个 Material 组件。</p>
+<p>并非所有库都需要如此精细的粒度。
+大多数具有单一逻辑用途的库都应作为单个入口点发布。
+例如，<code>@angular/core</code> 为运行时使用单个入口点，因为 Angular 运行时通常作为一个整体使用。</p>
+
+  <h3 id="resolution-of-secondary-entry-points">
+    <a href="#resolution-of-secondary-entry-points" class="docs-anchor" tabindex="-1" aria-label="Link to Resolution of secondary entry points">辅助入口点的求解</a>
+  </h3>
+  <p>辅助入口点可以通过软件包的 <code>package.json</code> 的 <code>"exports"</code> 字段来求解。</p>
+
+  <h2 id="readmemd">
+    <a href="#readmemd" class="docs-anchor" tabindex="-1" aria-label="Link to README.md">README.md</a>
+  </h2>
+  <p>Markdown 格式的 README 文件，用于在 npm 和 GitHub 上显示软件包的描述。</p>
+<p>@angular/core 软件包的 README 内容范例：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">Angular</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=======</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">The sources for this package are in the main [Angular](https://github.com/angular/angular) repo.Please file issues and pull requests against that repo.</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">License: MIT</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="partial-compilation">
+    <a href="#partial-compilation" class="docs-anchor" tabindex="-1" aria-label="Link to Partial compilation">部分编译</a>
+  </h2>
+  <p>Angular 软件包格式的库必须以“部分编译”模式发布。
+这是 <code>ngc</code> 的一种编译模式，它生成的已编译 Angular 代码不依赖于特定的 Angular 运行时版本，这与用于应用的完全编译形成对比，在完全编译中，Angular 编译器和运行时版本必须完全匹配。</p>
+<p>要部分编译 Angular 代码，请在 <code>tsconfig.json</code> 文件的 <code>angularCompilerOptions</code> 属性中使用 <code>compilationMode</code> 标志：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "angularCompilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "compilationMode"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"partial"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>部分编译的库代码随后在应用构建过程中由 Angular CLI 转换为完全编译的代码。</p>
+<p>如果你的构建管道不使用 Angular CLI，请参阅<a href="tools/libraries/creating-libraries#consuming-partial-ivy-code-outside-the-angular-cli">在 Angular CLI 之外使用部分 ivy 代码</a>指南。</p>
+
+  <h2 id="optimizations">
+    <a href="#optimizations" class="docs-anchor" tabindex="-1" aria-label="Link to Optimizations">优化</a>
+  </h2>
+  
+  <h3 id="flattening-of-es-modules">
+    <a href="#flattening-of-es-modules" class="docs-anchor" tabindex="-1" aria-label="Link to Flattening of ES modules">ES 模块的扁平化</a>
+  </h3>
+  <p>Angular 软件包格式指定代码以“扁平化” ES 模块格式发布。
+这大大减少了 Angular 应用的构建时间以及最终应用捆绑包的下载和解析时间。
+请查看 Nolan Lawson 的优秀文章 <a href="https://nolanlawson.com/2016/08/15/the-cost-of-small-modules" target="_blank">“小型模块的成本”</a>。</p>
+<p>Angular 编译器可以生成索引 ES 模块文件。Rollup 等工具可以使用这些文件以 <em>扁平化 ES 模块</em> (FESM) 文件格式生成扁平化模块。</p>
+<p>FESM 是一种文件格式，它通过将从入口点可访问的所有 ES 模块扁平化为单个 ES 模块而创建。
+它的形成过程是：跟踪软件包中的所有导入，并将该代码复制到单个文件中，同时保留所有公共 ES 导出并删除所有私有导入。</p>
+<p>缩写名称 FESM，发音为 <em>phe-som</em>，后面可以跟一个数字，例如 FESM2020。
+该数字指的是模块内部 JavaScript 的语言级别。
+因此，FESM2022 文件将是 ESM+ES2022，并包含 import/export 语句和 ES2022 源代码。</p>
+<p>要生成扁平化的 ES 模块索引文件，请在 tsconfig.json 文件中使用以下配置选项：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "compilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    …</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "module"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"esnext"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "target"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"es2022"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    …</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "angularCompilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    …</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "flatModuleOutFile"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"my-ui-lib.js"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "flatModuleId"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"my-ui-lib"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>一旦索引文件（例如，<code>my-ui-lib.js</code>）由 ngc 生成，就可以使用 Rollup 等打捆器和优化器来生成扁平化的 ESM 文件。</p>
+
+  <h3 id="sideeffects-flag">
+    <a href="#sideeffects-flag" class="docs-anchor" tabindex="-1" aria-label="Link to " sideeffects_ flag_>“sideEffects”标记</a>
+  </h3>
+  <p>默认情况下，EcmaScript 模块是具有副作用的：从模块导入可确保应运行该模块顶层的任何代码。
+这通常是不希望的，因为典型模块中的大多数副作用代码并非真正具有副作用，而只是影响特定符号。
+如果未导入和使用这些符号，则通常希望在称为摇树优化的优化过程中删除它们，而副作用代码可能会阻止这种情况。</p>
+<p>诸如 webpack 之类的构建工具支持一个标志，该标志允许软件包声明它们不依赖于模块顶层的副作用代码，从而使工具有更大的自由度来摇树优化软件包中的代码。
+这些优化的最终结果应该是更小的捆绑包大小以及代码拆分后捆绑包块中更好的代码分布。
+如果你的代码包含非本地副作用，则此优化可能会破坏你的代码 - 但这在 Angular 应用中并不常见，并且通常是不良设计的迹象。
+建议所有软件包通过将 <code>sideEffects</code> 属性设置为 <code>false</code> 来声明无副作用状态，并且开发人员遵循 <a href="/style-guide">Angular 风格指南</a>，这自然会导致代码不包含非本地副作用。</p>
+<p>更多信息：<a href="https://github.com/webpack/webpack/tree/master/examples/side-effects" target="_blank">关于副作用的 webpack 文档</a></p>
+
+  <h3 id="es2022-language-level">
+    <a href="#es2022-language-level" class="docs-anchor" tabindex="-1" aria-label="Link to ES2022 language level">ES2022 语言级别</a>
+  </h3>
+  <p>ES2022 语言级别现在是 Angular CLI 和其他工具使用的默认语言级别。
+Angular CLI 在应用构建时将捆绑包降级到所有目标浏览器都支持的语言级别。</p>
+
+  <h3 id="dts-bundling---type-definition-flattening">
+    <a href="#dts-bundling---type-definition-flattening" class="docs-anchor" tabindex="-1" aria-label="Link to d.ts bundling / type definition flattening">d.ts 打包 / 类型定义扁平化</a>
+  </h3>
+  <p>从 APF v8 开始，建议捆绑 TypeScript 定义。
+类型定义的捆绑可以显着加快用户的编译速度，尤其是在你的库中有很多单独的 <code>.ts</code> 源文件的情况下。</p>
+<p>Angular 使用 <a href="https://github.com/Swatinem/rollup-plugin-dts" target="_blank"><code>rollup-plugin-dts</code></a> 来扁平化 <code>.d.ts</code> 文件（使用 <code>rollup</code>，类似于 FESM 文件的创建方式）。</p>
+<p>使用 rollup 进行 <code>.d.ts</code> 打包是有益的，因为它支持入口点之间的代码拆分。
+例如，假设你有多个依赖于同一共享类型的入口点，则会创建一个共享的 <code>.d.ts</code> 文件以及更大的扁平化 <code>.d.ts</code> 文件。
+这是理想的，并且避免了类型重复。</p>
+
+  <h3 id="tslib">
+    <a href="#tslib" class="docs-anchor" tabindex="-1" aria-label="Link to Tslib">Tslib</a>
+  </h3>
+  <p>从 APF v10 开始，建议将 tslib 添加为主要入口点的直接依赖项。
+这是因为 tslib 版本与用于编译库的 TypeScript 版本相关联。</p>
+
+  <h2 id="examples">
+    <a href="#examples" class="docs-anchor" tabindex="-1" aria-label="Link to Examples">范例</a>
+  </h2>
+  
+    <nav class="docs-pill-row">
+      
+    <a class="docs-pill" href="https://unpkg.com/browse/@angular/core@17.0.0/" target="_blank">
+      @angular/core 软件包<docs-icon class="docs-icon-small">open_in_new</docs-icon>
+    </a>
+    
+    <a class="docs-pill" href="https://unpkg.com/browse/@angular/material@17.0.0/" target="_blank">
+      @angular/material 软件包<docs-icon class="docs-icon-small">open_in_new</docs-icon>
+    </a>
+    
+
+    </nav>
+    
+  <h2 id="definition-of-terms">
+    <a href="#definition-of-terms" class="docs-anchor" tabindex="-1" aria-label="Link to Definition of terms">术语定义</a>
+  </h2>
+  <p>以下术语在本文档中均有意使用。
+本节提供了所有这些术语的定义，以提供额外的清晰度。</p>
+
+  <h3 id="package">
+    <a href="#package" class="docs-anchor" tabindex="-1" aria-label="Link to Package">软件包</a>
+  </h3>
+  <p>发布到 NPM 并一起安装的最小文件集，例如 <code>@angular/core</code>。
+此软件包包括一个名为 package.json 的清单、已编译的源代码、typescript 定义文件、源码映射、元数据等。
+该软件包使用 <code>npm install @angular/core</code> 安装。</p>
+
+  <h3 id="symbol">
+    <a href="#symbol" class="docs-anchor" tabindex="-1" aria-label="Link to Symbol">符号</a>
+  </h3>
+  <p>模块中包含的类、函数、常量或变量，可以选择通过模块导出使其对外部世界可见。</p>
+
+  <h3 id="module">
+    <a href="#module" class="docs-anchor" tabindex="-1" aria-label="Link to Module">模块</a>
+  </h3>
+  <p>ECMAScript 模块的缩写。
+一个包含导入和导出符号语句的文件。
+这与 ECMAScript 规范中模块的定义相同。</p>
+
+  <h3 id="esm">
+    <a href="#esm" class="docs-anchor" tabindex="-1" aria-label="Link to ESM">ESM</a>
+  </h3>
+  <p>ECMAScript 模块的缩写（见上文）。</p>
+
+  <h3 id="fesm">
+    <a href="#fesm" class="docs-anchor" tabindex="-1" aria-label="Link to FESM">FESM</a>
+  </h3>
+  <p>扁平化 ES 模块的缩写，由一种文件格式组成，该格式通过将从入口点可访问的所有 ES 模块扁平化为单个 ES 模块而创建。</p>
+
+  <h3 id="module-id">
+    <a href="#module-id" class="docs-anchor" tabindex="-1" aria-label="Link to Module ID">模块 ID</a>
+  </h3>
+  <p>模块的标识符，用于导入语句中（例如，<code>@angular/core</code>）。
+ID 通常直接映射到文件系统上的路径，但这并非总是如此，因为存在各种模块解析策略。</p>
+
+  <h3 id="module-specifier">
+    <a href="#module-specifier" class="docs-anchor" tabindex="-1" aria-label="Link to Module specifier">模块标识符</a>
+  </h3>
+  <p>模块标识符（见上文）。</p>
+
+  <h3 id="module-resolution-strategy">
+    <a href="#module-resolution-strategy" class="docs-anchor" tabindex="-1" aria-label="Link to Module resolution strategy">模块解析策略</a>
+  </h3>
+  <p>用于将模块 ID 转换为文件系统路径的算法。
+Node.js 有一个明确指定且广泛使用的算法，TypeScript 支持多种模块解析策略，<a href="https://developers.google.com/closure/compiler" target="_blank">Closure Compiler</a> 还有另一种策略。</p>
+
+  <h3 id="module-format">
+    <a href="#module-format" class="docs-anchor" tabindex="-1" aria-label="Link to Module format">模块格式</a>
+  </h3>
+  <p>模块语法的规范，至少涵盖从文件中导入和导出的语法。
+常见的模块格式有 CommonJS（CJS，通常用于 Node.js 应用）或 ECMAScript 模块（ESM）。
+模块格式仅指示各个模块的打包方式，但不指示用于构成模块内容的 JavaScript 语言特性。
+因此，Angular 团队经常使用语言级别标识符作为模块格式的后缀（例如，ESM+ES2022 指定模块为 ESM 格式并包含 ES2022 代码）。</p>
+
+  <h3 id="bundle">
+    <a href="#bundle" class="docs-anchor" tabindex="-1" aria-label="Link to Bundle">捆绑包</a>
+  </h3>
+  <p>一种以单个 JS 文件形式存在的产物，由构建工具（例如，<a href="https://webpack.js.org" target="_blank">webpack</a> 或 <a href="https://rollupjs.org" target="_blank">Rollup</a>）生成，其中包含源自一个或多个模块的符号。
+捆绑包是一种特定于浏览器的变通方法，旨在减少网络压力，否则，如果浏览器开始下载成百上千甚至数万个文件，就会造成网络压力。
+Node.js 通常不使用捆绑包。
+常见的捆绑包格式是 UMD 和 System.register。</p>
+
+  <h3 id="language-level">
+    <a href="#language-level" class="docs-anchor" tabindex="-1" aria-label="Link to Language level">语言级别</a>
+  </h3>
+  <p>代码的语言 (ES2022)。
+独立于模块格式。</p>
+
+  <h3 id="entry-point">
+    <a href="#entry-point" class="docs-anchor" tabindex="-1" aria-label="Link to Entry point">入口点</a>
+  </h3>
+  <p>旨在由用户导入的模块。
+它由唯一的模块 ID 引用，并导出由该模块 ID 引用的公共 API。
+例如 <code>@angular/core</code> 或 <code>@angular/core/testing</code>。
+这两个入口点都存在于 <code>@angular/core</code> 包中，但它们导出不同的符号。
+一个包可以有多个入口点。</p>
+
+  <h3 id="deep-import">
+    <a href="#deep-import" class="docs-anchor" tabindex="-1" aria-label="Link to Deep import">深度导入</a>
+  </h3>
+  <p>从非入口点的模块中检索符号的过程。
+这些模块 ID 通常被认为是私有 API，它们可能会在项目的生命周期内或在创建给定包的捆绑包时发生更改。</p>
+
+  <h3 id="top-level-import">
+    <a href="#top-level-import" class="docs-anchor" tabindex="-1" aria-label="Link to Top-Level import">顶层导入</a>
+  </h3>
+  <p>来自入口点的导入。
+可用的顶层导入定义了公共 API，并在 “@angular/name” 模块中公开，例如 <code>@angular/core</code> 或 <code>@angular/common</code>。</p>
+
+  <h3 id="tree-shaking">
+    <a href="#tree-shaking" class="docs-anchor" tabindex="-1" aria-label="Link to Tree-shaking">摇树优化</a>
+  </h3>
+  <p>识别和删除应用中未使用的代码的过程 - 也称为死代码消除。
+这是一种在应用级别执行的全局优化，使用的工具有 <a href="https://rollupjs.org" target="_blank">Rollup</a>、<a href="https://developers.google.com/closure/compiler" target="_blank">Closure Compiler</a> 或 <a href="https://github.com/terser/terser" target="_blank">Terser</a>。</p>
+
+  <h3 id="aot-compiler">
+    <a href="#aot-compiler" class="docs-anchor" tabindex="-1" aria-label="Link to AOT compiler">预先编译器</a>
+  </h3>
+  <p>Angular 的预先编译器。</p>
+
+  <h3 id="flattened-type-definitions">
+    <a href="#flattened-type-definitions" class="docs-anchor" tabindex="-1" aria-label="Link to Flattened type definitions">扁平化类型定义</a>
+  </h3>
+  <p>从 <a href="https://api-extractor.com" target="_blank">API Extractor</a> 生成的捆绑 TypeScript 定义。</p>

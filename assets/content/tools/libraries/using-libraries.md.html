@@ -1,0 +1,145 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">使用发布到 npm 的 Angular 库</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/libraries/using-libraries.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>当你构建 Angular 应用时，可以充分利用成熟的第一方库以及丰富的第三方库生态系统。
+<a href="https://material.angular.io" title="Angular" material | angular target="_blank">Angular Material</a> 就是一个成熟的第一方库的范例。</p>
+
+  <h2 id="install-libraries">
+    <a href="#install-libraries" class="docs-anchor" tabindex="-1" aria-label="Link to Install libraries">安装库</a>
+  </h2>
+  <p>库以 <a href="reference/configs/npm-packages" title="Workspace" npm dependencies | angular>npm 包</a> 的形式发布，通常还带有原理图，以便将它们与 Angular CLI 集成。
+要将可复用的库代码集成到应用中，你需要安装该包，并在使用它的位置导入所提供的功能。
+对于大多数已发布的 Angular 库，请使用 <code>ng add &lt;lib_name&gt;</code> Angular CLI 命令。</p>
+<p><code>ng add</code> Angular CLI 命令使用包管理器来安装库包，并调用包中包含的原理图，以便在项目代码中进行其他脚手架操作。
+包管理器的范例包括 <a href="https://www.npmjs.com" title="npm" target="_blank">npm</a> 或 <a href="https://yarnpkg.com" title="Yarn" target="_blank">yarn</a>。
+项目代码中的其他脚手架操作包括导入语句、字体和主题。</p>
+<p>已发布的库通常会提供一个 <code>README</code> 文件或其他文档，说明如何将该库添加到你的应用中。
+例如，请参阅 <a href="https://material.angular.io" title="Angular" material | angular target="_blank">Angular Material</a> 文档。</p>
+
+  <h3 id="library-typings">
+    <a href="#library-typings" class="docs-anchor" tabindex="-1" aria-label="Link to Library typings">库类型定义</a>
+  </h3>
+  <p>通常，库包会在 <code>.d.ts</code> 文件中包含类型定义；请参阅 <code>node_modules/@angular/material</code> 中的范例。
+如果你的库包不包含类型定义，并且你的 IDE 报错，你可能需要随库一起安装 <code>@types/&lt;lib_name&gt;</code> 包。</p>
+<p>例如，假设你有一个名为 <code>d3</code> 的库：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> d3</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --save</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @types/d3</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --save-dev</span></span></code></pre>
+    </pre>
+  </div><p>为工作区中安装的库在 <code>@types/</code> 包中定义的类型，会自动添加到使用该库的项目的 TypeScript 配置中。
+TypeScript 默认会在 <code>node_modules/@types</code> 目录中查找类型，因此你无需单独添加每个类型包。</p>
+<p>如果某个库在 <code>@types/</code> 中没有可用的类型定义，你可以通过手动为其添加类型定义来使用它。
+要做到这一点：</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>在你的 <code>src/</code> 目录中创建一个 <code>typings.d.ts</code> 文件。
+ 此文件会自动作为全局类型定义包含在内。</p>
+</li>
+<li><p>在 <code>src/typings.d.ts</code> 中添加以下代码：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">declare</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> module</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'host'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">   export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> interface</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Host</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">     protocol</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">     hostname</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">     pathname</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">   }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">   export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> parse</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">url</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">queryString</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Host</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>在使用该库的组件或文件中，添加以下代码：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> *</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> as</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> host </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'host'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> parsedUrl</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> host.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">parse</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'https://angular.io'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(parsedUrl.hostname);</span></span></code></pre>
+    </pre>
+  </div></li>
+
+    </ol>
+    <p>根据需要定义更多类型定义。</p>
+
+  <h2 id="updating-libraries">
+    <a href="#updating-libraries" class="docs-anchor" tabindex="-1" aria-label="Link to Updating libraries">更新库</a>
+  </h2>
+  <p>库可以由发布者更新，并且还有需要保持最新的各个依赖项。
+要检查已安装库的更新，请使用 <a href="cli/update" title="ng" update | cli |angular><code>ng update</code></a> Angular CLI 命令。</p>
+<p>使用 <code>ng update &lt;lib_name&gt;</code> Angular CLI 命令来更新单个库版本。
+Angular CLI 会检查库的最新发布版本，如果最新版本比你安装的版本新，则会下载它并更新你的 <code>package.json</code> 以匹配最新版本。</p>
+<p>当你将 Angular 更新到新版本时，你需要确保你正在使用的任何库都是最新的。
+如果库具有相互依赖性，你可能必须按特定顺序更新它们。
+请参阅 <a href="https://angular.dev/update-guide" title="Angular" update guide | angular target="_blank">Angular 更新指南</a> 以获得帮助。</p>
+
+  <h2 id="adding-a-library-to-the-runtime-global-scope">
+    <a href="#adding-a-library-to-the-runtime-global-scope" class="docs-anchor" tabindex="-1" aria-label="Link to Adding a library to the runtime global scope">将库添加到运行时全局作用域</a>
+  </h2>
+  <p>如果旧的 JavaScript 库没有导入到应用中，你可以将其添加到运行时全局作用域，并像在 script 标签中添加它一样加载它。
+在构建时配置 Angular CLI 来执行此操作，方法是使用 <a href="reference/configs/workspace-config" title="Angular" workspace configuration | angular><code>angular.json</code></a> 工作区构建配置文件中构建目标的 <code>scripts</code> 和 <code>styles</code> 选项。</p>
+<p>例如，要使用 <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction" title="Introduction" | bootstrap target="_blank">Bootstrap 4</a> 库</p>
+
+    <ol class="docs-ordered-list">
+      <li><p>使用 npm 包管理器安装库和相关的依赖项：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> jquery</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --save</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> popper.js</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --save</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> bootstrap</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --save</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>在 <code>angular.json</code> 配置文件中，将相关的脚本文件添加到 <code>scripts</code> 数组中：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"scripts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">   "node_modules/jquery/dist/jquery.slim.js"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">   "node_modules/popper.js/dist/umd/popper.js"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">   "node_modules/bootstrap/dist/js/bootstrap.js"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ],</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>将 <code>bootstrap.css</code> CSS 文件添加到 <code>styles</code> 数组中：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">"styles": [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">   "node_modules/bootstrap/dist/css/bootstrap.css"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">   "src/styles.css"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ],</span></span></code></pre>
+    </pre>
+  </div></li>
+<li><p>运行或重启 <code>ng serve</code> Angular CLI 命令，以查看 Bootstrap 4 在你的应用中工作。</p>
+</li>
+
+    </ol>
+    
+  <h3 id="using-runtime-global-libraries-inside-your-app">
+    <a href="#using-runtime-global-libraries-inside-your-app" class="docs-anchor" tabindex="-1" aria-label="Link to Using runtime-global libraries inside your app">在你的应用内部使用运行时全局库</a>
+  </h3>
+  <p>在使用 “scripts” 数组导入库之后，<strong>不要</strong> 在你的 TypeScript 代码中使用 import 语句导入它。
+以下代码片段是一个 import 语句的范例。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> *</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> as</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> $ </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'jquery'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div><p>如果你使用 import 语句导入它，你将拥有该库的两个不同副本：一个作为全局库导入，另一个作为模块导入。
+对于带有插件的库（如 JQuery）来说，这尤其糟糕，因为每个副本都包含不同的插件。</p>
+<p>相反，运行 <code>npm install @types/jquery</code> Angular CLI 命令来下载库的类型定义，然后按照库安装步骤操作。
+这使你可以访问该库公开的全局变量。</p>
+
+  <h3 id="defining-typings-for-runtime-global-libraries">
+    <a href="#defining-typings-for-runtime-global-libraries" class="docs-anchor" tabindex="-1" aria-label="Link to Defining typings for runtime-global libraries">为运行时全局库定义类型定义</a>
+  </h3>
+  <p>如果你需要使用的全局库没有全局类型定义，你可以在 <code>src/typings.d.ts</code> 中手动将其声明为 <code>any</code>。</p>
+<p>例如：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">declare</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> var</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> libraryName</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div><p>有些脚本会扩展其他库；例如使用 JQuery 插件：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">$</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'.test'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">myPlugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span></code></pre>
+    </pre>
+  </div><p>在这种情况下，已安装的 <code>@types/jquery</code> 不包含 <code>myPlugin</code>，因此你需要在 <code>src/typings.d.ts</code> 中添加一个接口。
+例如：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">interface</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JQuery</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  myPlugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">options</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>如果你不为脚本定义的扩展添加接口，你的 IDE 将显示错误：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span>[TS][Error] Property 'myPlugin' does not exist on type 'JQuery'</span></span></code></pre>
+    </pre>
+  </div>

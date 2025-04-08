@@ -1,0 +1,152 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">扩展诊断</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/extended-diagnostics/overview.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>从技术上讲，许多编码模式对于编译器或运行时都是有效的，但它们可能具有复杂的细微差别或注意事项。
+这些模式可能无法达到开发人员预期的效果，这通常会导致 Bug。
+Angular 编译器包含了“扩展诊断”，用于识别许多此类模式，以便警告开发人员潜在的问题，并在代码库中强制执行通用的最佳实践。</p>
+
+  <h2 id="diagnostics">
+    <a href="#diagnostics" class="docs-anchor" tabindex="-1" aria-label="Link to Diagnostics">诊断</a>
+  </h2>
+  <p>目前，Angular 支持以下扩展诊断：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">代码</th>
+<th align="left">名称</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>NG8101</code></td>
+<td align="left"><a href="extended-diagnostics/NG8101"><code>invalidBananaInBox</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8102</code></td>
+<td align="left"><a href="extended-diagnostics/NG8102"><code>nullishCoalescingNotNullable</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8103</code></td>
+<td align="left"><a href="extended-diagnostics/NG8103"><code>missingControlFlowDirective</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8104</code></td>
+<td align="left"><a href="extended-diagnostics/NG8104"><code>textAttributeNotBinding</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8105</code></td>
+<td align="left"><a href="extended-diagnostics/NG8105"><code>missingNgForOfLet</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8106</code></td>
+<td align="left"><a href="extended-diagnostics/NG8106"><code>suffixNotSupported</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8107</code></td>
+<td align="left"><a href="extended-diagnostics/NG8107"><code>optionalChainNotNullable</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8108</code></td>
+<td align="left"><a href="extended-diagnostics/NG8108"><code>skipHydrationNotStatic</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8109</code></td>
+<td align="left"><a href="extended-diagnostics/NG8109"><code>interpolatedSignalNotInvoked</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8111</code></td>
+<td align="left"><a href="extended-diagnostics/NG8111"><code>uninvokedFunctionInEventBinding</code></a></td>
+</tr>
+<tr>
+<td align="left"><code>NG8113</code></td>
+<td align="left"><a href="extended-diagnostics/NG8113"><code>unusedStandaloneImports</code></a></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="configuration">
+    <a href="#configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Configuration">配置</a>
+  </h2>
+  <p>默认情况下，扩展诊断是警告，不会阻止编译。
+每个诊断都可以配置为以下类别之一：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">错误类别</th>
+<th align="left">效果</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>warning</code></td>
+<td align="left">默认 - 编译器将诊断作为警告发出，但不会阻止编译。即使发出警告，编译器仍将以状态代码 0 退出。</td>
+</tr>
+<tr>
+<td align="left"><code>error</code></td>
+<td align="left">编译器将诊断作为错误发出，并使编译失败。如果发出一个或多个错误，编译器将以非零状态代码退出。</td>
+</tr>
+<tr>
+<td align="left"><code>suppress</code></td>
+<td align="left">编译器<em>完全不</em>发出诊断。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>检查严重程度可以配置为<a href="reference/configs/angular-compiler-options">Angular 编译器选项</a>：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "angularCompilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "extendedDiagnostics"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      // The categories to use for specific diagnostics.</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "checks"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // Maps check name to its category.</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "invalidBananaInBox"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"suppress"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      },</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      // The category to use for any diagnostics not listed in `checks` above.</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "defaultCategory"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"error"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p><code>checks</code> 字段将各个诊断的名称映射到其关联的类别。
+请参阅<a href="#diagnostics">诊断</a>，获取扩展诊断的完整列表以及用于配置它们的名字。</p>
+<p><code>defaultCategory</code> 字段用于任何未在 <code>checks</code> 下明确列出的诊断。
+如果未设置，则此类诊断将视为 <code>warning</code>。</p>
+<p>当启用 <a href="tools/cli/template-typecheck#strict-mode"><code>strictTemplates</code></a> 时，将发出扩展诊断。
+这是必需的，以便编译器更好地理解 Angular 模板类型，并提供准确且有意义的诊断。</p>
+
+  <h2 id="semantic-versioning">
+    <a href="#semantic-versioning" class="docs-anchor" tabindex="-1" aria-label="Link to Semantic Versioning">语义化版本控制</a>
+  </h2>
+  <p>Angular 团队计划在 Angular 的<strong>次要</strong>版本中添加或启用新的扩展诊断（参见 <a href="https://docs.npmjs.com/about-semantic-versioning" target="_blank">semver</a>）。
+这意味着升级 Angular 可能会在现有代码库中显示新的警告。
+这使团队能够更快地交付特性，并使开发人员更容易获得扩展诊断。</p>
+<p>但是，设置 <code>"defaultCategory": "error"</code> 会将此类警告提升为硬错误。
+这可能会导致次要版本升级引入编译错误，这可能被视为不符合 semver 规范的重大更改。
+任何新的诊断都可以通过上面的<a href="#configuration">配置</a>来抑制或降级为警告，因此，对于默认将扩展诊断视为错误的项目，新诊断的影响应该是最小的。
+默认设置为错误是一个非常强大的工具；只是在决定 <code>error</code> 是否是你的项目的正确默认设置时，请注意这个 semver 注意事项。</p>
+
+  <h2 id="new-diagnostics">
+    <a href="#new-diagnostics" class="docs-anchor" tabindex="-1" aria-label="Link to New Diagnostics">新的诊断</a>
+  </h2>
+  <p>Angular 团队始终乐于接受关于可以添加的新诊断的建议。
+扩展诊断通常应该：</p>
+
+  <ul class="docs-list">
+    <li>检测 Angular 模板中常见的、不明显的开发人员错误</li>
+<li>清楚地说明为什么这种模式可能导致 Bug 或意外行为</li>
+<li>提出一个或多个明确的解决方案</li>
+<li>具有较低的误报率，最好是零误报率</li>
+<li>适用于绝大多数 Angular 应用（不特定于非官方库）</li>
+<li>提高程序的正确性或性能（而不是样式，这应由 linter 负责）</li>
+
+  </ul>
+  <p>如果你对符合这些标准的扩展诊断有想法，请考虑提交<a href="https://github.com/angular/angular/issues/new?template=2-feature-request.yaml" target="_blank">特性请求</a>。</p>

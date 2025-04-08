@@ -1,0 +1,493 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular 应用构建体系</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/build-system-migration.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>在 v17 及更高版本中，新的构建体系提供了一种改进的构建 Angular 应用的方式。这个新的构建体系包括：</p>
+
+  <ul class="docs-list">
+    <li>使用 ESM 的现代输出格式，带有动态导入表达式以支持惰性模块加载。</li>
+<li>更快的构建时性能，包括初始构建和增量重建。</li>
+<li>更新的 JavaScript 生态系统工具，例如 <a href="https://esbuild.github.io/" target="_blank">esbuild</a> 和 <a href="https://vitejs.dev/" target="_blank">Vite</a>。</li>
+<li>集成的 SSR 和预渲染功能。</li>
+<li>自动全局和组件样式表热替换。</li>
+
+  </ul>
+  <p>这个新的构建体系是稳定的，并且完全支持与 Angular 应用一起使用。
+你可以将使用 <code>browser</code> 构建器的应用迁移到新的构建体系。
+如果使用自定义构建器，请参阅该构建器的文档，以了解可能的迁移选项。</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> 现有的基于 webpack 的构建体系仍然被认为是稳定且完全支持的。
+应用可以继续使用 <code>browser</code> 构建器，并且项目可以选择在更新期间不进行迁移。</p>
+
+    </div>
+    
+  <h2 id="for-new-applications">
+    <a href="#for-new-applications" class="docs-anchor" tabindex="-1" aria-label="Link to For new applications">对于新应用</a>
+  </h2>
+  <p>默认情况下，新应用将通过 <code>application</code> 构建器使用这个新的构建体系。</p>
+
+  <h2 id="for-existing-applications">
+    <a href="#for-existing-applications" class="docs-anchor" tabindex="-1" aria-label="Link to For existing applications">对于现有应用</a>
+  </h2>
+  <p>根据项目的需求，可以使用自动化和手动步骤。
+从 v18 开始，更新过程将询问你是否希望通过自动化迁移将现有应用迁移到新的构建体系。
+在迁移之前，请考虑查看<a href="#known-issues">已知问题</a>部分，因为它可能包含与你的项目相关的信息。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 如果使用 SSR，请记住删除应用服务器代码中的任何 CommonJS 假设，例如 <code>require</code>、<code>__filename</code>、<code>__dirname</code> 或 <a href="https://nodejs.org/api/modules.html#the-module-scope" target="_blank">CommonJS 模块作用域</a>中的其他结构。所有应用代码都应该是 ESM 兼容的。这不适用于第三方依赖。</p>
+
+    </div>
+    
+  <h3 id="automated-migration-recommended">
+    <a href="#automated-migration-recommended" class="docs-anchor" tabindex="-1" aria-label="Link to Automated migration (Recommended)">自动化迁移（推荐）</a>
+  </h3>
+  <p>自动化迁移将调整 <code>angular.json</code> 中的应用配置以及代码和样式表，以移除以前 webpack 特有的特性用法。
+虽然许多更改可以自动化，并且大多数应用不需要任何进一步的更改，但每个应用都是独一无二的，可能需要进行一些手动更改。
+迁移后，请尝试构建应用，因为可能会出现新的错误，需要对代码进行调整。
+错误将尝试在可能的情况下提供问题解决方案，本指南的后续章节将介绍你可能遇到的一些更常见的情况。
+通过 <code>ng update</code> 更新到 Angular v18 时，系统将要求你执行迁移。
+对于 v18，此迁移是完全可选的，也可以在更新后的任何时候通过以下命令手动运行：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/cli</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --name</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> use-application-builder</span></span></code></pre>
+    </pre>
+  </div><p>迁移执行以下操作：</p>
+
+  <ul class="docs-list">
+    <li>将现有的 <code>browser</code> 或 <code>browser-esbuild</code> 目标转换为 <code>application</code></li>
+<li>移除任何之前的 SSR 构建器（因为 <code>application</code> 现在可以做到这一点）。</li>
+<li>相应地更新配置。</li>
+<li>将 <code>tsconfig.server.json</code> 与 <code>tsconfig.app.json</code> 合并，并添加 TypeScript 选项 <code>"esModuleInterop": true</code>，以确保 <code>express</code> 导入符合 <a href="#esm-default-imports-vs-namespace-imports">ESM 兼容性</a>。</li>
+<li>更新应用服务器代码以使用新的引导和输出目录结构。</li>
+<li>移除任何 webpack 特有的构建器样式表用法，例如 <code>@import</code>/<code>url()</code> 中的波浪号或插入符号，并更新配置以提供等效行为</li>
+<li>如果未找到其他 <code>@angular-devkit/build-angular</code> 用法，则转换为使用新的较低依赖 <code>@angular/build</code> Node.js 包。</li>
+
+  </ul>
+  
+  <h3 id="manual-migration">
+    <a href="#manual-migration" class="docs-anchor" tabindex="-1" aria-label="Link to Manual migration">手动迁移</a>
+  </h3>
+  <p>此外，对于现有项目，你可以选择按应用手动选择使用新的构建器，并提供两种不同的选项。
+这两个选项都被 Angular 团队认为是稳定且完全支持的。
+选择使用哪个选项取决于你需要进行多少更改才能迁移，以及你希望在项目中使用哪些新特性。</p>
+
+  <ul class="docs-list">
+    <li><code>browser-esbuild</code> 构建器仅构建应用的客户端捆绑包，该捆绑包旨在与提供预先存在的构建体系的现有 <code>browser</code> 构建器兼容。
+此构建器提供等效的构建选项，在许多情况下，它可以作为现有 <code>browser</code> 应用的直接替换。</li>
+<li><code>application</code> 构建器涵盖整个应用，例如客户端捆绑包，以及可选地构建用于服务器端渲染的服务器并执行静态页面的构建时预渲染。</li>
+
+  </ul>
+  <p><code>application</code> 构建器通常更优，因为它改进了服务器端渲染 (SSR) 构建，并使客户端渲染的项目将来更容易采用 SSR。
+但是，它需要更多的迁移工作量，特别是对于手动执行的现有 SSR 应用。
+如果 <code>application</code> 构建器难以在你的项目中采用，那么 <code>browser-esbuild</code> 可能是一个更简单的解决方案，它可以提供大部分构建性能优势，同时减少破坏性更改。</p>
+
+  <h4 id="manual-migration-to-the-compatibility-builder">
+    <a href="#manual-migration-to-the-compatibility-builder" class="docs-anchor" tabindex="-1" aria-label="Link to Manual migration to the compatibility builder">手动迁移到兼容性构建器</a>
+  </h4>
+  <p>名为 <code>browser-esbuild</code> 的构建器在 <code>@angular-devkit/build-angular</code> 包中可用，该包存在于 Angular CLI 生成的应用中。
+你可以为使用 <code>browser</code> 构建器的应用尝试新的构建体系。
+如果使用自定义构建器，请参阅该构建器的文档，以了解可能的迁移选项。</p>
+<p>实现兼容性选项是为了最大限度地减少最初迁移应用所需的更改量。
+这是通过备用构建器 (<code>browser-esbuild</code>) 提供的。
+你可以更新任何应用目标的 <code>build</code> 目标以迁移到新的构建体系。</p>
+<p>以下是你通常在应用的 <code>angular.json</code> 中找到的内容：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">...</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:browser"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">...</span></span></code></pre>
+    </pre>
+  </div><p>更改 <code>builder</code> 字段是你唯一需要做的更改。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">...</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:browser-esbuild"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">...</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="manual-migration-to-the-new-application-builder">
+    <a href="#manual-migration-to-the-new-application-builder" class="docs-anchor" tabindex="-1" aria-label="Link to Manual migration to the new <code>application</code> builder">手动迁移到新的 <code>application</code> 构建器</a>
+  </h4>
+  <p>名为 <code>application</code> 的构建器也在 <code>@angular-devkit/build-angular</code> 包中可用，该包存在于 Angular CLI 生成的应用中。
+此构建器是所有通过 <code>ng new</code> 创建的新应用的默认设置。</p>
+<p>以下是你通常在应用的 <code>angular.json</code> 中找到的内容：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">...</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:browser"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">...</span></span></code></pre>
+    </pre>
+  </div><p>更改 <code>builder</code> 字段是你需要做的第一个更改。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">...</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">...</span></span></code></pre>
+    </pre>
+  </div><p>一旦构建器名称已更改，就需要更新 <code>build</code> 目标中的选项。
+以下列表讨论了所有需要调整的 <code>browser</code> 构建器选项。</p>
+
+  <ul class="docs-list">
+    <li><code>main</code> 应重命名为 <code>browser</code>。</li>
+<li><code>polyfills</code> 应该是一个数组，而不是单个文件。</li>
+<li><code>buildOptimizer</code> 应该移除，因为它已被 <code>optimization</code> 选项覆盖。</li>
+<li><code>resourcesOutputPath</code> 应该移除，现在始终为 <code>media</code>。</li>
+<li><code>vendorChunk</code> 应该移除，因为这是一种不再需要的性能优化。</li>
+<li><code>commonChunk</code> 应该移除，因为这是一种不再需要的性能优化。</li>
+<li><code>deployUrl</code> 应该移除且不受支持。请改用 <a href="guide/routing/common-router-tasks"><code>&lt;base href&gt;</code></a>。有关更多信息，请参阅<a href="tools/cli/deployment#--deploy-url">部署文档</a>。</li>
+<li><code>ngswConfigPath</code> 应重命名为 <code>serviceWorker</code>。</li>
+
+  </ul>
+  <p>如果应用当前未使用 SSR，则这应该是允许 <code>ng build</code> 运行的最后一步。
+首次执行 <code>ng build</code> 后，可能会出现基于行为差异或应用使用 webpack 特有的特性的新警告或错误。
+许多警告将提供关于如何解决该问题的建议。
+如果警告似乎不正确或解决方案不明显，请在 <a href="https://github.com/angular/angular-cli/issues" target="_blank">GitHub</a> 上提交 issue。
+此外，本指南的后续章节还提供了关于几个特定情况以及当前已知问题的更多信息。</p>
+<p>对于 SSR 新应用，<a href="guide/ssr">Angular SSR 指南</a>提供了关于向应用添加 SSR 的建立过程的更多信息。</p>
+<p>对于已在使用 SSR 的应用，需要进行额外的调整以更新应用服务器，以支持新的集成 SSR 功能。
+<code>application</code> 构建器现在为以下所有预先存在的构建器提供集成功能：</p>
+
+  <ul class="docs-list">
+    <li><code>app-shell</code></li>
+<li><code>prerender</code></li>
+<li><code>server</code></li>
+<li><code>ssr-dev-server</code></li>
+
+  </ul>
+  <p><code>ng update</code> 过程将自动移除 <code>@nguniversal</code> 作用域包的用法，其中一些构建器以前位于这些包中。
+新的 <code>@angular/ssr</code> 包也将被自动添加，并在更新期间调整配置和代码后使用。
+<code>@angular/ssr</code> 包支持 <code>browser</code> 构建器以及 <code>application</code> 构建器。</p>
+
+  <h2 id="executing-a-build">
+    <a href="#executing-a-build" class="docs-anchor" tabindex="-1" aria-label="Link to Executing a build">执行构建</a>
+  </h2>
+  <p>一旦你更新了应用配置，就可以像以前一样使用 <code>ng build</code> 执行构建。
+根据构建器迁移的选择，一些命令行选项可能会有所不同。
+如果构建命令包含在任何 <code>npm</code> 或其他脚本中，请确保审阅并更新它们。
+对于已经迁移到 <code>application</code> 构建器并且使用 SSR 和/或预渲染的应用，既然 <code>ng build</code> 已经集成了 SSR 支持，你也许能够从脚本中移除额外的 <code>ng run</code> 命令。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="starting-the-development-server">
+    <a href="#starting-the-development-server" class="docs-anchor" tabindex="-1" aria-label="Link to Starting the development server">启动开发服务器</a>
+  </h2>
+  <p>开发服务器将自动检测新的构建体系，并使用它来构建应用。
+要启动开发服务器，无需更改 <code>dev-server</code> 构建器的配置或命令行。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> serve</span></span></code></pre>
+    </pre>
+  </div><p>你可以继续将过去与开发服务器一起使用的<a href="/cli/serve">命令行选项</a>用于开发服务器。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 使用开发服务器时，你可能会在启动时看到很小的无样式内容闪烁 (FOUC)，因为服务器正在初始化。
+开发服务器会尝试延迟处理样式表，直到首次使用时才处理，以缩短重建时间。
+这不会发生在开发服务器之外的构建中。</p>
+
+    </div>
+    
+  <h3 id="hot-module-replacement">
+    <a href="#hot-module-replacement" class="docs-anchor" tabindex="-1" aria-label="Link to Hot module replacement">热模块替换</a>
+  </h3>
+  <p>热模块替换 (HMR) 是开发服务器使用的一种技术，用于避免在仅更改应用的一部分时重新加载整个页面。
+在许多情况下，更改可以立即显示在浏览器中，从而在开发应用时改进编辑/刷新周期。
+虽然目前不支持通用的基于 JavaScript 的热模块替换 (HMR)，但可以使用几种更具体的 HMR 形式：</p>
+
+  <ul class="docs-list">
+    <li><strong>全局样式表</strong> (<code>styles</code> 构建选项)</li>
+<li><strong>组件样式表</strong>（内联和基于文件）</li>
+<li><strong>组件模板</strong>（内联和基于文件）</li>
+
+  </ul>
+  <p>HMR 功能是自动启用的，使用时无需更改代码或配置。
+Angular 为基于文件 (<code>templateUrl</code>/<code>styleUrl</code>/<code>styleUrls</code>) 和内联 (<code>template</code>/<code>styles</code>) 组件样式和模板都提供了 HMR 支持。
+当构建体系检测到仅样式表更改时，它将尝试编译和处理最少量的应用代码。</p>
+<p>如果需要，可以通过将 <code>hmr</code> 开发服务器选项设置为 <code>false</code> 来禁用 HMR 功能。
+也可以通过命令行进行更改：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> serve</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --no-hmr</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="vite-as-a-development-server">
+    <a href="#vite-as-a-development-server" class="docs-anchor" tabindex="-1" aria-label="Link to Vite as a development server">Vite 作为开发服务器</a>
+  </h3>
+  <p>Vite 在 Angular CLI 中的使用目前仅限于<em>开发服务器容量</em>。即使不使用底层的 Vite 构建体系，Vite 也提供了一个功能齐全的开发服务器，具有客户端支持，并且已捆绑到一个低依赖的 npm 包中。这使其成为提供全面的开发服务器功能的理想选择。当前的开发服务器进程使用新的构建体系在内存中生成应用的开发版本，并将结果传递给 Vite 以启动服务器来为应用提供服务。Vite 的使用，就像基于 Webpack 的开发服务器一样，封装在 Angular CLI <code>dev-server</code> 构建器中，目前无法直接配置。</p>
+
+  <h3 id="prebundling">
+    <a href="#prebundling" class="docs-anchor" tabindex="-1" aria-label="Link to Prebundling">预捆绑</a>
+  </h3>
+  <p>当使用开发服务器时，预捆绑可以缩短构建和重建时间。
+Vite 提供了<a href="https://vite.dev/guide/dep-pre-bundling" target="_blank">预捆绑功能</a>，默认情况下，当使用 Angular CLI 时会启用该功能。
+预捆绑过程会分析项目中的所有第三方项目依赖项，并在首次执行开发服务器时处理它们。
+此过程消除了每次发生重建或执行开发服务器时重建和捆绑项目依赖项的需要。</p>
+<p>在大多数情况下，不需要额外的自定义。但是，可能需要自定义的一些情况包括：</p>
+
+  <ul class="docs-list">
+    <li>自定义依赖项中导入的加载器行为，例如<a href="#file-extension-loader-customization"><code>loader</code> 选项</a></li>
+<li>将依赖项符号链接到本地代码以进行开发，例如 <a href="https://docs.npmjs.com/cli/v10/commands/npm-link" target="_blank"><code>npm link</code></a></li>
+<li>解决在预捆绑依赖项期间遇到的错误</li>
+
+  </ul>
+  <p>如果项目需要，可以完全禁用预捆绑过程，也可以排除单个依赖项。
+<code>dev-server</code> 构建器的 <code>prebundle</code> 选项可用于这些自定义。
+要排除特定依赖项，可以使用 <code>prebundle.exclude</code> 选项：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"serve"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular/build:dev-server"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "prebundle"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "exclude"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"some-dep"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      },</span></span></code></pre>
+    </pre>
+  </div><p>默认情况下，<code>prebundle</code> 设置为 <code>true</code>，但可以设置为 <code>false</code> 以完全禁用预捆绑。
+但是，建议改为排除特定依赖项，因为禁用预捆绑会增加重建时间。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"serve"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular/build:dev-server"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "prebundle"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      },</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="new-features">
+    <a href="#new-features" class="docs-anchor" tabindex="-1" aria-label="Link to New features">新特性</a>
+  </h2>
+  <p>应用构建体系的主要优势之一是提高了构建和重建速度。
+但是，新的应用构建体系还提供了 <code>browser</code> 构建器中没有的其他特性。</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> 此处描述的 <code>application</code> 构建器的新特性默认情况下与 <code>karma</code> 测试构建器不兼容，因为它在内部使用 <code>browser</code> 构建器。
+用户可以选择通过将 <code>karma</code> 构建器的 <code>builderMode</code> 选项设置为 <code>application</code> 来选择使用 <code>application</code> 构建器。
+此选项目前处于开发者预览状态。
+如果你发现任何问题，请<a href="https://github.com/angular/angular-cli/issues" target="_blank">在此处</a>报告。</p>
+
+    </div>
+    
+  <h3 id="build-time-value-replacement-define">
+    <a href="#build-time-value-replacement-define" class="docs-anchor" tabindex="-1" aria-label="Link to Build-time value replacement (define)">构建时值替换 (define)</a>
+  </h3>
+  <p><code>define</code> 选项允许在构建时将代码中存在的标识符替换为另一个值。
+这类似于 Webpack 的 <code>DefinePlugin</code> 的行为，该插件以前与一些使用第三方构建器的自定义 Webpack 配置一起使用。
+该选项可以在 <code>angular.json</code> 配置文件中或在命令行中使用。
+在 <code>angular.json</code> 中配置 <code>define</code> 对于值是常量并且可以签入到源码控制中的情况很有用。</p>
+<p>在配置文件中，该选项采用对象的形式。
+对象的键表示要替换的标识符，对象的值表示标识符的相应替换值。
+示例如下：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular/build:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">      ...</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "define"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "SOME_NUMBER"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"5"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "ANOTHER"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"'this is a string literal, note the extra single quotes'"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "REFERENCE"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"globalThis.someValue.noteTheAbsentSingleQuotes"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 所有替换值都在配置文件中定义为字符串。
+如果替换项旨在成为实际的字符串字面量，则应将其括在单引号中。
+这允许灵活地使用任何有效的 JSON 类型以及不同的标识符作为替换。</p>
+
+    </div>
+    <p>对于可能在每次构建执行时更改的值（例如 git 提交哈希或环境变量），首选命令行用法。
+CLI 将合并来自命令行的 <code>--define</code> 值和来自 <code>angular.json</code> 的 <code>define</code> 值，并将两者都包含在构建中。
+如果同一标识符同时存在于两者中，则命令行用法优先。
+对于命令行用法，<code>--define</code> 选项使用 <code>IDENTIFIER=VALUE</code> 的格式。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --define</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> SOME_NUMBER=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">5</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --define</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "ANOTHER='these will overwrite existing'"</span></span></code></pre>
+    </pre>
+  </div><p>环境变量也可以有选择地包含在构建中。
+对于非 Windows shell，如果需要，可以直接转义哈希字面量周围的引号。
+此示例假定为类似 bash 的 shell，但其他 shell 也提供类似的行为。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> MY_APP_API_HOST</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"http://example.com"</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> API_RETRY</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">3</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --define</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> API_HOST=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">$MY_APP_API_HOST</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\'</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --define</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> API_RETRY=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">$API_RETRY</span></span></code></pre>
+    </pre>
+  </div><p>对于这两种用法，TypeScript 都需要知道标识符的类型，以防止在构建期间出现类型检查错误。
+这可以通过在应用源码中添加一个额外的类型定义文件（例如 <code>src/types.d.ts</code>）来实现，其内容类似：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">declare</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> SOME_NUMBER</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">declare</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> ANOTHER</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">declare</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> GIT_HASH</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">declare</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> API_HOST</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">declare</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> API_RETRY</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div><p>默认项目配置已设置为使用项目源码目录中存在的任何类型定义文件。
+如果项目的 TypeScript 配置已更改，则可能需要对其进行调整以引用新添加的类型定义文件。</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> 此选项不会替换 Angular 元数据（例如 Component 或 Directive 装饰器）中包含的标识符。</p>
+
+    </div>
+    
+  <h3 id="file-extension-loader-customization">
+    <a href="#file-extension-loader-customization" class="docs-anchor" tabindex="-1" aria-label="Link to File extension loader customization">文件扩展名加载器自定义</a>
+  </h3>
+  
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> 此特性仅适用于 <code>application</code> 构建器。</p>
+
+    </div>
+    <p>某些项目可能需要控制如何将具有特定文件扩展名的所有文件加载并捆绑到应用中。
+当使用 <code>application</code> 构建器时，可以使用 <code>loader</code> 选项来处理这些情况。
+该选项允许项目定义要用于指定文件扩展名的加载器类型。
+然后，可以使用 import 语句或动态 import 表达式在应用代码中使用具有已定义扩展名的文件。
+可以使用的可用加载器包括：</p>
+
+  <ul class="docs-list">
+    <li><code>text</code> - 将内容内联为 <code>string</code>，可作为默认导出使用</li>
+<li><code>binary</code> - 将内容内联为 <code>Uint8Array</code>，可作为默认导出使用</li>
+<li><code>file</code> - 在应用输出路径发出文件，并提供文件的运行时位置作为默认导出</li>
+<li><code>empty</code> - 认为内容为空，并且不会将其包含在捆绑包中</li>
+
+  </ul>
+  <p><code>empty</code> 值虽然不太常见，但对于可能包含需要删除的特定于捆绑器的导入用法的第三方库的兼容性很有用。
+这种情况的一个例子是 CSS 文件的副作用导入 (<code>import 'my.css';</code>)，它在浏览器中不起作用。
+相反，项目可以使用 <code>empty</code>，然后可以将 CSS 文件添加到 <code>styles</code> 构建选项或使用其他注入方法。</p>
+<p>loader 选项是基于对象的选项，其中键用于定义文件扩展名，值用于定义加载器类型。</p>
+<p>将 SVG 文件的内容内联到捆绑的应用中的构建选项用法的示例如下：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular/build:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">      ...</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "loader"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        ".svg"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"text"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span></code></pre>
+    </pre>
+  </div><p>然后可以导入 SVG 文件：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> contents </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './some-file.svg'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(contents); </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// &lt;svg&gt;...&lt;/svg&gt;</span></span></code></pre>
+    </pre>
+  </div><p>此外，TypeScript 需要知道导入的模块类型，以防止在构建期间出现类型检查错误。这可以通过在应用源码中添加一个额外的类型定义文件（例如 <code>src/types.d.ts</code>）来实现，其内容如下或类似：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">declare</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> module</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "*.svg"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> content</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> default</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> content;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>默认项目配置已设置为使用项目源码目录中存在的任何类型定义文件（<code>.d.ts</code> 文件）。如果项目的 TypeScript 配置已更改，则可能需要调整 tsconfig 以引用新添加的类型定义文件。</p>
+
+  <h3 id="import-attribute-loader-customization">
+    <a href="#import-attribute-loader-customization" class="docs-anchor" tabindex="-1" aria-label="Link to Import attribute loader customization">导入属性加载器自定义</a>
+  </h3>
+  <p>对于仅应以特定方式加载某些文件的情况，可以使用基于文件的加载行为控制。
+这可以通过 <code>loader</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import/with" target="_blank">导入属性</a>来实现，该属性可以与 import 语句和表达式一起使用。
+导入属性的存在优先于所有其他加载行为，包括 JS/TS 和任何 <code>loader</code> 构建选项值。
+对于所有其他不受支持的文件类型的文件的常规加载，建议使用 <a href="#file-extension-loader-customization"><code>loader</code></a> 构建选项。</p>
+<p>对于导入属性，支持以下加载器值：</p>
+
+  <ul class="docs-list">
+    <li><code>text</code> - 将内容内联为 <code>string</code>，可作为默认导出使用</li>
+<li><code>binary</code> - 将内容内联为 <code>Uint8Array</code>，可作为默认导出使用</li>
+<li><code>file</code> - 在应用输出路径发出文件，并提供文件的运行时位置作为默认导出</li>
+
+  </ul>
+  <p>使用导入属性的另一个必要条件是，必须将 TypeScript 的 <code>module</code> 选项设置为 <code>esnext</code>，以允许 TypeScript 成功构建应用代码。
+一旦 TypeScript 中提供了 <code>ES2025</code>，就不再需要此更改。</p>
+<p>目前，TypeScript 不支持基于导入属性值的类型定义。
+当前需要使用 <code>@ts-expect-error</code>/<code>@ts-ignore</code> 或使用单独的类型定义文件（假设该文件仅使用相同的 loader 属性导入）。
+例如，SVG 文件可以通过以下方式作为文本导入：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// @ts-expect-error TypeScript cannot provide types based on attributes yet</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> contents </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './some-file.svg'</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> with</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { loader: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'text'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> };</span></span></code></pre>
+    </pre>
+  </div><p>在异步函数中使用导入表达式也可以实现同样的目的。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">async</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> loadSvg</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // @ts-expect-error TypeScript cannot provide types based on attributes yet</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  return</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'./some-file.svg'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, { with: { loader: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'text'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> } }).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">then</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">((</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">m</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> m.default);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>对于导入表达式，<code>loader</code> 值必须是字符串字面量才能进行静态分析。
+如果该值不是字符串字面量，则会发出警告。</p>
+<p>当文件将在运行时通过 <code>fetch()</code>、设置为图像元素的 <code>src</code> 或其他类似方法加载时，<code>file</code> 加载器非常有用。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// @ts-expect-error TypeScript cannot provide types based on attributes yet</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> imagePath </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './image.webp'</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> with</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { loader: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'file'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> };</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(imagePath); </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// media/image-ULK2SIIB.webp</span></span></code></pre>
+    </pre>
+  </div><p>对于如上面的代码注释中所示的生产环境构建，哈希将自动添加到路径中以实现长期缓存。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 当使用开发服务器并使用 <code>loader</code> 属性从 Node.js 包中导入文件时，必须通过开发服务器的 <code>prebundle</code> 选项将该包从预捆绑中排除。</p>
+
+    </div>
+    
+  <h3 id="import-export-conditions">
+    <a href="#import-export-conditions" class="docs-anchor" tabindex="-1" aria-label="Link to Import/export conditions">导入/导出条件</a>
+  </h3>
+  <p>项目可能需要根据构建类型将某些导入路径映射到不同的文件。
+这对于诸如 <code>ng serve</code> 需要使用调试/开发特定代码，而 <code>ng build</code> 需要使用没有任何开发特性/信息的代码的情况尤其有用。
+已自动应用多个导入/导出<a href="https://nodejs.org/api/packages.html#community-conditions-definitions" target="_blank">条件</a>以支持这些项目需求：</p>
+
+  <ul class="docs-list">
+    <li>对于优化构建，将启用 <code>production</code> 条件。</li>
+<li>对于非优化构建，将启用 <code>development</code> 条件。</li>
+<li>对于浏览器输出代码，将启用 <code>browser</code> 条件。</li>
+
+  </ul>
+  <p>优化构建由 <code>optimization</code> 选项的值确定。
+当 <code>optimization</code> 设置为 <code>true</code>，或者更具体地说，如果 <code>optimization.scripts</code> 设置为 <code>true</code>，则该构建被认为是优化的。
+此分类适用于 <code>ng build</code> 和 <code>ng serve</code>。
+在一个新项目中，<code>ng build</code> 默认为优化构建，而 <code>ng serve</code> 默认为非优化构建。</p>
+<p>在应用代码中利用这些条件的一个有用方法是将它们与<a href="https://nodejs.org/api/packages.html#subpath-imports" target="_blank">子路径导入</a>结合使用。
+通过使用以下导入语句：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {verboseLogging} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '#logger'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div><p>可以在 <code>package.json</code> 的 <code>imports</code> 字段中切换文件：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">  ...</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "imports"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "#logger"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "development"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./src/logging/debug.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./src/logging/noop.ts"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>对于也使用 SSR 的应用，可以通过使用 <code>browser</code> 条件来切换浏览器和服务器代码：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">  ...</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "imports"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "#crashReporter"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "browser"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./src/browser-logger.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./src/server-logger.ts"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>这些条件也适用于 Node.js 包以及包中定义的任何<a href="https://nodejs.org/api/packages.html#conditional-exports" target="_blank"><code>exports</code></a>。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 如果当前正在使用 <code>fileReplacements</code> 构建选项，则此特性可能能够替代它的用法。</p>
+
+    </div>
+    
+  <h2 id="known-issues">
+    <a href="#known-issues" class="docs-anchor" tabindex="-1" aria-label="Link to Known Issues">已知问题</a>
+  </h2>
+  <p>尝试新的构建体系时，您目前可能会遇到一些已知问题。此列表将保持更新。如果当前有任何这些问题阻止您尝试新的构建体系，请稍后查看，因为问题可能已得到解决。</p>
+
+  <h3 id="type-checking-of-web-worker-code-and-processing-of-nested-web-workers">
+    <a href="#type-checking-of-web-worker-code-and-processing-of-nested-web-workers" class="docs-anchor" tabindex="-1" aria-label="Link to Type-checking of Web Worker code and processing of nested Web Workers">Web Worker 代码的类型检查和嵌套 Web Worker 的处理</a>
+  </h3>
+  <p>Web Worker 可以在应用代码中使用相同的语法 (<code>new Worker(new URL('&lt;workerfile&gt;', import.meta.url))</code>)，这与 <code>browser</code> 构建器支持的语法相同。
+但是，Worker 中的代码目前不会由 TypeScript 编译器进行类型检查。支持 TypeScript 代码，但不会进行类型检查。
+此外，任何嵌套的 worker 都不会由构建体系处理。嵌套 worker 是指在另一个 Worker 文件中实例化的 Worker。</p>
+
+  <h3 id="esm-default-imports-vs-namespace-imports">
+    <a href="#esm-default-imports-vs-namespace-imports" class="docs-anchor" tabindex="-1" aria-label="Link to ESM default imports vs. namespace imports">ESM 默认导入与命名空间导入</a>
+  </h3>
+  <p>默认情况下，TypeScript 允许将默认导出作为命名空间导入导入，然后在调用表达式中使用。
+遗憾的是，这与 ECMAScript 规范有所不同。
+新构建体系中的底层捆绑器 (<code>esbuild</code>) 期望 ESM 代码符合规范。
+如果你的应用使用了不正确的包导入类型，构建体系现在将生成警告。
+但是，为了使 TypeScript 接受正确的用法，必须在应用的 <code>tsconfig</code> 文件中启用一个 TypeScript 选项。
+启用后，<a href="https://www.typescriptlang.org/tsconfig#esModuleInterop" target="_blank"><code>esModuleInterop</code></a> 选项可以更好地与 ECMAScript 规范保持一致，并且也是 TypeScript 团队推荐的。
+启用后，你可以将包导入更新为符合 ECMAScript 的形式（如果适用）。</p>
+<p>以 <a href="https://npmjs.com/package/moment" target="_blank"><code>moment</code></a> 包为例，以下应用代码将导致运行时错误：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> *</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> as</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> moment </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'moment'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">moment</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">format</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span></code></pre>
+    </pre>
+  </div><p>构建将生成一个警告，通知你存在潜在问题。警告将类似于：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span>▲ [WARNING] Calling "moment" will crash at run-time because it's an import namespace object, not a function [call-import-namespace]</span></span><span class="line"><span></span></span><span class="line"><span>    src/main.ts:2:12:</span></span><span class="line"><span>      2 │ console.log(moment().format());</span></span><span class="line"><span>        ╵             ~~~~~~</span></span><span class="line"><span></span></span><span class="line"><span>Consider changing "moment" to a default import instead:</span></span><span class="line"><span></span></span><span class="line"><span>    src/main.ts:1:7:</span></span><span class="line"><span>      1 │ import * as moment from 'moment';</span></span><span class="line"><span>        │        ~~~~~~~~~~~</span></span><span class="line"><span>        ╵        moment</span></span></code></pre>
+    </pre>
+  </div><p>但是，你可以通过为应用启用 <code>esModuleInterop</code> TypeScript 选项并将导入更改为以下内容来避免运行时错误和警告：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> moment </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'moment'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">moment</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">format</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="order-dependent-side-effectful-imports-in-lazy-modules">
+    <a href="#order-dependent-side-effectful-imports-in-lazy-modules" class="docs-anchor" tabindex="-1" aria-label="Link to Order-dependent side-effectful imports in lazy modules">惰性模块中依赖顺序的副作用导入</a>
+  </h3>
+  <p>依赖于特定顺序且也在多个惰性模块中使用的导入语句可能会导致顶层语句乱序执行。
+这并不常见，因为它取决于副作用模块的用法，并且不适用于 <code>polyfills</code> 选项。
+这是由底层捆绑器中的一个<a href="https://github.com/evanw/esbuild/issues/399" target="_blank">缺陷</a>引起的，但将在未来的更新中解决。</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> 无论使用何种构建体系，都建议尽可能避免使用具有非本地副作用（polyfills 之外）的模块，这样可以避免这个特殊问题。具有非本地副作用的模块也可能对应用大小和运行时性能产生负面影响。</p>
+
+    </div>
+    
+  <h2 id="bug-reports">
+    <a href="#bug-reports" class="docs-anchor" tabindex="-1" aria-label="Link to Bug reports">Bug 报告</a>
+  </h2>
+  <p>在 <a href="https://github.com/angular/angular-cli/issues" target="_blank">GitHub</a> 上报告问题和特性请求。</p>
+<p>请尽可能提供最小化的复现，以帮助团队解决问题。</p>

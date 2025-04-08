@@ -1,0 +1,28 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">检查后表达式已更改</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0100.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+    <div class="docs-video-container">
+      <iframe class="docs-video" src="https://www.youtube.com/embed/O47uUnJjbJc" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen credentialless title="Video player"></iframe>
+    </div>
+    <p>当在变更检测完成后表达式值被更改时，Angular 抛出一个 <code>ExpressionChangedAfterItHasBeenCheckedError</code> 错误。Angular 只在开发模式下抛出这个错误。</p>
+<p>在开发模式下，Angular 在每次变更检测运行后执行一次额外的检查，以确保绑定没有更改。这可以捕获视图处于不一致状态的错误。例如，如果一个方法或 getter 每次被调用时返回不同的值，或者如果一个子组件更改了其父组件上的值，则可能发生这种情况。如果发生任何一种情况，则表明变更检测不稳定。Angular 抛出此错误以确保数据始终在视图中正确反映，从而防止不稳定的 UI 行为或可能的无限循环。</p>
+<p>当您添加了模板表达式或已开始实现生命周期钩子（如 <code>ngAfterViewInit</code> 或 <code>ngOnChanges</code>）时，通常会发生此错误。在处理加载状态和异步操作时，或者当子组件更改其父组件绑定时，也很常见。</p>
+
+  <h2 id="debugging-the-error">
+    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">调试错误</a>
+  </h2>
+  <p>CLI 生成的<a href="https://developer.mozilla.org/docs/Tools/Debugger/How_to/Use_a_source_map" target="_blank">源码映射</a>在调试时非常有用。向上导航调用堆栈，直到找到错误中显示的值已更改的模板表达式。</p>
+<p>确保在运行变更检测后，模板中的绑定没有任何更改。这通常意味着重构以针对您的用例使用正确的组件生命周期钩子。如果问题存在于 <code>ngAfterViewInit</code> 中，建议的解决方案是使用构造函数或 <code>ngOnInit</code> 来设置初始值，或者为其他值绑定使用 <code>ngAfterContentInit</code>。</p>
+<p>如果您在视图中绑定到方法，请确保调用不会更新模板中的任何其他绑定。</p>
+<p>阅读<a href="https://angularindepth.com/posts/1001/everything-you-need-to-know-about-the-expressionchangedafterithasbeencheckederror-error" target="_blank">“关于 "ExpressionChangedAfterItHasBeenCheckedError" 错误，你需要知道的一切”</a>，详细了解哪种解决方案适合您，并在<a href="https://blog.angular-university.io/angular-debugging" target="_blank">“Angular 调试 "检查后表达式已更改"：简单解释（和修复）”</a>中了解为什么这很有用。</p>

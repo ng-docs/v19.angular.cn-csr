@@ -1,0 +1,48 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/platform-browser</span><div class="docs-reference-title"><div><h1>provideClientHydration</h1><div class="docs-api-item-label type-function full">函数</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/platform-browser/src/hydration.ts#L223-L261" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">代码</i></a></div><section class="docs-reference-description"><p>建立必要的提供者，以启用应用的 hydration 功能。</p></section><nav class="docs-pill-row"><a class="docs-pill" href="/api/platform-browser/withNoHttpTransferCache">withNoHttpTransferCache</a><a class="docs-pill" href="/api/platform-browser/withHttpTransferCacheOptions">withHttpTransferCacheOptions</a><a class="docs-pill" href="/api/platform-browser/withI18nSupport">withI18nSupport</a><a class="docs-pill" href="/api/platform-browser/withEventReplay">withEventReplay</a></nav></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">  <code>
+    <span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/platform-browser/provideClientHydration">provideClientHydration</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  ...</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">features</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/platform-browser/HydrationFeature">HydrationFeature</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/platform-browser/HydrationFeatureKind">HydrationFeatureKind</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;[]</span></span><span class="line "><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/core/EnvironmentProviders">EnvironmentProviders</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-members"><div id="provideClientHydration_0" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>provideClientHydration</h3><div><code><a href="/api/core/EnvironmentProviders">EnvironmentProviders</a></code></div></header><div class="docs-reference-card-body"><div class="docs-reference-card-item "><div class="docs-function-definition"><p>建立必要的提供者，以启用应用的 hydration 功能。</p>
+<p>默认情况下，此函数为大多数应用启用推荐的一组特性，以获得最佳性能。它包括以下特性：</p>
+
+    <ul class="docs-list">
+      <li>协调 DOM 水合。要了解更多信息，请<a href="guide/hydration">点击这里</a>。</li>
+<li>在服务器上运行时对 <a href="api/common/http/HttpClient"><code>HttpClient</code></a> 响应进行缓存，并将此缓存传输到客户端，以避免额外的 HTTP 请求。要了解关于数据缓存的更多信息，请<a href="guide/ssr#caching-data-when-using-httpclient">点击这里</a>。</li>
+
+    </ul>
+    <p>这些函数允许你禁用一些默认特性或启用新的特性：</p>
+
+    <ul class="docs-list">
+      <li><a href="/api/platform-browser/withNoHttpTransferCache"><code>withNoHttpTransferCache</code></a> 以禁用 HTTP 传输缓存</li>
+<li><a href="/api/platform-browser/withHttpTransferCacheOptions"><code>withHttpTransferCacheOptions</code></a> 以配置一些 HTTP 传输缓存选项</li>
+<li><a href="/api/platform-browser/withI18nSupport"><code>withI18nSupport</code></a> 以启用对 i18n 控制块的水合支持</li>
+<li><a href="/api/platform-browser/withEventReplay"><code>withEventReplay</code></a> 以启用对重放用户事件的支持</li>
+
+    </ul></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">features</span><code><a href="/api/platform-browser/HydrationFeature">HydrationFeature</a>&lt;<a href="/api/platform-browser/HydrationFeatureKind">HydrationFeatureKind</a>&gt;[]</code><div class="docs-parameter-description"><p>用于配置额外的水合行为的可选特性。</p></div></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code><a href="/api/core/EnvironmentProviders">EnvironmentProviders</a></code></div></div></div></div></div><div class="docs-reference-section"><h2 id="description" class="docs-reference-section-heading"><a href="#description" aria-label="Link to Description section" tabindex="-1">描述</a></h2><div><p>建立必要的提供者，以启用应用的 hydration 功能。</p>
+<p>默认情况下，此函数为大多数应用启用推荐的一组特性，以获得最佳性能。它包括以下特性：</p>
+
+    <ul class="docs-list">
+      <li>协调 DOM 水合。要了解更多信息，请<a href="guide/hydration">点击这里</a>。</li>
+<li>在服务器上运行时对 <a href="api/common/http/HttpClient"><code>HttpClient</code></a> 响应进行缓存，并将此缓存传输到客户端，以避免额外的 HTTP 请求。要了解关于数据缓存的更多信息，请<a href="guide/ssr#caching-data-when-using-httpclient">点击这里</a>。</li>
+
+    </ul>
+    <p>这些函数允许你禁用一些默认特性或启用新的特性：</p>
+
+    <ul class="docs-list">
+      <li><a href="/api/platform-browser/withNoHttpTransferCache"><code>withNoHttpTransferCache</code></a> 以禁用 HTTP 传输缓存</li>
+<li><a href="/api/platform-browser/withHttpTransferCacheOptions"><code>withHttpTransferCacheOptions</code></a> 以配置一些 HTTP 传输缓存选项</li>
+<li><a href="/api/platform-browser/withI18nSupport"><code>withI18nSupport</code></a> 以启用对 i18n 控制块的水合支持</li>
+<li><a href="/api/platform-browser/withEventReplay"><code>withEventReplay</code></a> 以启用对重放用户事件的支持</li>
+
+    </ul></div></div><div class="docs-reference-section"><h2 id="usage-notes" class="docs-reference-section-heading"><a href="#usage-notes" aria-label="Link to Usage Notes section" tabindex="-1">用法说明</a></h2><div><p>当使用 <code><a href="/api/platform-browser/bootstrapApplication">bootstrapApplication</a></code> 函数时，如何在你的应用中启用 hydration 的基本范例：</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/platform-browser/bootstrapApplication">bootstrapApplication</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppComponent, {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/platform-browser/provideClientHydration">provideClientHydration</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+        </pre>
+      </div>
+    <p>或者，如果你正在使用 NgModules，你可以将 <code><a href="/api/platform-browser/provideClientHydration">provideClientHydration</a></code> 添加到你的根应用模块的提供者列表中。</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/core/NgModule">NgModule</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [RootCmp],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  bootstrap: [RootCmp],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/platform-browser/provideClientHydration">provideClientHydration</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+        </pre>
+      </div>
+    </div></div></div>

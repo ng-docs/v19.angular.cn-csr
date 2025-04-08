@@ -1,0 +1,43 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular 库概览</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/libraries/overview.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>许多应用都需要解决相同的通用问题，例如呈现统一的用户界面、呈现数据以及允许数据录入。
+开发人员可以为特定领域创建通用解决方案，这些方案可以调整后在不同的应用中复用。
+这样的解决方案可以构建为 Angular <em>库</em>，并且这些库可以作为 <em>npm 包</em> 发布和共享。</p>
+<p>Angular 库是一个 Angular 项目，它与应用的不同之处在于它不能独立运行。
+库必须在应用中导入和使用。</p>
+<p>库扩展了 Angular 的基本特性。
+例如，要向应用添加 <a href="guide/forms/reactive-forms">响应式表单</a>，请使用 <code>ng add @angular/forms</code> 添加库包，然后在你的应用代码中从 <code>@angular/forms</code> 库导入 <code>ReactiveFormsModule</code>。
+同样，将 <a href="ecosystem/service-workers">Service Worker</a> 库添加到 Angular 应用是将应用转变为 <a href="https://developers.google.com/web/progressive-web-apps" target="_blank">Progressive Web App</a> (PWA) 的步骤之一。
+<a href="https://material.angular.io" target="_blank">Angular Material</a> 是一个大型通用库的范例，它提供了复杂、可复用且可适配的 UI 组件。</p>
+<p>任何应用开发者都可以使用这些库以及 Angular 团队或第三方发布的其他库。
+请参阅 <a href="tools/libraries/using-libraries">使用已发布的库</a>。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 库旨在供 Angular 应用使用。要将 Angular 特性添加到非 Angular Web 应用，请使用 <a href="guide/elements">Angular 自定义元素</a>。</p>
+
+    </div>
+    
+  <h2 id="creating-libraries">
+    <a href="#creating-libraries" class="docs-anchor" tabindex="-1" aria-label="Link to Creating libraries">创建库</a>
+  </h2>
+  <p>如果你开发了适合复用的特性，则可以创建自己的库。
+这些库可以在你的工作区本地使用，或者你可以将它们作为 <a href="reference/configs/npm-packages">npm 包</a> 发布，以便与其他项目或其他 Angular 开发者共享。
+这些包可以发布到 npm 仓库、私有 npm 企业仓库或支持 npm 包的私有包管理系统。
+请参阅 <a href="tools/libraries/creating-libraries">创建库</a>。</p>
+<p>决定将特性打包为库是一项架构决策。这类似于决定特性是组件还是服务，或者决定组件的范围。</p>
+<p>将特性打包为库会强制库中的工件与应用的业务逻辑解耦。
+这可以帮助避免各种不良实践或架构错误，这些错误可能会使将来难以解耦和复用代码。</p>
+<p>将代码放入单独的库中比仅仅将所有内容放在一个应用中更复杂。
+它需要在管理、维护和更新库方面投入更多的时间和思考。
+当库在多个应用中使用时，这种复杂性会得到回报。</p>

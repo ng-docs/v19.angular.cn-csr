@@ -1,0 +1,71 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">应用外壳模式</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/ecosystem/service-workers/app-shell.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p> <a href="https://developer.chrome.com/blog/app-shell" target="_blank">应用外壳模式</a>是一种在构建时使用路由渲染应用一部分的方式。
+它可以通过快速启动一个静态渲染的页面（所有页面通用的骨架）来改善用户体验，同时浏览器下载完整的客户端版本，并在代码加载后自动切换到该版本。</p>
+<p>这为用户提供了应用有意义的首次绘制，它会快速出现，因为浏览器可以渲染 HTML 和 CSS，而无需初始化任何 JavaScript。</p>
+
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="prepare-the-application">
+    <a href="#prepare-the-application" class="docs-anchor" tabindex="-1" aria-label="Link to Prepare the application">准备应用</a>
+  </h3>
+  
+      <p>使用以下 Angular CLI 命令执行此操作：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> new</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-app</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --routing</span></span></code></pre>
+    </pre>
+  </div><p>对于现有应用，你必须手动添加 <code>Router</code> 并在你的应用中定义 <code>&lt;router-outlet&gt;</code>。</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="create-the-application-shell">
+    <a href="#create-the-application-shell" class="docs-anchor" tabindex="-1" aria-label="Link to Create the application shell">创建应用外壳</a>
+  </h3>
+  
+      <p>使用 Angular CLI 自动创建应用外壳。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> app-shell</span></span></code></pre>
+    </pre>
+  </div><p>有关此命令的更多信息，请参阅<a href="cli/generate/app-shell">应用外壳命令</a>。</p>
+<p>该命令会更新应用代码，并将额外的文件添加到项目结构中。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span>src</span></span><span class="line"><span>├── app</span></span><span class="line"><span>│ ├── app.config.server.ts # server application configuration</span></span><span class="line"><span>│ └── app-shell # app-shell component</span></span><span class="line"><span>│   ├── app-shell.component.html</span></span><span class="line"><span>│   ├── app-shell.component.scss</span></span><span class="line"><span>│   ├── app-shell.component.spec.ts</span></span><span class="line"><span>│   └── app-shell.component.ts</span></span><span class="line"><span>└── main.server.ts # main server application bootstrapping</span></span></code></pre>
+    </pre>
+  </div><docs-step title="Verify the application is built with the shell content">
+
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --configuration=development</span></span></code></pre>
+    </pre>
+  </div><p>或使用生产配置。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span></span></code></pre>
+    </pre>
+  </div><p>要验证构建输出，请打开 <code class="no-auto-link">dist/my-app/browser/index.html</code>。
+查找默认文本 <code>app-shell works!</code> 以表明应用外壳路由已作为输出的一部分进行渲染。</p>
+
+    </docs-step></li>
+    
+    </ol>
+    

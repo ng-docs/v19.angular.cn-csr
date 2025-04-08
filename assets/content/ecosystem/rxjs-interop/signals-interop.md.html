@@ -1,0 +1,98 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular Signal 的 RxJS 互操作</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/ecosystem/rxjs-interop/signals-interop.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> RxJS Interop 包可用于<a href="reference/releases#developer-preview">开发者预览</a>。你可以立即试用，但在稳定版本发布之前，它可能会有所变更。</p>
+
+    </div>
+    <p><code>@angular/rxjs-interop</code> 包提供了一些 API，可帮助你集成 RxJS 和 Angular signal。</p>
+
+  <h2 id="create-a-signal-from-an-rxjs-observable-with-tosignal">
+    <a href="#create-a-signal-from-an-rxjs-observable-with-tosignal" class="docs-anchor" tabindex="-1" aria-label="Link to Create a signal from an RxJs Observable with <code>toSignal</code>">使用 <code>toSignal</code> 从 RxJs 可观察者创建一个 Signal</a>
+  </h2>
+  <p>使用 <code>toSignal</code> 函数创建一个 signal，以跟踪 Observable 的值。它的行为类似于模板中的 <code>async</code> 管道，但更加灵活，可以在应用的任何地方使用。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { Component } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { AsyncPipe } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/common'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { interval } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'rxjs'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { toSignal } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core/rxjs-interop'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`{{ counter() }}`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Ticker</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  counterObservable</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> interval</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Get a `Signal` representing the `counterObservable`'s value.</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  counter</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> toSignal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.counterObservable, {initialValue: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>与 <code>async</code> 管道一样，<code>toSignal</code> 会立即订阅 Observable，这可能会触发副作用。当调用 <code>toSignal</code> 的组件或服务被销毁时，<code>toSignal</code> 创建的订阅会自动取消订阅给定的 Observable。</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> <code>toSignal</code> 会创建一个订阅。你应该避免为同一个 Observable 重复调用它，而是复用它返回的 signal。</p>
+
+    </div>
+    
+  <h3 id="injection-context">
+    <a href="#injection-context" class="docs-anchor" tabindex="-1" aria-label="Link to Injection context">注入上下文</a>
+  </h3>
+  <p>默认情况下，<code>toSignal</code> 需要在<a href="guide/di/dependency-injection-context">依赖注入上下文</a>中运行，例如在构造组件或服务期间。如果依赖注入上下文不可用，你可以手动指定要替代使用的 <code>Injector</code>。</p>
+
+  <h3 id="initial-values">
+    <a href="#initial-values" class="docs-anchor" tabindex="-1" aria-label="Link to Initial values">初始值</a>
+  </h3>
+  <p>Observable 可能不会在订阅时同步生成值，但 signal 始终需要一个当前值。有几种方法可以处理 <code>toSignal</code> signal 的这个“初始”值。</p>
+
+  <h4 id="the-initialvalue-option">
+    <a href="#the-initialvalue-option" class="docs-anchor" tabindex="-1" aria-label="Link to The <code>initialValue</code> option"><code>initialValue</code> 选项</a>
+  </h4>
+  <p>如上面的范例所示，你可以使用 <code>initialValue</code> 选项指定 signal 在 Observable 首次发出之前应返回的值。</p>
+
+  <h4 id="undefined-initial-values">
+    <a href="#undefined-initial-values" class="docs-anchor" tabindex="-1" aria-label="Link to <code>undefined</code> initial values"><code>undefined</code> 初始值</a>
+  </h4>
+  <p>如果你不提供 <code>initialValue</code>，则生成的 signal 将返回 <code>undefined</code>，直到 Observable 发出值。这类似于 <code>async</code> 管道返回 <code>null</code> 的行为。</p>
+
+  <h4 id="the-requiresync-option">
+    <a href="#the-requiresync-option" class="docs-anchor" tabindex="-1" aria-label="Link to The <code>requireSync</code> option"><code>requireSync</code> 选项</a>
+  </h4>
+  <p>某些 Observable 保证同步发出值，例如 <code>BehaviorSubject</code>。在这些情况下，你可以指定 <code>requireSync: true</code> 选项。</p>
+<p>当 <code>requiredSync</code> 为 <code>true</code> 时，<code>toSignal</code> 会强制 Observable 在订阅时同步发出值。这保证了 signal 始终有一个值，并且不需要 <code>undefined</code> 类型或初始值。</p>
+
+  <h3 id="manualcleanup">
+    <a href="#manualcleanup" class="docs-anchor" tabindex="-1" aria-label="Link to <code>manualCleanup</code>"><code>manualCleanup</code></a>
+  </h3>
+  <p>默认情况下，当创建 <code>toSignal</code> 的组件或服务被销毁时，<code>toSignal</code> 会自动取消订阅 Observable。</p>
+<p>要覆盖此行为，你可以传递 <code>manualCleanup</code> 选项。你可以将此设置用于那些自然完成的 Observable。</p>
+
+  <h3 id="error-and-completion">
+    <a href="#error-and-completion" class="docs-anchor" tabindex="-1" aria-label="Link to Error and Completion">错误和完成</a>
+  </h3>
+  <p>如果在 <code>toSignal</code> 中使用的 Observable 产生错误，则在读取 signal 时会抛出该错误。</p>
+<p>如果在 <code>toSignal</code> 中使用的 Observable 完成，则 signal 将继续返回完成之前最近发出的值。</p>
+
+  <h2 id="create-an-rxjs-observable-from-a-signal-with-toobservable">
+    <a href="#create-an-rxjs-observable-from-a-signal-with-toobservable" class="docs-anchor" tabindex="-1" aria-label="Link to Create an RxJS Observable from a signal with <code>toObservable</code>">使用 <code>toObservable</code> 从 Signal 创建一个 RxJS 可观察者</a>
+  </h2>
+  <p>使用 <code>toObservable</code> 实用工具创建一个 <code>Observable</code>，以跟踪 signal 的值。signal 的值通过 <code>effect</code> 进行监控，当值发生变化时，<code>effect</code> 会将值发出到 Observable。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { Component, signal } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { toObservable } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core/rxjs-interop'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SearchResults</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  query</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Signal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(QueryService).query;</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  query$</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> toObservable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.query);</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  results$</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.query$.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">pipe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    switchMap</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">query</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.http.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/search?q='</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> query ))</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  );</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>随着 <code>query</code> signal 的变化，<code>query$</code> Observable 会发出最新的查询并触发新的 HTTP 请求。</p>
+
+  <h3 id="injection-context-1">
+    <a href="#injection-context-1" class="docs-anchor" tabindex="-1" aria-label="Link to Injection context">注入上下文</a>
+  </h3>
+  <p>默认情况下，<code>toObservable</code> 需要在<a href="guide/di/dependency-injection-context">依赖注入上下文</a>中运行，例如在构造组件或服务期间。如果依赖注入上下文不可用，你可以手动指定要替代使用的 <code>Injector</code>。</p>
+
+  <h3 id="timing-of-toobservable">
+    <a href="#timing-of-toobservable" class="docs-anchor" tabindex="-1" aria-label="Link to Timing of <code>toObservable</code>"><code>toObservable</code> 的时序</a>
+  </h3>
+  <p><code>toObservable</code> 使用副作用来跟踪 <code>ReplaySubject</code> 中 Signal 的值。在订阅时，第一个值（如果可用）可能会同步发射，所有后续值都将是异步的。</p>
+<p>与 Observable 不同，signal 永远不会同步通知更改。即使你多次更新 signal 的值，<code>toObservable</code> 也只会在 signal 稳定后才发出值。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> obs$</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> toObservable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(mySignal);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">obs$.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">subscribe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">value</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">log</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(value));</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">mySignal.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">mySignal.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">mySignal.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">3</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre>
+    </pre>
+  </div><p>在这里，只会记录最后一个值 (3)。</p>

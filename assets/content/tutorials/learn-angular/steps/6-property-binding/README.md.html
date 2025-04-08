@@ -1,0 +1,60 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular 中的属性（Property）绑定</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/learn-angular/steps/6-property-binding/README.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular 中的属性（Property）绑定使你能够为 HTML 元素、Angular 组件等的属性（Property）设置值。</p>
+<p>使用属性（Property）绑定来动态地为属性（Property）和 Attribute 设置值。你可以执行诸如切换按钮特性、以编程方式设置图片路径以及在组件之间共享值等操作。</p>
+<p>在本活动中，你将学习如何在模板中使用属性（Property）绑定。</p>
+<hr>
+
+<p>要绑定到元素的 Attribute，请将 Attribute 名称放在方括号中。这是一个范例：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> alt</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"photo"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> [src]</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"imageURL"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span></code></pre>
+    </pre>
+  </div><p>在本范例中，<code>src</code> Attribute 的值将绑定到类属性（Property） <code>imageURL</code>。无论 <code>imageURL</code> 具有什么值，都将设置为 <code>img</code> 标签的 <code>src</code> Attribute。</p>
+
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="add-a-property-called-iseditable">
+    <a href="#add-a-property-called-iseditable" class="docs-anchor" tabindex="-1" aria-label="Link to Add a property called <code>isEditable</code>">添加一个名为 <code>isEditable</code> 的属性</a>
+  </h3>
+  
+      <p>通过将一个名为 <code>isEditable</code> 的属性（Property）添加到 <code>AppComponent</code> 类，并将初始值设置为 <code>true</code>，来更新 <code>app.component.ts</code> 中的代码。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">    isEditable</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="bind-to-contenteditable">
+    <a href="#bind-to-contenteditable" class="docs-anchor" tabindex="-1" aria-label="Link to Bind to <code>contentEditable</code>">绑定到 <code>contentEditable</code></a>
+  </h3>
+  
+      <p>接下来，通过使用 <code aria-label="square brackets">[]</code> 语法，将 <code>div</code> 的 <code>contentEditable</code> Attribute 绑定到 <code>isEditable</code> 属性（Property）。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    ...</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> [contentEditable]</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"isEditable"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span></code></pre>
+    </pre>
+  </div>
+    </li>
+    
+    </ol>
+    <p><span class="docs-emoji">现在这个 div 是可编辑的了。干得漂亮 👍</span></p>
+<p>属性（Property）绑定是 Angular 众多强大的特性之一。如果你想了解更多信息，请查看<a href="guide/templates/property-binding">Angular 文档</a>。</p>

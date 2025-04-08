@@ -1,0 +1,337 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">编写原理图</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/schematics-authoring.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>你可以创建自己的原理图来操作 Angular 项目。
+库开发人员通常将原理图与其库打包在一起，以便将它们与 Angular CLI 集成。
+你还可以创建独立的原理图来操纵 Angular 应用中的文件和构造，以便为你的开发环境自定义它们，并使它们符合你的标准和约束。
+原理图可以链式处理，运行其他原理图以执行复杂的操作。</p>
+<p>操纵应用中的代码可能非常强大，但也相应地非常危险。
+例如，创建一个已经存在的文件将是一个错误，如果立即应用它，它将丢弃到目前为止应用的所有其他更改。
+Angular 原理图工具通过创建虚拟文件系统来防止副作用和错误。
+原理图描述了一个可以应用于虚拟文件系统的转换管道。
+当原理图运行时，转换会记录在内存中，并且只有在确认它们有效后才应用于真实文件系统。</p>
+
+  <h2 id="schematics-concepts">
+    <a href="#schematics-concepts" class="docs-anchor" tabindex="-1" aria-label="Link to Schematics concepts">原理图概念</a>
+  </h2>
+  <p>原理图的公共 API 定义了一些类，这些类代表了基本概念。</p>
+
+  <ul class="docs-list">
+    <li><p>虚拟文件系统由 <code>Tree</code> 表示。<code>Tree</code> 数据结构包含一个<em>基</em>（一组已经存在的文件）和一个<em>暂存区</em>（要应用于基的更改列表）。在进行修改时，你实际上并没有更改基，而是将这些修改添加到暂存区。</p>
+</li>
+<li><p><code>Rule</code> 对象定义了一个函数，该函数接受一个 <code>Tree</code>，应用转换，并返回一个新的 <code>Tree</code>。原理图的主文件 <code>index.ts</code> 定义了一组规则，这些规则实现了原理图的逻辑。</p>
+</li>
+<li><p>转换由 <code>Action</code> 表示。共有四种操作类型：<code>Create</code>、<code>Rename</code>、<code>Overwrite</code> 和 <code>Delete</code>。</p>
+</li>
+<li><p>每个原理图都在上下文中运行，该上下文由 <code>SchematicContext</code> 对象表示。</p>
+</li>
+
+  </ul>
+  <p>传递到规则中的上下文对象提供了对实用函数和元数据的访问，原理图可能需要使用这些实用函数和元数据，包括用于帮助调试的日志记录 API。上下文还定义了一个<em>合并策略</em>，该策略确定如何将更改从暂存树合并到基树中。可以接受或忽略更改，或者抛出异常。</p>
+
+  <h3 id="defining-rules-and-actions">
+    <a href="#defining-rules-and-actions" class="docs-anchor" tabindex="-1" aria-label="Link to Defining rules and actions">定义规则和操作</a>
+  </h3>
+  <p>当你使用 <a href="#schematics-cli">Schematics CLI</a> 创建新的空白原理图时，生成的入口函数是一个<em>规则工厂</em>。<code>RuleFactory</code> 对象定义了一个创建 <code>Rule</code> 的高阶函数。</p>
+<div class="docs-code" header="index.ts">
+    <div class="docs-code-header"><h3>index.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { Rule, SchematicContext, Tree } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular-devkit/schematics'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// You don't have to export the function as default.</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// You can also have more than one rule factory per file.</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> helloWorld</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">_options</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Rule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">tree</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Tree</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">_context</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SchematicContext</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">   return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> tree;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> };</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>你的规则可以通过调用外部工具和实现逻辑来更改你的项目。例如，你需要一个规则来定义如何将原理图中的模板合并到宿主项目中。</p>
+<p>规则可以使用 <code>@schematics/angular</code> 包提供的实用程序。查找用于处理模块、依赖项、TypeScript、AST、JSON、Angular CLI 工作区和项目等的辅助函数。</p>
+<div class="docs-code" header="index.ts">
+    <div class="docs-code-header"><h3>index.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  JsonAstObject,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  JsonObject,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  JsonValue,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  Path,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  normalize,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  parseJsonAst,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  strings,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular-devkit/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="defining-input-options-with-a-schema-and-interfaces">
+    <a href="#defining-input-options-with-a-schema-and-interfaces" class="docs-anchor" tabindex="-1" aria-label="Link to Defining input options with a schema and interfaces">使用模式和接口定义输入选项</a>
+  </h3>
+  <p>规则可以从调用者那里收集选项值，并将它们注入到模板中。你的规则可用的选项及其允许的值和默认值在原理图的 JSON 模式文件 <code>&lt;schematic&gt;/schema.json</code> 中定义。使用 TypeScript 接口为模式定义变量或枚举数据类型。</p>
+<p>模式定义了原理图中使用的变量的类型和默认值。例如，假设的“Hello World”原理图可能具有以下模式。</p>
+<div class="docs-code" header="src/hello-world/schema.json">
+    <div class="docs-code-header"><h3>src/hello-world/schema.json</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "properties"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "name"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "minLength"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"world"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "useColor"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"boolean"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>有关 Angular CLI 命令原理图的模式文件示例，请参阅 <a href="https://github.com/angular/angular-cli/blob/main/packages/schematics/angular/application/schema.json" target="_blank"><code>@schematics/angular</code></a>。</p>
+
+  <h3 id="schematic-prompts">
+    <a href="#schematic-prompts" class="docs-anchor" tabindex="-1" aria-label="Link to Schematic prompts">原理图提示</a>
+  </h3>
+  <p>原理图<em>提示</em>将用户交互引入原理图执行。配置原理图选项以向用户显示可自定义的问题。提示在原理图执行之前显示，然后使用响应作为选项的值。这使用户可以指导原理图的操作，而无需深入了解所有可用选项。</p>
+<p>例如，“Hello World”原理图可能会询问用户的姓名，并显示该姓名以代替默认名称“world”。要定义这样的提示，请将 <code>x-prompt</code> 属性添加到 <code>name</code> 变量的模式中。</p>
+<p>同样，你可以添加一个提示，让用户决定原理图在执行其 hello 操作时是否使用颜色。包含这两个提示的模式如下所示。</p>
+<div class="docs-code" header="src/hello-world/schema.json">
+    <div class="docs-code-header"><h3>src/hello-world/schema.json</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "properties"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "name"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "minLength"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"world"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "x-prompt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"What is your name?"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "useColor"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"boolean"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "x-prompt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Would you like the response in color?"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="prompt-short-form-syntax">
+    <a href="#prompt-short-form-syntax" class="docs-anchor" tabindex="-1" aria-label="Link to Prompt short-form syntax">提示简写语法</a>
+  </h4>
+  <p>这些示例使用了提示语法的简写形式，仅提供问题的文本。在大多数情况下，这就是所需要的全部内容。但是请注意，这两个提示需要不同类型的输入。当使用简写形式时，会根据属性的模式自动选择最合适的类型。在示例中，<code>name</code> 提示使用 <code>input</code> 类型，因为它是一个字符串属性。<code>useColor</code> 提示使用 <code>confirmation</code> 类型，因为它是一个布尔属性。在这种情况下，“yes”对应于 <code>true</code>，“no”对应于 <code>false</code>。</p>
+<p>有三种受支持的输入类型。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">输入类型</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">confirmation</td>
+<td align="left">是或否问题；非常适合布尔选项。</td>
+</tr>
+<tr>
+<td align="left">input</td>
+<td align="left">文本输入；非常适合字符串或数字选项。</td>
+</tr>
+<tr>
+<td align="left">list</td>
+<td align="left">一组预定义的允许值。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>在简写形式中，类型是从属性的类型和约束推断出来的。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">属性模式</th>
+<th align="left">提示类型</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">“type”：“boolean”</td>
+<td align="left">confirmation （“yes”=<code>true</code>，“no”=<code>false</code>）</td>
+</tr>
+<tr>
+<td align="left">“type”：“string”</td>
+<td align="left">input</td>
+</tr>
+<tr>
+<td align="left">“type”：“number”</td>
+<td align="left">input（仅接受有效数字）</td>
+</tr>
+<tr>
+<td align="left">“type”：“integer”</td>
+<td align="left">input（仅接受有效数字）</td>
+</tr>
+<tr>
+<td align="left">“enum”：[…]</td>
+<td align="left">list（枚举成员变为列表选择）</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>在以下示例中，该属性采用枚举值，因此原理图会自动选择列表类型，并从可能的值创建一个菜单。</p>
+<div class="docs-code" header="schema.json">
+    <div class="docs-code-header"><h3>schema.json</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"style"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "description"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"The file extension or preprocessor to use for style files."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"css"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "enum"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "css"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "scss"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "sass"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "less"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "styl"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "x-prompt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Which stylesheet format would you like to use?"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>提示运行时会自动根据 JSON 模式中提供的约束验证提供的响应。如果该值不可接受，则会提示用户输入新值。这确保了传递给原理图的任何值都符合原理图实现的预期，因此你无需在原理图的代码中添加额外的检查。</p>
+
+  <h4 id="prompt-long-form-syntax">
+    <a href="#prompt-long-form-syntax" class="docs-anchor" tabindex="-1" aria-label="Link to Prompt long-form syntax">提示长格式语法</a>
+  </h4>
+  <p><code>x-prompt</code> 字段语法支持长格式，用于需要对提示进行额外自定义和控制的情况。在这种形式中，<code>x-prompt</code> 字段值是一个 JSON 对象，其中包含自定义提示行为的子字段。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">字段</th>
+<th align="left">数据值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">类型</td>
+<td align="left"><code>confirmation</code>、<code>input</code> 或 <code>list</code>（在简短形式中自动选择）</td>
+</tr>
+<tr>
+<td align="left">message</td>
+<td align="left">字符串（必要）</td>
+</tr>
+<tr>
+<td align="left">items</td>
+<td align="left">字符串和/或标签/值对象对（仅在 <code>list</code> 类型中有效）</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>以下长格式的范例来自原理图的 JSON 模式，CLI 使用该模式来<a href="https://github.com/angular/angular-cli/blob/ba8a6ea59983bb52a6f1e66d105c5a77517f062e/packages/schematics/angular/application/schema.json#L56" target="_blank">生成应用</a>。
+它定义了提示，让用户可以选择他们想要为正在创建的应用使用哪种样式预处理器。
+通过使用长格式，原理图可以为菜单选项提供更明确的格式。</p>
+<div class="docs-code" header="package/schematics/angular/application/schema.json">
+    <div class="docs-code-header"><h3>package/schematics/angular/application/schema.json</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"style"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "description"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"The file extension or preprocessor to use for style files."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "default"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"css"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "enum"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "css"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "scss"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "sass"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "less"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "x-prompt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "message"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Which stylesheet format would you like to use?"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"list"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "items"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"value"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"css"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,  </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"label"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"CSS"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"value"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"scss"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"label"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"value"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"sass"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"label"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Sass   [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"value"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"less"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"label"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Less   [ https://lesscss.org/                                            ]"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="x-prompt-schema">
+    <a href="#x-prompt-schema" class="docs-anchor" tabindex="-1" aria-label="Link to x-prompt schema">x-prompt 模式</a>
+  </h4>
+  <p>定义原理图选项的 JSON 模式支持扩展，以允许对提示及其各自的行为进行声明式定义。
+原理图的代码不需要额外的逻辑或更改即可支持提示。
+以下 JSON 模式是对 <code>x-prompt</code> 字段的长格式语法的完整描述。</p>
+<div class="docs-code" header="x-prompt schema">
+    <div class="docs-code-header"><h3>x-prompt 模式</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "oneOf"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"object"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "properties"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "message"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "items"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                    "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"array"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                    "items"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                        "oneOf"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                            { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                            {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                                "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"object"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                                "properties"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                                    "label"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">"type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"string"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                                    "value"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                                },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                                "required"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [ </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"value"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                            }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                        ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "required"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [ </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"message"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="schematics-cli">
+    <a href="#schematics-cli" class="docs-anchor" tabindex="-1" aria-label="Link to Schematics CLI">原理图 CLI</a>
+  </h2>
+  <p>原理图自带命令行工具。
+使用 Node 6.9 或更高版本，全局安装原理图命令行工具：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -g</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular-devkit/schematics-cli</span></span></code></pre>
+    </pre>
+  </div><p>这将安装 <code>schematics</code> 可执行文件，你可以使用它在自己的项目文件夹中创建新的原理图集合，将新的原理图添加到现有集合，或扩展现有原理图。</p>
+<p>在以下各节中，你将使用 CLI 创建一个新的原理图集合，以介绍文件和文件结构，以及一些基本概念。</p>
+<p>然而，原理图最常见的用途是将 Angular 库与 Angular CLI 集成。
+通过在 Angular 工作区中的库项目中直接创建原理图文件来实现这一点，而无需使用原理图 CLI。
+请参阅<a href="tools/cli/schematics-for-libraries">库的原理图</a>。</p>
+
+  <h3 id="creating-a-schematics-collection">
+    <a href="#creating-a-schematics-collection" class="docs-anchor" tabindex="-1" aria-label="Link to Creating a schematics collection">创建原理图集合</a>
+  </h3>
+  <p>以下命令在同名的新项目文件夹中创建一个名为 <code>hello-world</code> 的新原理图。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schematics</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> blank</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --name=hello-world</span></span></code></pre>
+    </pre>
+  </div><p><code>blank</code> 原理图由原理图 CLI 提供。
+该命令创建一个新的项目文件夹（集合的根文件夹）和集合中的初始命名原理图。</p>
+<p>转到集合文件夹，安装你的 npm 依赖项，并在你喜欢的编辑器中打开你的新集合以查看生成的文件。
+例如，如果你正在使用 VS Code：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">cd</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> hello-world</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> install</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">npm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> run</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">code</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> .</span></span></code></pre>
+    </pre>
+  </div><p>初始原理图与项目文件夹同名，并在 <code>src/hello-world</code> 中生成。
+将相关的原理图添加到此集合，并修改生成的骨架代码以定义你的原理图的功能。
+每个原理图名称在集合中必须是唯一的。</p>
+
+  <h3 id="running-a-schematic">
+    <a href="#running-a-schematic" class="docs-anchor" tabindex="-1" aria-label="Link to Running a schematic">运行原理图</a>
+  </h3>
+  <p>使用 <code>schematics</code> 命令来运行命名的原理图。
+以以下格式提供项目文件夹的路径、原理图名称和任何强制性选项。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schematics</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">path-to-schematics-projec</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">t</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">:</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">schematics-nam</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">e</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">required-option</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">value</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span></span></code></pre>
+    </pre>
+  </div><p>路径可以是绝对路径，也可以是相对于执行命令的当前工作目录的相对路径。
+例如，要运行你刚刚生成的原理图（它没有必需的选项），请使用以下命令。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schematics</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> .:hello-world</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="adding-a-schematic-to-a-collection">
+    <a href="#adding-a-schematic-to-a-collection" class="docs-anchor" tabindex="-1" aria-label="Link to Adding a schematic to a collection">向集合添加原理图</a>
+  </h3>
+  <p>要将原理图添加到现有集合，请使用与启动新的原理图项目相同的命令，但在项目文件夹内运行该命令。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">cd</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> hello-world</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schematics</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> blank</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --name=goodbye-world</span></span></code></pre>
+    </pre>
+  </div><p>该命令在你的集合中生成新的命名原理图，其中包含一个主 <code>index.ts</code> 文件及其关联的测试规范。
+它还将新原理图的名称、描述和工厂函数添加到 <code>collection.json</code> 文件中集合的模式。</p>
+
+  <h2 id="collection-contents">
+    <a href="#collection-contents" class="docs-anchor" tabindex="-1" aria-label="Link to Collection contents">集合内容</a>
+  </h2>
+  <p>集合的根项目文件夹的顶层包含配置文件、一个 <code>node_modules</code> 文件夹和一个 <code>src/</code> 文件夹。
+<code>src/</code> 文件夹包含集合中命名原理图的子文件夹，以及一个模式 <code>collection.json</code>，它描述了收集的原理图。
+每个原理图都使用名称、描述和工厂函数创建。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "$schema"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">     "../node_modules/@angular-devkit/schematics/collection-schema.json"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "schematics"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "hello-world"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "description"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"A blank schematic."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "factory"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./hello-world/index#helloWorld"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <ul class="docs-list">
+    <li><p><code>$schema</code> 属性指定 CLI 用于验证的模式。</p>
+</li>
+<li><p><code>schematics</code> 属性列出了属于此集合的命名原理图。
+每个原理图都有一个纯文本描述，并指向主文件中的生成入口函数。</p>
+</li>
+<li><p><code>factory</code> 属性指向生成的入口函数。
+在此范例中，你通过调用 <code>helloWorld()</code> 工厂函数来调用 <code>hello-world</code> 原理图。</p>
+</li>
+<li><p>可选的 <code>schema</code> 属性指向一个 JSON 模式文件，该文件定义了可用于原理图的命令行选项。</p>
+</li>
+<li><p>可选的 <code>aliases</code> 数组指定一个或多个可用于调用原理图的字符串。
+例如，Angular CLI “generate” 命令的原理图有一个别名 “g”，它允许你使用命令 <code>ng g</code>。</p>
+</li>
+
+  </ul>
+  
+  <h3 id="named-schematics">
+    <a href="#named-schematics" class="docs-anchor" tabindex="-1" aria-label="Link to Named schematics">命名原理图</a>
+  </h3>
+  <p>当你使用原理图 CLI 创建一个空白原理图项目时，新的空白原理图是集合的第一个成员，并且与集合同名。
+当你向此集合添加新的命名原理图时，它会自动添加到 <code>collection.json</code> 模式中。</p>
+<p>除了名称和描述之外，每个原理图都有一个 <code>factory</code> 属性，用于标识原理图的入口点。
+在此范例中，你通过调用主文件 <code>hello-world/index.ts</code> 中的 <code>helloWorld()</code> 函数来调用原理图的已定义功能。</p>
+<img alt="overview" src="assets/images/guide/schematics/collection-files.gif">
+
+<p>集合中的每个命名原理图都具有以下主要部分。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">部分</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>index.ts</code></td>
+<td align="left">定义命名原理图的转换逻辑的代码。</td>
+</tr>
+<tr>
+<td align="left"><code>schema.json</code></td>
+<td align="left">原理图变量定义。</td>
+</tr>
+<tr>
+<td align="left"><code>schema.d.ts</code></td>
+<td align="left">原理图变量。</td>
+</tr>
+<tr>
+<td align="left"><code>files/</code></td>
+<td align="left">要复制的可选组件/模板文件。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>原理图有可能在 <code>index.ts</code> 文件中提供其所有逻辑，而无需额外的模板。
+但是，你可以通过在 <code>files</code> 文件夹中提供组件和模板（如独立 Angular 项目中的组件和模板）来为 Angular 创建动态原理图。
+索引文件中的逻辑通过定义注入数据和修改变量的规则来配置这些模板。</p>

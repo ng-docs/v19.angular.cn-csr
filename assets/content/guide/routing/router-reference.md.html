@@ -1,0 +1,337 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">路由器参考</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/routing/router-reference.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>以下各节重点介绍了一些核心路由器概念。</p>
+
+  <h2 id="router-imports">
+    <a href="#router-imports" class="docs-anchor" tabindex="-1" aria-label="Link to Router imports">路由器导入</a>
+  </h2>
+  <p>Angular 路由器是一项可选服务，它为给定的 URL 提供特定的组件视图。
+它不是 Angular 核心的一部分，因此位于其自己的库包 <code>@angular/router</code> 中。</p>
+<p>从中导入你所需要的内容，就像从任何其他 Angular 包中导入一样。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { provideRouter } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/router'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 有关浏览器 URL 样式的更多信息，请参阅 <a href="guide/routing/common-router-tasks#browser-url-styles"><code>LocationStrategy</code> 和浏览器 URL 样式</a>。</p>
+
+    </div>
+    
+  <h2 id="configuration">
+    <a href="#configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Configuration">配置</a>
+  </h2>
+  <p>带路由的 Angular 应用具有 <code>Router</code> 服务的单例实例。
+当浏览器的 URL 更改时，该路由器会查找相应的 <code>Route</code>，从中可以确定要显示的组件。</p>
+<p>在配置路由器之前，它没有任何路由。
+以下范例创建了五个路由定义，通过 <code>provideRouter</code> 方法配置路由器，并将结果添加到 <code>ApplicationConfig</code> 的 <code>providers</code> 数组中。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> appRoutes</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Routes</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  { path: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'crisis-center'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, component: CrisisListComponent },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  { path: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'hero/:id'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,      component: HeroDetailComponent },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    path: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'heroes'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    component: HeroListComponent,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    data: { title: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Heroes List'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  { path: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">''</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    redirectTo: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/heroes'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    pathMatch: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'full'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  { path: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'**'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, component: PageNotFoundComponent }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">];</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> appConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ApplicationConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    providers: [</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provideRouter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(appRoutes, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withDebugTracing</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>路由的 <code>routes</code> 数组描述了如何导航。
+将其传递给 <code>ApplicationConfig</code> <code>providers</code> 中的 <code>provideRouter</code> 方法以配置路由器。</p>
+<p>每个 <code>Route</code> 都将 URL <code>path</code> 映射到一个组件。
+路径中没有前导斜杠。
+路由器会为你解析和构建最终 URL，这使你在应用视图之间导航时可以使用相对路径和绝对路径。</p>
+<p>第二个路由中的 <code>:id</code> 是路由参数的令牌。
+在诸如 <code>/hero/42</code> 之类的 URL 中，“42”是 <code>id</code> 参数的值。
+相应的 <code>HeroDetailComponent</code> 使用该值来查找并显示其 <code>id</code> 为 42 的英雄。</p>
+<p>第三个路由中的 <code>data</code> 属性是存储与此特定路由关联的任意数据的位置。
+<code>data</code> 属性在每个已激活的路由中都可访问。
+使用它来存储诸如页面标题、面包屑文本和其他只读静态数据之类的条目。
+使用 resolve 守卫来检索动态数据。</p>
+<p>第四个路由中的空路径表示应用的默认路径——当 URL 中的路径为空时（通常在启动时为空）要访问的位置。
+此默认路由会重定向到 <code>/heroes</code> URL 的路由，因此会显示 <code>HeroesListComponent</code>。</p>
+<p>如果你需要查看导航生命周期中正在发生的事件，可以使用 <code>withDebugTracing</code> 特性。
+这会将每个导航生命周期中发生的每个路由器事件输出到浏览器控制台。
+<code>withDebugTracing</code> 仅用于调试目的。
+你可以在作为第二个参数传递给 <code>provideRouter</code> 方法的对象中设置 <code>withDebugTracing</code> 选项。</p>
+
+  <h2 id="router-outlet">
+    <a href="#router-outlet" class="docs-anchor" tabindex="-1" aria-label="Link to Router outlet">路由器出口</a>
+  </h2>
+  <p><code>RouterOutlet</code> 是路由器库中的一个指令，其用法类似于组件。
+它充当占位符，标记模板中路由器应显示该出口组件的位置。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- Routed components go here --&gt;</span></span></code></pre>
+    </pre>
+  </div><p>给定前面的配置，当此应用的浏览器 URL 变为 <code>/heroes</code> 时，路由器会将该 URL 与路由路径 <code>/heroes</code> 匹配，并将 <code>HeroListComponent</code> 显示为与你放置在宿主组件模板中的 <code>RouterOutlet</code> 同级的元素。</p>
+
+  <h2 id="router-links">
+    <a href="#router-links" class="docs-anchor" tabindex="-1" aria-label="Link to Router links">路由器链接</a>
+  </h2>
+  <p>要作为某些用户操作（例如单击锚标记）的结果进行导航，请使用 <code>RouterLink</code>。</p>
+<p>考虑以下模板：</p>
+<div class="docs-code" path="adev/src/content/examples/router/src/app/app.component.1.html" header="src/app/app.component.html">
+    <div class="docs-code-header"><h3>src/app/app.component.html</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Angular Router&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/crisis-center"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLinkActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"active"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ariaCurrentWhenActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"page"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Crisis Center&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/heroes"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> routerLinkActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"active"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ariaCurrentWhenActive</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"page"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Heroes&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">nav</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">router-outlet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div><p>锚标记上的 <code>RouterLink</code> 指令使路由器可以控制这些元素。
+导航路径是固定的，因此你可以将字符串赋值为到 <code>routerLink</code> 的一次性绑定。</p>
+<p>如果导航路径更具动态性，你可以绑定到返回路由链接参数数组的模板表达式；即<a href="guide/routing/common-router-tasks#link-parameters-array">链接参数数组</a>。
+路由器将该数组求解为一个完整的 URL。</p>
+
+  <h2 id="active-router-links">
+    <a href="#active-router-links" class="docs-anchor" tabindex="-1" aria-label="Link to Active router links">活动的路由器链接</a>
+  </h2>
+  <p><code>RouterLinkActive</code> 指令根据当前的 <code>RouterState</code> 切换活动 <code>RouterLink</code> 绑定的 CSS 类。</p>
+<p>在每个锚标记上，你都会看到一个到 <code>RouterLinkActive</code> 指令的<a href="guide/templates/property-binding">属性（Property）绑定</a>，如下所示</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">routerLinkActive="..."</span></span></code></pre>
+    </pre>
+  </div><p>等号 <code>=</code> 右侧的模板表达式包含一个空格分隔的 CSS 类字符串，当此链接处于活动状态时，路由器会添加这些类，而在链接处于非活动状态时，路由器会删除这些类。
+你可以将 <code>RouterLinkActive</code> 指令设置为类字符串，例如 <code>routerLinkActive="active fluffy"</code>，或将其绑定到返回此类字符串的组件属性。
+例如，</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[routerLinkActive]</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"someStringProperty"</span></span></code></pre>
+    </pre>
+  </div><p>活动路由链接在路由树的每个级别向下级联，因此父路由器链接和子路由器链接可以同时处于活动状态。
+要重写此行为，请使用 <code>{ exact: true }</code> 表达式绑定到 <code>[routerLinkActiveOptions]</code> 输入绑定。
+通过使用 <code>{ exact: true }</code>，仅当给定的 <code>RouterLink</code> 的 URL 与当前 URL 完全匹配时，它才处于活动状态。</p>
+<p><code>RouterLinkActive</code> 还允许你轻松地将 <code>aria-current</code> 属性应用于活动元素，从而为所有用户提供更无障碍的体验。 更多信息请参阅无障碍功能最佳实践<a href="/best-practices/a11y#active-links-identification">活动链接识别</a>部分。</p>
+
+  <h2 id="router-state">
+    <a href="#router-state" class="docs-anchor" tabindex="-1" aria-label="Link to Router state">路由器状态</a>
+  </h2>
+  <p>在每个成功的导航生命周期结束后，路由器都会构建一个 <code>ActivatedRoute</code> 对象树，这些对象构成了路由器的当前状态。
+你可以使用 <code>Router</code> 服务和 <code>routerState</code> 属性从应用中的任何位置访问当前的 <code>RouterState</code>。</p>
+<p><code>RouterState</code> 中的每个 <code>ActivatedRoute</code> 都提供了在路由树中向上和向下遍历的方法，以从父路由、子路由和同级路由获取信息。</p>
+
+  <h2 id="activated-route">
+    <a href="#activated-route" class="docs-anchor" tabindex="-1" aria-label="Link to Activated route">已激活的路由</a>
+  </h2>
+  <p>路由路径和参数可以通过名叫 <a href="api/router/ActivatedRoute">ActivatedRoute</a> 的注入路由器服务获得。
+它包含大量有用的信息，包括：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">属性（Property）</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>url</code></td>
+<td align="left">一个路由路径的 <code>Observable</code>，表示为字符串数组，数组中的每个条目对应路由路径的一部分。</td>
+</tr>
+<tr>
+<td align="left"><code>data</code></td>
+<td align="left">一个 <code>Observable</code>，其中包含为路由提供的 <code>data</code> 对象。也包含来自 resolve 守卫的任何已求解的值。</td>
+</tr>
+<tr>
+<td align="left"><code>params</code></td>
+<td align="left">一个 <code>Observable</code>，其中包含特定于该路由的必要参数和可选参数。</td>
+</tr>
+<tr>
+<td align="left"><code>paramMap</code></td>
+<td align="left">一个 <code>Observable</code>，其中包含特定于该路由的必要参数和可选参数的 <a href="api/router/ParamMap">映射表</a>。 该映射表支持从同一参数中检索单个和多个值。</td>
+</tr>
+<tr>
+<td align="left"><code>queryParamMap</code></td>
+<td align="left">一个 <code>Observable</code>，其中包含所有路由可用的查询参数的 <a href="api/router/ParamMap">映射表</a>。 该映射表支持从查询参数中检索单个和多个值。</td>
+</tr>
+<tr>
+<td align="left"><code>queryParams</code></td>
+<td align="left">一个 <code>Observable</code>，其中包含所有路由可用的查询参数。</td>
+</tr>
+<tr>
+<td align="left"><code>fragment</code></td>
+<td align="left">一个所有路由可用的 URL 片段的 <code>Observable</code>。</td>
+</tr>
+<tr>
+<td align="left"><code>outlet</code></td>
+<td align="left">用于渲染此路由的 <code>RouterOutlet</code> 的名称。对于未命名的出口，出口名称是主要的。</td>
+</tr>
+<tr>
+<td align="left"><code>routeConfig</code></td>
+<td align="left">用于包含原始路径的路由的路由配置。</td>
+</tr>
+<tr>
+<td align="left"><code>parent</code></td>
+<td align="left">当此路由是子路由时，此路由的父 <code>ActivatedRoute</code>。</td>
+</tr>
+<tr>
+<td align="left"><code>firstChild</code></td>
+<td align="left">包含此路由的子路由列表中的第一个 <code>ActivatedRoute</code>。</td>
+</tr>
+<tr>
+<td align="left"><code>children</code></td>
+<td align="left">包含当前路由下激活的所有子路由。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="router-events">
+    <a href="#router-events" class="docs-anchor" tabindex="-1" aria-label="Link to Router events">路由器事件</a>
+  </h2>
+  <p>在每次导航期间，<code>Router</code> 通过 <code>Router.events</code> 属性发出导航事件。
+下表显示了这些事件。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">路由器事件</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><a href="api/router/NavigationStart"><code>NavigationStart</code></a></td>
+<td align="left">当导航开始时触发。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/RouteConfigLoadStart"><code>RouteConfigLoadStart</code></a></td>
+<td align="left">在 <code>Router</code> 惰性加载路由配置之前触发。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/RouteConfigLoadEnd"><code>RouteConfigLoadEnd</code></a></td>
+<td align="left">在路由被惰性加载之后触发。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/RoutesRecognized"><code>RoutesRecognized</code></a></td>
+<td align="left">当路由器解析 URL 并且路由被识别时触发。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/GuardsCheckStart"><code>GuardsCheckStart</code></a></td>
+<td align="left">当路由器开始路由的守卫阶段时触发。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/ChildActivationStart"><code>ChildActivationStart</code></a></td>
+<td align="left">当路由器开始激活路由的子路由时触发。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/ActivationStart"><code>ActivationStart</code></a></td>
+<td align="left">当路由器开始激活路由时触发。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/GuardsCheckEnd"><code>GuardsCheckEnd</code></a></td>
+<td align="left">当路由器成功完成路由的守卫阶段时触发。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/ResolveStart"><code>ResolveStart</code></a></td>
+<td align="left">当路由器开始路由的求解阶段时触发。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/ResolveEnd"><code>ResolveEnd</code></a></td>
+<td align="left">当路由器成功完成路由的求解阶段时触发。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/ChildActivationEnd"><code>ChildActivationEnd</code></a></td>
+<td align="left">当路由器完成激活路由的子路由时触发。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/ActivationEnd"><code>ActivationEnd</code></a></td>
+<td align="left">当路由器完成激活路由时触发。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/NavigationEnd"><code>NavigationEnd</code></a></td>
+<td align="left">当导航成功结束时触发。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/NavigationCancel"><code>NavigationCancel</code></a></td>
+<td align="left">当导航被取消时触发。当路由守卫在导航期间返回 false，或通过返回 <code>UrlTree</code> 或 <code>RedirectCommand</code> 重定向时，可能会发生这种情况。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/NavigationError"><code>NavigationError</code></a></td>
+<td align="left">当导航由于意外错误而失败时触发。</td>
+</tr>
+<tr>
+<td align="left"><a href="api/router/Scroll"><code>Scroll</code></a></td>
+<td align="left">表示一个滚动事件。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>当你启用 <code>withDebugTracing</code> 特性时，Angular 会将这些事件记录到控制台。</p>
+
+  <h2 id="router-terminology">
+    <a href="#router-terminology" class="docs-anchor" tabindex="-1" aria-label="Link to Router terminology">路由器术语</a>
+  </h2>
+  <p>以下是关键的 <code>Router</code> 术语及其含义：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">路由器部件</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>Router</code></td>
+<td align="left">显示活动 URL 的应用组件。管理从一个组件到下一个组件的导航。</td>
+</tr>
+<tr>
+<td align="left"><code>provideRouter</code></td>
+<td align="left">为浏览应用视图提供必要的提供者。</td>
+</tr>
+<tr>
+<td align="left"><code>RouterModule</code></td>
+<td align="left">一个单独的 NgModule，它为浏览应用视图提供必要的提供者和指令。</td>
+</tr>
+<tr>
+<td align="left"><code>Routes</code></td>
+<td align="left">定义一个 Routes 数组，每个条目都将 URL 路径映射到一个组件。</td>
+</tr>
+<tr>
+<td align="left"><code>Route</code></td>
+<td align="left">定义路由器应如何基于 URL 模式导航到组件。大多数路由由路径和组件类型组成。</td>
+</tr>
+<tr>
+<td align="left"><code>RouterOutlet</code></td>
+<td align="left">该指令 (<code>&lt;router-outlet&gt;</code>) 标记了路由器显示视图的位置。</td>
+</tr>
+<tr>
+<td align="left"><code>RouterLink</code></td>
+<td align="left">用于将可点击的 HTML 元素绑定到路由的指令。单击带有 <code>routerLink</code> 指令的元素（该指令绑定到<em>字符串</em>或<em>链接参数数组</em>）会触发导航。</td>
+</tr>
+<tr>
+<td align="left"><code>RouterLinkActive</code></td>
+<td align="left">当元素上或内部包含的关联 <code>routerLink</code> 变为活动/非活动状态时，用于从 HTML 元素添加/删除类的指令。它还可以为活动链接设置 <code>aria-current</code> 以获得更好的无障碍功能。</td>
+</tr>
+<tr>
+<td align="left"><code>ActivatedRoute</code></td>
+<td align="left">提供给每个路由组件的服务，其中包含特定于路由的信息，例如路由参数、静态数据、求解数据、全局查询参数和全局片段。</td>
+</tr>
+<tr>
+<td align="left"><code>RouterState</code></td>
+<td align="left">路由器的当前状态，包括当前激活路由的树，以及用于遍历路由树的便捷方法。</td>
+</tr>
+<tr>
+<td align="left">链接参数数组</td>
+<td align="left">路由器解释为路由指令的数组。你可以将该数组绑定到 <code>RouterLink</code>，或者将该数组作为参数传递给 <code>Router.navigate</code> 方法。</td>
+</tr>
+<tr>
+<td align="left">路由组件</td>
+<td align="left">一个带有 <code>RouterOutlet</code> 的 Angular 组件，它根据路由器导航显示视图。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  

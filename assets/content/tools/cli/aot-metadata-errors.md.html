@@ -1,0 +1,288 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">预先编译元数据错误</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/aot-metadata-errors.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>以下是你可能会遇到的元数据错误，以及解释和建议的更正。</p>
+
+  <h2 id="expression-form-not-supported">
+    <a href="#expression-form-not-supported" class="docs-anchor" tabindex="-1" aria-label="Link to Expression form not supported">不支持的表达式形式</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 编译器在评估 Angular 元数据时，遇到了一个它不理解的表达式。</p>
+
+    </div>
+    <p>超出编译器<a href="tools/cli/aot-compiler#expression-syntax">受限表达式语法</a>之外的语言特性可能会产生此错误，如下例所示：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Fooish</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { … }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">…</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> prop</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> typeof</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Fooish; </span><span style="--shiki-light:#24292E;--shiki-dark:#6A737D">// typeof is not valid in metadata</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // bracket notation is not valid in metadata</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  { </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provide</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'token'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">useValue</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { [prop]: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'value'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> } };</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div><p>你可以在正常的应用代码中使用 <code>typeof</code> 和方括号表示法。
+只是不能在定义 Angular 元数据的表达式中使用这些特性。</p>
+<p>在编写 Angular 元数据时，坚持使用编译器<a href="tools/cli/aot-compiler#expression-syntax">受限的表达式语法</a>来避免此错误，并警惕新的或不常见的 TypeScript 特性。</p>
+
+  <h2 id="reference-to-a-local-non-exported-symbol">
+    <a href="#reference-to-a-local-non-exported-symbol" class="docs-anchor" tabindex="-1" aria-label="Link to Reference to a local (non-exported) symbol">引用本地（未导出的）符号</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 引用本地（未导出的）符号 '符号名称'。 考虑导出该符号。</p>
+
+    </div>
+    <p>编译器遇到了对本地定义的符号的引用，该符号既未导出也未初始化。</p>
+<p>这是一个关于此问题的 <code>provider</code> 范例。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> foo</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// neither exported nor initialized</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: … ,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: Foo, useValue: foo }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>编译器在单独的模块中生成组件工厂，其中包括 <code>useValue</code> 提供者代码。<em>那个</em> 工厂模块无法返回到<em>这个</em> 源码模块以访问本地（未导出的）<code>foo</code> 变量。</p>
+<p>你可以通过初始化 <code>foo</code> 来解决问题。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> foo </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 42</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// initialized</span></span></code></pre>
+    </pre>
+  </div><p>编译器将<a href="tools/cli/aot-compiler#code-folding">折叠</a>表达式到提供者中，就像你写了这样。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  { provide: Foo, useValue: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">42</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]</span></span></code></pre>
+    </pre>
+  </div><p>或者，你可以通过导出 <code>foo</code> 来修复它，并期望 <code>foo</code> 将在你真正知道其值时在运行时赋值。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> foo</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// exported</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: … ,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: Foo, useValue: foo }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>对于元数据（如 <code>providers</code> 和 <code>animations</code>）中引用的变量，添加 <code>export</code> 通常有效，因为编译器可以在这些表达式中生成对导出变量的<em>引用</em>。它不需要这些变量的<em>值</em>。</p>
+<p>当编译器需要<em>实际值</em>以便生成代码时，添加 <code>export</code> 不起作用。
+例如，它对 <code>template</code> 属性不起作用。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> someTemplate</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// exported but not initialized</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: someTemplate</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>编译器<em>现在</em>就需要 <code>template</code> 属性的值来生成组件工厂。
+仅变量引用是不够的。
+在声明前加上 <code>export</code> 只会产生一个新的错误：“<a href="#only-initialized-variables"><code>Only initialized variables and constants can be referenced</code></a>”。</p>
+
+  <h2 id="only-initialized-variables-and-constants">
+    <a href="#only-initialized-variables-and-constants" class="docs-anchor" tabindex="-1" aria-label="Link to Only initialized variables and constants">仅初始化的变量和常量</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> <em>只能引用初始化的变量和常量，因为模板编译器需要此变量的值。</em></p>
+
+    </div>
+    <p>编译器找到了对未初始化的导出变量或静态字段的引用。
+它需要该变量的值来生成代码。</p>
+<p>以下示例尝试将组件的 <code>template</code> 属性设置为导出的 <code>someTemplate</code> 变量的值，该变量已声明但<em>未赋值</em>。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> someTemplate</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: someTemplate</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>如果你从其他模块导入了 <code>someTemplate</code> 并且忽略在那里初始化它，你也会收到此错误。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR - not initialized there either</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { someTemplate } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './config'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: someTemplate</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>编译器不能等到运行时才获取模板信息。
+它必须从源码中静态地推导出 <code>someTemplate</code> 变量的值，以便它可以生成组件工厂，其中包括基于模板构建元素的指令。</p>
+<p>要纠正此错误，请在<em>同一行</em>的初始化子句中提供变量的初始值。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> someTemplate </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '&lt;h1&gt;Greetings from Angular&lt;/h1&gt;'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'my-component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: someTemplate</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="reference-to-a-non-exported-class">
+    <a href="#reference-to-a-non-exported-class" class="docs-anchor" tabindex="-1" aria-label="Link to Reference to a non-exported class">引用未导出的类</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> <em>引用未导出的类 <code>&lt;类名&gt;</code>。</em>
+<em>考虑导出该类。</em></p>
+
+    </div>
+    <p>元数据引用了一个未导出的类。</p>
+<p>例如，你可能定义了一个类，并将其用作 providers 数组中的注入令牌，但忽略了导出该类。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">abstract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyStrategy</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: MyStrategy, useValue: … }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div><p>Angular 在单独的模块中生成类工厂，该工厂<a href="tools/cli/aot-compiler#exported-symbols">只能访问导出的类</a>。
+要纠正此错误，请导出引用的类。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> abstract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyStrategy</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: MyStrategy, useValue: … }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="reference-to-a-non-exported-function">
+    <a href="#reference-to-a-non-exported-function" class="docs-anchor" tabindex="-1" aria-label="Link to Reference to a non-exported function">引用未导出的函数</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> <em>元数据引用了一个未导出的函数。</em></p>
+
+    </div>
+    <p>例如，你可能已将 providers 的 <code>useFactory</code> 属性设置为本地定义的函数，但忽略了导出它。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> myStrategy</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() { … }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: MyStrategy, useFactory: myStrategy }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div><p>Angular 在单独的模块中生成类工厂，该工厂<a href="tools/cli/aot-compiler#exported-symbols">只能访问导出的函数</a>。
+要纠正此错误，请导出该函数。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> myStrategy</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() { … }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: MyStrategy, useFactory: myStrategy }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="function-calls-are-not-supported">
+    <a href="#function-calls-are-not-supported" class="docs-anchor" tabindex="-1" aria-label="Link to Function calls are not supported">不支持函数调用</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> <em>不支持函数调用。 考虑将函数或 lambda 替换为对导出函数的引用。</em></p>
+
+    </div>
+    <p>编译器目前不支持<a href="tools/cli/aot-compiler#function-expression">函数表达式或 lambda 函数</a>。
+例如，你不能像这样将 provider 的 <code>useFactory</code> 设置为匿名函数或箭头函数。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: MyStrategy, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">useFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">function</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() { … } },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: OtherStrategy, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">useFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { … } }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div><p>如果你在 provider 的 <code>useValue</code> 中调用函数或方法，你也会收到此错误。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { calculateValue } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './utilities'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: SomeValue, useValue: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">calculateValue</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div><p>要纠正此错误，请从模块中导出一个函数，并在 <code>useFactory</code> 提供者中引用该函数。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { calculateValue } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './utilities'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> myStrategy</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() { … }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> otherStrategy</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() { … }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> someValueFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  return</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> calculateValue</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: MyStrategy, useFactory: myStrategy },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: OtherStrategy, useFactory: otherStrategy },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: SomeValue, useFactory: someValueFactory }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="destructured-variable-or-constant-not-supported">
+    <a href="#destructured-variable-or-constant-not-supported" class="docs-anchor" tabindex="-1" aria-label="Link to Destructured variable or constant not supported">不支持解构的变量或常量</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> <em>模板编译器不支持引用导出的已解构变量或常量。请考虑简化此操作以避免解构。</em></p>
+
+    </div>
+    <p>编译器不支持引用通过<a href="https://www.typescriptlang.org/docs/handbook/variable-declarations.html#destructuring" target="_blank">解构</a>赋值的变量。</p>
+<p>例如，你不能这样写：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { configuration } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './configuration'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// destructured assignment to foo and bar</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">foo</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">bar</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> configuration;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    {provide: Foo, useValue: foo},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    {provide: Bar, useValue: bar},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div><p>要更正此错误，请引用非解构的值。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { configuration } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './configuration'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    {provide: Foo, useValue: configuration.foo},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    {provide: Bar, useValue: configuration.bar},</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="could-not-resolve-type">
+    <a href="#could-not-resolve-type" class="docs-anchor" tabindex="-1" aria-label="Link to Could not resolve type">无法求解类型</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> <em>编译器遇到一个类型，但无法确定哪个模块导出了该类型。</em></p>
+
+    </div>
+    <p>如果你引用了环境类型，则可能发生这种情况。
+例如，<code>Window</code> 类型是在全局 <code>.d.ts</code> 文件中声明的环境类型。</p>
+<p>如果在组件构造函数中引用它，你将收到错误，编译器必须静态分析它。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({ })</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> win</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Window</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) { … }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>TypeScript 理解环境类型，因此你无需导入它们。
+Angular 编译器不理解你忽略导出或导入的类型。</p>
+<p>在这种情况下，编译器不理解如何使用 <code>Window</code> 令牌注入某些东西。</p>
+<p>不要在元数据表达式中引用环境类型。</p>
+<p>如果必须注入环境类型的实例，你可以通过以下四个步骤巧妙地解决问题：</p>
+
+    <ol class="docs-ordered-list">
+      <li>为环境类型的实例创建注入令牌。</li>
+<li>创建一个返回该实例的工厂函数。</li>
+<li>添加一个带有该工厂函数的 <code>useFactory</code> 提供者。</li>
+<li>使用 <code>@Inject</code> 注入该实例。</li>
+
+    </ol>
+    <p>这是一个阐明问题的范例。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { Inject } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> WINDOW</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> InjectionToken</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Window'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> _window</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() { </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> window; }</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">WINDOW</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, useFactory: _window }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">WINDOW</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> win</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Window</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) { … }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>构造函数中的 <code>Window</code> 类型不再是编译器的问题，因为它使用 <code>@Inject(WINDOW)</code> 来生成注入代码。</p>
+<p>Angular 对 <code>DOCUMENT</code> 令牌也做了类似的事情，因此你可以注入浏览器的 <code>document</code> 对象（或它的抽象，取决于应用运行的平台）。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { Inject }   </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { DOCUMENT } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/common'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({ … })</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">DOCUMENT</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> doc</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Document</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) { … }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="name-expected">
+    <a href="#name-expected" class="docs-anchor" tabindex="-1" aria-label="Link to Name expected">应为名称</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> <em>编译器在求值的表达式中应为名称。</em></p>
+
+    </div>
+    <p>如果你像以下示例中那样使用数字作为属性名，则可能发生这种情况。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provider</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [{ provide: Foo, useValue: { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'test'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> } }]</span></span></code></pre>
+    </pre>
+  </div><p>将属性的名称更改为非数字的名称。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// CORRECTED</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">provider</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [{ provide: Foo, useValue: { </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'0'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'test'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> } }]</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="unsupported-enum-member-name">
+    <a href="#unsupported-enum-member-name" class="docs-anchor" tabindex="-1" aria-label="Link to Unsupported enum member name">不支持的枚举成员名称</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> <em>Angular 无法确定你在元数据中引用的<a href="https://www.typescriptlang.org/docs/handbook/enums.html" target="_blank">枚举成员</a>的值。</em></p>
+
+    </div>
+    <p>编译器可以理解简单的枚举值，但不能理解复杂的值，例如那些从计算属性派生的值。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">enum</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Colors</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  Red</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  White</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  Blue</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "Blue"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">length</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> // computed</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  providers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: BaseColor,   useValue: Colors.White } </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ok</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: DangerColor, useValue: Colors.Red }   </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ok</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    { provide: StrongColor, useValue: Colors.Blue }  </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// bad</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  …</span></span></code></pre>
+    </pre>
+  </div><p>避免引用具有复杂初始化器或计算属性的枚举。</p>
+
+  <h2 id="tagged-template-expressions-are-not-supported">
+    <a href="#tagged-template-expressions-are-not-supported" class="docs-anchor" tabindex="-1" aria-label="Link to Tagged template expressions are not supported">不支持标记模板表达式</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> <em>元数据中不支持标记模板表达式。</em></p>
+
+    </div>
+    <p>编译器遇到了 JavaScript ES2015 <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals" target="_blank">标记模板表达式</a>，例如以下内容。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ERROR</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> expression</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'funky'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> raw</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">raw</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`A tagged template ${</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">expression</span><span style="--shiki-light:#24292E;--shiki-dark:#9ECBFF">} string`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#E1E4E8"> …</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#B392F0"> template</span><span style="--shiki-light:#032F62;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;div&gt;'</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> raw</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '&lt;/div&gt;'</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#E1E4E8"> …</span></span></code></pre>
+    </pre>
+  </div><p><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String/raw" target="_blank"><code>String.raw()</code></a> 是 JavaScript ES2015 原生的<em>标签函数</em>。</p>
+<p>AoT 编译器不支持标记模板表达式；在元数据表达式中避免使用它们。</p>
+
+  <h2 id="symbol-reference-expected">
+    <a href="#symbol-reference-expected" class="docs-anchor" tabindex="-1" aria-label="Link to Symbol reference expected">应为 Symbol 引用</a>
+  </h2>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> <em>编译器应为错误消息中指定位置的 symbol 引用。</em></p>
+
+    </div>
+    <p>如果在类的 <code>extends</code> 子句中使用表达式，则可能会发生此错误。</p>
+<!--todo: Chuck: After reviewing your PR comment I'm still at a loss. See [comment there](https://github.com/angular/angular/pull/17712#discussion_r132025495). -->

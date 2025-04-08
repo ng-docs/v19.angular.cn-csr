@@ -1,0 +1,60 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">基于构造函数的依赖注入</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/learn-angular/steps/21-constructor-based-di/README.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>在之前的活动中，你使用 <code>inject()</code> 函数来提供资源，也就是将资源“提供”给你的组件。<code>inject()</code> 函数是一种模式，但了解还有另一种注入资源的模式也很有用，这种模式叫做基于构造函数的依赖注入。</p>
+<p>你可以将资源指定为组件的 <code>constructor</code> 函数的参数。Angular 将使这些资源可用于你的组件。<br><br>
+在本活动中，你将学习如何使用基于构造函数的依赖注入。</p>
+<hr>
+
+<p>要将服务或其他可注入的资源注入到你的组件中，请使用以下语法：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> PetCarDashboardComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> petCareService</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> PetCareService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>这里有几件事需要注意：</p>
+
+  <ul class="docs-list">
+    <li>使用 <code>private</code> 关键字</li>
+<li><code>petCareService</code> 变成了你可以在类中使用的属性（Property）</li>
+<li><code>PetCareService</code> 类是注入的类</li>
+
+  </ul>
+  <p>好的，现在你来试试看：</p>
+
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="update-the-code-to-use-constructor-based-di">
+    <a href="#update-the-code-to-use-constructor-based-di" class="docs-anchor" tabindex="-1" aria-label="Link to Update the code to use constructor-based DI">更新代码以使用基于构造函数的依赖注入</a>
+  </h3>
+  
+      <p>在 <code>app.component.ts</code> 中，更新构造函数代码以匹配以下代码：</p>
+
+    <div class="docs-alert docs-alert-tip">
+    <p><strong>提示：</strong> 请记住，如果你遇到困难，请参考此活动页面上的范例。</p>
+
+    </div>
+    <div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(private carService: CarService) {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.display </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.carService.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getCars</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">join</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">' ⭐️ '</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+    </li>
+    
+    </ol>
+    <p>祝贺你完成此活动。示例代码的工作方式与使用 <code>inject</code> 函数相同。虽然这两种方法在很大程度上是相同的，但仍有一些细微的差异超出了本教程的范围。</p>
+<br>
+
+<p>你可以在<a href="guide/di">Angular 文档</a>中找到有关依赖注入的更多信息。</p>

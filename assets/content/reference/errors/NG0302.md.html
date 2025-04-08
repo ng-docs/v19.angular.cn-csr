@@ -1,0 +1,39 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">找不到管道</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0302.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    
+    <div class="docs-video-container">
+      <iframe class="docs-video" src="https://www.youtube.com/embed/maI2u6Sxk9M" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen credentialless title="Video player"></iframe>
+    </div>
+    <p>Angular 找不到具有此名称的管道。</p>
+<p>模板中引用的<a href="guide/templates/pipes">管道</a>未被正确命名或声明。</p>
+<p>要使用管道，请执行以下操作：</p>
+
+  <ul class="docs-list">
+    <li>确保模板中使用的名称与管道装饰器中定义的名称匹配。</li>
+<li>将管道添加到组件的 <code>imports</code> 数组中；或者，如果管道设置了 <code>standalone: false</code>，则将管道所属的 <code>NgModule</code> 添加到组件的 <code>imports</code> 数组中。</li>
+
+  </ul>
+  
+  <h2 id="debugging-the-error">
+    <a href="#debugging-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the error">调试错误</a>
+  </h2>
+  <p>使用管道名称来追踪管道的声明和使用位置。</p>
+<p>要解决此错误，请执行以下操作：</p>
+
+  <ul class="docs-list">
+    <li>如果管道是 <code>NgModule</code> 本地的，请在管道的装饰器中为其指定一个唯一的名称，并在该 <code>NgModule</code> 中声明它。</li>
+<li>如果管道是独立的或在另一个 <code>NgModule</code> 中声明的，请将其添加到独立组件或当前 <code>NgModule</code> 的 <code>imports</code> 字段中。</li>
+
+  </ul>
+  <p>如果你最近添加了导入或声明，则可能需要重启服务器才能看到这些更改。</p>

@@ -1,0 +1,14 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/core</span><div class="docs-reference-title"><div><h1>REQUEST</h1><div class="docs-api-item-label type-constant full">常量</div><div class="docs-api-item-label type-developer_preview full"><a href="/reference/releases#developer-preview">开发者预览</a></div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/core/src/application/platform_tokens.ts#L29-L35" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">代码</i></a></div><section class="docs-reference-description"><p>表示当前 HTTP 请求对象的注入令牌。</p></section><nav class="docs-pill-row"><a class="docs-pill" href="https://developer.mozilla.org/en-US/docs/Web/API/Request">| MDN 上的 <code>Request</code></a></nav></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">  <code>
+    <span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> <a href="/api/core/REQUEST">REQUEST</a></span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/core/InjectionToken">InjectionToken</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Request</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;;</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-section"><h2 id="description" class="docs-reference-section-heading"><a href="#description" aria-label="Link to Description section" tabindex="-1">描述</a></h2><div><p>表示当前 HTTP 请求对象的注入令牌。</p>
+<p>在处理服务端渲染 (SSR) 时，使用此令牌来访问当前请求。</p></div></div><div class="docs-reference-section"><h2 id="usage-notes" class="docs-reference-section-heading"><a href="#usage-notes" aria-label="Link to Usage Notes section" tabindex="-1">用法说明</a></h2><div><p>在以下场景中，此令牌可能为 <code>null</code>：</p>
+
+    <ul class="docs-list">
+      <li>在构建过程中。</li>
+<li>当应用在浏览器中渲染时（客户端渲染）。</li>
+<li>当执行静态站点生成 (SSG) 时。</li>
+<li>在开发期间的路由提取过程中（在请求时）。</li>
+
+    </ul>
+    </div></div></div>

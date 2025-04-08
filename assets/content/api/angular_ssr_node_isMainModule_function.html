@@ -1,0 +1,24 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/ssr/node</span><div class="docs-reference-title"><div><h1>isMainModule</h1><div class="docs-api-item-label type-function full">函数</div><div class="docs-api-item-label type-developer_preview full"><a href="/reference/releases#developer-preview">开发者预览</a></div></div></div><section class="docs-reference-description"><p>确定提供的 URL 是否表示主入口点模块。</p></section></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">  <code>
+    <span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/ssr/node/isMainModule">isMainModule</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line "><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  url</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span></span><span class="line "><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-members"><div id="isMainModule_0" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>isMainModule</h3><div><code>boolean</code></div></header><div class="docs-reference-card-body"><div class="docs-reference-card-item "><div class="docs-function-definition"><p>确定提供的 URL 是否表示主入口点模块。</p>
+<p>此函数检查提供的 URL 是否对应于直接执行的主 ESM 模块。
+它对于有条件地执行仅应在模块是入口点时运行的代码很有用，例如启动服务器或初始化应用。</p>
+<p>它执行两个关键检查：</p>
+
+      <ol class="docs-ordered-list">
+        <li>验证 URL 是否以 'file:' 开头，确保它是一个本地文件。</li>
+<li>将 URL 的已求解文件路径与第一个命令行参数 (<code>process.argv[1]</code>) 进行比较，
+该参数指向正在执行的文件。</li>
+
+      </ol></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">url</span><code>string</code><div class="docs-parameter-description"><p>要检查的模块的 URL。这通常应该是 <code>import.meta.url</code>。</p></div></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code>boolean</code></div></div></div></div></div><div class="docs-reference-section"><h2 id="description" class="docs-reference-section-heading"><a href="#description" aria-label="Link to Description section" tabindex="-1">描述</a></h2><div><p>确定提供的 URL 是否表示主入口点模块。</p>
+<p>此函数检查提供的 URL 是否对应于直接执行的主 ESM 模块。
+它对于有条件地执行仅应在模块是入口点时运行的代码很有用，例如启动服务器或初始化应用。</p>
+<p>它执行两个关键检查：</p>
+
+      <ol class="docs-ordered-list">
+        <li>验证 URL 是否以 'file:' 开头，确保它是一个本地文件。</li>
+<li>将 URL 的已求解文件路径与第一个命令行参数 (<code>process.argv[1]</code>) 进行比较，
+该参数指向正在执行的文件。</li>
+
+      </ol></div></div></div>

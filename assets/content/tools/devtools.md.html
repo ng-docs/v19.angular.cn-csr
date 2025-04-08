@@ -1,0 +1,234 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">DevTools 概览</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/devtools.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular DevTools 是一款浏览器扩展程序，为 Angular 应用提供调试和性能分析功能。</p>
+
+    <div class="docs-video-container">
+      <iframe class="docs-video" src="https://www.youtube.com/embed/bavWOHZM6zE" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen credentialless title="Video player"></iframe>
+    </div>
+    <p>从 <a href="https://chrome.google.com/webstore/detail/angular-developer-tools/ienfalfjdbdpebioblfackkekamfmbnh" target="_blank">Chrome Web Store</a> 或 <a href="https://addons.mozilla.org/firefox/addon/angular-devtools/" target="_blank">Firefox Addons</a> 安装 Angular DevTools。</p>
+<p>你可以通过按 <kbd>F12</kbd> 或 <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd></kbd> (Windows 或 Linux) 以及 <kbd><kbd>Fn</kbd>+<kbd>F12</kbd></kbd> 或 <kbd><kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>I</kbd></kbd> (Mac) 在任何网页上打开 Chrome 或 Firefox DevTools。
+一旦浏览器 DevTools 打开并且 Angular DevTools 安装完毕，你就可以在 “Angular” 标签页下找到它。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> Chrome 的新标签页不会运行已安装的扩展程序，因此 Angular 标签页不会出现在 DevTools 中。请访问任何其他页面以查看它。</p>
+
+    </div>
+    <img src="assets/images/guide/devtools/devtools.png" alt="An overview of Angular DevTools showing a tree of components for an application.">
+
+
+  <h2 id="open-your-application">
+    <a href="#open-your-application" class="docs-anchor" tabindex="-1" aria-label="Link to Open your application">打开你的应用</a>
+  </h2>
+  <p>当你打开扩展程序时，你将看到两个额外的标签页：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">标签页</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><a href="tools/devtools#debug-your-application">组件</a></td>
+<td align="left">让你探索应用中的组件和指令，并预览或编辑它们的状态。</td>
+</tr>
+<tr>
+<td align="left"><a href="tools/devtools#profile-your-application">性能分析器</a></td>
+<td align="left">让你分析你的应用，并了解在变更检测执行期间的性能瓶颈是什么。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <img src="assets/images/guide/devtools/devtools-tabs.png" alt="A screenshot of the top of Angular DevTools illustrating two tabs in the upper-left corner, one labeled 'Components' and another labeled 'Profiler'.">
+
+<p>在 Angular DevTools 的右上角，你将找到页面上正在运行的 Angular 版本以及扩展程序的最新提交哈希值。</p>
+
+  <h3 id="angular-application-not-detected">
+    <a href="#angular-application-not-detected" class="docs-anchor" tabindex="-1" aria-label="Link to Angular application not detected">未检测到 Angular 应用</a>
+  </h3>
+  <p>如果在打开 Angular DevTools 时看到错误消息 “未检测到 Angular 应用”，这意味着它无法与页面上的 Angular 应用通信。
+最常见的原因是你正在检查的网页不包含 Angular 应用。
+请仔细检查你是否正在检查正确的网页以及 Angular 应用是否正在运行。</p>
+
+  <h3 id="we-detected-an-application-built-with-production-configuration">
+    <a href="#we-detected-an-application-built-with-production-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to We detected an application built with production configuration">我们检测到一个使用生产配置构建的应用</a>
+  </h3>
+  <p>如果你看到错误消息 “我们检测到一个使用生产配置构建的应用。Angular DevTools 仅支持开发版本。”，这意味着在该页面上找到了一个 Angular 应用，但它是使用生产优化编译的。
+当为生产环境编译时，Angular CLI 会删除各种调试功能，以最大限度地减少页面上的 JavaScript 数量，从而提高性能。这包括与 DevTools 通信所需的功能。</p>
+<p>要运行 DevTools，你需要编译你的应用时禁用优化。<code>ng serve</code> 默认会这样做。
+如果你需要调试已部署的应用，请使用 <a href="reference/configs/workspace-config#optimization-configuration"><code>optimization</code> 配置选项</a> (<code>{"optimization": false}</code>) 在你的构建中禁用优化。</p>
+
+  <h2 id="debug-your-application">
+    <a href="#debug-your-application" class="docs-anchor" tabindex="-1" aria-label="Link to Debug your application">调试你的应用</a>
+  </h2>
+  <p><strong>组件</strong> 标签页让你探索应用的结构。
+你可以可视化 DOM 中的组件和指令实例，并检查或修改它们的状态。</p>
+
+  <h3 id="explore-the-application-structure">
+    <a href="#explore-the-application-structure" class="docs-anchor" tabindex="-1" aria-label="Link to Explore the application structure">探索应用结构</a>
+  </h3>
+  <p>组件树显示了你的应用中<em>组件和指令</em>的分层关系。</p>
+<img src="assets/images/guide/devtools/component-explorer.png" alt="A screenshot of the 'Components' tab showing a tree of Angular components and directives starting the root of the application.">
+
+<p>单击组件浏览器中的各个组件或指令以选择它们并预览其属性。
+Angular DevTools 在组件树的右侧显示属性和元数据。</p>
+<p>要按名称查找组件或指令，请使用组件树上方的搜索框。</p>
+<img src="assets/images/guide/devtools/search.png" alt="A screenshot of the 'Components' tab. The filter bar immediately underneath the tab is searching for 'todo' and all components with 'todo' in the name are highlighted in the tree. `app-todos` is currently selected and a sidebar to the right displays information about the component's properties. This includes a section of `@Output` fields and another section for other properties.">
+
+
+  <h3 id="navigate-to-the-host-node">
+    <a href="#navigate-to-the-host-node" class="docs-anchor" tabindex="-1" aria-label="Link to Navigate to the host node">导航到宿主节点</a>
+  </h3>
+  <p>要转到特定组件或指令的宿主元素，请在组件浏览器中双击它。
+Angular DevTools 将在 Chrome 中打开 Elements 标签页或在 Firefox 中打开 Inspector 标签页，并选择关联的 DOM 节点。</p>
+
+  <h3 id="navigate-to-source">
+    <a href="#navigate-to-source" class="docs-anchor" tabindex="-1" aria-label="Link to Navigate to source">导航到源码</a>
+  </h3>
+  <p>对于组件，Angular DevTools 允许你导航到 Sources 标签页 (Chrome) 和 Debugger 标签页 (Firefox) 中的组件定义。
+选择特定组件后，单击属性视图右上角的图标：</p>
+<img src="assets/images/guide/devtools/navigate-source.png" alt="A screenshot of the 'Components' tab. The properties view on the right is visible for a component and the mouse rests in the upper right corner of that view on top of a `<>` icon. An adjacent tooltip reads 'Open component source'.">
+
+
+  <h3 id="update-property-value">
+    <a href="#update-property-value" class="docs-anchor" tabindex="-1" aria-label="Link to Update property value">更新属性值</a>
+  </h3>
+  <p>与浏览器的 DevTools 类似，属性视图允许你编辑输入属性、输出属性或其他属性的值。
+右键单击属性值，如果此值类型可以使用编辑功能，则会出现一个文本输入框。
+键入新值并按 <code>Enter</code> 以将此值应用于该属性。</p>
+<img src="assets/images/guide/devtools/update-property.png" alt="A screenshot of the 'Components' tab with the properties view open for a component. An `@Input` named `todo` contains a `label` property which is currently selected and has been manually updated to the value 'Buy milk'.">
+
+
+  <h3 id="access-selected-component-or-directive-in-console">
+    <a href="#access-selected-component-or-directive-in-console" class="docs-anchor" tabindex="-1" aria-label="Link to Access selected component or directive in console">在控制台中访问所选组件或指令</a>
+  </h3>
+  <p>作为控制台中的快捷方式，Angular DevTools 提供了对最近选择的组件或指令实例的访问。
+键入 <code>$ng0</code> 以获取对当前所选组件或指令实例的引用，键入 <code>$ng1</code> 获取对先前选择的实例的引用，<code>$ng2</code> 获取对之前选择的实例的引用，依此类推。</p>
+<img src="assets/images/guide/devtools/access-console.png" alt="A screenshot of the 'Components' tab with the browser console underneath. In the console, the user has typed three commands, `$ng0`, `$ng1`, and `$ng2` to view the three most recently selected elements. After each statement, the console prints a different component reference.">
+
+
+  <h3 id="select-a-directive-or-component">
+    <a href="#select-a-directive-or-component" class="docs-anchor" tabindex="-1" aria-label="Link to Select a directive or component">选择一个指令或组件</a>
+  </h3>
+  <p>与浏览器的 DevTools 类似，你可以检查页面以选择特定的组件或指令。
+单击 Angular DevTools 左上角的<em><strong>检查元素</strong></em>图标，并将鼠标悬停在页面上的 DOM 元素上。
+该扩展程序会识别关联的指令和/或组件，并允许你在组件树中选择相应的元素。</p>
+<img src="assets/images/guide/devtools/inspect-element.png" alt="A screenshot of the 'Components' tab with an Angular todo application visible. In the very top-left corner of Angular DevTools, an icon of a screen with a mouse icon inside it is selected. The mouse rests on a todo element in the Angular application UI. The element is highlighted with a `<TodoComponent>` label displayed in an adjacent tooltip.">
+
+
+  <h2 id="profile-your-application">
+    <a href="#profile-your-application" class="docs-anchor" tabindex="-1" aria-label="Link to Profile your application">分析你的应用性能</a>
+  </h2>
+  <p><strong>Profiler</strong> 标签页可以让你可视化 Angular 变更检测的执行过程。
+这对于确定变更检测何时以及如何影响你的应用性能非常有用。</p>
+<img src="assets/images/guide/devtools/profiler.png" alt="A screenshot of the 'Profiler' tab which reads 'Click the play button to start a new recording, or upload a json file containing profiler data.' Next to this is a record button to being recording a new profile as well as a file picker to select an existing profile.">
+
+<p>Profiler 标签页允许你开始分析当前应用，或从之前的运行中导入现有的分析文件。
+要开始分析你的应用，请将鼠标悬停在 <strong>Profiler</strong> 标签页左上角的圆圈上，然后点击 <strong>Start recording</strong>（开始录制）。</p>
+<p>在分析期间，Angular DevTools 会捕获执行事件，例如变更检测和生命周期钩子的执行。
+与你的应用交互以触发变更检测并生成 Angular DevTools 可以使用的数据。
+要完成录制，再次点击圆圈以 <strong>Stop recording</strong>（停止录制）。</p>
+<p>你也可以导入现有的录制文件。
+在 <a href="tools/devtools#import-and-export-recordings">导入录制文件</a> 部分阅读关于此特性的更多信息。</p>
+
+  <h3 id="understand-your-applications-execution">
+    <a href="#understand-your-applications-execution" class="docs-anchor" tabindex="-1" aria-label="Link to Understand your application's execution">了解你的应用的执行过程</a>
+  </h3>
+  <p>在录制或导入分析文件后，Angular DevTools 会显示变更检测周期的可视化视图。</p>
+<img src="assets/images/guide/devtools/default-profiler-view.png" alt="A screenshot of the 'Profiler' tab after a profile has been recorded or uploaded. It displays a bar chart illustrating various change detection cycles with some text which reads 'Select a bar to preview a particular change detection cycle'.">
+
+<p>序列中的每个条形都代表你应用中的一个变更检测周期。
+条形越高，表示应用在此周期中运行变更检测所花费的时间越长。
+当你选择一个条形时，DevTools 会显示关于它的有用信息，包括：</p>
+
+  <ul class="docs-list">
+    <li>一个条形图，其中包含在此周期中捕获的所有组件和指令</li>
+<li>Angular 在此周期中运行变更检测所花费的时间。</li>
+<li>用户体验到的估计帧率。</li>
+<li>触发变更检测的来源。</li>
+
+  </ul>
+  <img src="assets/images/guide/devtools/profiler-selected-bar.png" alt="A screenshot of the 'Profiler' tab. A single bar has been selected by the user and a nearby dropdown menu displays 'Bar chart`, showing a second bar chart underneath it. The new chart has two bars which take up the majority of the space, one labeled `TodosComponent` and the other labeled `NgForOf`. The other bars are small enough to be negligible in comparison.">
+
+
+  <h3 id="understand-component-execution">
+    <a href="#understand-component-execution" class="docs-anchor" tabindex="-1" aria-label="Link to Understand component execution">了解组件执行过程</a>
+  </h3>
+  <p>点击变更检测周期后显示的条形图，会显示关于你的应用在该特定组件或指令中运行变更检测所花费时间的详细视图。</p>
+<p>此范例展示了 <code>NgForOf</code> 指令所花费的总时间以及在其上调用的方法。</p>
+<img src="assets/images/guide/devtools/directive-details.png" alt="A screenshot of the 'Profiler' tab where the `NgForOf` bar is selected. A detailed view of `NgForOf` is visible to the right where it lists 'Total time spent: 1.76 ms'. It includes a with exactly one row, listing `NgForOf` as a directives with an `ngDoCheck` method which took 1.76 ms. It also includes a list labeled 'Parent Hierarchy' containing the parent components of this directive.">
+
+
+  <h3 id="hierarchical-views">
+    <a href="#hierarchical-views" class="docs-anchor" tabindex="-1" aria-label="Link to Hierarchical views">分层视图</a>
+  </h3>
+  <img src="assets/images/guide/devtools/flame-graph-view.png" alt="A screenshot of the 'Profiler' tab. A single bar has been selected by the user and a nearby dropdown menu now displays 'Flame graph', showing a flame graph underneath it. The flame graph starts with a row called 'Entire application' and another row called 'AppComponent'. Beneath those, the rows start to break up into multiple items, starting with `[RouterOutlet]` and `DemoAppComponent` on the third row. A few layers deep, one cell is highlighted red.">
+
+<p>你也可以在类似火焰图的视图中可视化变更检测的执行过程。</p>
+<p>图中的每个瓦片代表屏幕上渲染树中特定位置的元素。
+例如，考虑一个变更检测周期，其中 <code>LoggedOutUserComponent</code> 被移除，并且 Angular 在其位置渲染了 <code>LoggedInUserComponent</code>。在这种情况下，两个组件都将显示在同一个瓦片中。</p>
+<p>x 轴表示渲染此变更检测周期所花费的总时间。
+y 轴表示元素分层结构。为元素运行变更检测需要渲染其指令和子组件。
+总而言之，此图可视化了哪些组件的渲染时间最长以及时间都花在了哪里。</p>
+<p>每个瓦片的颜色都取决于 Angular 在那里花费的时间。
+Angular DevTools 根据相对于渲染时间最长的瓦片所花费的时间来确定颜色的强度。</p>
+<p>当你点击某个瓦片时，你会在右侧面板中看到关于它的详细信息。
+双击瓦片会放大它，以便你可以更轻松地查看其嵌套的子级。</p>
+
+  <h3 id="debug-change-detection-and-onpush-components">
+    <a href="#debug-change-detection-and-onpush-components" class="docs-anchor" tabindex="-1" aria-label="Link to Debug change detection and <code>OnPush</code> components">调试变更检测和 <code>OnPush</code> 组件</a>
+  </h3>
+  <p>通常，对于任何给定的变更检测帧，该图都会可视化<em>渲染</em>应用所花费的时间。但是，某些组件（例如 <code>OnPush</code> 组件）仅在其输入属性更改时才会重新渲染。对于特定帧，在没有这些组件的情况下可视化火焰图可能很有用。</p>
+<p>要仅可视化变更检测帧中经历了变更检测过程的组件，请选中火焰图上方顶部的 <strong>Change detection</strong>（变更检测）复选框。</p>
+<p>此视图突出显示了所有经历了变更检测的组件，并将未经历变更检测的组件显示为灰色，例如未重新渲染的 <code>OnPush</code> 组件。</p>
+<img src="assets/images/guide/devtools/debugging-onpush.png" alt="A screenshot of the 'Profiler' tab displaying a flame chart visualization of a change detection cycle. A checkbox labeled 'Show only change detection' is now checked. The flame graph looks very similar to before, however the color of components has changed from orange to blue. Several tiles labeled `[RouterOutlet]` are no longer highlighted with any color.">
+
+
+  <h3 id="import-and-export-recordings">
+    <a href="#import-and-export-recordings" class="docs-anchor" tabindex="-1" aria-label="Link to Import and export recordings">导入和导出录制文件</a>
+  </h3>
+  <p>点击已录制的分析会话右上角的 <strong>Save Profile</strong>（保存分析文件）按钮，将其导出为 JSON 文件并保存到磁盘。
+稍后，通过点击 <strong>Choose file</strong>（选择文件）输入框，在分析器的初始视图中导入该文件。</p>
+<img src="assets/images/guide/devtools/save-profile.png" alt="A screenshot of the 'Profiler' tab displaying change detection cycles. On the right side a 'Save Profile' button is visible.">
+
+
+  <h2 id="inspect-your-injectors">
+    <a href="#inspect-your-injectors" class="docs-anchor" tabindex="-1" aria-label="Link to Inspect your injectors">检查你的注入器</a>
+  </h2>
+  <p>注意：Injector Tree 适用于使用 v17 或更高版本构建的 Angular 应用。</p>
+
+  <h3 id="view-the-injector-hierarchy-of-your-application">
+    <a href="#view-the-injector-hierarchy-of-your-application" class="docs-anchor" tabindex="-1" aria-label="Link to View the injector hierarchy of your application">查看你应用的注入器分层结构</a>
+  </h3>
+  <p><strong>Injector Tree</strong>（注入器树）标签页允许你探索在你的应用中配置的注入器的结构。在这里，你将看到两棵树，它们代表你应用的 <a href="guide/di/hierarchical-dependency-injection">注入器分层结构</a>。一棵树是你的环境分层结构，另一棵树是你的元素分层结构。</p>
+<img src="assets/images/guide/devtools/di-injector-tree.png" alt="A screenshot of the 'Profiler' tab displaying the injector tree tab in Angular Devtools visualizing the injector graph for an example application.">
+
+
+  <h3 id="visualize-resolution-paths">
+    <a href="#visualize-resolution-paths" class="docs-anchor" tabindex="-1" aria-label="Link to Visualize resolution paths">可视化求解路径</a>
+  </h3>
+  <p>当选择特定的注入器时，从该注入器到根注入器 Angular 依赖注入算法遍历的路径将被高亮显示。对于元素注入器，这包括高亮显示当依赖项无法在元素分层结构中被求解时，依赖注入算法跳转到的环境注入器。</p>
+<p>要了解关于 Angular 如何求解解析路径的更多详情，请参阅<a href="guide/di/hierarchical-dependency-injection#resolution-rules">解析规则</a>。</p>
+<img src="assets/images/guide/devtools/di-injector-tree-selected.png" alt="A screenshot of the 'Profiler' tab displaying how the injector tree visualize highlights resolution paths when an injector is selected.">
+
+
+  <h3 id="view-injector-providers">
+    <a href="#view-injector-providers" class="docs-anchor" tabindex="-1" aria-label="Link to View injector providers">查看注入器提供者</a>
+  </h3>
+  <p>单击配置了提供者的注入器，将在注入器树状视图的右侧列表中显示这些提供者。在这里，你可以查看所提供的令牌及其类型。</p>
+<img src="assets/images/guide/devtools/di-injector-tree-providers.png" alt="A screenshot of the 'Profiler' tab displaying how providers are made visible when an injector is selected.">

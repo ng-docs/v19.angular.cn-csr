@@ -1,0 +1,139 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">建立 <code>HttpClient</code></h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/http/setup.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>在你的应用中使用 <code>HttpClient</code> 之前，你必须使用<a href="guide/di">依赖注入</a>对其进行配置。</p>
+
+  <h2 id="providing-httpclient-through-dependency-injection">
+    <a href="#providing-httpclient-through-dependency-injection" class="docs-anchor" tabindex="-1" aria-label="Link to Providing <code>HttpClient</code> through dependency injection">通过依赖注入提供 <code>HttpClient</code></a>
+  </h2>
+  <p><code>HttpClient</code> 是使用 <code>provideHttpClient</code> 辅助函数提供的，大多数应用会在 <code>app.config.ts</code> 的应用 <code>providers</code> 中引入它。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> appConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ApplicationConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    provideHttpClient</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre>
+    </pre>
+  </div><p>如果你的应用改为使用基于 NgModule 的引导，你可以将 <code>provideHttpClient</code> 包含在应用的 NgModule 的 providers 中：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    provideHttpClient</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ],</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // ... other application configuration</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>然后，你可以将 <code>HttpClient</code> 服务作为依赖项注入到你的组件、服务或其他类中：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Injectable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({providedIn: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'root'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ConfigService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> http</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(HttpClient);</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // This service can now make HTTP requests via `this.http`.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="configuring-features-of-httpclient">
+    <a href="#configuring-features-of-httpclient" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring features of <code>HttpClient</code>">配置 <code>HttpClient</code> 的特性</a>
+  </h2>
+  <p><code>provideHttpClient</code> 接受一个可选特性配置列表，以启用或配置客户端不同方面的行为。本节详细介绍了可选特性及其用法。</p>
+
+  <h3 id="withfetch">
+    <a href="#withfetch" class="docs-anchor" tabindex="-1" aria-label="Link to <code>withFetch</code>"><code>withFetch</code></a>
+  </h3>
+  <div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> appConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ApplicationConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    provideHttpClient</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">      withFetch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ),</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre>
+    </pre>
+  </div><p>默认情况下，<code>HttpClient</code> 使用 <a href="https://developer.mozilla.org/docs/Web/API/XMLHttpRequest" target="_blank"><code>XMLHttpRequest</code></a> API 发出请求。<code>withFetch</code> 特性将客户端切换为使用 <a href="https://developer.mozilla.org/docs/Web/API/Fetch_API" target="_blank"><code>fetch</code></a> API。</p>
+<p><code>fetch</code> 是一个更现代的 API，在一些不支持 <code>XMLHttpRequest</code> 的环境中可用。它确实有一些限制，例如不生成上传进度事件。</p>
+
+  <h3 id="withinterceptors">
+    <a href="#withinterceptors" class="docs-anchor" tabindex="-1" aria-label="Link to <code>withInterceptors(...)</code>"><code>withInterceptors(...)</code></a>
+  </h3>
+  <p><code>withInterceptors</code> 配置将处理通过 <code>HttpClient</code> 发出的请求的拦截器函数集。有关更多信息，请参阅<a href="guide/http/interceptors">拦截器指南</a>。</p>
+
+  <h3 id="withinterceptorsfromdi">
+    <a href="#withinterceptorsfromdi" class="docs-anchor" tabindex="-1" aria-label="Link to <code>withInterceptorsFromDi()</code>"><code>withInterceptorsFromDi()</code></a>
+  </h3>
+  <p><code>withInterceptorsFromDi</code> 在 <code>HttpClient</code> 配置中包含了旧式的基于类的拦截器。有关更多信息，请参阅<a href="guide/http/interceptors">拦截器指南</a>。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 函数式拦截器（通过 <code>withInterceptors</code>）具有更可预测的顺序，我们建议优先使用它们，而不是基于 DI 的拦截器。</p>
+
+    </div>
+    
+  <h3 id="withrequestsmadeviaparent">
+    <a href="#withrequestsmadeviaparent" class="docs-anchor" tabindex="-1" aria-label="Link to <code>withRequestsMadeViaParent()</code>"><code>withRequestsMadeViaParent()</code></a>
+  </h3>
+  <p>默认情况下，当你在给定的注入器中使用 <code>provideHttpClient</code> 配置 <code>HttpClient</code> 时，此配置会覆盖父注入器中可能存在的任何 <code>HttpClient</code> 配置。</p>
+<p>当你添加 <code>withRequestsMadeViaParent()</code> 时，<code>HttpClient</code> 将被配置为将请求传递给父注入器中的 <code>HttpClient</code> 实例，前提是它们已经通过了此级别的任何已配置的拦截器。如果你想在子注入器中<em>添加</em>拦截器，同时仍然通过父注入器的拦截器发送请求，这将非常有用。</p>
+
+    <div class="docs-alert docs-alert-critical">
+    <p><strong>重要：</strong> 你必须在当前注入器之上配置一个 <code>HttpClient</code> 实例，否则此选项无效，并且当你尝试使用它时会出现运行时错误。</p>
+
+    </div>
+    
+  <h3 id="withjsonpsupport">
+    <a href="#withjsonpsupport" class="docs-anchor" tabindex="-1" aria-label="Link to <code>withJsonpSupport()</code>"><code>withJsonpSupport()</code></a>
+  </h3>
+  <p>包含 <code>withJsonpSupport</code> 会在 <code>HttpClient</code> 上启用 <code>.jsonp()</code> 方法，该方法通过 <a href="https://en.wikipedia.org/wiki/JSONP" target="_blank">JSONP 约定</a>发出 GET 请求，以进行跨域数据加载。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 如果可能，请优先使用 <a href="https://developer.mozilla.org/docs/Web/HTTP/CORS" target="_blank">CORS</a> 而不是 JSONP 来发出跨域请求。</p>
+
+    </div>
+    
+  <h3 id="withxsrfconfiguration">
+    <a href="#withxsrfconfiguration" class="docs-anchor" tabindex="-1" aria-label="Link to <code>withXsrfConfiguration(...)</code>"><code>withXsrfConfiguration(...)</code></a>
+  </h3>
+  <p>包含此选项可以自定义 <code>HttpClient</code> 的内置 XSRF 安全功能。有关更多信息，请参阅<a href="best-practices/security">安全指南</a>。</p>
+
+  <h3 id="withnoxsrfprotection">
+    <a href="#withnoxsrfprotection" class="docs-anchor" tabindex="-1" aria-label="Link to <code>withNoXsrfProtection()</code>"><code>withNoXsrfProtection()</code></a>
+  </h3>
+  <p>包含此选项会禁用 <code>HttpClient</code> 的内置 XSRF 安全功能。有关更多信息，请参阅<a href="best-practices/security">安全指南</a>。</p>
+
+  <h2 id="httpclientmodule-based-configuration">
+    <a href="#httpclientmodule-based-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to <code>HttpClientModule</code>-based configuration">基于 <code>HttpClientModule</code> 的配置</a>
+  </h2>
+  <p>某些应用可能会使用基于 NgModule 的旧 API 来配置 <code>HttpClient</code>。</p>
+<p>下表列出了 <code>@angular/common/http</code> 中可用的 NgModule 以及它们与上述提供者配置函数的关系。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th><strong>NgModule</strong></th>
+<th><code>provideHttpClient()</code> 等效配置</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td><code>HttpClientModule</code></td>
+<td><code>provideHttpClient(withInterceptorsFromDi())</code></td>
+</tr>
+<tr>
+<td><code>HttpClientJsonpModule</code></td>
+<td><code>withJsonpSupport()</code></td>
+</tr>
+<tr>
+<td><code>HttpClientXsrfModule.withOptions(...)</code></td>
+<td><code>withXsrfConfiguration(...)</code></td>
+</tr>
+<tr>
+<td><code>HttpClientXsrfModule.disable()</code></td>
+<td><code>withNoXsrfProtection()</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+    <div class="docs-callout docs-callout-important">
+      <h3>在多个注入器中使用 HttpClientModule 时要小心</h3>
+      <p>当 <code>HttpClientModule</code> 存在于多个注入器中时，拦截器的行为定义不明确，并且取决于确切的选项和提供者/导入顺序。</p>
+<p>对于多注入器配置，请优先使用 <code>provideHttpClient</code>，因为它具有更稳定的行为。请参阅上面的 <code>withRequestsMadeViaParent</code> 特性。</p>
+
+    </div>
+    

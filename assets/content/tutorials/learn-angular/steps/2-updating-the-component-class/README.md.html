@@ -1,0 +1,73 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">更新组件类</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/learn-angular/steps/2-updating-the-component-class/README.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>在 Angular 中，组件的逻辑和行为是在组件的 TypeScript 类中定义的。</p>
+<p>在本活动中，你将学习如何更新组件类以及如何使用<a href="/guide/templates/binding#render-dynamic-text-with-text-interpolation">插值</a>。</p>
+<hr>
+
+
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="add-a-property-called-city">
+    <a href="#add-a-property-called-city" class="docs-anchor" tabindex="-1" aria-label="Link to Add a property called <code>city</code>">添加一个名为 <code>city</code> 的属性</a>
+  </h3>
+  
+      <p>通过向 <code>AppComponent</code> 类添加一个名为 <code>city</code> 的属性来更新组件类。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  city</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'San Francisco'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p><code>city</code> 属性的类型为 <code>string</code>，但由于 <a href="https://www.typescriptlang.org/docs/handbook/type-inference.html" target="_blank">TypeScript 中的类型推断</a>，你可以省略类型。<code>city</code> 属性可以在 <code>AppComponent</code> 类中使用，也可以在组件模板中引用。</p>
+<br>
+
+<p>要在模板中使用类属性，你必须使用 <code>{{ }}</code> 语法。</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="update-the-component-template">
+    <a href="#update-the-component-template" class="docs-anchor" tabindex="-1" aria-label="Link to Update the component template">更新组件模板</a>
+  </h3>
+  
+      <p>更新 <code>template</code> 属性以匹配以下 HTML：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`Hello {{ city }}`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span></code></pre>
+    </pre>
+  </div><p>这是插值的一个范例，也是 Angular 模板语法的一部分。它使你能够做更多的事情，而不仅仅是在模板中放置动态文本。你还可以使用此语法来调用函数、编写表达式等等。</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="more-practice-with-interpolation">
+    <a href="#more-practice-with-interpolation" class="docs-anchor" tabindex="-1" aria-label="Link to More practice with interpolation">更多插值实践</a>
+  </h3>
+  
+      <p>试试这个 - 添加另一组 <code>{{ }}</code>，内容为 <code>1 + 1</code>：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">template</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`Hello {{ city }}, {{ 1 + 1 }}`</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span></code></pre>
+    </pre>
+  </div><p>Angular 会求值 <code>{{ }}</code> 的内容，并在模板中渲染输出。</p>
+
+    </li>
+    
+    </ol>
+    <p>这仅仅是 Angular 模板可能实现的冰山一角，继续学习以了解更多信息。</p>

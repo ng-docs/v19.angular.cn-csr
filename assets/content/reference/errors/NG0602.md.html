@@ -1,0 +1,62 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">在响应式上下文中不允许的函数调用</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/errors/NG0602.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>一个不允许在响应式上下文中运行的函数，却从响应式上下文中被调用。</p>
+<p>例如，不能从 <code>computed</code> 或正在执行的 effect 中调度 <code>effect</code>。
+避免在模板表达式中调用诸如 <code>effect</code> 之类的函数，因为这些函数会在它们自己的响应式上下文中执行。</p>
+<p>计算表达式应为纯函数。
+纯函数意味着表达式不应触发任何副作用。
+副作用是指诸如调度 <code>afterRender</code>、创建新的 <code>effect</code> 或订阅可观察者之类的操作。</p>
+<p>为了避免常见的陷阱，某些操作在响应式上下文中被显式禁止。
+例如，在 <code>computed</code> 中使用 <code>afterRender</code> 将在每次计算表达式求值时调度新的渲染钩子。
+这可能不是预期的行为，并可能降低应用性能。</p>
+
+  <h3 id="fixing-the-error">
+    <a href="#fixing-the-error" class="docs-anchor" tabindex="-1" aria-label="Link to Fixing the error">修复此错误</a>
+  </h3>
+  <p>本错误指南并非详尽无遗。
+它捕获了一些常见场景以及如何解决此错误。</p>
+
+  <h4 id="afterrender">
+    <a href="#afterrender" class="docs-anchor" tabindex="-1" aria-label="Link to <code>afterRender</code>"><code>afterRender</code></a>
+  </h4>
+  <p>将 <code>afterRender</code> 的调用移到响应式上下文之外。</p>
+<p>调度渲染后钩子的一个好地方是在组件的类构造函数中。
+或者，使用 <code>untracked</code> 离开响应式上下文并显式选择退出此错误。</p>
+
+  <h4 id="effect">
+    <a href="#effect" class="docs-anchor" tabindex="-1" aria-label="Link to <code>effect</code>"><code>effect</code></a>
+  </h4>
+  <p>将 <code>effect</code> 的调用移到响应式上下文之外。</p>
+<p>调度 effect 的一个好地方是在 <code>@Component</code> 的类构造函数中。</p>
+
+  <h4 id="tosignal">
+    <a href="#tosignal" class="docs-anchor" tabindex="-1" aria-label="Link to <code>toSignal</code>"><code>toSignal</code></a>
+  </h4>
+  <p>将 <code>toSignal</code> 的调用移到响应式上下文之外。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">result </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> computed</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> dataSignal</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> toSignal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(dataObservable$);</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  return</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> doSomething</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">dataSignal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>可以重构为：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">dataSignal </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> toSignal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(dataObservable$);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">result </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> computed</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> doSomething</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">dataSignal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()));</span></span></code></pre>
+    </pre>
+  </div><p>或者，如果这不可行，请考虑手动订阅可观察者。</p>
+<p>作为最后的手段，使用 <code>untracked</code> 离开响应式上下文。
+请注意，离开响应式上下文可能会导致在 <code>untracked</code> 内部忽略信号读取。</p>
+<p>@debugging</p>
+<p>错误消息提到了意外调用的函数。
+在你的应用代码中查找此函数调用。</p>
+<p>或者，浏览器中的堆栈跟踪将显示函数在何处被调用以及它位于何处。</p>

@@ -1,0 +1,92 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular CLI</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/overview.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular CLI 是一种命令行界面工具，使你可以直接从命令 Shell 搭建、开发、测试、部署和维护 Angular 应用。</p>
+<p>Angular CLI 在 npm 上以 <code>@angular/cli</code> 包的形式发布，并包含一个名为 <code>ng</code> 的二进制文件。调用 <code>ng</code> 命令时，就会使用 Angular CLI。</p>
+
+    <div class="docs-callout docs-callout-helpful">
+      <h3>无需本地安装即可试用 Angular</h3>
+      <p>如果你是 Angular 新手，不妨从<a href="tutorials/learn-angular">立即试用！</a>开始，它在现成的基本在线商店应用的上下文中介绍了 Angular 的要点，供你检查和修改。
+这个独立的教程利用了用于在线开发的交互式 <a href="https://stackblitz.com" target="_blank">StackBlitz</a> 环境。
+在准备就绪之前，你无需建立本地环境。</p>
+
+    </div>
+    
+    <div class="docs-card-grid">
+      
+    <a href="tools/cli/setup-local" class="docs-card">
+      <div>
+        <h3>快速上手</h3>
+        <p>安装 Angular CLI 以创建和构建你的第一个应用。</p>
+
+      </div>
+      <span>开始使用</span>
+    </a>
+    
+    <a href="cli" class="docs-card">
+      <div>
+        <h3>命令参考</h3>
+        <p>探索 CLI 命令，以提高 Angular 的生产力。</p>
+
+      </div>
+      <span>了解更多</span>
+    </a>
+    
+    <a href="tools/cli/schematics" class="docs-card">
+      <div>
+        <h3>原理图</h3>
+        <p>创建并运行原理图，以自动生成和修改应用中的源文件。</p>
+
+      </div>
+      <span>了解更多</span>
+    </a>
+    
+    <a href="tools/cli/cli-builder" class="docs-card">
+      <div>
+        <h3>构建器</h3>
+        <p>创建并运行构建器，以执行从源代码到生成的构建输出的复杂转换。</p>
+
+      </div>
+      <span>了解更多</span>
+    </a>
+    
+    </div>
+    
+  <h2 id="cli-command-language-syntax">
+    <a href="#cli-command-language-syntax" class="docs-anchor" tabindex="-1" aria-label="Link to CLI command-language syntax">CLI 命令行语言语法</a>
+  </h2>
+  <p>Angular CLI 在选项语法方面大致遵循 Unix/POSIX 约定。</p>
+
+  <h3 id="boolean-options">
+    <a href="#boolean-options" class="docs-anchor" tabindex="-1" aria-label="Link to Boolean options">布尔选项</a>
+  </h3>
+  <p>布尔选项有两种形式：<code>--this-option</code> 将标志设置为 <code>true</code>，<code>--no-this-option</code> 将其设置为 <code>false</code>。
+你也可以使用 <code>--this-option=false</code> 或 <code>--this-option=true</code>。
+如果未提供任何选项，则该标志将保持其默认状态，如参考文档中所列。</p>
+
+  <h3 id="array-options">
+    <a href="#array-options" class="docs-anchor" tabindex="-1" aria-label="Link to Array options">数组选项</a>
+  </h3>
+  <p>数组选项可以通过两种形式提供：<code>--option value1 value2</code> 或 <code>--option value1 --option value2</code>。</p>
+
+  <h3 id="key-value-options">
+    <a href="#key-value-options" class="docs-anchor" tabindex="-1" aria-label="Link to Key/value options">键/值选项</a>
+  </h3>
+  <p>某些选项（如 <code>--define</code>）需要 <code>key=value</code> 对的数组作为其值。
+与数组选项一样，键/值选项可以通过两种形式提供：
+<code>--define 'KEY_1="value1"' KEY_2=true</code> 或 <code>--define 'KEY_1="value1"' --define KEY_2=true</code>。</p>
+
+  <h3 id="relative-paths">
+    <a href="#relative-paths" class="docs-anchor" tabindex="-1" aria-label="Link to Relative paths">相对路径</a>
+  </h3>
+  <p>指定文件的选项可以作为绝对路径给出，也可以作为相对于当前工作目录的路径给出，当前工作目录通常是工作区或项目根目录。</p>

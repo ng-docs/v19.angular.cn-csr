@@ -1,0 +1,107 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">向组件的模板添加插值</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tutorials/first-app/steps/07-dynamic-template-values/README.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>本教程课程演示了如何向 Angular 模板添加插值，以便在模板中显示动态数据。</p>
+
+    <div class="docs-video-container">
+      <iframe class="docs-video" src="https://www.youtube.com/embed/eM3zi_n7lNs?si=IFAly3Ss8dwqFx8N&amp;start=338" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen credentialless title="Video player"></iframe>
+    </div>
+    
+  <h2 id="what-youll-learn">
+    <a href="#what-youll-learn" class="docs-anchor" tabindex="-1" aria-label="Link to What you'll learn">你将学到什么</a>
+  </h2>
+  
+  <ul class="docs-list">
+    <li>你的应用将在 <code>HousingLocationComponent</code> 模板中显示插值结果。</li>
+<li>你的应用会将房屋位置数据渲染到浏览器。</li>
+
+  </ul>
+  
+  <h2 id="conceptual-preview-of-interpolation">
+    <a href="#conceptual-preview-of-interpolation" class="docs-anchor" tabindex="-1" aria-label="Link to Conceptual preview of interpolation">插值的概念预览</a>
+  </h2>
+  <p>在此步骤中，你将使用插值在模板中显示值（属性（Property）和 <code>Input</code> 值）。</p>
+<p>在 Angular 模板中使用 <code>{{ expression }}</code>，你可以渲染来自属性（Property）、<code>Inputs</code> 和有效的 JavaScript 表达式的值。</p>
+<p>要获得更深入的解释，请参阅<a href="guide/templates/binding#render-dynamic-text-with-text-interpolation">使用插值显示值</a>指南。</p>
+
+    <ol class="docs-steps">
+      
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="update-housinglocationcomponent-template-to-include-interpolated-values">
+    <a href="#update-housinglocationcomponent-template-to-include-interpolated-values" class="docs-anchor" tabindex="-1" aria-label="Link to Update <code>HousingLocationComponent</code> template to include interpolated values">更新 <code>HousingLocationComponent</code> 模板以包含插值结果</a>
+  </h3>
+  
+      <p>此步骤在 <code>HousingLocationComponent</code> 模板中添加了新的 HTML 结构和插值结果。</p>
+<p>在代码编辑器中：</p>
+
+    <ol class="docs-ordered-list">
+      <li>导航到 <code>src/app/housing-location/housing-location.component.ts</code></li>
+<li>在 <code>@Component</code> 装饰器的模板属性中，将现有的 HTML 标记替换为以下代码：</li>
+
+    </ol>
+    <div class="docs-code" path="adev/src/content/tutorials/first-app/steps/08-ngFor/src/app/housing-location/housing-location.component.ts" visiblelines="8,9,10,11,12,13,14,15,16,17,18,19" header="Update HousingLocationComponent template">
+    <div class="docs-code-header"><h3>更新 HousingLocationComponent 模板</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {Component, Input} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {CommonModule} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/common'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {HousingLocation} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '../housinglocation'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app-housing-location'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [CommonModule],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">`</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">section</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"listing"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">img</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">        class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"listing-photo"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">        [src]</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"housingLocation.photo"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">        alt</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Exterior photo of {{ </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">housingLocation</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">.</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">name</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> }}"</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">        crossorigin</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h2</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"listing-heading"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;{{ housingLocation.name }}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">h2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> class</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"listing-location"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;{{ housingLocation.city }}, {{ housingLocation.state }}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">section</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  `</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  styleUrls: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'./housing-location.component.css'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HousingLocationComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  @</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Input</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">housingLocation</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">!:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HousingLocation</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div><p>在这个更新后的模板代码中，你使用了属性绑定将 <code>housingLocation.photo</code> 绑定到 <code>src</code> Attribute。<code>alt</code> Attribute 使用插值来为图像的 alt 文本提供更多上下文。</p>
+<p>你使用插值来包含 <code>housingLocation</code> 属性的 <code>name</code>、<code>city</code> 和 <code>state</code> 的值。</p>
+
+    </li>
+    
+    <li>
+      <span class="docs-step-number" aria-hidden="true"></span>
+      
+  <h3 id="confirm-the-changes-render-in-the-browser">
+    <a href="#confirm-the-changes-render-in-the-browser" class="docs-anchor" tabindex="-1" aria-label="Link to Confirm the changes render in the browser">确认更改在浏览器中渲染</a>
+  </h3>
+  
+      
+    <ol class="docs-ordered-list">
+      <li>保存所有更改。</li>
+<li>打开浏览器并确认应用渲染了照片、城市和州示例数据。<img alt="browser frame of homes-app displaying logo, filter text input box, search button and the same housing location UI card" src="assets/images/tutorials/first-app/homes-app-lesson-07-step-2.png"></li>
+
+    </ol>
+    
+    </li>
+    
+    </ol>
+    
+    <div class="docs-alert docs-alert-summary">
+    <p><strong>摘要：</strong> 在本课程中，你添加了一个新的 HTML 结构，并使用 Angular 模板语法在 <code>HousingLocation</code> 模板中渲染值。</p>
+
+    </div>
+    <p>现在，你掌握了两项重要的技能：</p>
+
+  <ul class="docs-list">
+    <li>将数据传递给组件</li>
+<li>将值插值到模板中</li>
+
+  </ul>
+  <p>有了这些技能，你的应用现在可以共享数据并在浏览器中显示动态值了。目前为止做得很好。</p>
+<p>有关本课程涵盖主题的更多信息，请访问：</p>
+
+    <nav class="docs-pill-row">
+      
+    <a class="docs-pill" href="guide/templates">
+      模板语法
+    </a>
+    
+    <a class="docs-pill" href="guide/templates/binding#render-dynamic-text-with-text-interpolation">
+      使用插值显示值
+    </a>
+    
+
+    </nav>
+    

@@ -1,0 +1,302 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">工作区和项目文件结构</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/configs/file-structure.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>你可以在 Angular 工作区的上下文中开发应用。
+一个工作区包含一个或多个项目的相关文件。
+一个项目是由构成应用或可共享库的一组文件。</p>
+<p>Angular CLI 的 <code>ng new</code> 命令会创建一个工作区。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> new</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-project</span></span></code></pre>
+    </pre>
+  </div><p>当你运行此命令时，CLI 会在一个新的工作区中安装必要的 Angular npm 包和其他依赖项，以及一个名为 <em>my-project</em> 的根级应用。</p>
+<p>默认情况下，<code>ng new</code> 会在工作区的根级别创建一个初始骨架应用，以及它的端到端测试。
+此骨架是一个简单的欢迎应用，可以立即运行并且易于修改。
+根级应用与工作区同名，并且源码文件位于工作区的 <code>src/</code> 子目录下。</p>
+<p>这种默认行为适用于典型的“多代码仓”开发风格，即每个应用都位于其自己的工作区中。
+建议初学者和中级用户使用 <code>ng new</code> 为每个应用创建一个单独的工作区。</p>
+<p>Angular 还支持具有<a href="#multiple-projects">多个项目</a>的工作区。
+这种类型的开发环境适用于正在开发可共享库的高级用户，以及使用“单一代码仓”开发风格的企业，这种风格为所有 Angular 项目使用单一代码仓和全局配置。</p>
+<p>要建立单一代码仓工作区，你应该跳过创建根应用。
+请参阅下面的<a href="#multiple-projects">建立多项目工作区</a>。</p>
+
+  <h2 id="workspace-configuration-files">
+    <a href="#workspace-configuration-files" class="docs-anchor" tabindex="-1" aria-label="Link to Workspace configuration files">工作区配置文件</a>
+  </h2>
+  <p>工作区内的所有项目共享一个<a href="reference/configs/workspace-config">配置</a>。
+工作区的顶层包含工作区范围的配置文件、根级应用的配置文件以及根级应用源码和测试文件的子文件夹。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">工作区配置文件</th>
+<th align="left">用途</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>.editorconfig</code></td>
+<td align="left">代码编辑器的配置。请参阅 <a href="https://editorconfig.org" target="_blank">EditorConfig</a>。</td>
+</tr>
+<tr>
+<td align="left"><code>.gitignore</code></td>
+<td align="left">指定 <a href="https://git-scm.com" target="_blank">Git</a> 应该忽略的，有意不跟踪的文件。</td>
+</tr>
+<tr>
+<td align="left"><code>README.md</code></td>
+<td align="left">工作区的文档。</td>
+</tr>
+<tr>
+<td align="left"><code>angular.json</code></td>
+<td align="left">工作区中所有项目的 CLI 配置，包括如何构建、启动服务器和测试每个项目的配置选项。 有关详细信息，请参阅<a href="reference/configs/workspace-config">Angular 工作区配置</a>。</td>
+</tr>
+<tr>
+<td align="left"><code>package.json</code></td>
+<td align="left">配置可用于工作区中所有项目的<a href="reference/configs/npm-packages">npm 包依赖</a>。 有关此文件的特定格式和内容，请参阅 <a href="https://docs.npmjs.com/files/package.json" target="_blank">npm 文档</a>。</td>
+</tr>
+<tr>
+<td align="left"><code>package-lock.json</code></td>
+<td align="left">为 npm 客户端安装到 <code>node_modules</code> 中的所有包提供版本信息。 有关详细信息，请参阅 <a href="https://docs.npmjs.com/files/package-lock.json" target="_blank">npm 文档</a>。</td>
+</tr>
+<tr>
+<td align="left"><code>src/</code></td>
+<td align="left">根级应用项目的源文件。</td>
+</tr>
+<tr>
+<td align="left"><code>public/</code></td>
+<td align="left">包含图像和其他资产文件，这些文件将由开发服务器作为静态文件启动服务器，并在你构建应用时按原样复制。</td>
+</tr>
+<tr>
+<td align="left"><code>node_modules/</code></td>
+<td align="left">为整个工作区安装的 <a href="reference/configs/npm-packages">npm 包</a>。 工作区范围的 <code>node_modules</code> 依赖项对所有项目都可见。</td>
+</tr>
+<tr>
+<td align="left"><code>tsconfig.json</code></td>
+<td align="left">工作区中项目的基本<a href="https://www.typescriptlang.org" target="_blank">TypeScript</a> 配置。 所有其他配置文件都从此基本文件继承。 有关更多信息，请参阅<a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#tsconfig-bases" target="_blank">相关的 TypeScript 文档</a>。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="application-project-files">
+    <a href="#application-project-files" class="docs-anchor" tabindex="-1" aria-label="Link to Application project files">应用项目文件</a>
+  </h2>
+  <p>默认情况下，CLI 命令 <code>ng new my-app</code> 创建一个名为“my-app”的工作区文件夹，并在工作区顶层的 <code>src/</code> 文件夹中生成一个新的应用骨架。
+新生成的应用包含根模块的源文件，以及根组件和模板。</p>
+<p>当工作区文件结构就位后，你可以在命令行上使用 <code>ng generate</code> 命令向应用添加功能和数据。
+这个初始的根级应用是 CLI 命令的<em>默认应用</em>（除非你在创建<a href="#multiple-projects">其他应用</a>后更改了默认值）。</p>
+<p>对于单应用工作区，工作区的 <code>src</code> 子文件夹包含根应用的源文件（应用逻辑、数据和资产）。
+对于多项目工作区，<code>projects</code> 文件夹中的其他项目包含一个具有相同结构的 <code>project-name/src/</code> 子文件夹。</p>
+
+  <h3 id="application-source-files">
+    <a href="#application-source-files" class="docs-anchor" tabindex="-1" aria-label="Link to Application source files">应用源文件</a>
+  </h3>
+  <p><code>src/</code> 顶层的文件支持运行你的应用。
+子文件夹包含应用源码和应用特定的配置。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">应用支持文件</th>
+<th align="left">用途</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>app/</code></td>
+<td align="left">包含在其中定义应用逻辑和数据的组件文件。 有关详细信息，请参见<a href="#app-src">下面</a>。</td>
+</tr>
+<tr>
+<td align="left"><code>favicon.ico</code></td>
+<td align="left">要在书签栏中用于此应用的图标。</td>
+</tr>
+<tr>
+<td align="left"><code>index.html</code></td>
+<td align="left">当有人访问你的站点时启动服务器的主 HTML 页面。 CLI 在构建你的应用时会自动添加所有 JavaScript 和 CSS 文件，因此你通常不需要在此处手动添加任何 <code>&lt;script&gt;</code> 或 <code>&lt;link&gt;</code> 标签。</td>
+</tr>
+<tr>
+<td align="left"><code>main.ts</code></td>
+<td align="left">应用的main入口点。</td>
+</tr>
+<tr>
+<td align="left"><code>styles.css</code></td>
+<td align="left">应用于整个应用的全局 CSS 样式。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>在 <code>src</code> 文件夹中，<code>app</code> 文件夹包含你项目的逻辑和数据。
+Angular 组件、模板和样式放在这里。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left"><code>src/app/</code> 文件</th>
+<th align="left">用途</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>app.config.ts</code></td>
+<td align="left">定义应用配置，以告知 Angular 如何组装应用。 当你向应用添加更多提供者时，应该在此处声明它们。<br><br><em>仅在使用 <code>--standalone</code> 选项时生成。</em></td>
+</tr>
+<tr>
+<td align="left"><code>app.component.ts</code></td>
+<td align="left">定义应用的根组件，名为 <code>AppComponent</code>。 当你向应用添加组件和服务时，与此根组件关联的视图将成为视图分层的根。</td>
+</tr>
+<tr>
+<td align="left"><code>app.component.html</code></td>
+<td align="left">定义与 <code>AppComponent</code> 关联的 HTML 模板。</td>
+</tr>
+<tr>
+<td align="left"><code>app.component.css</code></td>
+<td align="left">定义 <code>AppComponent</code> 的 CSS 样式表。</td>
+</tr>
+<tr>
+<td align="left"><code>app.component.spec.ts</code></td>
+<td align="left">定义 <code>AppComponent</code> 的单元测试。</td>
+</tr>
+<tr>
+<td align="left"><code>app.module.ts</code></td>
+<td align="left">定义根模块，名为 <code>AppModule</code>，它告诉 Angular 如何组装应用。 最初仅声明 <code>AppComponent</code>。 当你向应用添加更多组件时，必须在此处声明它们。<br><br><em>仅在使用 <code>--standalone false</code> 选项时生成。</em></td>
+</tr>
+<tr>
+<td align="left"><code>app.routes.ts</code></td>
+<td align="left">定义应用的路由配置。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="application-configuration-files">
+    <a href="#application-configuration-files" class="docs-anchor" tabindex="-1" aria-label="Link to Application configuration files">应用配置文件</a>
+  </h3>
+  <p>根应用的特定于应用的配置文件位于工作区根级别。
+对于多项目工作区，特定于项目的配置文件位于项目根目录下的 <code>projects/project-name/</code> 中。</p>
+<p>特定于项目的 <a href="https://www.typescriptlang.org" target="_blank">TypeScript</a> 配置文件继承自工作区范围的 <code>tsconfig.json</code>。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">应用特定的配置文件</th>
+<th align="left">用途</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>tsconfig.app.json</code></td>
+<td align="left">应用特定的<a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript 配置</a>，包括 <a href="reference/configs/angular-compiler-options">Angular 编译器选项</a>。</td>
+</tr>
+<tr>
+<td align="left"><code>tsconfig.spec.json</code></td>
+<td align="left">用于应用测试的 <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript 配置</a>。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="multiple-projects">
+    <a href="#multiple-projects" class="docs-anchor" tabindex="-1" aria-label="Link to Multiple projects">多个项目</a>
+  </h2>
+  <p>多项目工作区适用于为多个 Angular 项目（“单一代码仓”模型）使用单一代码仓和全局配置的组织。
+多项目工作区还支持库开发。</p>
+
+  <h3 id="setting-up-for-a-multi-project-workspace">
+    <a href="#setting-up-for-a-multi-project-workspace" class="docs-anchor" tabindex="-1" aria-label="Link to Setting up for a multi-project workspace">建立多项目工作区</a>
+  </h3>
+  <p>如果你打算在一个工作区中拥有多个项目，那么可以在创建工作区时跳过初始应用的生成步骤，并为该工作区指定一个唯一的名称。
+以下命令会创建一个包含所有工作区范围的配置文件的工作区，但不包含根级别的应用。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> new</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-workspace</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --no-create-application</span></span></code></pre>
+    </pre>
+  </div><p>然后，你可以生成名称在工作区内唯一的应用和库。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">cd</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-workspace</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> application</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-app</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> library</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> my-lib</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="multiple-project-file-structure">
+    <a href="#multiple-project-file-structure" class="docs-anchor" tabindex="-1" aria-label="Link to Multiple project file structure">多项目文件结构</a>
+  </h3>
+  <p>第一个显式生成的应用会进入 <code>projects</code> 文件夹，与工作区中的所有其他项目放在一起。
+新生成的库也会添加到 <code>projects</code> 下。
+当你以这种方式创建项目时，工作区的文件结构与 <a href="reference/configs/workspace-config">工作区配置文件</a> <code>angular.json</code> 的结构完全一致。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">my-workspace/</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ├── …                (workspace-wide configuration files)</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  └── projects/        (applications and libraries)</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      ├── my-app/      (an explicitly generated application)</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      │   └── …        (application-specific code and configuration)</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      └── my-lib/      (a generated library)</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          └── …        (library-specific code and configuration)</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="library-project-files">
+    <a href="#library-project-files" class="docs-anchor" tabindex="-1" aria-label="Link to Library project files">库项目文件</a>
+  </h2>
+  <p>当你使用 CLI 生成库（使用诸如 <code>ng generate library my-lib</code> 这样的命令）时，生成的文件会进入工作区的 <code>projects/</code> 文件夹。
+有关创建你自己的库的更多信息，请参阅 <a href="tools/libraries/creating-libraries">创建库</a>。</p>
+<p>与应用不同，库有自己的 <code>package.json</code> 配置文件。</p>
+<p>在 <code>projects/</code> 文件夹下，<code>my-lib</code> 文件夹包含你的库代码。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">库源码文件</th>
+<th align="left">用途</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>src/lib</code></td>
+<td align="left">包含你的库项目的逻辑和数据。与应用项目类似，库项目可以包含组件、服务、模块、指令和管道。</td>
+</tr>
+<tr>
+<td align="left"><code>src/public-api.ts</code></td>
+<td align="left">指定从你的库导出的所有文件。</td>
+</tr>
+<tr>
+<td align="left"><code>ng-package.json</code></td>
+<td align="left">由 <a href="https://github.com/ng-packagr/ng-packagr" target="_blank">ng-packagr</a> 用于构建你的库的配置文件。</td>
+</tr>
+<tr>
+<td align="left"><code>package.json</code></td>
+<td align="left">配置此库所需的 <a href="reference/configs/npm-packages">npm 包依赖</a>。</td>
+</tr>
+<tr>
+<td align="left"><code>tsconfig.lib.json</code></td>
+<td align="left">库特定的 <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript 配置</a>，包括 <a href="reference/configs/angular-compiler-options">Angular 编译器选项</a>。</td>
+</tr>
+<tr>
+<td align="left"><code>tsconfig.lib.prod.json</code></td>
+<td align="left">库特定的 <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript 配置</a>，在生产模式下构建库时使用。</td>
+</tr>
+<tr>
+<td align="left"><code>tsconfig.spec.json</code></td>
+<td align="left">用于库的单元测试的 <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">TypeScript 配置</a>。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  

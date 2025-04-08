@@ -1,0 +1,66 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">注入上下文</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/di/dependency-injection-context.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>依赖注入 (DI) 体系在内部依赖于一个运行时上下文，在该上下文中，当前的注入器是可用的。
+这意味着只有当代码在这样的上下文中执行时，注入器才能工作。</p>
+<p>注入上下文在以下情况中可用：</p>
+
+  <ul class="docs-list">
+    <li>在由 DI 体系实例化的类（例如 <code>@Injectable</code> 或 <code>@Component</code>）的构造期间（通过 <code>constructor</code>）。</li>
+<li>在此类字段的初始化器中。</li>
+<li>在为 <code>Provider</code> 或 <code>@Injectable</code> 的 <code>useFactory</code> 指定的工厂函数中。</li>
+<li>在为 <code>InjectionToken</code> 指定的 <code>factory</code> 函数中。</li>
+<li>在注入上下文中运行的堆栈帧内。</li>
+
+  </ul>
+  <p>了解你何时处于注入上下文中，将允许你使用 <a href="api/core/inject"><code>inject</code></a> 函数来注入实例。</p>
+
+  <h2 id="class-constructors">
+    <a href="#class-constructors" class="docs-anchor" tabindex="-1" aria-label="Link to Class constructors">类构造函数</a>
+  </h2>
+  <p>每次 DI 体系实例化一个类时，它都会在注入上下文中执行此操作。这由框架本身处理。该类的构造函数在该运行时上下文中执行，这也允许使用 <a href="api/core/inject"><code>inject</code></a> 函数注入令牌。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> service1</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Service1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line highlighted"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> service2</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Service2</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Service2); </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// In context</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line highlighted"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.service1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Service1) </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// In context</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="stack-frame-in-context">
+    <a href="#stack-frame-in-context" class="docs-anchor" tabindex="-1" aria-label="Link to Stack frame in context">上下文中的堆栈帧</a>
+  </h2>
+  <p>某些 API 被设计为在注入上下文中运行。例如，路由器守卫就是这种情况。这允许在守卫函数中使用 <a href="api/core/inject"><code>inject</code></a> 来访问服务。</p>
+<p>这是 <code>CanActivateFn</code> 的一个范例</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> canActivateTeam</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CanActivateFn</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    (</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">route</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ActivatedRouteSnapshot</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">state</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> RouterStateSnapshot</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">      return</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(PermissionsService).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">canActivate</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(UserToken), route.params.id);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    };</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="run-within-an-injection-context">
+    <a href="#run-within-an-injection-context" class="docs-anchor" tabindex="-1" aria-label="Link to Run within an injection context">在注入上下文中运行</a>
+  </h2>
+  <p>当你想在注入上下文中运行给定的函数，而你又不在其中时，你可以使用 <code>runInInjectionContext</code> 来做到这一点。
+这需要访问给定的注入器，例如 <code>EnvironmentInjector</code>：</p>
+<div class="docs-code" header="src/app/heroes/hero.service.ts">
+    <div class="docs-code-header"><h3>src/app/heroes/hero.service.ts</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Injectable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providedIn: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'root'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HeroService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> environmentInjector</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(EnvironmentInjector);</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  someMethod</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    runInInjectionContext</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.environmentInjector, () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line highlighted"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">      inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(SomeService); </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Do what you need with the injected service</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    });</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>请注意，只有当注入器可以求解所需的令牌时，<code>inject</code> 才会返回一个实例。</p>
+
+  <h2 id="asserts-the-context">
+    <a href="#asserts-the-context" class="docs-anchor" tabindex="-1" aria-label="Link to Asserts the context">断言上下文</a>
+  </h2>
+  <p>Angular 提供了 <code>assertInInjectionContext</code> 辅助函数来断言当前上下文是否为注入上下文。</p>
+
+  <h2 id="using-di-outside-of-a-context">
+    <a href="#using-di-outside-of-a-context" class="docs-anchor" tabindex="-1" aria-label="Link to Using DI outside of a context">在上下文之外使用 DI</a>
+  </h2>
+  <p>在注入上下文之外调用 <a href="api/core/inject"><code>inject</code></a> 或调用 <code>assertInInjectionContext</code> 将会抛出 <a href="/errors/NG0203">错误 NG0203</a>。</p>

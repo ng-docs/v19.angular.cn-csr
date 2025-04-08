@@ -1,0 +1,1 @@
+{"templates":[{"path":"playground/0-hello-world","label":"Hello world"},{"path":"playground/2-control-flow","label":"Control flow"},{"path":"playground/1-signals","label":"Signals"},{"path":"playground/3-minigame","label":"Minigame"}],"defaultTemplate":{"path":"playground/0-hello-world","label":"Hello world"},"starterTemplate":{"path":"playground/3-minigame","label":"Minigame"}}

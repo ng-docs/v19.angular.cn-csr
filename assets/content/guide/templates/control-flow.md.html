@@ -1,0 +1,135 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">控制流</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/templates/control-flow.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>Angular 模板支持控制流控制块，它们允许你根据条件显示、隐藏和重复元素。</p>
+
+    <div class="docs-alert docs-alert-note">
+    <p><strong>注意：</strong> 以前，这是通过 *ngIf、*ngFor 和 *ngSwitch 指令完成的。</p>
+
+    </div>
+    
+  <h2 id="conditionally-display-content-with-if-else-if-and-else">
+    <a href="#conditionally-display-content-with-if-else-if-and-else" class="docs-anchor" tabindex="-1" aria-label="Link to Conditionally display content with <code>@if</code>, <code>@else-if</code> and <code>@else</code>">使用 <code>@if</code>、<code>@else-if</code> 和 <code>@else</code> 有条件地显示内容</a>
+  </h2>
+  <p>当 <code>@if</code> 控制块的条件表达式为真值时，它会根据条件显示其内容：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (a </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> b) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;{{a}} is greater than {{b}}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>如果你想显示备用内容，你可以通过提供任意数量的 <code>@else if</code> 控制块和一个单独的 <code>@else</code> 控制块来实现。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (a </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> b) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {{a}} is greater than {{b}}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@else if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (b </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> a) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {{a}} is less than {{b}}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@else</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {{a}} is equal to {{b}}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="referencing-the-conditional-expressions-result">
+    <a href="#referencing-the-conditional-expressions-result" class="docs-anchor" tabindex="-1" aria-label="Link to Referencing the conditional expression's result">引用条件表达式的结果</a>
+  </h3>
+  <p><code>@if</code> 条件语句支持将条件表达式的结果保存到一个变量中，以便在控制块内部复用。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (user.profile.settings.startDate; </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">as</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> startDate</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {{ startDate }}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>这对于引用较长的表达式非常有用，这些表达式在模板中更易于阅读和维护。</p>
+
+  <h2 id="repeat-content-with-the-for-block">
+    <a href="#repeat-content-with-the-for-block" class="docs-anchor" tabindex="-1" aria-label="Link to Repeat content with the <code>@for</code> block">使用 <code>@for</code> 控制块重复内容</a>
+  </h2>
+  <p><code>@for</code> 控制块会循环访问一个集合并重复渲染控制块的内容。该集合可以是任何 JavaScript <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Iteration_protocols" target="_blank">可迭代者</a>，但 Angular 针对 <code>Array</code> 值进行了额外的性能优化。</p>
+<p>一个典型的 <code>@for</code> 循环看起来像这样：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (item </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">of</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> items; track item.id) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  {{ item.name }}</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>Angular 的 <code>@for</code> 控制块不支持像 JavaScript 的 <code>continue</code> 或 <code>break</code> 这样的流控制语句。</p>
+
+  <h3 id="why-is-track-in-for-blocks-important">
+    <a href="#why-is-track-in-for-blocks-important" class="docs-anchor" tabindex="-1" aria-label="Link to Why is <code>track</code> in <code>@for</code> blocks important?">为什么 <code>@for</code> 控制块中的 <code>track</code> 很重要？</a>
+  </h3>
+  <p><code>track</code> 表达式允许 Angular 维护你的数据和页面上的 DOM 节点之间的关系。这允许 Angular 通过在数据更改时执行最少的必要 DOM 操作来优化性能。</p>
+<p>在循环访问数据集合时，有效地使用 track 可以显着提高应用的渲染性能。</p>
+<p>在 <code>track</code> 表达式中选择一个唯一标识每个条目的属性（Property）。如果你的数据模型包含一个唯一标识属性（通常是 <code>id</code> 或 <code>uuid</code>），请使用此值。如果你的数据不包含这样的字段，请强烈考虑添加一个。</p>
+<p>对于从不更改的静态集合，你可以使用 <code>$index</code> 来告诉 Angular 通过集合中每个条目的索引来跟踪它。</p>
+<p>如果没有其他选项可用，你可以指定 <code>identity</code>。这告诉 Angular 使用三等号运算符 (<code>===</code>) 通过条目的引用标识来跟踪它。尽可能避免使用此选项，因为它可能导致渲染更新速度显着降低，因为 Angular 无法映射哪个数据条目对应于哪个 DOM 节点。</p>
+
+  <h3 id="contextual-variables-in-for-blocks">
+    <a href="#contextual-variables-in-for-blocks" class="docs-anchor" tabindex="-1" aria-label="Link to Contextual variables in <code>@for</code> blocks"><code>@for</code> 控制块中的上下文变量</a>
+  </h3>
+  <p>在 <code>@for</code> 控制块内部，始终有几个隐式变量可用：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>变量</th>
+<th>含义</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td><code>$count</code></td>
+<td>迭代集合中的条目数</td>
+</tr>
+<tr>
+<td><code>$index</code></td>
+<td>当前行的索引</td>
+</tr>
+<tr>
+<td><code>$first</code></td>
+<td>当前行是否为第一行</td>
+</tr>
+<tr>
+<td><code>$last</code></td>
+<td>当前行是否为最后一行</td>
+</tr>
+<tr>
+<td><code>$even</code></td>
+<td>当前行索引是否为偶数</td>
+</tr>
+<tr>
+<td><code>$odd</code></td>
+<td>当前行索引是否为奇数</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>这些变量始终以这些名称提供，但可以通过 <code>let</code> 段进行别名：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (item </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">of</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> items; track item.id; </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> idx </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> $index, e </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> $even) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;Item #{{ idx }}: {{ item.name }}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">p</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>当嵌套 <code>@for</code> 控制块时，别名非常有用，它允许你从内部 <code>@for</code> 控制块读取外部 <code>@for</code> 控制块的变量。</p>
+
+  <h3 id="providing-a-fallback-for-for-blocks-with-the-empty-block">
+    <a href="#providing-a-fallback-for-for-blocks-with-the-empty-block" class="docs-anchor" tabindex="-1" aria-label="Link to Providing a fallback for <code>@for</code> blocks with the <code>@empty</code> block">使用 <code>@empty</code> 控制块为 <code>@for</code> 控制块提供后备方案</a>
+  </h3>
+  <p>你可以选择在 <code>@for</code> 控制块内容之后立即包含一个 <code>@empty</code> 部分。当没有条目时，将显示 <code>@empty</code> 控制块的内容：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (item </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">of</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> items; track item.name) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">li</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; {{ item.name }}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">li</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@empty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">li</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> aria-hidden</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"true"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt; There are no items. &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">li</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="conditionally-display-content-with-the-switch-block">
+    <a href="#conditionally-display-content-with-the-switch-block" class="docs-anchor" tabindex="-1" aria-label="Link to Conditionally display content with the <code>@switch</code> block">使用 <code>@switch</code> 控制块有条件地显示内容</a>
+  </h2>
+  <p>虽然 <code>@if</code> 控制块在大多数情况下都很棒，但 <code>@switch</code> 控制块提供了另一种有条件渲染数据的语法。它的语法与 JavaScript 的 <code>switch</code> 语句非常相似。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@switch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (userPermissions) {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  @case</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'admin'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-admin-dashboard</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  @case</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'reviewer'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-reviewer-dashboard</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  @case</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'editor'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-editor-dashboard</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  @default</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">app-viewer-dashboard</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>条件表达式的值使用三等号 (<code>===</code>) 运算符与 case 表达式进行比较。</p>
+<p><strong><code>@switch</code> 没有贯穿 (fallthrough) 行为</strong>，因此你不需要在控制块中使用等效于 <code>break</code> 或 <code>return</code> 语句的语句。</p>
+<p>你可以选择包含一个 <code>@default</code> 控制块。如果前面的 case 表达式均不与 switch 值匹配，则显示 <code>@default</code> 控制块的内容。</p>
+<p>如果没有 <code>@case</code> 与表达式匹配，并且没有 <code>@default</code> 控制块，则不显示任何内容。</p>

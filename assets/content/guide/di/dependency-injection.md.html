@@ -1,0 +1,134 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">理解依赖注入</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/di/dependency-injection.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>依赖注入（Dependency injection），或 DI，是 Angular 中的基本概念之一。DI 已植入 Angular 框架，并允许带有 Angular 装饰器的类（例如组件、指令、管道和可注入对象）配置它们需要的依赖项。</p>
+<p>DI 体系中存在两个主要角色：依赖使用者和依赖提供者。</p>
+<p>Angular 使用名为 <code>Injector</code> 的抽象来促进依赖使用者和依赖提供者之间的交互。当请求依赖项时，注入器会检查其注册表，查看是否已存在可用实例。如果不存在，则会创建一个新实例并存储在注册表中。在应用引导启动过程中，Angular 会创建一个应用范围的注入器（也称为“根”注入器）。在大多数情况下，你不需要手动创建注入器，但你应该知道有一个层连接着提供者和使用者。</p>
+<p>本主题介绍了一个类如何充当依赖项的基本场景。Angular 还允许你使用函数、对象、原始类型（如字符串或布尔值）或任何其他类型作为依赖项。 欲了解更多信息，请参阅<a href="guide/di/dependency-injection-providers">依赖提供者</a>。</p>
+
+  <h2 id="providing-a-dependency">
+    <a href="#providing-a-dependency" class="docs-anchor" tabindex="-1" aria-label="Link to Providing a dependency">提供依赖项</a>
+  </h2>
+  <p>考虑一个名为 <code>HeroService</code> 的类，它需要在组件中充当依赖项。</p>
+<p>第一步是添加 <code>@Injectable</code> 装饰器，以表明该类可以被注入。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Injectable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HeroService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>下一步是通过提供它使其在 DI 中可用。
+可以在多个位置提供依赖项：</p>
+
+  <ul class="docs-list">
+    <li><a href="#understanding-dependency-injection">理解依赖注入</a>
+  <ul class="docs-list">
+    <li><a href="#providing-a-dependency">提供依赖项</a>
+  <ul class="docs-list">
+    <li><a href="#preferred-at-the-application-root-level-using-providedin"><strong>首选</strong>：在应用根级别使用 <code>providedIn</code></a></li>
+<li><a href="#at-the-component-level">在组件级别</a></li>
+<li><a href="#at-the-application-root-level-using-applicationconfig">在应用根级别使用 <code>ApplicationConfig</code></a></li>
+<li><a href="#ngmodule-based-applications">基于 <code>NgModule</code> 的应用</a></li>
+
+  </ul>
+  </li>
+<li><a href="#injectingconsuming-a-dependency">注入/使用依赖项</a></li>
+<li><a href="#whats-next">下一步是什么</a></li>
+
+  </ul>
+  </li>
+
+  </ul>
+  
+  <h3 id="preferred-at-the-application-root-level-using-providedin">
+    <a href="#preferred-at-the-application-root-level-using-providedin" class="docs-anchor" tabindex="-1" aria-label="Link to <strong>Preferred</strong>: At the application root level using <code>providedIn</code>"><strong>首选</strong>：在应用根级别使用 <code>providedIn</code></a>
+  </h3>
+  <p>在应用根级别使用 <code>providedIn</code> 提供服务，允许将该服务注入到所有其他类中。
+使用 <code>providedIn</code> 使 Angular 和 JavaScript 代码优化器能够有效地移除未使用的服务（称为摇树优化）。</p>
+<p>你可以通过在 <code>@Injectable</code> 装饰器中使用 <code>providedIn: 'root'</code> 来提供服务：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Injectable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providedIn: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'root'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HeroService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>当你在根级别提供服务时，Angular 会创建 <code>HeroService</code> 的单个共享实例，并将其注入到任何请求它的类中。</p>
+
+  <h3 id="at-the-component-level">
+    <a href="#at-the-component-level" class="docs-anchor" tabindex="-1" aria-label="Link to At the Component level">在组件级别</a>
+  </h3>
+  <p>你可以通过使用 <code>@Component</code> 装饰器的 <code>providers</code> 字段在 <code>@Component</code> 级别提供服务。
+在这种情况下，<code>HeroService</code> 可用于此组件的所有实例以及模板中使用的其他组件和指令。</p>
+<p>例如：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'hero-list'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'...'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  providers: [HeroService]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> HeroListComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p>当你在组件级别注册提供者时，对于该组件的每个新实例，你都会获得一个新的服务实例。</p>
+
+    <div class="docs-alert docs-alert-note">
+    <p><strong>注意：</strong> 像这样声明服务会导致 <code>HeroService</code> 始终包含在你的应用中 —— 即使该服务未使用。</p>
+
+    </div>
+    
+  <h3 id="at-the-application-root-level-using-applicationconfig">
+    <a href="#at-the-application-root-level-using-applicationconfig" class="docs-anchor" tabindex="-1" aria-label="Link to At the application root level using <code>ApplicationConfig</code>">在应用根级别使用 <code>ApplicationConfig</code></a>
+  </h3>
+  <p>你可以使用 <code>ApplicationConfig</code>（传递给 <code>bootstrapApplication</code> 函数）的 <code>providers</code> 字段，在应用级别提供服务或其他 <code>Injectable</code>。</p>
+<p>在下面的示例中，<code>HeroService</code> 可用于所有组件、指令和管道：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> appConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ApplicationConfig</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    providers: [</span></span><span class="line highlighted"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      { provide: HeroService },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre>
+    </pre>
+  </div><p>然后，在 <code>main.ts</code> 中：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppComponent, appConfig)</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-note">
+    <p><strong>注意：</strong> 像这样声明服务会导致 <code>HeroService</code> 始终包含在你的应用中 —— 即使该服务未使用。</p>
+
+    </div>
+    
+  <h3 id="ngmodule-based-applications">
+    <a href="#ngmodule-based-applications" class="docs-anchor" tabindex="-1" aria-label="Link to <code>NgModule</code> based applications">基于 <code>NgModule</code> 的应用</a>
+  </h3>
+  <p>基于 <code>@NgModule</code> 的应用使用 <code>@NgModule</code> 装饰器的 <code>providers</code> 字段来提供可在应用级别使用的服务或其他 <code>Injectable</code>。</p>
+<p>在模块中提供的服务可用于该模块的所有对象声明，或任何其他共享同一 <code>ModuleInjector</code> 的模块。
+要理解所有极端情况，请参阅<a href="guide/di/hierarchical-dependency-injection">分层注入器</a>。</p>
+
+    <div class="docs-alert docs-alert-note">
+    <p><strong>注意：</strong> 使用 <code>providers</code> 声明服务会导致该服务始终包含在你的应用中 —— 即使该服务未使用。</p>
+
+    </div>
+    
+  <h2 id="injecting-consuming-a-dependency">
+    <a href="#injecting-consuming-a-dependency" class="docs-anchor" tabindex="-1" aria-label="Link to Injecting/consuming a dependency">注入/使用依赖项</a>
+  </h2>
+  <p>使用 Angular 的 <code>inject</code> 函数来检索依赖项。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {inject, Component} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; </span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* ... */</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> UserProfile</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // You can use the `inject` function in property initializers.</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  private</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> userClient</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(UserClient);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  </span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // You can also use the `inject` function in a constructor.</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> logger</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> inject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Logger);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>你可以在任何<a href="guide/di/dependency-injection-context">注入上下文</a>中使用 <code>inject</code> 函数。大多数情况下，这会在组件、指令、服务和管道的类属性初始化器或类构造函数中。</p>
+<p>当 Angular 发现某个组件依赖于某个服务时，它首先检查注入器是否已存在该服务的任何实例。如果请求的服务实例尚不存在，则注入器会使用已注册的提供者创建一个实例，并将其添加到注入器中，然后再将服务返回给 Angular。</p>
+<p>当所有请求的服务都已被求解并返回后，Angular 可以使用这些服务作为参数来调用组件的构造函数。</p>
+<svg aria-roledescription="flowchart-v2" role="graphics-document document" viewBox="0 0 800.140625 272" style="max-width: 800.140625px;" class="flowchart" xmlns="http://www.w3.org/2000/svg" width="100%" id="mermaid-generated-diagram"><style>#mermaid-generated-diagram{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-generated-diagram .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-generated-diagram .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-generated-diagram .error-icon{fill:hsl(220.5882352941, 100%, 98.3333333333%);}#mermaid-generated-diagram .error-text{fill:rgb(8.5000000002, 5.7500000001, 0);stroke:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-generated-diagram .edge-thickness-normal{stroke-width:1px;}#mermaid-generated-diagram .edge-thickness-thick{stroke-width:3.5px;}#mermaid-generated-diagram .edge-pattern-solid{stroke-dasharray:0;}#mermaid-generated-diagram .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-generated-diagram .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-generated-diagram .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-generated-diagram .marker{fill:#0b0b0b;stroke:#0b0b0b;}#mermaid-generated-diagram .marker.cross{stroke:#0b0b0b;}#mermaid-generated-diagram svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-generated-diagram p{margin:0;}#mermaid-generated-diagram .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-generated-diagram .cluster-label text{fill:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-generated-diagram .cluster-label span{color:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-generated-diagram .cluster-label span p{background-color:transparent;}#mermaid-generated-diagram .label text,#mermaid-generated-diagram span{fill:#333;color:#333;}#mermaid-generated-diagram .node rect,#mermaid-generated-diagram .node circle,#mermaid-generated-diagram .node ellipse,#mermaid-generated-diagram .node polygon,#mermaid-generated-diagram .node path{fill:#fff4dd;stroke:hsl(40.5882352941, 60%, 83.3333333333%);stroke-width:1px;}#mermaid-generated-diagram .rough-node .label text,#mermaid-generated-diagram .node .label text,#mermaid-generated-diagram .image-shape .label,#mermaid-generated-diagram .icon-shape .label{text-anchor:middle;}#mermaid-generated-diagram .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-generated-diagram .rough-node .label,#mermaid-generated-diagram .node .label,#mermaid-generated-diagram .image-shape .label,#mermaid-generated-diagram .icon-shape .label{text-align:center;}#mermaid-generated-diagram .node.clickable{cursor:pointer;}#mermaid-generated-diagram .root .anchor path{fill:#0b0b0b!important;stroke-width:0;stroke:#0b0b0b;}#mermaid-generated-diagram .arrowheadPath{fill:#0b0b0b;}#mermaid-generated-diagram .edgePath .path{stroke:#0b0b0b;stroke-width:2.0px;}#mermaid-generated-diagram .flowchart-link{stroke:#0b0b0b;fill:none;}#mermaid-generated-diagram .edgeLabel{background-color:hsl(-79.4117647059, 100%, 93.3333333333%);text-align:center;}#mermaid-generated-diagram .edgeLabel p{background-color:hsl(-79.4117647059, 100%, 93.3333333333%);}#mermaid-generated-diagram .edgeLabel rect{opacity:0.5;background-color:hsl(-79.4117647059, 100%, 93.3333333333%);fill:hsl(-79.4117647059, 100%, 93.3333333333%);}#mermaid-generated-diagram .labelBkg{background-color:rgba(243.9999999999, 220.9999999998, 255, 0.5);}#mermaid-generated-diagram .cluster rect{fill:hsl(220.5882352941, 100%, 98.3333333333%);stroke:hsl(220.5882352941, 60%, 88.3333333333%);stroke-width:1px;}#mermaid-generated-diagram .cluster text{fill:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-generated-diagram .cluster span{color:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-generated-diagram div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(220.5882352941, 100%, 98.3333333333%);border:1px solid hsl(220.5882352941, 60%, 88.3333333333%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-generated-diagram .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-generated-diagram rect.text{fill:none;stroke-width:0;}#mermaid-generated-diagram .icon-shape,#mermaid-generated-diagram .image-shape{background-color:hsl(-79.4117647059, 100%, 93.3333333333%);text-align:center;}#mermaid-generated-diagram .icon-shape p,#mermaid-generated-diagram .image-shape p{background-color:hsl(-79.4117647059, 100%, 93.3333333333%);padding:2px;}#mermaid-generated-diagram .icon-shape rect,#mermaid-generated-diagram .image-shape rect{opacity:0.5;background-color:hsl(-79.4117647059, 100%, 93.3333333333%);fill:hsl(-79.4117647059, 100%, 93.3333333333%);}#mermaid-generated-diagram :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="8" markerWidth="8" markerUnits="userSpaceOnUse" refY="5" refX="5" viewBox="0 0 10 10" class="marker flowchart-v2" id="mermaid-generated-diagram_flowchart-v2-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 0 L 10 5 L 0 10 z"></path></marker><marker orient="auto" markerHeight="8" markerWidth="8" markerUnits="userSpaceOnUse" refY="5" refX="4.5" viewBox="0 0 10 10" class="marker flowchart-v2" id="mermaid-generated-diagram_flowchart-v2-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 5 L 10 10 L 10 0 z"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart-v2" id="mermaid-generated-diagram_flowchart-v2-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart-v2" id="mermaid-generated-diagram_flowchart-v2-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart-v2" id="mermaid-generated-diagram_flowchart-v2-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart-v2" id="mermaid-generated-diagram_flowchart-v2-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><g class="root"><g class="clusters"><g data-look="classic" id="Injector" class="cluster"><rect height="104" width="784.140625" y="8" x="8" style=""></rect><g transform="translate(369.7734375, 8)" class="cluster-label"><foreignObject height="24" width="60.59375"><div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel"><p>Injector</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path marker-end="url(#mermaid-generated-diagram_flowchart-v2-pointEnd)" style="" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" id="L_heroService_componentProperty_0" d="M306.688,87L306.688,91.167C306.688,95.333,306.688,103.667,306.688,112C306.688,120.333,306.688,128.667,306.688,136.333C306.688,144,306.688,151,306.688,154.5L306.688,158"></path></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" class="labelBkg" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g transform="translate(110.5859375, 60)" id="flowchart-serviceA-0" class="node default"><rect height="54" width="135.171875" y="-27" x="-67.5859375" style="" class="basic label-container"></rect><g transform="translate(-37.5859375, -12)" style="" class="label"><rect></rect><foreignObject height="24" width="75.171875"><div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel"><p>Service A</p></span></div></foreignObject></g></g><g transform="translate(306.6875, 60)" id="flowchart-heroService-1" class="node default"><rect height="54" width="157.03125" y="-27" x="-78.515625" style="" class="basic label-container"></rect><g transform="translate(-48.515625, -12)" style="" class="label"><rect></rect><foreignObject height="24" width="97.03125"><div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel"><p>HeroService</p></span></div></foreignObject></g></g><g transform="translate(502.8984375, 60)" id="flowchart-serviceC-2" class="node default"><rect height="54" width="135.390625" y="-27" x="-67.6953125" style="" class="basic label-container"></rect><g transform="translate(-37.6953125, -12)" style="" class="label"><rect></rect><foreignObject height="24" width="75.390625"><div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel"><p>Service C</p></span></div></foreignObject></g></g><g transform="translate(688.8671875, 60)" id="flowchart-serviceD-3" class="node default"><rect height="54" width="136.546875" y="-27" x="-68.2734375" style="" class="basic label-container"></rect><g transform="translate(-38.2734375, -12)" style="" class="label"><rect></rect><foreignObject height="24" width="76.546875"><div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel"><p>Service D</p></span></div></foreignObject></g></g><g transform="translate(306.6875, 213)" id="flowchart-componentProperty-4" class="node default"><rect height="102" width="260" y="-51" x="-130" style="" class="basic label-container"></rect><g transform="translate(-100, -36)" style="text-align:left !important" class="label"><rect></rect><foreignObject height="72" width="200"><div xmlns="http://www.w3.org/1999/xhtml" style="text-align: center; display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; width: 200px;"><span class="nodeLabel" style="text-align:left !important"><p>Component <br> heroService = inject(HeroService)</p></span></div></foreignObject></g></g></g></g></g></svg>
+  <h2 id="whats-next">
+    <a href="#whats-next" class="docs-anchor" tabindex="-1" aria-label="Link to What's next">下一步是什么</a>
+  </h2>
+  
+    <nav class="docs-pill-row">
+      
+    <a class="docs-pill" href="/guide/di/creating-injectable-service">创建一个可注入的服务</a>
+    
+
+    </nav>
+    

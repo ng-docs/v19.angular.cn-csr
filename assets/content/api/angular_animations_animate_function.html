@@ -1,0 +1,50 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/animations</span><div class="docs-reference-title"><div><h1>animate</h1><div class="docs-api-item-label type-function full">函数</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/animations/src/animation_metadata.ts#L672-L677" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">代码</i></a></div><section class="docs-reference-description"><p>定义动画步骤，将样式信息与时序信息相结合。</p></section></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">  <code>
+    <span class="line "><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/animations/animate">animate</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line "><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  timings</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line "><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  styles</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/animations/AnimationStyleMetadata">AnimationStyleMetadata</a></span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/animations/AnimationKeyframesSequenceMetadata">AnimationKeyframesSequenceMetadata</a></span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span></span><span class="line "><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/animations/AnimationAnimateMetadata">AnimationAnimateMetadata</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-members"><div id="animate_0" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>animate</h3><div><code><a href="/api/animations/AnimationAnimateMetadata">AnimationAnimateMetadata</a></code></div></header><div class="docs-reference-card-body"><div class="docs-reference-card-item "><div class="docs-function-definition"><p>定义动画步骤，将样式信息与时序信息相结合。</p></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">timings</span><code>string | number</code><div class="docs-parameter-description"><p>为父动画设置 <code><a href="/api/animations/AnimateTimings">AnimateTimings</a></code>。
+格式为 "duration [delay] [easing]" 的字符串。</p>
+
+    <ul class="docs-list">
+      <li>持续时间和延迟表示为一个数字和可选的时间单位，例如 "1s" 或 "10ms" 分别表示一秒和 10 毫秒。
+默认单位是毫秒。</li>
+<li>缓动值控制动画在其运行时如何加速和减速。值是 <code>ease</code>、<code>ease-in</code>、<code>ease-out</code>、<code>ease-in-out</code> 或 <code>cubic-bezier()</code> 函数调用之一。
+如果未提供，则不应用缓动。</li>
+
+    </ul>
+    <p>例如，字符串 "1s 100ms ease-out" 指定持续时间为 1000 毫秒，延迟为 100 毫秒，以及 "ease-out" 缓动样式，
+该样式在持续时间接近结束时减速。</p></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">styles</span><code><a href="/api/animations/AnimationStyleMetadata">AnimationStyleMetadata</a> | <a href="/api/animations/AnimationKeyframesSequenceMetadata">AnimationKeyframesSequenceMetadata</a> | null</code><div class="docs-parameter-description"><p>为父动画设置 AnimationStyles。
+调用 <code><a href="/api/animations/style()">style()</a></code> 或 <code><a href="/api/animations/keyframes()">keyframes()</a></code> 的函数调用，
+它返回要应用于父动画的 CSS 样式条目的集合。
+当为 null 时，使用来自目标状态的样式。
+当描述将完成动画的动画步骤时，这很有用；
+请参阅 <code>transitions()</code> 中的“为最终状态制作动画”。</p></div></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code><a href="/api/animations/AnimationAnimateMetadata">AnimationAnimateMetadata</a></code></div></div></div></div></div><div class="docs-reference-section"><h2 id="usage-notes" class="docs-reference-section-heading"><a href="#usage-notes" aria-label="Link to Usage Notes section" tabindex="-1">用法说明</a></h2><div><p>在动画 <code><a href="/api/animations/sequence()">sequence()</a></code>、<a href="/api/animations/group"><code>group()</code></a> 或 <code><a href="/api/animations/transition()">transition()</a></code> 调用中调用，以指定一个动画步骤，该步骤在给定的时间内将给定的样式数据应用于父动画。</p>
+
+      <h3 id="syntax-examples" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#syntax-examples" aria-label="Link to Syntax Examples section" tabindex="-1">语法范例</a>
+      </h3>
+    <p><strong>时序范例</strong></p>
+<p>以下范例展示了各种 <code>timings</code> 规范。</p>
+
+    <ul class="docs-list">
+      <li><code><a href="/api/animations/animate(500)">animate(500)</a></code>：持续时间为 500 毫秒。</li>
+<li><code><a href="/api/animations/animate(&quot;1s&quot;)">animate("1s")</a></code>：持续时间为 1000 毫秒。</li>
+<li><code>animate("100ms 0.5s")</code>：持续时间为 100 毫秒，延迟为 500 毫秒。</li>
+<li><code><a href="/api/animations/animate(&quot;5s ease-in&quot;)">animate("5s ease-in")</a></code>：持续时间为 5000 毫秒，缓入。</li>
+<li><code>animate("5s 10ms cubic-bezier(.17,.67,.88,.1)")</code>：持续时间为 5000 毫秒，延迟为 10
+毫秒，根据贝塞尔曲线缓动。</li>
+
+    </ul>
+    <p><strong>样式范例</strong></p>
+<p>以下范例调用 <code><a href="/api/animations/style()">style()</a></code> 来设置单个 CSS 样式。</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/animations/animate">animate</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">500</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/animations/style">style</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({ background: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"red"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }))</span></span></code></pre>
+        </pre>
+      </div>
+    <p>以下范例调用 <code><a href="/api/animations/keyframes()">keyframes()</a></code> 来为连续的关键帧将 CSS 样式设置为不同的值。</p>
+
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/animations/animate">animate</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">500</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"><a href="/api/animations/keyframes">keyframes</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  <a href="/api/animations/style">style</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({ background: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"blue"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }),</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  <a href="/api/animations/style">style</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({ background: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"red"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> })</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ])</span></span></code></pre>
+        </pre>
+      </div>
+    </div></div></div>

@@ -1,0 +1,61 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">组件测试工具概览</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/testing/component-harnesses-overview.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p><strong>组件测试工具</strong>是一个类，它允许测试以最终用户的方式，通过受支持的 API 与组件进行交互。你可以为任何组件创建测试工具，范围从小型的可复用小部件到完整的页面。</p>
+<p>测试工具提供了以下几个优点：</p>
+
+  <ul class="docs-list">
+    <li>它们通过将自身与组件的实现细节（例如其 DOM 结构）隔离开来，使测试不易出错</li>
+<li>它们使测试更具可读性，并且更易于维护</li>
+<li>它们可以跨多个测试环境使用</li>
+
+  </ul>
+  <div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Example of test with a harness for a component called MyButtonComponent</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">it</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'should load button with exact text'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">async</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> button</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> await</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> loader.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getHarness</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(MyButtonComponentHarness);</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">  expect</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">await</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> button.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getText</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">toBe</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'Confirm'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre>
+    </pre>
+  </div><p>组件测试工具对于共享 UI 小部件尤其有用。开发人员经常编写依赖于小部件的私有实现细节（例如 DOM 结构和 CSS 类）的测试。这些依赖关系使测试变得脆弱且难以维护。测试工具提供了一种替代方案——一个受支持的 API，它以最终用户的方式与小部件进行交互。现在，小部件实现的更改不太可能破坏用户测试。例如，<a href="https://material.angular.io/components/categories" target="_blank">Angular Material</a> 为库中的每个组件都提供了一个测试工具。</p>
+<p>组件测试工具支持多个测试环境。你可以在单元测试和端到端测试中使用相同的测试工具实现。测试编写者只需要学习一个 API，而组件作者不必维护单独的单元和端到端测试实现。</p>
+<p>许多开发人员可以根据以下开发人员类型类别之一进行分类：测试编写者、组件测试工具作者和测试工具环境作者。使用下表根据这些类别查找本指南中最相关的部分：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">开发人员类型</th>
+<th align="left">描述</th>
+<th align="left">相关章节</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">测试编写者</td>
+<td align="left">使用其他人编写的组件测试工具来测试其应用的开发人员。例如，这可能是一个应用开发人员，他使用第三方菜单组件，并且需要在单元测试中与该菜单进行交互。</td>
+<td align="left"><a href="guide/testing/using-component-harnesses">在测试中使用组件测试工具</a></td>
+</tr>
+<tr>
+<td align="left">组件测试工具作者</td>
+<td align="left">维护一些可复用的 Angular 组件，并希望为其用户创建一个测试工具以在他们的测试中使用的开发人员。例如，第三方 Angular 组件库的作者或为大型 Angular 应用维护一组通用组件的开发人员。</td>
+<td align="left"><a href="guide/testing/creating-component-harnesses">为你的组件创建组件测试工具</a></td>
+</tr>
+<tr>
+<td align="left">测试工具环境作者</td>
+<td align="left">希望在其他测试环境中添加对使用组件测试工具的支持的开发人员。有关开箱即用的受支持测试环境的信息，请参阅<a href="guide/testing/using-component-harnesses#test-harness-environments-and-loaders">测试工具环境和加载器</a>。</td>
+<td align="left"><a href="guide/testing/component-harnesses-testing-environments">添加对其他测试环境的支持</a></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>有关完整的 API 参考，请参阅 <a href="https://material.angular.io/cdk/testing/api" target="_blank">Angular CDK 的组件测试工具 API 参考页面</a>。</p>

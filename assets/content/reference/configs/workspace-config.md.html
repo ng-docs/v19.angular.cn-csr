@@ -1,0 +1,808 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular 工作区配置</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/configs/workspace-config.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>位于 Angular 工作区根目录下的 <code>angular.json</code> 文件提供了工作区范围和项目特定的配置默认值。这些默认值用于 Angular CLI 提供的构建和开发工具。
+配置中给定的路径值是相对于根工作区目录的。</p>
+
+  <h2 id="general-json-structure">
+    <a href="#general-json-structure" class="docs-anchor" tabindex="-1" aria-label="Link to General JSON structure">通用 JSON 结构</a>
+  </h2>
+  <p>在 <code>angular.json</code> 的顶层，一些属性配置了工作区，而 <code>projects</code> 部分包含其余的每个项目的配置选项。
+你可以通过在项目级别设置的默认值来覆盖在工作区级别设置的 Angular CLI 默认值。
+你还可以使用命令行覆盖在项目级别设置的默认值。</p>
+<p>文件顶层的以下属性配置了工作区。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">属性</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>version</code></td>
+<td align="left">配置文件版本。</td>
+</tr>
+<tr>
+<td align="left"><code>newProjectRoot</code></td>
+<td align="left">通过诸如 <code>ng generate application</code> 或 <code>ng generate library</code> 之类的工具创建新项目的路径。路径可以是绝对路径，也可以是相对于工作区目录的相对路径。默认为 <code>projects</code></td>
+</tr>
+<tr>
+<td align="left"><code>cli</code></td>
+<td align="left">一组用于自定义 <a href="tools/cli">Angular CLI</a> 的选项。请参阅下面的<a href="#angular-cli-configuration-options">Angular CLI 配置选项</a>。</td>
+</tr>
+<tr>
+<td align="left"><code>schematics</code></td>
+<td align="left">一组<a href="tools/cli/schematics">原理图</a>，用于自定义此工作区的 <code>ng generate</code> 子命令选项默认值。请参阅下面的<a href="#schematics">原理图</a>。</td>
+</tr>
+<tr>
+<td align="left"><code>projects</code></td>
+<td align="left">包含工作区中每个应用或库的子部分，其中包含特定于项目的配置选项。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>你使用 <code>ng new app-name</code> 创建的初始应用在 "projects" 下列出：</p>
+<p>当你使用 <code>ng generate library</code> 创建一个库项目时，该库项目也会被添加到 <code>projects</code> 部分。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>注意：</strong> 配置文件中的 <code>projects</code> 部分与工作区文件结构并不完全对应。</p>
+<!-- markdownlint-disable-next-line MD032 -->
+
+  <ul class="docs-list">
+    <li>由 <code>ng new</code> 创建的初始应用位于工作区文件结构的顶层。</li>
+<li>默认情况下，其他应用和库位于 <code>projects</code> 目录下。</li>
+
+  </ul>
+  
+    </div>
+    <p>有关更多信息，请参阅<a href="reference/configs/file-structure">工作区和项目文件结构</a>。</p>
+
+  <h2 id="angular-cli-configuration-options">
+    <a href="#angular-cli-configuration-options" class="docs-anchor" tabindex="-1" aria-label="Link to Angular CLI configuration options">Angular CLI 配置选项</a>
+  </h2>
+  <p>以下属性是一组用于自定义 Angular CLI 的选项。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">属性（Property）</th>
+<th align="left">详情</th>
+<th align="left">值类型</th>
+<th align="left">默认值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>analytics</code></td>
+<td align="left">与 Angular 团队共享匿名使用数据。布尔值指示是否共享数据，而 UUID 字符串使用假名标识符共享数据。</td>
+<td align="left"><code>boolean</code> | <code>string</code></td>
+<td align="left"><code>false</code></td>
+</tr>
+<tr>
+<td align="left"><code>cache</code></td>
+<td align="left">控制 <a href="cli/cache">持久磁盘缓存</a>，该缓存由 <a href="tools/cli/cli-builder">Angular CLI 构建器</a> 使用。</td>
+<td align="left"><a href="#cache-options">缓存选项</a></td>
+<td align="left"><code>{}</code></td>
+</tr>
+<tr>
+<td align="left"><code>schematicCollections</code></td>
+<td align="left">列出要在 <code>ng generate</code> 中使用的原理图集合。</td>
+<td align="left"><code>string[]</code></td>
+<td align="left"><code>[]</code></td>
+</tr>
+<tr>
+<td align="left"><code>packageManager</code></td>
+<td align="left">要使用的首选包管理器工具。</td>
+<td align="left"><code>npm</code> | <code>cnpm</code> | <code>pnpm</code> | <code>yarn</code></td>
+<td align="left"><code>npm</code></td>
+</tr>
+<tr>
+<td align="left"><code>warnings</code></td>
+<td align="left">控制 Angular CLI 特定的控制台警告。</td>
+<td align="left"><a href="#warnings-options">警告选项</a></td>
+<td align="left"><code>{}</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="cache-options">
+    <a href="#cache-options" class="docs-anchor" tabindex="-1" aria-label="Link to Cache options">缓存选项</a>
+  </h3>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">属性（Property）</th>
+<th align="left">详情</th>
+<th align="left">值类型</th>
+<th align="left">默认值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>enabled</code></td>
+<td align="left">配置是否为构建启用磁盘缓存。</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>environment</code></td>
+<td align="left">配置在哪个环境中启用磁盘缓存。<br><br>* <code>ci</code> 仅在持续集成 (CI) 环境中启用缓存。<br>* <code>local</code> 仅在 <em>CI 环境之外</em> 启用缓存。<br>* <code>all</code> 在任何地方都启用缓存。</td>
+<td align="left"><code>local</code> | <code>ci</code> | <code>all</code></td>
+<td align="left"><code>local</code></td>
+</tr>
+<tr>
+<td align="left"><code>path</code></td>
+<td align="left">用于存储缓存结果的目录。</td>
+<td align="left"><code>string</code></td>
+<td align="left"><code>.angular/cache</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="warnings-options">
+    <a href="#warnings-options" class="docs-anchor" tabindex="-1" aria-label="Link to Warnings options">警告选项</a>
+  </h3>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">属性（Property）</th>
+<th align="left">详情</th>
+<th align="left">值类型</th>
+<th align="left">默认值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>versionMismatch</code></td>
+<td align="left">当全局 Angular CLI 版本比本地版本新时显示警告。</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="project-configuration-options">
+    <a href="#project-configuration-options" class="docs-anchor" tabindex="-1" aria-label="Link to Project configuration options">项目配置选项</a>
+  </h2>
+  <p>以下顶层配置属性可用于每个项目，位于 <code>projects['project-name']</code> 下。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">属性（Property）</th>
+<th align="left">详情</th>
+<th align="left">值类型</th>
+<th align="left">默认值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>root</code></td>
+<td align="left">此项目文件的根目录，相对于工作区目录。对于位于工作区顶层的初始应用，此项为空。</td>
+<td align="left"><code>string</code></td>
+<td align="left">无（必要）</td>
+</tr>
+<tr>
+<td align="left"><code>projectType</code></td>
+<td align="left">"application" 或 "library" 之一。应用可以在浏览器中独立运行，而库不能。</td>
+<td align="left"><code>application</code> | <code>library</code></td>
+<td align="left">无（必要）</td>
+</tr>
+<tr>
+<td align="left"><code>sourceRoot</code></td>
+<td align="left">此项目源文件的根目录。</td>
+<td align="left"><code>string</code></td>
+<td align="left"><code>''</code></td>
+</tr>
+<tr>
+<td align="left"><code>prefix</code></td>
+<td align="left">当使用 <code>ng generate</code> 生成新的组件、指令和管道时，Angular 会预先添加到选择器中的字符串。可以自定义此字符串以标识应用或特性区域。</td>
+<td align="left"><code>string</code></td>
+<td align="left"><code>'app'</code></td>
+</tr>
+<tr>
+<td align="left"><code>schematics</code></td>
+<td align="left">一组原理图，用于自定义此项目的 <code>ng generate</code> 子命令选项默认值。请参阅<a href="#schematics">生成原理图</a>部分。</td>
+<td align="left">参阅<a href="#schematics">原理图</a></td>
+<td align="left"><code>{}</code></td>
+</tr>
+<tr>
+<td align="left"><code>architect</code></td>
+<td align="left">此项目的 Architect 构建器目标的配置默认值。</td>
+<td align="left">参阅<a href="#configuring-builder-targets">配置构建器目标</a></td>
+<td align="left"><code>{}</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="schematics">
+    <a href="#schematics" class="docs-anchor" tabindex="-1" aria-label="Link to Schematics">原理图</a>
+  </h2>
+  <p><a href="tools/cli/schematics">Angular 原理图</a>是通过添加新文件或修改现有文件来修改项目的指令。
+可以通过将原理图名称映射到一组默认选项来配置它们。</p>
+<p>原理图的 "name" 格式为：<code>&lt;schematic-package&gt;:&lt;schematic-name&gt;</code>。
+用于默认 Angular CLI <code>ng generate</code> 子命令的原理图收集在 <a href="https://github.com/angular/angular-cli/blob/main/packages/schematics/angular/application/schema.json" target="_blank"><code>@schematics/angular</code></a> 包中。
+例如，使用 <code>ng generate component</code> 生成组件的原理图是 <code>@schematics/angular:component</code>。</p>
+<p>原理图的 schema 中给出的字段对应于 Angular CLI 子命令选项的允许的命令行参数值和默认值。
+你可以更新你的工作区 schema 文件，为子命令选项设置不同的默认值。例如，默认禁用 <code>ng generate component</code> 中的 <code>standalone</code>：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "schematics"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "@schematics/angular:component"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "standalone"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="configuring-cli-builders">
+    <a href="#configuring-cli-builders" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring CLI builders">配置 CLI 构建器</a>
+  </h2>
+  <p>Architect 是 Angular CLI 用来执行复杂任务（如编译和运行测试）的工具。
+Architect 是一个外壳，它运行指定的构建器以根据目标配置执行给定的任务。
+你可以定义和配置新的构建器和目标，以扩展 Angular CLI。
+请参阅 <a href="tools/cli/cli-builder">Angular CLI 构建器</a>。</p>
+
+  <h3 id="default-architect-builders-and-targets">
+    <a href="#default-architect-builders-and-targets" class="docs-anchor" tabindex="-1" aria-label="Link to Default Architect builders and targets">默认 Architect 构建器和目标</a>
+  </h3>
+  <p>Angular 为特定命令或通用的 <code>ng run</code> 命令定义了默认的构建器。
+定义每个构建器的选项和默认值的 JSON 模式都收集在 <a href="https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/builders.json" target="_blank"><code>@angular-devkit/build-angular</code></a> 包中。
+这些模式为以下构建器配置选项。</p>
+
+  <h3 id="configuring-builder-targets">
+    <a href="#configuring-builder-targets" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring builder targets">配置构建器目标</a>
+  </h3>
+  <p><code>angular.json</code> 的 <code>architect</code> 部分包含一组 Architect 目标。
+许多目标都对应于运行它们的 Angular CLI 命令。
+其他目标可以使用 <code>ng run</code> 命令执行，你也可以定义自己的目标。</p>
+<p>每个目标对象都为该目标指定了 <code>builder</code>，它是 Architect 运行的工具的 npm 包。
+每个目标还具有一个 <code>options</code> 部分，用于配置目标的默认选项；以及一个 <code>configurations</code> 部分，用于命名和指定目标的可选配置。
+请参阅下面的<a href="#build-target">构建目标</a>中的示例。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">属性（Property）</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>build</code></td>
+<td align="left">为 <code>ng build</code> 命令的选项配置默认值。有关更多信息，请参阅<a href="#build-target">构建目标</a>部分。</td>
+</tr>
+<tr>
+<td align="left"><code>serve</code></td>
+<td align="left">为 <code>ng serve</code> 命令覆盖构建默认值并提供额外的 serve 默认值。除了 <code>ng build</code> 命令可用的选项外，它还添加了与为应用启动服务器相关的选项。</td>
+</tr>
+<tr>
+<td align="left"><code>e2e</code></td>
+<td align="left">使用 <code>ng e2e</code> 命令覆盖用于构建端到端测试应用的构建默认值。</td>
+</tr>
+<tr>
+<td align="left"><code>test</code></td>
+<td align="left">为测试构建覆盖构建默认值，并为 <code>ng test</code> 命令提供额外的测试运行默认值。</td>
+</tr>
+<tr>
+<td align="left"><code>lint</code></td>
+<td align="left">为 <code>ng lint</code> 命令的选项配置默认值，该命令对项目源文件执行静态代码分析。</td>
+</tr>
+<tr>
+<td align="left"><code>extract-i18n</code></td>
+<td align="left">为 <code>ng extract-i18n</code> 命令的选项配置默认值，该命令从源码中提取本地化的消息字符串，并为国际化输出翻译文件。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 配置文件中的所有选项都必须使用 <code>camelCase</code>，而不是像命令行中使用的 <code>dash-case</code>。</p>
+
+    </div>
+    
+  <h2 id="build-target">
+    <a href="#build-target" class="docs-anchor" tabindex="-1" aria-label="Link to Build target">构建目标</a>
+  </h2>
+  <p><code>architect</code> 下的每个目标都具有以下属性：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">属性（Property）</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>builder</code></td>
+<td align="left">用于创建此目标的 CLI 构建器，格式为 <code>&lt;package-name&gt;:&lt;builder-name&gt;</code>。</td>
+</tr>
+<tr>
+<td align="left"><code>options</code></td>
+<td align="left">构建目标默认选项。</td>
+</tr>
+<tr>
+<td align="left"><code>configurations</code></td>
+<td align="left">用于执行目标的可选配置。每个配置都为目标环境设置默认选项，从而覆盖 <code>options</code> 下的关联值。请参阅下面的<a href="#alternate-build-configurations">可选构建配置</a>。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>例如，要配置禁用优化的构建，请执行以下操作：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "optimization"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="alternate-build-configurations">
+    <a href="#alternate-build-configurations" class="docs-anchor" tabindex="-1" aria-label="Link to Alternate build configurations">可选构建配置</a>
+  </h3>
+  <p>Angular CLI 带有两个构建配置：<code>production</code> 和 <code>development</code>。
+默认情况下，<code>ng build</code> 命令使用 <code>production</code> 配置，该配置应用了多项构建优化，包括：</p>
+
+  <ul class="docs-list">
+    <li>打捆文件</li>
+<li>最小化多余的空格</li>
+<li>删除注释和死代码</li>
+<li>最小化代码以使用简短、混乱的名称</li>
+
+  </ul>
+  <p>你可以根据你的开发过程定义和命名额外的可选配置（例如 <code>staging</code>）。
+你可以通过将其名称传递给 <code>--configuration</code> 命令行标志来选择可选配置。</p>
+<p>例如，要配置仅为生产版本启用优化的构建 (<code>ng build --configuration production</code>)：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "optimization"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "configurations"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "production"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "optimization"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>你还可以传入多个配置名称作为逗号分隔的列表。
+例如，要同时应用 <code>staging</code> 和 <code>french</code> 构建配置，请使用命令 <code>ng build --configuration staging,french</code>。
+在这种情况下，该命令从左到右解析命名的配置。
+如果多个配置更改了同一设置，则最后设置的值是最终值。
+在此示例中，如果 <code>staging</code> 和 <code>french</code> 配置都设置了输出路径，则将使用 <code>french</code> 中的值。</p>
+
+  <h3 id="extra-build-and-test-options">
+    <a href="#extra-build-and-test-options" class="docs-anchor" tabindex="-1" aria-label="Link to Extra build and test options">额外的构建和测试选项</a>
+  </h3>
+  <p>默认或目标构建的可配置选项通常对应于 <a href="cli/build"><code>ng build</code></a>、<a href="cli/serve"><code>ng serve</code></a> 和 <a href="cli/test"><code>ng test</code></a> 命令可用的选项。
+有关这些选项及其可能值的详细信息，请参阅<a href="cli">Angular CLI 参考文献</a>。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">选项属性（Property）</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>assets</code></td>
+<td align="left">一个对象，其中包含要与应用一起提供的静态资产的路径。默认路径指向项目的 <code>public</code> 目录。有关更多信息，请参阅<a href="#assets-configuration">资产配置</a>部分。</td>
+</tr>
+<tr>
+<td align="left"><code>styles</code></td>
+<td align="left">一个 CSS 文件数组，用于添加到项目的全局上下文中。Angular CLI 支持 CSS 导入和所有主要的 CSS 预处理器。有关更多信息，请参阅<a href="#styles-and-scripts-configuration">样式和脚本配置</a>部分。</td>
+</tr>
+<tr>
+<td align="left"><code>stylePreprocessorOptions</code></td>
+<td align="left">一个对象，其中包含要传递给样式预处理器的选项-值对。有关更多信息，请参阅<a href="#styles-and-scripts-configuration">样式和脚本配置</a>部分。</td>
+</tr>
+<tr>
+<td align="left"><code>scripts</code></td>
+<td align="left">一个对象，其中包含要添加到应用中的 JavaScript 文件。加载脚本的方式与你在 <code>index.html</code> 内的 <code>&lt;script&gt;</code> 标签中添加它们的方式完全相同。有关更多信息，请参阅<a href="#styles-and-scripts-configuration">样式和脚本配置</a>部分。</td>
+</tr>
+<tr>
+<td align="left"><code>budgets</code></td>
+<td align="left">应用的所有部分或某些部分的默认大小预算类型和阈值。你可以配置构建器，以便在输出达到或超过阈值大小时报告警告或错误。请参阅<a href="tools/cli/build#configure-size-budgets">配置大小预算</a>。</td>
+</tr>
+<tr>
+<td align="left"><code>fileReplacements</code></td>
+<td align="left">一个对象，其中包含文件及其编译时替换项。有关更多信息，请参阅<a href="tools/cli/build#configure-target-specific-file-replacements">配置目标特定的文件替换</a>。</td>
+</tr>
+<tr>
+<td align="left"><code>index</code></td>
+<td align="left">一个加载应用的基础 HTML 文档。有关更多信息，请参阅<a href="#index-configuration">索引配置</a>。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="complex-configuration-values">
+    <a href="#complex-configuration-values" class="docs-anchor" tabindex="-1" aria-label="Link to Complex configuration values">复杂配置值</a>
+  </h2>
+  <p><code>assets</code>、<code>index</code>、<code>outputPath</code>、<code>styles</code> 和 <code>scripts</code> 选项可以具有简单的路径字符串值，也可以是具有特定字段的对象值。
+<code>sourceMap</code> 和 <code>optimization</code> 选项可以设置为简单的布尔值。也可以使用配置文件为它们赋予复杂的值。</p>
+<p>以下各节提供了有关如何在每种情况下使用这些复杂值的更多详细信息。</p>
+
+  <h3 id="assets-configuration">
+    <a href="#assets-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Assets configuration">资产配置</a>
+  </h3>
+  <p>每个 <code>build</code> 目标配置都可以包含一个 <code>assets</code> 数组，其中列出了在构建项目时要按原样复制的文件或文件夹。
+默认情况下，<code>public/</code> 目录的内容会被复制过来。</p>
+<p>要排除资产，你可以从资产配置中将其删除。</p>
+<p>你可以通过将资产指定为对象，而不是相对于工作区根目录的简单路径，来进一步配置要复制的资产。
+资产规范对象可以具有以下字段。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">字段</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>glob</code></td>
+<td align="left">一个 <a href="https://github.com/isaacs/node-glob/blob/master/README.md" target="_blank">node-glob</a>，使用 <code>input</code> 作为基本目录。</td>
+</tr>
+<tr>
+<td align="left"><code>input</code></td>
+<td align="left">相对于工作区根目录的路径。</td>
+</tr>
+<tr>
+<td align="left"><code>output</code></td>
+<td align="left">相对于 <code>outDir</code> 的路径。由于安全隐患，Angular CLI 永远不会将文件写入项目输出路径之外。</td>
+</tr>
+<tr>
+<td align="left"><code>ignore</code></td>
+<td align="left">要排除的 glob 列表。</td>
+</tr>
+<tr>
+<td align="left"><code>followSymlinks</code></td>
+<td align="left">允许 glob 模式跟踪符号链接目录。这允许搜索符号链接的子目录。默认为 <code>false</code>。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>例如，可以使用以下对象更详细地表示默认的资产路径。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "assets"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "glob"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"**/*"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "input"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/assets/"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "output"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/assets/"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "glob"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"favicon.ico"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "input"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "output"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>以下示例使用 <code>ignore</code> 字段来排除 assets 目录中的某些文件，使其不被复制到构建中：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "assets"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "glob"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"**/*"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "input"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/assets/"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "ignore"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"**/*.svg"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "output"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/assets/"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="styles-and-scripts-configuration">
+    <a href="#styles-and-scripts-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Styles and scripts configuration">样式和脚本配置</a>
+  </h3>
+  <p><code>styles</code> 和 <code>scripts</code> 选项的数组条目可以是一个简单的路径字符串，也可以是一个指向额外入口点文件的对象。
+相关的构建器会在构建期间将该文件及其依赖项加载为单独的捆绑包。
+使用配置对象，你可以选择使用 <code>bundleName</code> 字段为入口点捆绑包命名。</p>
+<p>默认情况下会注入捆绑包，但你可以将 <code>inject</code> 设置为 <code>false</code> 以排除捆绑包的注入。
+例如，以下对象值创建并命名一个包含样式和脚本的捆绑包，并将其排除在注入之外：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "styles"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "input"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/external-module/styles.scss"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "inject"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "bundleName"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"external-module"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            ],</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "scripts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "input"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"src/external-module/main.js"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "inject"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "bundleName"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"external-module"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="style-preprocessor-options">
+    <a href="#style-preprocessor-options" class="docs-anchor" tabindex="-1" aria-label="Link to Style preprocessor options">样式预处理器选项</a>
+  </h4>
+  <p>在 Sass 中，你可以为组件和全局样式使用 <code>includePaths</code> 特性。这允许你添加额外的基础路径，以便在导入时进行检查。</p>
+<p>要添加路径，请使用 <code>stylePreprocessorOptions</code> 选项：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "stylePreprocessorOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "includePaths"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                "src/style-paths"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>该目录中的文件（例如 <code>src/style-paths/_variables.scss</code>）可以从项目中的任何位置导入，而无需相对路径：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// src/app/app.component.scss</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// A relative path works</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@import</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '../style-paths/variables'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// But now this works as well</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@import</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 'variables'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 如果单元测试需要任何样式或脚本，你还需要将它们添加到 <code>test</code> 构建器中。
+另请参阅 <a href="tools/libraries/using-libraries#using-runtime-global-libraries-inside-your-app">在你的应用中使用运行时全局库</a>。</p>
+
+    </div>
+    
+  <h3 id="optimization-configuration">
+    <a href="#optimization-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Optimization configuration">优化配置</a>
+  </h3>
+  <p><code>optimization</code> 选项可以是布尔值或对象，以进行更精细的配置。
+此选项启用构建输出的各种优化，包括：</p>
+
+  <ul class="docs-list">
+    <li>脚本和样式的最小化</li>
+<li>摇树优化</li>
+<li>死代码消除</li>
+<li>关键 CSS 的内联</li>
+<li>字体内联</li>
+
+  </ul>
+  <p>可以使用多个选项来微调应用的优化。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">选项</th>
+<th align="left">详情</th>
+<th align="left">值类型</th>
+<th align="left">默认值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>scripts</code></td>
+<td align="left">启用脚本输出的优化。</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>styles</code></td>
+<td align="left">启用样式输出的优化。</td>
+<td align="left"><code>boolean</code> | <a href="#styles-optimization-options">样式优化选项</a></td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>fonts</code></td>
+<td align="left">启用字体优化。这需要互联网连接。</td>
+<td align="left"><code>boolean</code> | <a href="#fonts-optimization-options">字体优化选项</a></td>
+<td align="left"><code>true</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h4 id="styles-optimization-options">
+    <a href="#styles-optimization-options" class="docs-anchor" tabindex="-1" aria-label="Link to Styles optimization options">样式优化选项</a>
+  </h4>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">选项</th>
+<th align="left">详情</th>
+<th align="left">值类型</th>
+<th align="left">默认值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>minify</code></td>
+<td align="left">通过删除多余的空格和注释、合并标识符和最小化值来最小化 CSS 定义。</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>inlineCritical</code></td>
+<td align="left">提取并内联关键 CSS 定义，以改进 <a href="https://web.dev/first-contentful-paint" target="_blank">首次内容绘制</a>。</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>removeSpecialComments</code></td>
+<td align="left">删除全局 CSS 中包含 <code>@license</code> 或 <code>@preserve</code> 或以 <code>//!</code> 或 <code>/*!</code> 开头的注释。</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h4 id="fonts-optimization-options">
+    <a href="#fonts-optimization-options" class="docs-anchor" tabindex="-1" aria-label="Link to Fonts optimization options">字体优化选项</a>
+  </h4>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">选项</th>
+<th align="left">详情</th>
+<th align="left">值类型</th>
+<th align="left">默认值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>inline</code></td>
+<td align="left">通过在应用的 HTML 索引文件中内联外部 Google Fonts 和 Adobe Fonts CSS 定义，减少<a href="https://web.dev/render-blocking-resources" target="_blank">渲染阻塞请求</a>。这需要互联网连接。</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>你可以提供如下值，以便将优化应用于其中一项：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "optimization"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "scripts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "styles"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "minify"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                "inlineCritical"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">              },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "fonts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="source-map-configuration">
+    <a href="#source-map-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Source map configuration">源码映射配置</a>
+  </h3>
+  <p><code>sourceMap</code> 构建器选项可以是布尔值或对象，用于更精细的配置，以控制应用的源码映射。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">选项</th>
+<th align="left">详情</th>
+<th align="left">值类型</th>
+<th align="left">默认值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>scripts</code></td>
+<td align="left">为所有脚本输出源码映射。</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>styles</code></td>
+<td align="left">为所有样式输出源码映射。</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>vendor</code></td>
+<td align="left">求解供应商包源码映射。</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>false</code></td>
+</tr>
+<tr>
+<td align="left"><code>hidden</code></td>
+<td align="left">从输出 JavaScript 中省略指向源码映射的链接。</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>false</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>以下示例展示了如何切换一个或多个值来配置源码映射输出：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            "sourceMap"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "scripts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "styles"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "hidden"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">              "vendor"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">          }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 当使用隐藏源码映射时，源码映射不会在捆绑包中被引用。
+如果你只想让源码映射在错误报告工具中映射堆栈跟踪，而不希望在浏览器开发者工具中显示，这将非常有用。
+请注意，即使 <code>hidden</code> 阻止了源码映射在输出捆绑包中被链接，你的部署过程也必须注意不要在生产环境中提供生成的源码映射，否则信息仍然会泄露。</p>
+
+    </div>
+    
+  <h3 id="index-configuration">
+    <a href="#index-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Index configuration">索引配置</a>
+  </h3>
+  <p>配置应用的 HTML 索引的生成。</p>
+<p><code>index</code> 选项可以是字符串或对象，用于更精细的配置。</p>
+<p>当以字符串形式提供值时，指定路径的文件名将用于生成的文件，并将在应用的配置输出路径的根目录中创建。</p>
+
+  <h4 id="index-options">
+    <a href="#index-options" class="docs-anchor" tabindex="-1" aria-label="Link to Index options">索引选项</a>
+  </h4>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">选项</th>
+<th align="left">详情</th>
+<th align="left">值类型</th>
+<th align="left">默认值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>input</code></td>
+<td align="left">用于应用的生成的 HTML 索引的文件的路径。</td>
+<td align="left"><code>string</code></td>
+<td align="left">无（必要）</td>
+</tr>
+<tr>
+<td align="left"><code>output</code></td>
+<td align="left">应用的生成的 HTML 索引文件的输出路径。将使用提供的完整路径，并将其视为相对于应用的配置输出路径。</td>
+<td align="left"><code>string</code></td>
+<td align="left"><code>index.html</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="output-path-configuration">
+    <a href="#output-path-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Output path configuration">输出路径配置</a>
+  </h3>
+  <p><code>outputPath</code> 选项可以是 String（将用作 <code>base</code> 值）或 Object，用于更精细的配置。</p>
+<p>可以使用多个选项来微调应用的输出结构。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">选项</th>
+<th align="left">详情</th>
+<th align="left">值类型</th>
+<th align="left">默认值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>base</code></td>
+<td align="left">指定相对于工作区根目录的输出路径。</td>
+<td align="left"><code>string</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>browser</code></td>
+<td align="left">你的浏览器构建的输出目录名位于基本输出路径内。可以安全地为用户启动服务器。</td>
+<td align="left"><code>string</code></td>
+<td align="left"><code>browser</code></td>
+</tr>
+<tr>
+<td align="left"><code>server</code></td>
+<td align="left">你的服务器构建的输出目录名位于输出路径基本路径内。</td>
+<td align="left"><code>string</code></td>
+<td align="left"><code>server</code></td>
+</tr>
+<tr>
+<td align="left"><code>media</code></td>
+<td align="left">你的媒体文件输出目录名，位于浏览器输出目录内。这些媒体文件通常在 CSS 文件中被称为资源。</td>
+<td align="left"><code>string</code></td>
+<td align="left"><code>media</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  

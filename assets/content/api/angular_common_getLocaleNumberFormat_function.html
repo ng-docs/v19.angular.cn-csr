@@ -1,0 +1,110 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/common</span><div class="docs-reference-title"><div><h1>getLocaleNumberFormat</h1><div class="docs-api-item-label type-function full">函数</div><div class="docs-api-item-label type-deprecated full">已弃用</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/packages/common/src/i18n/locale_data_api.ts#L523-L526" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">代码</i></a></div><section class="docs-reference-description"><p>检索给定语言环境的数字格式。</p></section><nav class="docs-pill-row"><a class="docs-pill" href="/api/common/NumberFormatStyle">NumberFormatStyle</a><a class="docs-pill" href="http://cldr.unicode.org/translation/number-patterns">CLDR 网站</a><a class="docs-pill" href="guide/i18n">国际化 (i18n) 指南</a></nav></header><div class="docs-reference-section docs-reference-api-section"><h2 id="api" class="docs-reference-section-heading"><a href="#api" aria-label="Link to API section" tabindex="-1">API</a></h2><div class="docs-code"><pre class="docs-mini-scroll-track"><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0">  <code>
+    <span class="line shiki-deprecated"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">function</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/common/getLocaleNumberFormat">getLocaleNumberFormat</a></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span><span class="line "><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  locale</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line "><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  type</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> <a href="/api/common/NumberFormatStyle">NumberFormatStyle</a></span></span><span class="line "><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+  </code>
+  </pre></pre></div></div><div class="docs-reference-members"><div id="getLocaleNumberFormat_0" class="docs-reference-member-card"><header class="docs-reference-card-header"><h3>getLocaleNumberFormat</h3><div><code>string</code></div></header><div class="docs-reference-card-body"><div class="docs-reference-card-item docs-reference-card-item-deprecated"><div class="docs-function-definition"><p>检索给定语言环境的数字格式。</p>
+<p>数字使用模式格式化，例如 <code>#,###.00</code>。例如，模式 <code>#,###.00</code>
+当用于格式化数字 12345.678 时，可能会产生 "12'345,678"。如果你的语言的分组分隔符是撇号，而小数分隔符是逗号，则会发生这种情况。</p>
+<p><b>重要提示：</b>字符 <code>.</code> <code>,</code> <code>0</code> <code>#</code>（以及下面的其他字符）是特殊占位符，它们代表小数分隔符等等，而不是实际字符。
+你绝不能“翻译”占位符。例如，即使在你的语言中，小数点是用逗号书写的，也不要将 <code>.</code> 更改为 <code>,</code>。这些符号应替换为本地等效项，并为你使用的语言使用适当的 <code><a href="/api/common/NumberSymbol">NumberSymbol</a></code>。</p>
+<p>以下是数字模式中使用的特殊字符：</p>
+
+      <div class="docs-table docs-scroll-track-transparent">
+        <table>
+          <thead>
+          <tr>
+<th>符号</th>
+<th>含义</th>
+</tr>
+
+          </thead>
+          <tbody>
+          <tr>
+<td>.</td>
+<td>由用于小数点的字符自动替换。</td>
+</tr>
+<tr>
+<td>,</td>
+<td>由“分组”（千位）分隔符替换。</td>
+</tr>
+<tr>
+<td>0</td>
+<td>由数字替换（如果数字不足，则为零）。</td>
+</tr>
+<tr>
+<td>#</td>
+<td>由数字替换（如果数字不足，则不替换）。</td>
+</tr>
+<tr>
+<td>¤</td>
+<td>由货币符号替换，例如 $ 或 USD。</td>
+</tr>
+<tr>
+<td>%</td>
+<td>标记百分比格式。% 符号可能会更改位置，但必须保留。</td>
+</tr>
+<tr>
+<td>E</td>
+<td>标记科学计数法格式。E 符号可能会更改位置，但必须保留。</td>
+</tr>
+<tr>
+<td>'</td>
+<td>用作字面量字符的特殊字符用 ASCII 单引号引起来。</td>
+</tr>
+
+          </tbody>
+        </table>
+      </div></div><div><div class="docs-deprecation-message"><span class="docs-param-keyword docs-deprecated">@deprecated</span><span><p>Angular 建议依赖 <code>Intl</code> API 进行 i18n。
+让 <code>Intl.NumberFormat</code> 来决定数字格式。</p>
+</span></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">locale</span><code>string</code><div class="docs-parameter-description"><p>要使用的语言环境格式规则的语言环境代码。</p></div></div><div class="docs-param-group"><span class="docs-param-keyword">@param</span><span class="docs-param-name">type</span><code><a href="/api/common/NumberFormatStyle">NumberFormatStyle</a></code><div class="docs-parameter-description"><p>要格式化的数值类型（例如 <code>Decimal</code> 或 <code>Currency</code>。）</p></div></div><div class="docs-return-type"><span class="docs-param-keyword">@returns</span><code>string</code></div></div></div></div></div><div class="docs-reference-section"><h2 id="description" class="docs-reference-section-heading"><a href="#description" aria-label="Link to Description section" tabindex="-1">说明</a></h2><div><p>检索给定语言环境的数字格式。</p>
+<p>数字使用模式格式化，例如 <code>#,###.00</code>。例如，模式 <code>#,###.00</code>
+当用于格式化数字 12345.678 时，可能会产生 "12'345,678"。如果你的语言的分组分隔符是撇号，而小数分隔符是逗号，则会发生这种情况。</p>
+<p><b>重要提示：</b>字符 <code>.</code> <code>,</code> <code>0</code> <code>#</code>（以及下面的其他字符）是特殊占位符，它们代表小数分隔符等等，而不是实际字符。
+你绝不能“翻译”占位符。例如，即使在你的语言中，小数点是用逗号书写的，也不要将 <code>.</code> 更改为 <code>,</code>。这些符号应替换为本地等效项，并为你使用的语言使用适当的 <code><a href="/api/common/NumberSymbol">NumberSymbol</a></code>。</p>
+<p>以下是数字模式中使用的特殊字符：</p>
+
+      <div class="docs-table docs-scroll-track-transparent">
+        <table>
+          <thead>
+          <tr>
+<th>符号</th>
+<th>含义</th>
+</tr>
+
+          </thead>
+          <tbody>
+          <tr>
+<td>.</td>
+<td>由用于小数点的字符自动替换。</td>
+</tr>
+<tr>
+<td>,</td>
+<td>由“分组”（千位）分隔符替换。</td>
+</tr>
+<tr>
+<td>0</td>
+<td>由数字替换（如果数字不足，则为零）。</td>
+</tr>
+<tr>
+<td>#</td>
+<td>由数字替换（如果数字不足，则不替换）。</td>
+</tr>
+<tr>
+<td>¤</td>
+<td>由货币符号替换，例如 $ 或 USD。</td>
+</tr>
+<tr>
+<td>%</td>
+<td>标记百分比格式。% 符号可能会更改位置，但必须保留。</td>
+</tr>
+<tr>
+<td>E</td>
+<td>标记科学计数法格式。E 符号可能会更改位置，但必须保留。</td>
+</tr>
+<tr>
+<td>'</td>
+<td>用作字面量字符的特殊字符用 ASCII 单引号引起来。</td>
+</tr>
+
+          </tbody>
+        </table>
+      </div></div></div></div>

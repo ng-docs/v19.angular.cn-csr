@@ -1,0 +1,764 @@
+<div class="docs-decorative-header-container">
+      <div class="docs-decorative-header">
+        <div class="docs-header-content">
+          <docs-breadcrumb></docs-breadcrumb>
+
+          
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Angular 路线图</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/roadmap.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+
+          <p><!-- markdownlint-disable-line -->了解 Angular 团队如何在 Web 上构建势头。</p>
+        </div>
+
+        <!-- illustration -->
+        <svg width="433" height="182" viewBox="0 0 433 182" fill="none" xmlns="http://www.w3.org/2000/svg" class="docs-roadmap-svg">
+  <path d="M26.0339 81.4492H316.739L406.475 153.601H114.71L26.0339 81.4492Z" fill="var(--quinary-contrast)" />
+  <path d="M0.482666 81.4492H360.219" stroke="var(--primary-contrast)" stroke-width="0.93421" stroke-miterlimit="10" />
+  <path d="M100.184 153.602H415.329" stroke="var(--primary-contrast)" stroke-width="0.93421" stroke-miterlimit="10" />
+  <path d="M432.865 153.602H423.345" stroke="white" stroke-width="1.13974" />
+  <path d="M49.5872 112.254H360.22" stroke="#171614" stroke-width="0.93421" />
+  <path d="M344.189 73.9395V61.4106H340.181L336.173 57.4029V43.3695L338.183 41.3595H340.193C340.859 41.9391 342.203 43.1599 342.203 43.3695V55.3928H344.213V31.3462L346.223 29.3362H350.231L352.241 31.3462V55.3928H354.251V41.3595L356.261 39.3494H358.271L360.281 41.3595V55.3928L355.275 60.3994H352.266V73.9272" stroke="var(--primary-contrast)" stroke-width="0.93421" stroke-miterlimit="10" />
+  <path d="M382.577 126.534C382.577 116.57 374.191 108.567 364.104 109.183C355.435 109.714 348.381 116.78 347.851 125.449C347.728 127.483 347.95 129.432 348.468 131.269C348.838 132.576 349.356 133.822 350.009 134.981L350.083 135.129C350.083 135.129 350.083 135.154 350.096 135.166L363.315 159.089C364.129 160.557 366.238 160.557 367.051 159.089L380.37 134.993C381.763 132.49 382.565 129.604 382.565 126.546L382.577 126.534ZM365.202 133.292C361.86 133.292 359.147 130.579 359.147 127.237C359.147 123.895 361.86 121.182 365.202 121.182C368.544 121.182 371.257 123.895 371.257 127.237C371.257 130.579 368.544 133.292 365.202 133.292Z" fill="#8514F5" stroke="black" stroke-width="0.93421" stroke-miterlimit="10" />
+  <path d="M123.49 18.8176H115.611V26.6975H123.49V18.8176Z" stroke="var(--primary-contrast)" stroke-width="0.93421" stroke-miterlimit="10" />
+  <path d="M108.372 0.468262H104.179V4.66099H108.372V0.468262Z" stroke="var(--primary-contrast)" stroke-width="0.93421" stroke-miterlimit="10" />
+  <path d="M354.473 177.179H350.281V181.372H354.473V177.179Z" stroke="var(--primary-contrast)" stroke-width="0.93421" stroke-miterlimit="10" />
+  <path d="M182.83 133.92H322.67" stroke="#8514F5" stroke-width="0.93421" stroke-miterlimit="10" />
+  <path d="M321.77 136.991L327.097 133.92L321.77 130.85V136.991Z" fill="#8514F5" />
+  <path d="M6.64868 95.9268H146.489" stroke="#F637E3" stroke-width="0.93421" stroke-miterlimit="10" />
+  <path d="M145.588 99.0094L150.916 95.9265L145.588 92.856V99.0094Z" fill="#F637E3" />
+  <path d="M171.497 40.5084C171.497 30.1005 162.742 21.752 152.198 22.3933C143.147 22.9482 135.773 30.3225 135.23 39.3738C135.107 41.4949 135.341 43.5419 135.884 45.4533C136.266 46.8221 136.821 48.1169 137.499 49.3254L137.585 49.4734C137.585 49.4734 137.585 49.4981 137.598 49.5104L151.409 74.4819C152.26 76.011 154.455 76.011 155.306 74.4819L169.216 49.3254C170.671 46.7111 171.51 43.7022 171.51 40.496L171.497 40.5084ZM153.345 47.5744C149.855 47.5744 147.019 44.7381 147.019 41.2483C147.019 37.7584 149.855 34.9221 153.345 34.9221C156.835 34.9221 159.671 37.7584 159.671 41.2483C159.671 44.7381 156.835 47.5744 153.345 47.5744Z" fill="#F637E3" stroke="black" stroke-width="0.93421" stroke-miterlimit="10" />
+</svg>
+
+      </div>
+    </div>
+    <p>作为一个开源项目，Angular 的每日提交、PR 和发展势头都可在 GitHub 上追踪。为了提高这种日常工作与框架未来之间联系的透明度，我们的路线图汇集了团队当前和未来计划的愿景。</p>
+<p>以下项目与特定的 Angular 版本无关。我们将在完成后发布它们，并且根据我们的发布计划，遵循语义化版本控制，它们将成为特定版本的一部分。例如，如果特性包含重大更改，我们会在完成后的下一个小版本或下一个主版本中发布。</p>
+<p>目前，Angular 框架有两个目标：</p>
+
+    <ol class="docs-ordered-list">
+      <li>改进 <a href="#improving-the-angular-developer-experience">Angular 开发者体验</a> 以及</li>
+<li>改进<a href="#fast-by-default">框架的性能</a>。</li>
+
+    </ol>
+    <p>继续阅读以了解我们计划如何通过具体的项目工作来实现这些目标。</p>
+
+  <h2 id="explore-modern-angular">
+    <a href="#explore-modern-angular" class="docs-anchor" tabindex="-1" aria-label="Link to Explore modern Angular">探索现代 Angular</a>
+  </h2>
+  <p>开始使用我们路线图中的最新 Angular 特性进行开发。此列表表示我们路线图中新特性的当前状态：</p>
+
+  <h3 id="available-to-experiment-with">
+    <a href="#available-to-experiment-with" class="docs-anchor" tabindex="-1" aria-label="Link to Available to experiment with">可用于实验</a>
+  </h3>
+  
+  <ul class="docs-list">
+    <li><a href="/guide/incremental-hydration">增量式水合</a></li>
+<li><a href="/guide/experimental/zoneless">Zoneless 变更检测</a></li>
+<li><a href="/api/platform-browser/withI18nSupport">对 i18n 控制块的水合支持</a></li>
+<li><a href="/guide/signals/resource">资源 API</a></li>
+<li><a href="/api/core/effect">副作用 API</a></li>
+<li><a href="/guide/signals/linked-signal">关联的 Signal API</a></li>
+<li><a href="/guide/hybrid-rendering">路由级渲染模式</a></li>
+
+  </ul>
+  
+  <h3 id="production-ready">
+    <a href="#production-ready" class="docs-anchor" tabindex="-1" aria-label="Link to Production ready">可用于生产环境</a>
+  </h3>
+  
+  <ul class="docs-list">
+    <li><a href="/guide/signals">探索 Angular Signals</a></li>
+<li><a href="/api/platform-browser/withEventReplay">使用 SSR 的事件重放</a></li>
+<li><a href="/guide/defer">可延期加载的视图</a></li>
+<li><a href="/guide/templates/control-flow">内置控制流</a></li>
+<li><a href="/guide/templates/variables">局部变量声明</a></li>
+<li><a href="/guide/signals/inputs">Signal 输入</a></li>
+<li><a href="/guide/signals/model">模型输入</a></li>
+<li><a href="/guide/signals/queries">Signal 查询</a></li>
+<li><a href="/guide/components/outputs">基于函数的输出</a></li>
+
+  </ul>
+  
+  <h2 id="improving-the-angular-developer-experience">
+    <a href="#improving-the-angular-developer-experience" class="docs-anchor" tabindex="-1" aria-label="Link to Improving the Angular developer experience">改进 Angular 开发者体验</a>
+  </h2>
+  
+  <h3 id="developer-velocity">
+    <a href="#developer-velocity" class="docs-anchor" tabindex="-1" aria-label="Link to Developer velocity">开发者效率</a>
+  </h3>
+  
+    <div class="docs-card-grid">
+      
+    <a href="https://github.com/angular/angular/discussions/49685" target="_blank" class="docs-card">
+      <div>
+        <h3>交付 Angular Signals</h3>
+        <p>这个项目通过引入 Signals 作为响应式原始类型，重新思考了 Angular 的响应式模型。最初的规划促成了数百次讨论、与开发者的对话、反馈会议、用户体验研究以及一系列 RFC，这些 RFC 收到了 1,000 多条评论。</p>
+<p>作为 v17 版本发布的一部分，我们将 Angular Signals 库从开发者预览版升级。在 v19 中，我们将基于 signal 的查询、输入和模型输入移至稳定版。接下来，我们需要在完成此项目之前最终确定副作用。</p>
+
+      </div>
+      <span>了解更多</span>
+    </a>
+    
+  <div class="docs-card">
+    <div>
+      <h3>Zoneless Angular</h3>
+      <p>在 v18 中，我们在 Angular 中发布了实验性的 zoneless 支持。它使开发者无需在其捆绑包中包含 zone.js 即可使用该框架，从而提高了性能、调试体验和互操作性。作为初始版本的一部分，我们还在 Angular CDK 和 Angular Material 中引入了 zoneless 支持。</p>
+<p>在 v19 中，我们在服务器端渲染中引入了 zoneless 支持，解决了一些极端情况，并创建了一个原理图来搭建 zoneless 项目。我们将 <a href="https://fonts.google.com/">Google Fonts</a> 迁移到 zoneless，这提高了性能、开发者体验，并使我们能够识别在将此特性移至开发者预览版之前需要解决的差距。请继续关注未来几个月的更多更新。</p>
+
+    </div>
+    
+  </div>
+  
+  <div class="docs-card">
+    <div>
+      <h3>Signal 集成</h3>
+      <p>我们正在努力改进诸如表单、HTTP 和路由器等基本 Angular 包与 Signals 的集成。作为此项目的一部分，我们将寻求机会引入便捷的基于 signal 的 API 或包装器，以改善整体开发者体验。</p>
+
+    </div>
+    
+  </div>
+  
+  <div class="docs-card">
+    <div>
+      <h3>Angular DevTools 中的 Signal 调试</h3>
+      <p>随着 Angular 中 Signals 的发展，我们正在开发更好的工具来调试它们。优先级列表中较高的是用于检查和调试 signal 的 UI。</p>
+
+    </div>
+    
+  </div>
+  
+    <a href="https://github.com/angular/angular/issues/39367#issuecomment-1439537306" target="_blank" class="docs-card">
+      <div>
+        <h3>改进 HMR（热模块重载）</h3>
+        <p>我们正在通过启用热模块替换来努力实现更快的编辑/刷新周期。</p>
+<p>在 Angular v19 中，我们发布了对 CSS 和模板 HMR 的初始支持。我们将继续收集反馈，以确保在我们将此项目标记为完成之前，我们正在满足开发者的需求。</p>
+
+      </div>
+      <span>了解更多</span>
+    </a>
+    
+    </div>
+    
+  <h3 id="improve-angular-material-and-the-cdk">
+    <a href="#improve-angular-material-and-the-cdk" class="docs-anchor" tabindex="-1" aria-label="Link to Improve Angular Material and the CDK">改进 Angular Material 和 CDK</a>
+  </h3>
+  
+    <div class="docs-card-grid">
+      
+  <div class="docs-card">
+    <div>
+      <h3>新的 CDK 原始组件</h3>
+      <p>我们正在开发新的 CDK 原始组件，以方便基于 <a href="https://www.w3.org/TR/wai-aria-practices-1.1/#combobox" target="_blank">Combobox</a> 的 WAI-ARIA 设计模式创建自定义组件。Angular v14 作为此项目的一部分引入了稳定的 <a href="https://material.angular.io/cdk/categories" target="_blank">菜单和对话框原始组件</a>，并在 v15 中引入了 Listbox。</p>
+
+    </div>
+    
+  </div>
+  
+  <div class="docs-card">
+    <div>
+      <h3>Angular 组件无障碍功能</h3>
+      <p>我们正在根据 WCAG 等无障碍功能标准评估 Angular Material 中的组件，并努力修复此过程中出现的任何问题。</p>
+
+    </div>
+    
+  </div>
+  
+    </div>
+    
+  <h3 id="improve-tooling">
+    <a href="#improve-tooling" class="docs-anchor" tabindex="-1" aria-label="Link to Improve tooling">改进工具</a>
+  </h3>
+  
+    <div class="docs-card-grid">
+      
+  <div class="docs-card">
+    <div>
+      <h3>使用 ng test 实现单元测试工具现代化</h3>
+      <p>在 v12 中，我们通过使用诸如 Cypress、Nightwatch、Puppeteer、Playwright 和 Webdriver.io 等现代替代品替换 Protractor，重新审视了 Angular 的端到端测试体验。接下来，我们希望着手处理 <code>ng test</code>，以实现 Angular 单元测试体验的现代化。</p>
+<p>我们目前正在评估 Web Test Runner、Vitest 和 Jest 作为 Angular 项目新测试运行器的候选方案，同时保留 Jasmine 作为断言库，以避免破坏现有测试。</p>
+
+    </div>
+    
+  </div>
+  
+    <a href="https://nitro.unjs.io/" target="_blank" class="docs-card">
+      <div>
+        <h3>评估 Angular CLI 中的 Nitro 支持</h3>
+        <p>我们对 Nitro 提供的一系列特性感到兴奋，例如更多的部署选项、改进的服务器端渲染与不同运行时的兼容性以及基于文件的路由。在 2025 年，我们将评估它如何适应 Angular 的服务器端渲染模型。</p>
+<p>当我们在调查中取得进展时，我们将分享最新进展。</p>
+
+      </div>
+      <span>了解更多</span>
+    </a>
+    
+    </div>
+    
+  <h2 id="fast-by-default">
+    <a href="#fast-by-default" class="docs-anchor" tabindex="-1" aria-label="Link to Fast by default">默认很快</a>
+  </h2>
+  
+    <div class="docs-card-grid">
+      
+  <div class="docs-card">
+    <div>
+      <h3>启用增量水合</h3>
+      <p>在 v17 中，我们将水合从开发者预览版升级，并且我们一直观察到 LCP 提高了 40-50%。从那时起，我们开始了增量水合的原型设计，并在 ng-conf 的舞台上分享了一个演示。</p>
+<p>在 v19 中，我们以开发者预览模式发布了增量水合，它由 <code>@defer</code> 控制块提供支持。试用一下，并<a href="https://github.com/angular/angular/issues">与我们分享您的反馈</a>！</p>
+
+    </div>
+    
+  </div>
+  
+  <div class="docs-card">
+    <div>
+      <h3>服务器路由配置</h3>
+      <p>我们正在努力在服务器上启用更符合工效学的路由配置。我们希望能够轻松地声明哪些路由应该进行服务器端渲染、预渲染或客户端渲染。</p>
+<p>在 Angular v19 中，我们发布了路由级渲染模式的开发者预览版，它允许你精细地配置你希望 Angular 预渲染、服务器端渲染或客户端渲染哪些路由。</p>
+
+    </div>
+    
+  </div>
+  
+    </div>
+    
+  <h2 id="future-work-explorations-and-prototyping">
+    <a href="#future-work-explorations-and-prototyping" class="docs-anchor" tabindex="-1" aria-label="Link to Future work, explorations, and prototyping">未来的工作、探索和原型设计</a>
+  </h2>
+  <p>本节介绍对未来潜在项目的探索和原型设计。一个合理的结果是确定我们当前的解决方案是最佳选择。其他项目可能会产生 RFC，升级为进行中的项目，或者随着 Web 与我们的框架一起不断创新而被降低优先级。</p>
+
+    <div class="docs-card-grid">
+      
+  <div class="docs-card">
+    <div>
+      <h3>Signal Forms</h3>
+      <p>我们计划分析关于 Angular 表单的现有反馈，并设计一个解决方案，以满足开发人员的需求，并使用 Signal 来管理响应式状态。</p>
+
+    </div>
+    
+  </div>
+  
+  <div class="docs-card">
+    <div>
+      <h3>Selectorless</h3>
+      <p>为了减少样板代码并提高独立组件的工效学，我们现在正在设计一种解决方案，该方案将使选择器成为可选的。要使用组件或指令，你将能够导入它并直接在组件的模板中使用它。</p>
+<p>我们仍处于规划 selectorless 的早期阶段。当我们有一个初步设计并准备好进行下一步时，我们将分享征求意见稿。</p>
+
+    </div>
+    
+  </div>
+  
+  <div class="docs-card">
+    <div>
+      <h3>流式服务器端渲染的探索</h3>
+      <p>在过去的几个版本中，我们一直在努力使 Angular 的服务器端渲染方案更加健壮。在我们的优先级列表中，是探索用于 zoneless 应用的流式服务器端渲染。</p>
+
+    </div>
+    
+  </div>
+  
+  <div class="docs-card">
+    <div>
+      <h3>创作格式改进的调查</h3>
+      <p>根据我们的开发者调查结果，我们发现有机会改进组件创作格式的工效学。该过程的第一步将是收集需求并提前理解 RFC 中的问题空间。当取得进展时，我们将分享最新进展。未来工作中的高优先级将是向后兼容性和互操作性。</p>
+
+    </div>
+    
+  </div>
+  
+  <div class="docs-card">
+    <div>
+      <h3>改进 TestBed</h3>
+      <p>根据多年来的反馈以及 Angular 运行时的最新更新，我们将评估 TestBed，以找出在开发单元测试时改进开发者体验和减少样板代码的机会。</p>
+
+    </div>
+    
+  </div>
+  
+  <div class="docs-card">
+    <div>
+      <h3>增量采用</h3>
+      <p>Angular 一直缺乏工具和灵活性，无法向多页应用添加交互性，或者将 Angular 组件嵌入到使用不同框架构建的现有应用中。</p>
+<p>作为本项目的一部分，我们将探索跨框架互操作的需求空间以及我们的构建工具产品，以使这种用例成为可能。</p>
+
+    </div>
+    
+  </div>
+  
+    </div>
+    
+  <h2 id="completed-projects">
+    <a href="#completed-projects" class="docs-anchor" tabindex="-1" aria-label="Link to Completed projects">已完成的项目</a>
+  </h2>
+  
+    <div class="docs-card-grid">
+      
+    <a href="https://github.com/angular/components/issues/13372" target="_blank" class="docs-card">
+      <div>
+        <h3>支持二维拖放</h3>
+        <p>作为本项目的一部分，我们为 Angular CDK 拖放实现了混合方向支持。这是该存储库中最受用户欢迎的功能之一。</p>
+
+      </div>
+      <span>于 2024 年第二季度完成</span>
+    </a>
+    
+    <a href="https://angular.dev/api/platform-browser/withEventReplay" target="_blank" class="docs-card">
+      <div>
+        <h3>使用 SSR 和预渲染的事件重放</h3>
+        <p>在 v18 中，我们在使用服务器端渲染或预渲染时引入了事件重放功能。对于此特性，我们依赖于在 Google.com 上运行的事件分发原始类型（以前称为 jsaction）。</p>
+<p>在 Angular v19 中，我们将事件重放升级为稳定版，并为所有新项目默认启用它。</p>
+
+      </div>
+      <span>于 2024 年第四季度完成</span>
+    </a>
+    
+  <div class="docs-card">
+    <div>
+      <h3>将 Angular Language Service 与原理图集成</h3>
+      <p>为了使开发人员更容易使用现代 Angular API，我们启用了 Angular 语言服务和原理图之间的集成，这允许你通过单击一下来重构你的应用。</p>
+
+    </div>
+    <span>于 2024 年第四季度完成</span>
+  </div>
+  
+  <div class="docs-card">
+    <div>
+      <h3>使用 Language Service 简化独立导入</h3>
+      <p>作为此计划的一部分，语言服务会自动在独立应用和基于 NgModule 的应用中导入组件和管道。此外，我们还添加了一个模板诊断，以突出显示独立组件中未使用的导入，这应该有助于缩小应用捆绑包。</p>
+
+    </div>
+    <span>于 2024 年第四季度完成</span>
+  </div>
+  
+  <div class="docs-card">
+    <div>
+      <h3>局部模板变量</h3>
+      <p>我们已经在 Angular 中发布了对局部模板变量的支持，有关更多信息，请参阅 <a href="https://angular.dev/api/core/@let" target="_blank"><code>@let</code> 文档</a>。</p>
+
+    </div>
+    <span>于 2024 年第三季度完成</span>
+  </div>
+  
+    <a href="https://material.angular.io/guide/theming" target="_blank" class="docs-card">
+      <div>
+        <h3>扩展 Angular Material 的可定制性</h3>
+        <p>为了更好地定制我们的 Angular Material 组件并启用 Material 3 功能，我们将与 Google 的 Material Design 团队合作，定义基于令牌的主题 API。</p>
+<p>在 v17.2 中，我们分享了对 Angular Material 3 的实验性支持，并在 v18 中将其升级为稳定版。</p>
+
+      </div>
+      <span>于 2024 年第二季度完成</span>
+    </a>
+    
+    <a href="https://next.angular.dev/guide/defer" target="_blank" class="docs-card">
+      <div>
+        <h3>引入惰性加载</h3>
+        <p>在 v17 中，我们以开发者预览版发布了可延期视图，它为延迟代码加载提供了一个符合工效学的 API。在 v18 中，我们为库开发人员启用了可延期视图，并将该 API 升级为稳定版。</p>
+
+      </div>
+      <span>于 2024 年第二季度完成</span>
+    </a>
+    
+  <div class="docs-card">
+    <div>
+      <h3>Angular DevTools 中的 iframe 支持</h3>
+      <p>我们启用了对页面上 iframe 中嵌入的 Angular 应用进行调试和性能分析的功能。</p>
+
+    </div>
+    <span>于 2024 年第二季度完成</span>
+  </div>
+  
+    <a href="tools/cli/build-system-migration" class="docs-card">
+      <div>
+        <h3>将现有混合渲染项目过渡到 esbuild 和 vite 的自动化方案</h3>
+        <p>在 v17 中，我们发布了基于 vite 和 esbuild 的应用构建器，并默认对新项目启用。它将使用混合渲染的项目的构建时间最多缩短了 87%。在 v18 中，我们发布了原理图和一个指南，用于将使用混合渲染的现有项目迁移到新的构建流水线。</p>
+
+      </div>
+      <span>于 2024 年第二季度完成</span>
+    </a>
+    
+    <a href="https://goo.gle/angular-dot-dev" target="_blank" class="docs-card">
+      <div>
+        <h3>使 Angular.dev 成为 Angular 开发者的官方家园</h3>
+        <p>Angular.dev 是 Angular 开发的新站点、域名和家园。新站点包含更新的文档、教程和指南，将帮助开发者使用 Angular 的最新特性进行构建。</p>
+
+      </div>
+      <span>于 2024 年第二季度完成</span>
+    </a>
+    
+    <a href="https://next.angular.dev/essentials/conditionals-and-loops" target="_blank" class="docs-card">
+      <div>
+        <h3>引入内置控制流</h3>
+        <p>在 v17 中，我们发布了新控制流的开发者预览版。它为模板编写带来了显著的性能提升和更符合工效学的体验。我们还提供了现有 <code>*ngIf</code>、<code>*ngFor</code> 和 <code>*ngSwitch</code> 的迁移方案，你可以运行它将你的项目迁移到新的实现。截至 v18，内置控制流现已稳定。</p>
+
+      </div>
+      <span>于 2024 年第二季度完成</span>
+    </a>
+    
+  <div class="docs-card">
+    <div>
+      <h3>使入门教程现代化</h3>
+      <p>在过去的两个季度中，我们基于独立组件开发了一个新的<a href="https://www.youtube.com/watch?v=xAT0lHYhHMY&amp;list=PL1w1q3fL4pmj9k1FrJ3Pe91EPub2_h4jF" target="_blank">视频</a>和<a href="https://angular.dev/tutorials/learn-angular" target="_blank">文本</a>教程。</p>
+
+    </div>
+    <span>于 2023 年第四季度完成</span>
+  </div>
+  
+    <a href="guide/hydration" class="docs-card">
+      <div>
+        <h3>调研现代打捆器</h3>
+        <p>在 Angular v16 中，我们发布了基于 esbuild 的构建器的开发者预览版，支持 <code>ng build</code> 和 <code>ng serve</code>。<code>ng serve</code> 开发服务器使用 Vite 以及 esbuild 和 Angular 编译器的多文件编译。在 v17 中，我们将构建工具从开发者预览版升级，并默认对新项目启用。</p>
+
+      </div>
+      <span>于 2023 年第四季度完成</span>
+    </a>
+    
+    <a href="tools/devtools" class="docs-card">
+      <div>
+        <h3>引入依赖注入调试 API</h3>
+        <p>为了改进 Angular 和 Angular DevTools 的调试实用程序，我们将开发一些 API，以便访问依赖注入运行时。作为项目的一部分，我们将公开一些调试方法，使我们能够探索注入器分层结构以及与其关联的提供者之间的依赖关系。截至 v17，我们发布了一个特性，使我们能够接入依赖注入生命周期。我们还发布了注入器树的可视化以及对每个节点内声明的提供者的检查功能。</p>
+
+      </div>
+      <span>于 2023 年第四季度完成</span>
+    </a>
+    
+    <a href="components" class="docs-card">
+      <div>
+        <h3>改进独立组件的文档和原理图</h3>
+        <p>我们发布了 <code>ng new --standalone</code> 原理图集合的开发者预览版，允许你创建不含 NgModule 的应用。在 v17 中，我们将新的应用编写格式切换为独立 API，并更改了文档以反映此建议。此外，我们还发布了支持将现有应用更新为独立组件、指令和管道的原理图。即使 NgModule 在可预见的未来仍然存在，我们仍然建议你探索新 API 的优势，以改善开发者体验并从我们为其构建的新特性中获益。</p>
+
+      </div>
+      <span>于 2023 年第四季度完成</span>
+    </a>
+    
+  <div class="docs-card">
+    <div>
+      <h3>探索水合和服务器端渲染的改进</h3>
+      <p>在 v16 中，我们发布了非破坏性完全水合的开发者预览版，更多信息请参阅<a href="guide/hydration">水合指南</a>和<a href="https://blog.angular.dev/whats-next-for-server-side-rendering-in-angular-2a6f27662b67" target="_blank">博文</a>。我们已经看到 Core Web Vitals 得到了显著改进，包括<a href="https://web.dev/lcp" target="_blank">LCP</a> 和 <a href="https://web.dev/cls" target="_blank">CLS</a>。在实验室测试中，我们持续观察到真实应用的 LCP 提高了 45%。</p>
+<p>在 v17 中，我们将水合功能从开发者预览版中移除，并在服务器端渲染方面进行了一系列改进，包括：SSG 的运行时路由发现、混合渲染应用的构建时间最多加快 87%、为新项目启用混合渲染的提示。</p>
+
+    </div>
+    <span>于 2023 年第四季度完成</span>
+  </div>
+  
+    <a href="guide/hydration" class="docs-card">
+      <div>
+        <h3>非破坏性完全应用水合</h3>
+        <p>在 v16 中，我们发布了非破坏性完全水合的开发者预览版，它允许 Angular 复用服务器端渲染页面上现有的 DOM 节点，而不是从头开始重新创建应用。更多信息请参阅水合指南。</p>
+
+      </div>
+      <span>于 2023 年第一季度完成</span>
+    </a>
+    
+    <a href="guide/image-optimization" class="docs-card">
+      <div>
+        <h3>图像指令的改进</h3>
+        <p>我们在 v15 中发布了稳定的 Angular 图像指令。我们引入了一个新的填充模式特性，使图像能够适应其父容器，而不是具有显式尺寸。在过去的两个月中，Chrome Aurora 团队将该指令向后移植到 v12 及更高版本。</p>
+
+      </div>
+      <span>于 2023 年第一季度完成</span>
+    </a>
+    
+    <a href="https://angular.io" target="_blank" class="docs-card">
+      <div>
+        <h3>文档重构</h3>
+        <p>确保所有现有文档都符合一组一致的内容类型。将过度使用的教程式文档更新为独立主题。我们希望确保主要教程之外的内容是自给自足的，而不会与一系列指南紧密耦合。在 2022 年第二季度，我们重构了模板内容和依赖注入。在 2023 年第一季度，我们改进了 HTTP 指南，至此，我们将暂停文档重构项目。</p>
+
+      </div>
+      <span>于 2023 年第一季度完成</span>
+    </a>
+    
+    <a href="guide/image-optimization" class="docs-card">
+      <div>
+        <h3>提升图像性能</h3>
+        <p>Aurora 团队和 Angular 团队正在合作实现一个旨在改进 Core Web Vitals 的图像指令。我们在 v15 中发布了稳定版本的图像指令。</p>
+
+      </div>
+      <span>于 2022 年第四季度完成</span>
+    </a>
+    
+    <a href="https://blog.angular.dev/modern-css-in-angular-layouts-4a259dca9127" target="_blank" class="docs-card">
+      <div>
+        <h3>现代 CSS</h3>
+        <p>Web 生态系统在不断发展，我们希望在 Angular 中反映最新的现代标准。在这个项目中，我们旨在提供关于在 Angular 中使用现代 CSS 特性的指南，以确保开发者遵循布局、样式等方面的最佳实践。我们分享了官方布局指南，并作为该计划的一部分，停止发布 flex 布局。</p>
+
+      </div>
+      <span>于 2022 年第四季度完成</span>
+    </a>
+    
+    <a href="guide/directives/directive-composition-api" class="docs-card">
+      <div>
+        <h3>支持将指令添加到宿主元素</h3>
+        <p>长期以来的特性请求是添加将指令添加到宿主元素的能力。该特性使开发者可以使用其他行为来增强他们自己的组件，而无需使用继承。在 v15 中，我们发布了指令组合 API，它支持使用指令增强宿主元素。</p>
+
+      </div>
+      <span>于 2022 年第四季度完成</span>
+    </a>
+    
+    <a href="https://developer.chrome.com/blog/devtools-better-angular-debugging/" target="_blank" class="docs-card">
+      <div>
+        <h3>更好的堆栈跟踪</h3>
+        <p>Angular 团队和 Chrome DevTools 团队正在合作，为错误消息启用更易读的堆栈跟踪。在 v15 中，我们发布了改进的相关和链接堆栈跟踪。作为一个较低优先级的计划，我们将探索如何通过为模板提供更准确的调用帧名称来使堆栈跟踪更友好。</p>
+
+      </div>
+      <span>于 2022 年第四季度完成</span>
+    </a>
+    
+    <a href="https://material.angular.io/guide/mdc-migration" target="_blank" class="docs-card">
+      <div>
+        <h3>通过集成 MDC Web 增强 Angular Material 组件</h3>
+        <p>MDC Web 是 Google Material Design 团队创建的一个库，它为构建 Material Design 组件提供了可复用的基元。Angular 团队正在将这些基元整合到 Angular Material 中。使用 MDC Web 使 Angular Material 更紧密地与 Material Design 规范保持一致，扩展了无障碍功能，提高了组件质量，并提高了我们团队的速度。</p>
+
+      </div>
+      <span>于 2022 年第四季度完成</span>
+    </a>
+    
+    <a href="https://blog.angular.dev/angular-v15-is-now-available-df7be7f2f4c8" target="_blank" class="docs-card">
+      <div>
+        <h3>为可选的 NgModule 实现 API</h3>
+        <p>为了简化 Angular，我们正在努力引入一些 API，使开发者无需 NgModule 即可初始化应用、实例化组件和使用路由器。Angular v14 引入了独立组件、指令和管道 API 的开发者预览版。在接下来的几个季度中，我们将收集开发者的反馈并最终完成该项目，使这些 API 稳定下来。下一步，我们将致力于改进 TestBed、Angular elements 等用例。</p>
+
+      </div>
+      <span>于 2022 年第四季度完成</span>
+    </a>
+    
+    <a href="guide/templates/binding" class="docs-card">
+      <div>
+        <h3>允许绑定到模板中的受保护字段</h3>
+        <p>为了改进 Angular 组件的封装，我们启用了绑定到组件实例的受保护成员。这样，你不再需要将字段或方法公开为 public 才能在模板中使用它。</p>
+
+      </div>
+      <span>于 2022 年第二季度完成</span>
+    </a>
+    
+    <a href="https://angular.io/guide/change-detection" target="_blank" class="docs-card">
+      <div>
+        <h3>发布关于高级概念的指南</h3>
+        <p>开发并发布关于变更检测的深入指南。开发用于 Angular 应用的性能分析内容。涵盖变更检测如何与 Zone.js 交互，并解释何时触发变更检测、如何分析其持续时间以及性能优化的常用实践。</p>
+
+      </div>
+      <span>于 2022 年第二季度完成</span>
+    </a>
+    
+    <a href="guide/forms/typed-forms" class="docs-card">
+      <div>
+        <h3>为 @angular/forms 推出严格类型</h3>
+        <p>在 2021 年第四季度，我们设计了一个为表单引入严格类型的解决方案，并在 2022 年第一季度结束了相应的意见征询。目前，我们正在实施一项推出策略，其中包含一个自动迁移步骤，这将为现有项目启用改进。我们首先在 Google 的 2,500 多个项目上测试该解决方案，以确保为外部社区提供平滑的迁移路径。</p>
+
+      </div>
+      <span>于 2022 年第二季度完成</span>
+    </a>
+    
+    <a href="https://blog.angular.dev/angular-v15-is-now-available-df7be7f2f4c8" target="_blank" class="docs-card">
+      <div>
+        <h3>移除旧版 View Engine</h3>
+        <p>在我们将所有内部工具过渡到 Ivy 完成后，我们将移除旧版 View Engine，以减少 Angular 的概念开销、缩小软件包大小、降低维护成本和降低代码库复杂性。</p>
+
+      </div>
+      <span>已于 2022 年第一季度完成</span>
+    </a>
+    
+    <a href="https://blog.angular.dev/angular-v15-is-now-available-df7be7f2f4c8" target="_blank" class="docs-card">
+      <div>
+        <h3>使用可选的 NgModule 简化 Angular 的心智模型</h3>
+        <p>为了简化 Angular 的心智模型和学习过程，我们将致力于使 NgModule 成为可选的。这项工作使开发者可以开发独立组件，并实现一个替代 API 来声明组件的编译范围。我们通过在 RFC 中记录的高级设计讨论启动了这个项目。</p>
+
+      </div>
+      <span>已于 2022 年第一季度完成</span>
+    </a>
+    
+    <a href="guide/forms/typed-forms" class="docs-card">
+      <div>
+        <h3>为 @angular/forms 设计严格的类型</h3>
+        <p>我们将致力于寻找一种方法，以便为响应式表单实现更严格的类型检查，同时最大限度地减少向后不兼容的影响。 这样，我们就可以让开发人员在开发时捕获更多问题，更好地支持文本编辑器和 IDE，并改进对响应式表单的类型检查。</p>
+
+      </div>
+      <span>已于 2022 年第一季度完成</span>
+    </a>
+    
+    <a href="tools/devtools" class="docs-card">
+      <div>
+        <h3>改进 Angular DevTools 与框架的集成</h3>
+        <p>为了改进 Angular DevTools 与框架的集成，我们正在努力将代码库迁移到 angular/angular 单一代码仓中。 这包括将 Angular DevTools 过渡到 Bazel，并将其集成到现有的流程和 CI 管道中。</p>
+
+      </div>
+      <span>已于 2022 年第一季度完成</span>
+    </a>
+    
+    <a href="reference/extended-diagnostics" class="docs-card">
+      <div>
+        <h3>发布高级编译器诊断</h3>
+        <p>将 Angular 编译器的诊断扩展到类型检查之外。 引入其他正确性和一致性检查，以进一步保证正确性和最佳实践。</p>
+
+      </div>
+      <span>已于 2022 年第一季度完成</span>
+    </a>
+    
+    <a href="guide/testing" class="docs-card">
+      <div>
+        <h3>更新我们的 e2e 测试策略</h3>
+        <p>为了确保我们提供面向未来的 e2e 测试策略，我们希望评估 Protractor 的现状、社区创新、e2e 最佳实践，并探索新的机会。 作为这项工作的第一步，我们分享了一个 RFC，并与合作伙伴合作，以确保 Angular CLI 和最先进的 e2e 测试工具之间的顺利集成。 作为下一步，我们需要最终确定这些建议，并编制一份用于过渡的资源列表。</p>
+
+      </div>
+      <span>已于 2021 年第三季度完成</span>
+    </a>
+    
+    <a href="tools/libraries" class="docs-card">
+      <div>
+        <h3>Angular 库使用 Ivy</h3>
+        <p>在 2020 年初，我们分享了一个关于 Ivy 库分发的 RFC。 在收到来自社区的宝贵反馈后，我们制定了该项目的设计方案。 我们现在正在投资开发 Ivy 库分发，包括更新库包格式以使用 Ivy 编译，解除对 View Engine 库格式和 ngcc 弃用的限制。</p>
+
+      </div>
+      <span>已于 2021 年第三季度完成</span>
+    </a>
+    
+    <a href="guide/testing" class="docs-card">
+      <div>
+        <h3>通过自动测试环境清理来缩短测试时间和改进调试</h3>
+        <p>为了缩短测试时间并在各个测试之间创建更好的隔离，我们希望更改 TestBed 以在每次测试运行后自动清理和拆除测试环境。</p>
+
+      </div>
+      <span>已于 2021 年第三季度完成</span>
+    </a>
+    
+    <a href="https://github.com/angular/angular/issues/41840" target="_blank" class="docs-card">
+      <div>
+        <h3>弃用并移除 IE11 支持</h3>
+        <p>Internet Explorer 11 (IE11) 一直在阻止 Angular 利用 Web 平台的一些现代特性。 作为此项目的一部分，我们将弃用并移除 IE11 支持，从而为常青浏览器提供的现代特性开辟道路。 我们发起了一个 RFC，以收集社区的反馈并决定后续步骤。</p>
+
+      </div>
+      <span>已于 2021 年第三季度完成</span>
+    </a>
+    
+    <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank" class="docs-card">
+      <div>
+        <h3>利用 ES2017+ 作为默认输出语言</h3>
+        <p>支持现代浏览器使我们能够利用 JavaScript 更紧凑、更具表现力且性能更高的新语法。 作为此项目的一部分，我们将调查阻碍我们推进这项工作的因素，并采取措施使其成为可能。</p>
+
+      </div>
+      <span>已于 2021 年第三季度完成</span>
+    </a>
+    
+    <a href="tools/devtools" class="docs-card">
+      <div>
+        <h3>通过 Angular DevTools 加速调试和性能分析</h3>
+        <p>我们正在开发 Angular 的开发工具，该工具提供用于调试和性能分析的实用程序。 该项目旨在帮助开发人员了解 Angular 应用中的组件结构和变更检测。</p>
+
+      </div>
+      <span>已于 2021 年第二季度完成</span>
+    </a>
+    
+    <a href="reference/releases" class="docs-card">
+      <div>
+        <h3>通过整合 Angular 版本控制和分支来简化发布</h3>
+        <p>我们希望整合 Angular（angular/angular、angular/angular-cli 和 angular/components）的多个 GitHub 仓库之间的发布管理工具。 这项工作使我们能够复用基础设施、统一和简化流程，并提高发布过程的可靠性。</p>
+
+      </div>
+      <span>已于 2021 年第二季度完成</span>
+    </a>
+    
+    <a href="https://github.com/angular/angular" target="_blank" class="docs-card">
+      <div>
+        <h3>通过提交消息标准化提高开发人员的一致性</h3>
+        <p>我们希望统一 Angular 仓库（angular/angular、angular/components 和 angular/angular-cli）之间的提交消息要求和一致性，从而使我们的开发过程保持一致性并复用基础设施工具。</p>
+
+      </div>
+      <span>已于 2021 年第二季度完成</span>
+    </a>
+    
+    <a href="tools/language-service" class="docs-card">
+      <div>
+        <h3>将 Angular 语言服务过渡到 Ivy</h3>
+        <p>该项目的目标是通过将语言服务过渡到 Ivy 来改善体验并消除遗留依赖。 今天，即使对于 Ivy 应用，语言服务仍然使用 View Engine 编译器和类型检查。 我们希望为 Angular 语言服务使用 Ivy 模板解析器和改进的类型检查，以匹配应用行为。 这种迁移也是朝着解除对移除 View Engine 的限制迈出的一步，这将简化 Angular，减小 npm 包大小，并提高框架的可维护性。</p>
+
+      </div>
+      <span>已于 2021 年第二季度完成</span>
+    </a>
+    
+    <a href="best-practices/security" class="docs-card">
+      <div>
+        <h3>通过 Angular 中的原生 Trusted Types 提高安全性</h3>
+        <p>通过与 Google 安全团队合作，我们正在添加对新的 Trusted Types API 的支持。 这个 Web 平台 API 帮助开发人员构建更安全的 Web 应用。</p>
+
+      </div>
+      <span>已于 2021 年第二季度完成</span>
+    </a>
+    
+    <a href="tools/cli/build" class="docs-card">
+      <div>
+        <h3>通过 Angular CLI webpack 5 优化构建速度和捆绑包大小</h3>
+        <p>作为 v11 版本发布的一部分，我们在 Angular CLI 中引入了 webpack 5 的选择性预览。 为了确保稳定性，我们将继续迭代该实现，以实现构建速度和捆绑包大小的改进。</p>
+
+      </div>
+      <span>已于 2021 年第二季度完成</span>
+    </a>
+    
+    <a href="guide/ssr" class="docs-card">
+      <div>
+        <h3>通过在 Universal 应用中内联关键样式来加快应用速度</h3>
+        <p>加载外部样式表是一个阻塞操作，这意味着浏览器在加载所有引用的 CSS 之前无法开始渲染你的应用。 在页面的标头中包含渲染阻塞资源会严重影响其加载性能，例如，首次内容绘制。 为了加快应用速度，我们一直在与 Google Chrome 团队合作，研究内联关键 CSS 和异步加载其余样式。</p>
+
+      </div>
+      <span>已于 2021 年第一季度完成</span>
+    </a>
+    
+    <a href="reference/errors" class="docs-card">
+      <div>
+        <h3>通过更好的 Angular 错误消息改进调试</h3>
+        <p>错误消息通常带来的可操作信息有限，无法帮助开发人员求解问题。 我们一直在努力通过添加关联代码、开发指南和其他材料来使错误消息更易于发现，以确保更顺畅的调试体验。</p>
+
+      </div>
+      <span>已于 2021 年第一季度完成</span>
+    </a>
+    
+    <a href="tutorials" class="docs-card">
+      <div>
+        <h3>通过更新的入门文档改进开发者入职体验</h3>
+        <p>我们将重新定义用户学习历程并更新入门文档。 我们将明确说明 Angular 的优势、如何探索其功能，并提供指导，以便开发人员可以在尽可能短的时间内熟练掌握该框架。</p>
+
+      </div>
+      <span>已于 2021 年第一季度完成</span>
+    </a>
+    
+    <a href="https://material.angular.io/guide/using-component-harnesses" target="_blank" class="docs-card">
+      <div>
+        <h3>扩展组件测试工具最佳实践</h3>
+        <p>Angular CDK 在版本 9 中向 Angular 引入了组件测试工具的概念。 测试工具使组件作者可以创建受支持的 API，用于测试组件交互。 我们正在继续改进此工具基础设施，并阐明围绕使用工具的最佳实践。 我们还在努力推动 Google 内部更多地采用工具。</p>
+
+      </div>
+      <span>已于 2021 年第一季度完成</span>
+    </a>
+    
+    <a href="https://angular.io/docs" target="_blank" class="docs-card">
+      <div>
+        <h3>编写内容投影指南</h3>
+        <p>内容投影是 Angular 的核心概念，但在文档中没有得到应有的重视。 作为此项目的一部分，我们希望确定内容投影的核心用例和概念，并记录它们。</p>
+
+      </div>
+      <span>已于 2021 年第二季度完成</span>
+    </a>
+    
+    <a href="tools/cli" class="docs-card">
+      <div>
+        <h3>迁移到 ESLint</h3>
+        <p>随着 TSLint 的弃用，我们将迁移到 ESLint。 作为该过程的一部分，我们将努力确保与当前推荐的 TSLint 配置向后兼容，为现有的 Angular 应用实施迁移策略，并在 Angular CLI 工具链中引入新的工具。</p>
+
+      </div>
+      <span>已于 2020 年第四季度完成</span>
+    </a>
+    
+    <a href="https://github.com/angular/angular/issues" target="_blank" class="docs-card">
+      <div>
+        <h3>再见积压操作（也称为 Byelog 操作）</h3>
+        <p>我们正在积极投入高达 50% 的工程能力来分类问题和 PR，直到我们清楚地了解更广泛的社区需求。 在此之后，我们将投入高达 20% 的工程能力来及时跟进新的提交。</p>
+
+      </div>
+      <span>已于 2020 年第四季度完成</span>
+    </a>
+    
+    </div>
+    

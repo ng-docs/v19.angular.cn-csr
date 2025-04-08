@@ -1,0 +1,201 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">构建 Angular 应用</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/build.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>你可以使用 <code>ng build</code> 命令构建你的 Angular CLI 应用或库。
+这将把你的 TypeScript 代码编译为 JavaScript，并根据需要优化、打捆和最小化输出。</p>
+<p><code>ng build</code> 仅为 <code>angular.json</code> 中指定的默认项目中的 <code>build</code> 目标执行构建器。
+Angular CLI 包括四个通常用作 <code>build</code> 目标的构建器：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>构建器</th>
+<th>用途</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td><code>@angular-devkit/build-angular:application</code></td>
+<td>使用 <a href="https://esbuild.github.io/" target="_blank">esbuild</a> 构建具有客户端捆绑包、Node 服务器和构建时预渲染路由的应用。</td>
+</tr>
+<tr>
+<td><code>@angular-devkit/build-angular:browser-esbuild</code></td>
+<td>使用 <a href="https://esbuild.github.io/" target="_blank">esbuild</a> 为在浏览器中使用而打捆客户端应用。 有关更多信息，请参阅 <a href="tools/cli/build-system-migration#manual-migration-to-the-compatibility-builder"><code>browser-esbuild</code> 文档</a>。</td>
+</tr>
+<tr>
+<td><code>@angular-devkit/build-angular:browser</code></td>
+<td>使用 <a href="https://webpack.js.org/" target="_blank">webpack</a> 为在浏览器中使用而打捆客户端应用。</td>
+</tr>
+<tr>
+<td><code>@angular-devkit/build-angular:ng-packagr</code></td>
+<td>构建符合 <a href="tools/libraries/angular-package-format">Angular Package Format</a> 的 Angular 库。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>由 <code>ng new</code> 生成的应用默认使用 <code>@angular-devkit/build-angular:application</code>。
+由 <code>ng generate library</code> 生成的库默认使用 <code>@angular-devkit/build-angular:ng-packagr</code>。</p>
+<p>你可以通过查找特定项目的 <code>build</code> 目标来确定该项目正在使用哪个构建器。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "projects"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "my-app"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "architect"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // `ng build` invokes the Architect target named `build`.</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">          …</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        "serve"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">…</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        "test"</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">…</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">        …</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>本页讨论了 <code>@angular-devkit/build-angular:application</code> 的用法和选项。</p>
+
+  <h2 id="output-directory">
+    <a href="#output-directory" class="docs-anchor" tabindex="-1" aria-label="Link to Output directory">输出目录</a>
+  </h2>
+  <p>此构建过程的结果输出到一个目录（默认情况下为 <code>dist/${PROJECT_NAME}</code>）。</p>
+
+  <h2 id="configuring-size-budgets">
+    <a href="#configuring-size-budgets" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring size budgets">配置尺寸预算</a>
+  </h2>
+  <p>随着应用的功能增长，它们的大小也会增长。
+CLI 允许你在配置中设置尺寸阈值，以确保应用的各个部分保持在你定义的尺寸边界内。</p>
+<p>在 CLI 配置文件 <code>angular.json</code> 中，为每个<a href="tools/cli/environments">已配置的环境</a>的 <code>budgets</code> 部分定义你的尺寸边界。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">  …</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "configurations"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    "production"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">      …</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">      "budgets"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "type"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"initial"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "maximumWarning"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"250kb"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">          "maximumError"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"500kb"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        },</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      ]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p>你可以为整个应用和特定部分指定尺寸预算。
+每个预算条目都配置给定类型的预算。
+以以下格式指定尺寸值：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">尺寸值</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>123</code> 或 <code>123b</code></td>
+<td align="left">以字节为单位的尺寸。</td>
+</tr>
+<tr>
+<td align="left"><code>123kb</code></td>
+<td align="left">以千字节为单位的尺寸。</td>
+</tr>
+<tr>
+<td align="left"><code>123mb</code></td>
+<td align="left">以兆字节为单位的尺寸。</td>
+</tr>
+<tr>
+<td align="left"><code>12%</code></td>
+<td align="left">相对于基线的尺寸百分比。（对基线值无效。）</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>当你配置预算时，当应用的给定部分达到或超过你设置的边界尺寸时，构建器会发出警告或报告错误。</p>
+<p>每个预算条目都是一个 JSON 对象，具有以下属性：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">属性</th>
+<th align="left">值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">类型</td>
+<td align="left">预算的类型。 以下之一：<table> <thead> <tr> <th>值</th> <th>详情</th> </tr> </thead> <tbody> <tr> <td> <code>bundle</code> </td> <td>特定捆绑包的大小。</td> </tr> <tr> <td> <code>initial</code> </td> <td>引导应用所需的 JavaScript 和 CSS 的大小。 默认为 500kb 时警告，1mb 时报错。</td> </tr> <tr> <td> <code>allScript</code> </td> <td>所有脚本的大小。</td> </tr> <tr> <td> <code>all</code> </td> <td>整个应用的大小。</td> </tr> <tr> <td> <code>anyComponentStyle</code> </td> <td>任何一个组件样式表的大小。 默认为 2kb 时警告，4kb 时报错。</td> </tr> <tr> <td> <code>anyScript</code> </td> <td>任何一个脚本的大小。</td> </tr> <tr> <td> <code>any</code> </td> <td>任何文件的大小。</td> </tr> </tbody> </table></td>
+</tr>
+<tr>
+<td align="left">name</td>
+<td align="left">捆绑包的名称（对于 <code>type=bundle</code>）。</td>
+</tr>
+<tr>
+<td align="left">baseline</td>
+<td align="left">用于比较的基线尺寸。</td>
+</tr>
+<tr>
+<td align="left">maximumWarning</td>
+<td align="left">相对于基线的最大警告阈值。</td>
+</tr>
+<tr>
+<td align="left">maximumError</td>
+<td align="left">相对于基线的最大错误阈值。</td>
+</tr>
+<tr>
+<td align="left">minimumWarning</td>
+<td align="left">相对于基线的最小警告阈值。</td>
+</tr>
+<tr>
+<td align="left">minimumError</td>
+<td align="left">相对于基线的最小错误阈值。</td>
+</tr>
+<tr>
+<td align="left">warning</td>
+<td align="left">相对于基线（最小值和最大值）的警告阈值。</td>
+</tr>
+<tr>
+<td align="left">error</td>
+<td align="left">相对于基线（最小值和最大值）的错误阈值。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="configuring-commonjs-dependencies">
+    <a href="#configuring-commonjs-dependencies" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring CommonJS dependencies">配置 CommonJS 依赖</a>
+  </h2>
+  <p>始终在你的应用及其依赖项中优先使用原生 <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/import" target="_blank">ECMAScript 模块</a> (ESM)。
+ESM 是一个完全指定的 Web 标准和 JavaScript 语言特性，具有强大的静态分析支持。这使得捆绑包优化比其他模块格式更强大。</p>
+<p>Angular CLI 也支持将 <a href="https://nodejs.org/api/modules.html" target="_blank">CommonJS</a> 依赖项导入到你的项目中，并将自动打捆这些依赖项。
+但是，CommonJS 模块可能会阻止打捆器和最小化器有效地优化这些模块，从而导致更大的捆绑包尺寸。
+有关更多信息，请参阅 <a href="https://web.dev/commonjs-larger-bundles" target="_blank">CommonJS 如何使你的捆绑包更大</a>。</p>
+<p>如果 Angular CLI 检测到你的浏览器应用依赖于 CommonJS 模块，它会输出警告。
+当你遇到 CommonJS 依赖项时，请考虑要求维护者支持 ECMAScript 模块、自己贡献这种支持，或者使用满足你需求的替代依赖项。
+如果最好的选择是使用 CommonJS 依赖项，你可以通过将 CommonJS 模块名称添加到 <code>angular.json</code> 中 <code>build</code> 选项下的 <code>allowedCommonJsDependencies</code> 选项来禁用这些警告。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"build"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "builder"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"@angular-devkit/build-angular:browser"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "options"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">     "allowedCommonJsDependencies"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        "lodash"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">     ]</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">     …</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">   }</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">   …</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">},</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="configuring-browser-compatibility">
+    <a href="#configuring-browser-compatibility" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring browser compatibility">配置浏览器兼容性</a>
+  </h2>
+  <p>Angular CLI 使用 <a href="https://github.com/browserslist/browserslist" target="_blank">Browserslist</a> 来确保与不同浏览器版本的兼容性。
+根据支持的浏览器，Angular 将自动转换某些 JavaScript 和 CSS 特性，以确保构建的应用不使用受支持的浏览器尚未实现的功能。但是，Angular CLI 不会自动添加腻子脚本来补充缺少的 Web API。使用 <code>angular.json</code> 中的 <code>polyfills</code> 选项来添加腻子脚本。</p>
+<p>在内部，Angular CLI 使用以下默认的 <code>browserslist</code> 配置，该配置与 Angular <a href="reference/versions#browser-support">支持的浏览器</a>相匹配。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span>last 2 Chrome versions</span></span><span class="line"><span>last 1 Firefox version</span></span><span class="line"><span>last 2 Edge major versions</span></span><span class="line"><span>last 2 Safari major versions</span></span><span class="line"><span>last 2 iOS major versions</span></span><span class="line"><span>last 2 Android major versions</span></span><span class="line"><span>Firefox ESR</span></span></code></pre>
+    </pre>
+  </div><p>要重写内部配置，请运行 <a href="cli/generate/config"><code>ng generate config browserslist</code></a>，这将在项目目录中生成一个 <code>.browserslistrc</code> 配置文件。</p>
+<p>有关如何定位特定浏览器和版本的更多示例，请参阅 <a href="https://github.com/browserslist/browserslist" target="_blank">browserslist 仓库</a>。
+避免将此列表扩展到更多浏览器。即使你的应用代码具有更广泛的兼容性，Angular 本身也可能不兼容。
+你应该始终<em>减少</em>此列表中的浏览器或版本集。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 使用 <a href="https://browsersl.ist" target="_blank">browsersl.ist</a> 来显示与 <code>browserslist</code> 查询兼容的浏览器。</p>
+
+    </div>
+    
+  <h2 id="configuring-tailwind">
+    <a href="#configuring-tailwind" class="docs-anchor" tabindex="-1" aria-label="Link to Configuring Tailwind">配置 Tailwind</a>
+  </h2>
+  <p>Angular 支持 <a href="https://tailwindcss.com/" target="_blank">Tailwind</a>，这是一个实用至上的 CSS 框架。</p>
+<p>请按照 <a href="https://tailwindcss.com/docs/installation/framework-guides/angular" target="_blank">Tailwind 文档</a>进行操作，以与 Angular CLI 集成。</p>

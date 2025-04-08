@@ -1,0 +1,73 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">添加 localize 包</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/guide/i18n/add-package.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>要利用 Angular 的本地化特性，请使用 <a href="cli" title="CLI" overview and command reference | angular>Angular CLI</a> 将 <code>@angular/localize</code> 包添加到你的项目中。</p>
+<p>要添加 <code>@angular/localize</code> 包，请使用以下命令来更新项目中的 <code>package.json</code> 和 TypeScript 配置文件。</p>
+<div class="docs-code" path="adev/src/content/examples/i18n/doc-files/commands.sh" visiblelines="0">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ng add @angular</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">/</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">localize</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ng extract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">i18n</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ng extract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">i18n </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">--</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">output</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">path src</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">/</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">locale</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ng extract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">i18n </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">--</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">format</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">xlf</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ng extract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">i18n </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">--</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">format</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">xlf2</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ng extract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">i18n </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">--</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">format</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">xmb</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ng extract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">i18n </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">--</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">format</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">json</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ng extract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">i18n </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">--</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">format</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">arb</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ng extract</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">i18n </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">--</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">out</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">file source.xlf</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ng build </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">--</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">localize</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ng serve </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">--</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">configuration</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">fr</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ng build </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">--</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">configuration</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">production,fr</span></span><span class="line"></span></code></pre>
+    </pre>
+  </div><p>它会在 TypeScript 配置文件中添加 <code>types: ["@angular/localize"]</code>。
+它还会在 <code>main.ts</code> 文件的顶部添加 <code>/// &lt;reference types="@angular/localize" /&gt;</code> 行，这是对类型定义的引用。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 有关 <code>package.json</code> 和 <code>tsconfig.json</code> 文件的更多信息，请参阅 <a href="reference/configs/npm-packages" title="Workspace" npm dependencies | angular>Workspace npm 依赖</a> 和 <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" title="TypeScript" configuration target="_blank">TypeScript 配置</a>。要了解有关三斜线指令的更多信息，请访问 <a href="https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html#-reference-types-" target="_blank">Typescript Handbook</a>。</p>
+
+    </div>
+    <p>如果未安装 <code>@angular/localize</code> 并且你尝试构建项目的本地化版本（例如，当在模板中使用 <code>i18n</code> 属性时），<a href="cli" title="CLI" overview and command reference | angular>Angular CLI</a> 将生成一个错误，其中包含你可以采取的步骤，以便为你的项目启用 i18n。</p>
+
+  <h2 id="options">
+    <a href="#options" class="docs-anchor" tabindex="-1" aria-label="Link to Options">选项</a>
+  </h2>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">OPTION</th>
+<th align="left">DESCRIPTION</th>
+<th align="left">值类型</th>
+<th align="left">默认值</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>--project</code></td>
+<td align="left">项目的名称。</td>
+<td align="left"><code>string</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>--use-at-runtime</code></td>
+<td align="left">如果设置，则可以在运行时使用 <code>$localize</code>。此外，<code>@angular/localize</code> 会包含在 <code>package.json</code> 的 <code>dependencies</code> 部分中，而不是默认的 <code>devDependencies</code> 中。</td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>false</code></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>有关更多可用选项，请参阅 <a href="cli" title="CLI" overview and command reference | angular>Angular CLI</a> 中的 <code>ng add</code>。</p>
+
+  <h2 id="whats-next">
+    <a href="#whats-next" class="docs-anchor" tabindex="-1" aria-label="Link to What's next">接下来是什么</a>
+  </h2>
+  
+    <nav class="docs-pill-row">
+      
+    <a class="docs-pill" href="guide/i18n/locale-id">通过 ID 引用语言环境</a>
+    
+
+    </nav>
+    

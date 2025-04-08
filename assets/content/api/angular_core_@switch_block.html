@@ -1,0 +1,17 @@
+<div class="docs-api"><header class="docs-reference-header"><span class="docs-reference-category">@angular/core</span><div class="docs-reference-title"><div><h1>@switch</h1><div class="docs-api-item-label type-block full">控制块</div></div><a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/blob/main/tools/manual_api_docs/blocks/switch.md#L0-L0" title="View source" aria-label="View source"><i role="presentation" aria-hidden="true" class="material-symbols-outlined">代码</i></a></div><section class="docs-reference-description"><p><code>@switch</code> 控制块的灵感来源于 JavaScript 的 <code>switch</code> 语句：</p>
+
+      <h2 id="syntax" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#syntax" aria-label="Link to Syntax section" tabindex="-1">语法</a>
+      </h2>
+    
+      <div class="docs-code" role="group">
+        <pre class="docs-mini-scroll-track">          <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@switch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (condition) {</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  @case</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (caseA) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Case A.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  @case</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (caseB) {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Case B.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  @default</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Default case.</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+        </pre>
+      </div>
+    
+      <h2 id="description" class="docs-reference-section-heading docs-reference-section-heading--sub">
+        <a href="#description" aria-label="Link to Description section" tabindex="-1">描述</a>
+      </h2>
+    <p><code>@switch</code> 控制块显示的内容是由与条件表达式匹配的 case 语句选择的。条件表达式的值会使用 <code>===</code> 操作符与 case 表达式进行比较。</p>
+<p><code>@default</code> 控制块是可选的，可以省略。如果没有 <code>@case</code> 匹配表达式，并且没有 <code>@default</code> 控制块，则不会显示任何内容。</p>
+<p><strong><code>@switch</code> 没有 fallthrough 行为</strong>，因此你不需要等效于 <code>break</code> 或 <code>return</code> 语句的写法。</p></section></header></div>

@@ -1,0 +1,325 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">Service Worker DevOps</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/ecosystem/service-workers/devops.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>本页是关于部署和支持使用 Angular Service Worker 的生产应用的参考。
+它解释了 Angular Service Worker 如何融入更大的生产环境、Service Worker 在各种条件下的行为，以及可用的资源和保险措施。</p>
+
+  <h2 id="service-worker-and-caching-of-application-resources">
+    <a href="#service-worker-and-caching-of-application-resources" class="docs-anchor" tabindex="-1" aria-label="Link to Service worker and caching of application resources">Service Worker 和应用资源的缓存</a>
+  </h2>
+  <p>将 Angular Service Worker 想象为安装在最终用户的 Web 浏览器中的前向缓存或内容分发网络 (CDN) 边缘。
+Service Worker 响应 Angular 应用发出的从本地缓存请求资源或数据的请求，而无需等待网络。
+像任何缓存一样，它也有关于内容如何过期和更新的规则。</p>
+
+  <h3 id="application-versions">
+    <a href="#application-versions" class="docs-anchor" tabindex="-1" aria-label="Link to Application versions">应用版本</a>
+  </h3>
+  <p>在 Angular Service Worker 的上下文中，“版本”是代表 Angular 应用特定构建版本的资源集合。
+每当部署应用的新构建版本时，Service Worker 都会将该构建版本视为应用的新版本。
+即使只更新了一个文件，也是如此。
+在任何给定时间，Service Worker 的缓存中可能都有应用的多个版本，并且它可能会同时为它们提供服务。
+有关更多信息，请参阅<a href="#application-tabs">应用选项卡</a>部分。</p>
+<p>为了保持应用的完整性，Angular Service Worker 将所有文件一起分组到一个版本中。
+分组到一个版本中的文件通常包括 HTML、JS 和 CSS 文件。
+这些文件的分组对于完整性至关重要，因为 HTML、JS 和 CSS 文件经常相互引用并依赖于特定内容。
+例如，<code>index.html</code> 文件可能有一个引用 <code>bundle.js</code> 的 <code>&lt;script&gt;</code> 标记，并且它可能尝试从该脚本中调用 <code>startApp()</code> 函数。
+任何时候提供此版本的 <code>index.html</code> 时，都必须同时提供相应的 <code>bundle.js</code>。
+例如，假设 <code>startApp()</code> 函数在两个文件中都重命名为 <code>runApp()</code>。
+在这种情况下，将调用 <code>startApp()</code> 的旧 <code>index.html</code> 与定义 <code>runApp()</code> 的新捆绑包一起提供是无效的。</p>
+<p>当惰性加载时，此文件完整性尤为重要。
+JS 捆绑包可能会引用许多惰性代码块，并且惰性代码块的文件名对于应用的特定构建版本是唯一的。
+如果版本 <code>X</code> 的正在运行的应用尝试加载惰性代码块，但服务器已更新到版本 <code>X + 1</code>，则惰性加载操作将失败。</p>
+<p>应用的版本标识符由所有资源的内容决定，如果其中任何一个发生更改，它也会随之更改。
+在实践中，版本由 <code>ngsw.json</code> 文件的内容决定，其中包括所有已知内容的哈希值。
+如果任何缓存的文件发生更改，则该文件的哈希值会在 <code>ngsw.json</code> 中更改。此更改会导致 Angular Service Worker 将这组活动文件视为新版本。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 构建过程使用来自 <code>ngsw-config.json</code> 的信息创建清单文件 <code>ngsw.json</code>。</p>
+
+    </div>
+    <p>借助 Angular Service Worker 的版本控制行为，应用服务器可以确保 Angular 应用始终拥有一致的文件集。</p>
+
+  <h4 id="update-checks">
+    <a href="#update-checks" class="docs-anchor" tabindex="-1" aria-label="Link to Update checks">更新检查</a>
+  </h4>
+  <p>每次用户打开或刷新应用时，Angular Service Worker 都会通过查找 <code>ngsw.json</code> 清单的更新来检查应用的更新。
+如果找到更新，它将自动下载并缓存，并在下次加载应用时提供服务。</p>
+
+  <h3 id="resource-integrity">
+    <a href="#resource-integrity" class="docs-anchor" tabindex="-1" aria-label="Link to Resource integrity">资源完整性</a>
+  </h3>
+  <p>长时间缓存的潜在副作用之一是无意中缓存了无效的资源。
+在正常的 HTTP 缓存中，硬刷新或缓存过期会限制缓存无效文件的负面影响。
+Service Worker 忽略了这些约束，并有效地长时间缓存整个应用。
+重要的是 Service Worker 获取正确的内容，因此它保留资源的哈希值以维护其完整性。</p>
+
+  <h4 id="hashed-content">
+    <a href="#hashed-content" class="docs-anchor" tabindex="-1" aria-label="Link to Hashed content">哈希内容</a>
+  </h4>
+  <p>为了确保资源完整性，Angular Service Worker 验证它具有哈希值的所有资源的哈希值。
+对于使用 <a href="tools/cli">Angular CLI</a> 创建的应用，这是用户 <code>src/ngsw-config.json</code> 配置覆盖的 <code>dist</code> 目录中的所有内容。</p>
+<p>如果特定文件验证失败，Angular Service Worker 会尝试使用“缓存清除”URL 参数重新获取内容，以防止浏览器或中间缓存。
+如果该内容也验证失败，Service Worker 会认为整个应用版本无效，并停止提供应用服务。
+如有必要，Service Worker 将进入安全模式，其中请求回退到网络。如果提供损坏、过期或无效内容的风险很高，Service Worker 将不使用其缓存。</p>
+<p>哈希不匹配可能由于多种原因而发生：</p>
+
+  <ul class="docs-list">
+    <li>原始服务器和最终用户之间的缓存层可能会提供过时的内容</li>
+<li>非原子部署可能导致 Angular Service Worker 可以看到部分更新的内容</li>
+<li>构建过程中的错误可能导致资源已更新，但 <code>ngsw.json</code> 未更新。
+  相反的情况也可能发生，导致 <code>ngsw.json</code> 已更新，但资源未更新。</li>
+
+  </ul>
+  
+  <h4 id="unhashed-content">
+    <a href="#unhashed-content" class="docs-anchor" tabindex="-1" aria-label="Link to Unhashed content">非哈希内容</a>
+  </h4>
+  <p>唯一在 <code>ngsw.json</code> 清单中具有哈希值的资源是在构建清单时 <code>dist</code> 目录中存在的资源。
+其他资源，尤其是从 CDN 加载的资源，其内容在构建时未知，或者更新频率高于应用部署频率。</p>
+<p>如果 Angular Service Worker 没有哈希值来验证资源是否有效，它仍然会缓存其内容。同时，它通过使用<em>过时但仍重新验证</em>策略来遵守 HTTP 缓存标头。
+即使 HTTP 缓存标头指示资源不再有效，Angular Service Worker 也会继续提供该资源。同时，它会尝试在后台刷新过期的资源。
+这样，损坏的非哈希资源不会在缓存中保留超过其配置的生存期。</p>
+
+  <h3 id="application-tabs">
+    <a href="#application-tabs" class="docs-anchor" tabindex="-1" aria-label="Link to Application tabs">应用选项卡</a>
+  </h3>
+  <p>如果应用接收的资源版本突然或在没有警告的情况下更改，则可能会给应用带来问题。
+有关此类问题的描述，请参阅<a href="#application-versions">应用版本</a>部分。</p>
+<p>Angular Service Worker 提供了一个保证：正在运行的应用会继续运行同一应用版本。
+如果在新的 Web 浏览器选项卡中打开应用的另一个实例，则会提供最新版本的应用。
+因此，该新选项卡可以运行与原始选项卡不同版本的应用。</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> 此保证比普通 Web 部署模型提供的保证<strong>更强</strong>。如果没有 Service Worker，则无法保证惰性加载的代码与应用的初始代码来自同一版本。</p>
+
+    </div>
+    <p>Angular Service Worker 可能会在错误情况下更改正在运行的应用的版本，例如：</p>
+
+  <ul class="docs-list">
+    <li>当前版本由于哈希失败而变为无效。</li>
+<li>不相关的错误导致 Service Worker 进入安全模式并暂时停用它。</li>
+
+  </ul>
+  <p>当没有选项卡使用应用版本时，Angular Service Worker 会清理应用版本。</p>
+<p>Angular Service Worker 可能会更改正在运行的应用版本的其他原因是正常事件：</p>
+
+  <ul class="docs-list">
+    <li>页面已重新加载/刷新。</li>
+<li>页面请求使用 <code>SwUpdate</code> 服务立即激活更新。</li>
+
+  </ul>
+  
+  <h3 id="service-worker-updates">
+    <a href="#service-worker-updates" class="docs-anchor" tabindex="-1" aria-label="Link to Service worker updates">Service Worker 更新</a>
+  </h3>
+  <p>Angular Service Worker 是一个在 Web 浏览器中运行的小脚本。
+Service Worker 会不时地通过缺陷修复和特性改进进行更新。</p>
+<p>Angular Service Worker 在首次打开应用时以及在不活动一段时间后访问应用时下载。
+如果 Service Worker 发生更改，它会在后台更新。</p>
+<p>对 Angular Service Worker 的大多数更新对应用是透明的。旧缓存仍然有效，内容仍然正常提供。
+偶尔，Angular Service Worker 中的缺陷修复或特性可能需要使旧缓存失效。
+在这种情况下，Service Worker 会从网络透明地刷新应用。</p>
+
+  <h3 id="bypassing-the-service-worker">
+    <a href="#bypassing-the-service-worker" class="docs-anchor" tabindex="-1" aria-label="Link to Bypassing the service worker">绕过 Service Worker</a>
+  </h3>
+  <p>在某些情况下，你可能想要完全绕过 Service Worker，并让浏览器处理请求。
+一个例子是当你依赖于 Service Worker 当前不支持的特性时，例如<a href="https://github.com/w3c/ServiceWorker/issues/1141" target="_blank">报告上传文件的进度</a>。</p>
+<p>要绕过 Service Worker，请将 <code>ngsw-bypass</code> 设置为请求标头或查询参数。
+标头或查询参数的值将被忽略，并且可以为空或省略。</p>
+
+  <h3 id="service-worker-requests-when-the-server-cant-be-reached">
+    <a href="#service-worker-requests-when-the-server-cant-be-reached" class="docs-anchor" tabindex="-1" aria-label="Link to Service worker requests when the server can't be reached">当无法访问服务器时，Service Worker 请求</a>
+  </h3>
+  <p>Service Worker 处理所有请求，除非<a href="#bypassing-the-service-worker">显式绕过 Service Worker</a>。
+Service Worker 要么返回缓存的响应，要么将请求发送到服务器，具体取决于缓存的状态和配置。
+Service Worker 仅缓存对非变异请求（例如 <code>GET</code> 和 <code>HEAD</code>）的响应。</p>
+<p>如果 Service Worker 从服务器收到错误或未收到响应，它将返回一个错误状态，指示调用的结果。
+例如，如果 Service Worker 未收到响应，它将创建一个 <a href="https://developer.mozilla.org/docs/Web/HTTP/Status/504" target="_blank">504 网关超时</a> 状态以返回。此示例中的 <code>504</code> 状态可能是因为服务器脱机或客户端已断开连接而返回的。</p>
+
+  <h2 id="debugging-the-angular-service-worker">
+    <a href="#debugging-the-angular-service-worker" class="docs-anchor" tabindex="-1" aria-label="Link to Debugging the Angular service worker">调试 Angular Service Worker</a>
+  </h2>
+  <p>偶尔，可能需要检查 Angular Service Worker 的运行状态，以调查问题或其是否按设计运行。
+浏览器提供了用于调试 Service Worker 的内置工具，Angular Service Worker 本身也包含有用的调试功能。</p>
+
+  <h3 id="locating-and-analyzing-debugging-information">
+    <a href="#locating-and-analyzing-debugging-information" class="docs-anchor" tabindex="-1" aria-label="Link to Locating and analyzing debugging information">定位和分析调试信息</a>
+  </h3>
+  <p>Angular Service Worker 在 <code>ngsw/</code> 虚拟目录下公开调试信息。
+目前，唯一公开的 URL 是 <code>ngsw/state</code>。
+下面是此调试页面内容的一个范例：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NGSW</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Debug</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Info:</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Driver</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> version:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 13.3.7</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Driver</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> state:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> NORMAL</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ((nominal))</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Latest</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> manifest</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> hash:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> eea7f5f464f90789b621170af5a569d6be077e5c</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Last</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> check:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> never</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">===</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Version</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> eea7f5f464f90789b621170af5a569d6be077e5c</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ===</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Clients:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 7b79a015-69af-4d3d-9ae6-95ba90c79486,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 5bc08295-aaf2-42f3-a4cc-9e4ef9100f65</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">===</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Idle</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Task</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Queue</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ===</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Last</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> tick:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 1s496u</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Last</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> run:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> never</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Task</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> queue:</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> *</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> init</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> post-load</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (update, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">cleanup</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Debug</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> log:</span></span></code></pre>
+    </pre>
+  </div>
+  <h4 id="driver-state">
+    <a href="#driver-state" class="docs-anchor" tabindex="-1" aria-label="Link to Driver state">驱动器状态</a>
+  </h4>
+  <p>第一行表示驱动器的状态：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Driver</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> state:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> NORMAL</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ((nominal))</span></span></code></pre>
+    </pre>
+  </div><p><code>NORMAL</code> 表示 Service Worker 运行正常，并且未处于降级状态。</p>
+<p>有两种可能的降级状态：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">降级状态</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>EXISTING_CLIENTS_ONLY</code></td>
+<td align="left">Service Worker 没有应用最新已知版本的干净副本。可以使用较旧的缓存版本，因此现有选项卡继续从缓存运行，但是应用的新加载将从网络提供。当检测到并安装了应用的新版本时，Service Worker 将尝试从此状态恢复。当新的 <code>ngsw.json</code> 可用时，就会发生这种情况。</td>
+</tr>
+<tr>
+<td align="left"><code>SAFE_MODE</code></td>
+<td align="left">Service Worker 无法保证使用缓存数据的安全性。可能是发生了意外错误，或者所有缓存版本均无效。所有流量都将从网络提供，并尽可能少地运行 Service Worker 代码。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>在这两种情况下，括号中的注解都提供了导致 Service Worker 进入降级状态的错误。</p>
+<p>这两种状态都是临时的；它们仅在 <a href="https://developer.mozilla.org/docs/Web/API/ServiceWorkerGlobalScope" target="_blank">ServiceWorker 实例</a>的生命周期内保存。浏览器有时会终止空闲的 Service Worker，以节省内存和处理器能力，并创建一个新的 Service Worker 实例来响应网络事件。新的实例以 <code>NORMAL</code> 模式启动，而与先前实例的状态无关。</p>
+
+  <h4 id="latest-manifest-hash">
+    <a href="#latest-manifest-hash" class="docs-anchor" tabindex="-1" aria-label="Link to Latest manifest hash">最新的清单文件哈希</a>
+  </h4>
+  <div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Latest</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> manifest</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> hash:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> eea7f5f464f90789b621170af5a569d6be077e5c</span></span></code></pre>
+    </pre>
+  </div><p>这是 Service Worker 知道的应用的最新版本的 SHA1 哈希值。</p>
+
+  <h4 id="last-update-check">
+    <a href="#last-update-check" class="docs-anchor" tabindex="-1" aria-label="Link to Last update check">上次更新检查</a>
+  </h4>
+  <div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Last</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> check:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> never</span></span></code></pre>
+    </pre>
+  </div><p>这表示 Service Worker 上次检查应用的新版本或更新的时间。<code>never</code> 表示 Service Worker 从未检查过更新。</p>
+<p>在此范例调试文件中，更新检查当前已计划，如下一节所述。</p>
+
+  <h4 id="version">
+    <a href="#version" class="docs-anchor" tabindex="-1" aria-label="Link to Version">版本</a>
+  </h4>
+  <div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">===</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Version</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> eea7f5f464f90789b621170af5a569d6be077e5c</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ===</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Clients:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 7b79a015-69af-4d3d-9ae6-95ba90c79486,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 5bc08295-aaf2-42f3-a4cc-9e4ef9100f65</span></span></code></pre>
+    </pre>
+  </div><p>在此范例中，Service Worker 缓存了一个版本的应用，并用于为两个不同的选项卡提供服务。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 此版本哈希是上面列出的“最新的清单文件哈希”。两个客户端都使用最新版本。每个客户端都通过其在浏览器中 <code>Clients</code> API 中的 ID 列出。</p>
+
+    </div>
+    
+  <h4 id="idle-task-queue">
+    <a href="#idle-task-queue" class="docs-anchor" tabindex="-1" aria-label="Link to Idle task queue">空闲任务队列</a>
+  </h4>
+  <div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">===</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Idle</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Task</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Queue</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ===</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Last</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> tick:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 1s496u</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Last</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> update</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> run:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> never</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Task</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> queue:</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> *</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> init</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> post-load</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (update, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">cleanup</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span></code></pre>
+    </pre>
+  </div><p>空闲任务队列是在 Service Worker 后台中发生的所有待处理任务的队列。
+如果队列中有任何任务，则会列出它们及其描述。
+在此范例中，Service Worker 已计划了一个这样的任务，即涉及更新检查和清除过时缓存的初始化后操作。</p>
+<p>上次更新的节拍/运行计数器给出了自与空闲队列相关的特定事件发生以来的时间。“上次运行更新”计数器显示了上次实际执行空闲任务的时间。“上次更新节拍”显示了自上次事件发生后的时间，之后可能会处理队列。</p>
+
+  <h4 id="debug-log">
+    <a href="#debug-log" class="docs-anchor" tabindex="-1" aria-label="Link to Debug log">调试日志</a>
+  </h4>
+  <div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Debug</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> log:</span></span></code></pre>
+    </pre>
+  </div><p>Service Worker 中发生的错误将在此处记录。</p>
+
+  <h3 id="developer-tools">
+    <a href="#developer-tools" class="docs-anchor" tabindex="-1" aria-label="Link to Developer tools">开发者工具</a>
+  </h3>
+  <p>诸如 Chrome 之类的浏览器提供了用于与 Service Worker 交互的开发者工具。正确使用时，此类工具可能非常强大，但是有一些注意事项。</p>
+
+  <ul class="docs-list">
+    <li><p>使用开发者工具时，Service Worker 会在后台保持运行，并且永远不会重新启动。这可能会导致打开开发者工具时的行为与用户可能体验到的行为有所不同。</p>
+</li>
+<li><p>如果在“缓存存储”查看器中查看，则缓存经常会过期。右键单击“缓存存储”标题，然后刷新缓存。</p>
+</li>
+<li><p>在 Service Worker 窗格中停止并启动 Service Worker 会检查更新</p>
+</li>
+
+  </ul>
+  
+  <h2 id="service-worker-safety">
+    <a href="#service-worker-safety" class="docs-anchor" tabindex="-1" aria-label="Link to Service worker safety">Service Worker 安全性</a>
+  </h2>
+  <p>错误或损坏的配置可能会导致 Angular Service Worker 以意外的方式运行。如果发生这种情况，Angular Service Worker 包含多种故障保护机制，以防管理员需要快速停用 Service Worker。</p>
+
+  <h3 id="fail-safe">
+    <a href="#fail-safe" class="docs-anchor" tabindex="-1" aria-label="Link to Fail-safe">故障保护</a>
+  </h3>
+  <p>要停用 Service Worker，请重命名 <code>ngsw.json</code> 文件或将其删除。当 Service Worker 对 <code>ngsw.json</code> 的请求返回 <code>404</code> 时，Service Worker 将删除其所有缓存并注销自身，实际上是自我销毁。</p>
+
+  <h3 id="safety-worker">
+    <a href="#safety-worker" class="docs-anchor" tabindex="-1" aria-label="Link to Safety worker">安全 Worker</a>
+  </h3>
+  <!-- vale Angular.Google_Acronyms = NO -->
+
+<p><code>@angular/service-worker</code> NPM 包中还包含一个小型脚本 <code>safety-worker.js</code>。加载后，它会从浏览器中注销自身并删除 Service Worker 缓存。此脚本可以用作最后的手段，以摆脱已安装在客户端页面上的不需要的 Service Worker。</p>
+<!-- vale Angular.Google_Acronyms = YES -->
+
+
+    <div class="docs-alert docs-alert-critical">
+    <p><strong>重要提示：</strong> 您不能直接注册此 Worker，因为具有缓存状态的旧客户端可能看不到安装了不同 Worker 脚本的新 <code>index.html</code>。</p>
+
+    </div>
+    <p>相反，您必须在要注销的 Service Worker 脚本的 URL 上提供 <code>safety-worker.js</code> 的内容。您必须继续这样做，直到确定所有用户都已成功注销旧的 Worker。对于大多数站点，这意味着您应该永远在旧的 Service Worker URL 上提供安全 Worker。此脚本可用于停用 <code>@angular/service-worker</code> 并删除相应的缓存。它还会删除过去可能在您的站点上提供的任何其他 Service Worker。</p>
+
+  <h3 id="changing-your-applications-location">
+    <a href="#changing-your-applications-location" class="docs-anchor" tabindex="-1" aria-label="Link to Changing your application's location">更改应用的地址</a>
+  </h3>
+  
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重要提示：</strong> Service Worker 在重定向后不起作用。您可能已经遇到错误 <code>The script resource is behind a redirect, which is disallowed</code>。</p>
+
+    </div>
+    <p>如果您必须更改应用的地址，这可能会成为问题。如果您设置了从旧地址（例如 <code>example.com</code>）到新地址（在此范例中为 <code>www.example.com</code>）的重定向，则 Worker 将停止工作。此外，对于完全从 Service Worker 加载站点的用户，重定向甚至不会触发。在 <code>example.com</code> 注册的旧 Worker 尝试更新并向旧地址 <code>example.com</code> 发送请求。此请求被重定向到新地址 <code>www.example.com</code> 并产生错误：<code>The script resource is behind a redirect, which is disallowed</code>。</p>
+<p>为了解决这个问题，您可能需要使用上述技术之一停用旧的 Worker：<a href="#fail-safe">故障保护</a> 或 <a href="#safety-worker">安全 Worker</a>。</p>
+
+  <h2 id="more-on-angular-service-workers">
+    <a href="#more-on-angular-service-workers" class="docs-anchor" tabindex="-1" aria-label="Link to More on Angular service workers">有关 Angular Service Worker 的更多信息</a>
+  </h2>
+  <p>您可能还对以下内容感兴趣：</p>
+
+    <nav class="docs-pill-row">
+      
+    <a class="docs-pill" href="ecosystem/service-workers/config">
+      配置文件
+    </a>
+    
+    <a class="docs-pill" href="ecosystem/service-workers/communications">
+      与 Service Worker 通信
+    </a>
+    
+
+    </nav>
+    

@@ -1,0 +1,221 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">将现有的 Angular 项目迁移到独立</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/migrations/standalone.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p><strong>独立组件</strong>提供了一种构建 Angular 应用的简化方式。独立组件、指令和管道旨在通过减少对 <code>NgModule</code> 的需求来简化创作体验。现有的应用可以选择性地、渐进地采用新的独立风格，而无需任何破坏性更改。</p>
+
+    <div class="docs-video-container">
+      <iframe class="docs-video" src="https://www.youtube.com/embed/x5PZwb4XurU" title="Getting started with standalone components" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen credentialless></iframe>
+    </div>
+    <p>这个原理图有助于转换现有项目中的组件、指令和管道，使之成为独立的。该原理图旨在尽可能多地自动转换代码，但可能需要项目作者进行一些手动修复。</p>
+<p>使用以下命令运行原理图：</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> generate</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/core:standalone</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="before-updating">
+    <a href="#before-updating" class="docs-anchor" tabindex="-1" aria-label="Link to Before updating">更新之前</a>
+  </h2>
+  <p>在使用原理图之前，请确保项目：</p>
+
+    <ol class="docs-ordered-list">
+      <li>正在使用 Angular 15.2.0 或更高版本。</li>
+<li>构建时没有任何编译错误。</li>
+<li>位于干净的 Git 分支上，并且所有工作都已保存。</li>
+
+    </ol>
+    
+  <h2 id="schematic-options">
+    <a href="#schematic-options" class="docs-anchor" tabindex="-1" aria-label="Link to Schematic options">原理图选项</a>
+  </h2>
+  
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">选项</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><code>mode</code></td>
+<td align="left">要执行的转换。有关可用选项的详细信息，请参阅下面的<a href="#migration-modes">迁移模式</a>。</td>
+</tr>
+<tr>
+<td align="left"><code>path</code></td>
+<td align="left">要迁移的路径，相对于项目根目录。你可以使用此选项来渐进地迁移项目的各个部分。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="migrations-steps">
+    <a href="#migrations-steps" class="docs-anchor" tabindex="-1" aria-label="Link to Migrations steps">迁移步骤</a>
+  </h2>
+  <p>迁移过程由三个步骤组成。你必须多次运行它，并手动检查项目是否按预期构建和运行。</p>
+
+    <div class="docs-alert docs-alert-note">
+    <p><strong>注意：</strong> 虽然原理图可以自动更新大多数代码，但某些边缘情况需要开发人员干预。
+你应该计划在每次迁移步骤后应用手动修复。此外，原理图生成的新代码可能与你的代码格式规则不匹配。</p>
+
+    </div>
+    <p>按照下面列出的顺序运行迁移，并在每个步骤之间验证你的代码是否构建和运行：</p>
+
+    <ol class="docs-ordered-list">
+      <li>运行 <code>ng g @angular/core:standalone</code> 并选择 “Convert all components, directives and pipes to standalone”（将所有组件、指令和管道转换为独立）</li>
+<li>运行 <code>ng g @angular/core:standalone</code> 并选择 “Remove unnecessary NgModule classes”（移除不必要的 NgModule 类）</li>
+<li>运行 <code>ng g @angular/core:standalone</code> 并选择 “Bootstrap the project using standalone APIs”（使用独立 API 引导项目）</li>
+<li>运行任何代码检查和格式化检查，修复所有失败，并提交结果</li>
+
+    </ol>
+    
+  <h2 id="after-the-migration">
+    <a href="#after-the-migration" class="docs-anchor" tabindex="-1" aria-label="Link to After the migration">迁移之后</a>
+  </h2>
+  <p><span class="docs-emoji">恭喜，你的应用已转换为独立 🎉。以下是你现在可能想要采取的一些可选后续步骤：</span></p>
+
+  <ul class="docs-list">
+    <li>查找并移除任何剩余的 <code>NgModule</code> 对象声明：由于<a href="#remove-unnecessary-ngmodules">“Remove unnecessary NgModules”步骤</a>无法自动移除所有模块，你可能必须手动移除剩余的对象声明。</li>
+<li>运行项目的单元测试并修复所有失败。</li>
+<li>如果项目使用自动格式化，则运行任何代码格式化工具。</li>
+<li>在你的项目中运行任何代码检查工具，并修复新的警告。某些代码检查工具支持 <code>--fix</code> 标志，可以自动解决你的一些警告。</li>
+
+  </ul>
+  
+  <h2 id="migration-modes">
+    <a href="#migration-modes" class="docs-anchor" tabindex="-1" aria-label="Link to Migration modes">迁移模式</a>
+  </h2>
+  <p>迁移具有以下模式：</p>
+
+    <ol class="docs-ordered-list">
+      <li>将对象声明转换为独立。</li>
+<li>移除不必要的 NgModule。</li>
+<li>切换到独立引导 API。
+你应该按给定的顺序运行这些迁移。</li>
+
+    </ol>
+    
+  <h3 id="convert-declarations-to-standalone">
+    <a href="#convert-declarations-to-standalone" class="docs-anchor" tabindex="-1" aria-label="Link to Convert declarations to standalone">将对象声明转换为独立</a>
+  </h3>
+  <p>在此模式下，迁移通过移除 <code>standalone: false</code> 并将依赖项添加到其 <code>imports</code> 数组中，将所有组件、指令和管道转换为独立。</p>
+
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 原理图在此步骤中忽略了引导组件的 NgModule，因为它们很可能是 <code>bootstrapModule</code> 而不是与独立兼容的 <code>bootstrapApplication</code> 使用的根模块。原理图会在<a href="#switch-to-standalone-bootstrapping-api">“切换到独立引导 API”</a>步骤中自动转换这些对象声明。</p>
+
+    </div>
+    <p><strong>之前：</strong></p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// shared.module.ts</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [CommonModule],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [GreeterComponent],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  exports: [GreeterComponent]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SharedModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// greeter.component.ts</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'greeter'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;div *ngIf="showGreeting"&gt;Hello&lt;/div&gt;'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  standalone: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> GreeterComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  showGreeting</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div><p><strong>之后：</strong></p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// shared.module.ts</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [CommonModule, GreeterComponent],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  exports: [GreeterComponent]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SharedModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// greeter.component.ts</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'greeter'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'&lt;div *ngIf="showGreeting"&gt;Hello&lt;/div&gt;'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [NgIf]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> GreeterComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span><span class="line"><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">  showGreeting</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="remove-unnecessary-ngmodules">
+    <a href="#remove-unnecessary-ngmodules" class="docs-anchor" tabindex="-1" aria-label="Link to Remove unnecessary NgModules">移除不必要的 NgModule</a>
+  </h3>
+  <p>在将所有对象声明转换为独立后，可以安全地移除许多 NgModule。此步骤会删除此类模块对象声明以及尽可能多的相应引用。如果迁移无法自动删除引用，它会留下以下 TODO 注释，以便你可以手动删除 NgModule：</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/* TODO(standalone-migration): clean up removed NgModule reference manually */</span></span></code></pre>
+    </pre>
+  </div><p>如果模块满足以下条件，则迁移认为该模块可以安全移除：</p>
+
+  <ul class="docs-list">
+    <li>没有 <code>declarations</code>。</li>
+<li>没有 <code>providers</code>。</li>
+<li>没有 <code>bootstrap</code> 组件。</li>
+<li>没有引用 <code>ModuleWithProviders</code> 符号或无法移除的模块的 <code>imports</code>。</li>
+<li>没有类成员。空构造函数将被忽略。</li>
+
+  </ul>
+  <p><strong>之前：</strong></p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// importer.module.ts</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  imports: [FooComponent, BarPipe],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  exports: [FooComponent, BarPipe]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ImporterModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><p><strong>之后：</strong></p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// importer.module.ts</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Does not exist!</span></span></code></pre>
+    </pre>
+  </div>
+  <h3 id="switch-to-standalone-bootstrapping-api">
+    <a href="#switch-to-standalone-bootstrapping-api" class="docs-anchor" tabindex="-1" aria-label="Link to Switch to standalone bootstrapping API">切换到独立引导 API</a>
+  </h3>
+  <p>此步骤将 <code>bootstrapModule</code> 的任何用法转换为新的、基于独立的 <code>bootstrapApplication</code>。它还会从根组件中移除 <code>standalone: false</code> 并删除根 NgModule。如果根模块有任何 <code>providers</code> 或 <code>imports</code>，迁移会尝试将尽可能多的此配置复制到新的引导调用中。</p>
+<p><strong>之前：</strong></p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ./app/app.module.ts</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { NgModule } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/core'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { AppComponent } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './app.component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">NgModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  declarations: [AppComponent],</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  bootstrap: [AppComponent]</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ./app/app.component.ts</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'hello'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  standalone: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ./main.ts</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { platformBrowser } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { AppModule } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './app/app.module'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">platformBrowser</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapModule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppModule).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">catch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">e</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">error</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(e));</span></span></code></pre>
+    </pre>
+  </div><p><strong>之后：</strong></p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ./app/app.module.ts</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Does not exist!</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ./app/app.component.ts</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Component</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  selector: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'app'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  template: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'hello'</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">export</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> AppComponent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+    </pre>
+  </div><div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// ./main.ts</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { bootstrapApplication } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '@angular/platform-browser'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { AppComponent } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">from</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> './app/app.component'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span><span class="line"></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">bootstrapApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(AppComponent).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">catch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">e</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =&gt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> console.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">error</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(e));</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="common-problems">
+    <a href="#common-problems" class="docs-anchor" tabindex="-1" aria-label="Link to Common problems">常见问题</a>
+  </h2>
+  <p>一些可能阻止原理图正常工作的常见问题包括：</p>
+
+  <ul class="docs-list">
+    <li>编译错误 - 如果项目存在编译错误，Angular 就无法正确地分析和迁移它。</li>
+<li>未包含在 tsconfig 中的文件 - 原理图通过分析你项目的 <code>tsconfig.json</code> 文件来确定要迁移哪些文件。原理图会排除任何未被 tsconfig 捕获的文件。</li>
+<li>无法进行静态分析的代码 - 原理图使用静态分析来理解你的代码，并确定在哪里进行更改。迁移可能会跳过任何在构建时无法进行静态分析的元数据的类。</li>
+
+  </ul>
+  
+  <h2 id="limitations">
+    <a href="#limitations" class="docs-anchor" tabindex="-1" aria-label="Link to Limitations">局限性</a>
+  </h2>
+  <p>由于迁移的规模和复杂性，在某些情况下，原理图无法处理：</p>
+
+  <ul class="docs-list">
+    <li>因为单元测试不是预先编译 (AoT) 的，所以添加到单元测试中组件的 <code>imports</code> 可能不完全正确。</li>
+<li>该原理图依赖于对 Angular API 的直接调用。该原理图无法识别 Angular API 周围的自定义包装器。例如，如果你定义了一个包装了 <code>TestBed.configureTestingModule</code> 的自定义 <code>customConfigureTestModule</code> 函数，那么它声明的组件可能无法被识别。</li>
+
+  </ul>
+  

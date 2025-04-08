@@ -1,0 +1,184 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">部署</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/tools/cli/deployment.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>当你准备好将 Angular 应用部署到远程服务器时，你有多种选项。</p>
+
+  <h2 id="automatic-deployment-with-the-cli">
+    <a href="#automatic-deployment-with-the-cli" class="docs-anchor" tabindex="-1" aria-label="Link to Automatic deployment with the CLI">使用 CLI 自动部署</a>
+  </h2>
+  <p>Angular CLI 命令 <code>ng deploy</code> 执行与你的项目关联的 <code>deploy</code> <a href="tools/cli/cli-builder">CLI 构建器</a>。
+许多第三方构建器实现了到不同平台的部署功能。
+你可以使用 <code>ng add</code> 将它们中的任何一个添加到你的项目中。</p>
+<p>当你添加具有部署功能的软件包时，它将使用所选项目的 <code>deploy</code> 部分自动更新你的工作区配置（<code>angular.json</code> 文件）。
+然后，你可以使用 <code>ng deploy</code> 命令来部署该项目。</p>
+<p>例如，以下命令会自动将项目部署到 <a href="https://firebase.google.com/" target="_blank">Firebase</a>。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> @angular/fire</span></span><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> deploy</span></span></code></pre>
+    </pre>
+  </div><p>该命令是交互式的。
+在这种情况下，你必须拥有或创建一个 Firebase 帐户并使用它进行身份验证。
+该命令会提示你选择一个 Firebase 项目以进行部署，然后再构建你的应用并将生产资产上传到 Firebase。</p>
+<p>下表列出了实现到不同平台的部署功能的工具。
+每个软件包的 <code>deploy</code> 命令可能需要不同的命令行选项。
+你可以通过点击下面与软件包名称关联的链接来阅读更多内容：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">部署到</th>
+<th align="left">安装命令</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><a href="https://firebase.google.com/docs/hosting" target="_blank">Firebase 托管</a></td>
+<td align="left"><a href="https://npmjs.org/package/@angular/fire" target="_blank"><code>ng add @angular/fire</code></a></td>
+</tr>
+<tr>
+<td align="left"><a href="https://vercel.com/solutions/angular" target="_blank">Vercel</a></td>
+<td align="left"><a href="https://github.com/vercel/vercel/tree/main/examples/angular" target="_blank"><code>vercel init angular</code></a></td>
+</tr>
+<tr>
+<td align="left"><a href="https://www.netlify.com" target="_blank">Netlify</a></td>
+<td align="left"><a href="https://npmjs.org/package/@netlify-builder/deploy" target="_blank"><code>ng add @netlify-builder/deploy</code></a></td>
+</tr>
+<tr>
+<td align="left"><a href="https://pages.github.com" target="_blank">GitHub Pages</a></td>
+<td align="left"><a href="https://npmjs.org/package/angular-cli-ghpages" target="_blank"><code>ng add angular-cli-ghpages</code></a></td>
+</tr>
+<tr>
+<td align="left"><a href="https://aws.amazon.com/s3/?nc2=h_ql_prod_st_s3" target="_blank">Amazon Cloud S3</a></td>
+<td align="left"><a href="https://www.npmjs.com/package/@jefiozie/ngx-aws-deploy" target="_blank"><code>ng add @jefiozie/ngx-aws-deploy</code></a></td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>如果你要部署到自管理服务器，或者你喜欢的云平台没有构建器，你可以<a href="tools/cli/cli-builder">创建一个构建器</a>，使你可以使用 <code>ng deploy</code> 命令，或者阅读本指南以了解如何手动部署你的应用。</p>
+
+  <h2 id="manual-deployment-to-a-remote-server">
+    <a href="#manual-deployment-to-a-remote-server" class="docs-anchor" tabindex="-1" aria-label="Link to Manual deployment to a remote server">手动部署到远程服务器</a>
+  </h2>
+  <p>要手动部署你的应用，请创建一个生产环境构建，并将输出目录复制到 Web 服务器或内容分发网络 (CDN)。
+默认情况下，<code>ng build</code> 使用 <code>production</code> 配置。
+如果你已自定义了构建配置，你可能需要在部署之前确认是否应用了<a href="tools/cli/deployment#production-optimizations">生产环境优化</a>。</p>
+<p>默认情况下，<code>ng build</code> 会将构建后的产物输出到 <code>dist/my-app/</code>，不过，可以使用 <code>@angular-devkit/build-angular:browser</code> 构建器中的 <code>outputPath</code> 选项来配置此路径。
+将此目录复制到服务器并配置它以提供此目录。</p>
+<p>虽然这是一个最小化的部署方案，但服务器需要满足一些要求才能正确地为你的 Angular 应用提供服务。</p>
+
+  <h2 id="server-configuration">
+    <a href="#server-configuration" class="docs-anchor" tabindex="-1" aria-label="Link to Server configuration">服务器配置</a>
+  </h2>
+  <p>本节介绍你可能需要在服务器上配置的更改，以运行你的 Angular 应用。</p>
+
+  <h3 id="routed-apps-must-fall-back-to-indexhtml">
+    <a href="#routed-apps-must-fall-back-to-indexhtml" class="docs-anchor" tabindex="-1" aria-label="Link to Routed apps must fall back to <code>index.html</code>">路由后的应用必须回退到 <code>index.html</code></a>
+  </h3>
+  <p>客户端渲染的 Angular 应用是使用静态 HTML 服务器提供服务的理想选择，因为所有内容都是静态的，并且在构建时生成。</p>
+<p>如果应用使用 Angular 路由器，则当被请求的文件不存在时，你必须配置服务器以返回应用的主页 (<code>index.html</code>)。</p>
+<p>路由应用应支持“深层链接”。
+<em>深层链接</em>是一个 URL，它指定应用内组件的路径。
+例如，<code>http://my-app.test/users/42</code> 是用户详情页面的<em>深层链接</em>，该页面显示 <code>id</code> 为 42 的用户。</p>
+<p>当用户最初加载索引页，然后从正在运行的客户端内部导航到该 URL 时，不会出现问题。
+Angular 路由器执行<em>客户端</em>导航，并且不请求新的 HTML 页面。</p>
+<p>但是，点击电子邮件中的深层链接、在浏览器地址栏中输入它，甚至在已位于深层链接页面上时刷新浏览器，都将由浏览器自身处理，<em>在</em>正在运行的应用<em>之外</em>。
+浏览器直接向服务器发出 <code>/users/42</code> 的请求，绕过 Angular 路由器。</p>
+<p>当静态服务器收到对 <code>http://my-app.test/</code> 的请求时，通常会返回 <code>index.html</code>。
+但是，默认情况下，大多数服务器会拒绝 <code>http://my-app.test/users/42</code>，并返回 <code>404 - Not Found</code> 错误，<em>除非</em>它配置为返回 <code>index.html</code>。
+将回退路由或 404 页面配置为服务器的 <code>index.html</code>，以便为深层链接提供 Angular，并可以显示正确的路由。
+有些服务器将此回退行为称为“单页应用”(SPA) 模式。</p>
+<p>浏览器加载应用后，Angular 路由器将读取 URL 以确定它在哪个页面上，并正确显示 <code>/users/42</code>。</p>
+<p>对于“真正的” 404 页面（例如 <code>http://my-app.test/does-not-exist</code>），服务器不需要任何额外的配置。
+<a href="guide/routing/common-router-tasks#displaying-a-404-page">在 Angular 路由器中实现的 404 页面</a>将正确显示。</p>
+
+  <h3 id="requesting-data-from-a-different-server-cors">
+    <a href="#requesting-data-from-a-different-server-cors" class="docs-anchor" tabindex="-1" aria-label="Link to Requesting data from a different server (CORS)">从不同的服务器请求数据 (CORS)</a>
+  </h3>
+  <p>当向应用自身宿主服务器之外的服务器发出网络请求时，Web 开发人员可能会遇到<a href="https://developer.mozilla.org/docs/Web/HTTP/CORS" title="Cross-origin" resource sharing target="_blank"><em>跨域资源共享</em></a>错误。
+浏览器禁止此类请求，除非服务器显式允许它们。</p>
+<p>对于这些错误，Angular 或客户端应用都无能为力。
+<em>服务器</em>必须配置为接受应用的请求。
+请访问 <a href="https://enable-cors.org/server.html" title="Enabling" cors server target="_blank">enable-cors.org</a>，阅读有关如何为特定服务器启用 CORS 的信息。</p>
+
+  <h2 id="production-optimizations">
+    <a href="#production-optimizations" class="docs-anchor" tabindex="-1" aria-label="Link to Production optimizations">生产环境优化</a>
+  </h2>
+  <p>除非另有配置，否则 <code>ng build</code> 使用 <code>production</code> 配置。此配置启用了以下构建优化特性。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">特性</th>
+<th align="left">详情</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left"><a href="tools/cli/aot-compiler">预先编译 (AoT)</a></td>
+<td align="left">预先编译 Angular 组件模板。</td>
+</tr>
+<tr>
+<td align="left"><a href="tools/cli/deployment#development-only-features">生产模式</a></td>
+<td align="left">针对最佳运行时性能优化应用</td>
+</tr>
+<tr>
+<td align="left">打捆</td>
+<td align="left">将你的许多应用和库文件串联成最少数量的已部署文件。</td>
+</tr>
+<tr>
+<td align="left">最小化</td>
+<td align="left">移除多余的空格、注释和可选标记。</td>
+</tr>
+<tr>
+<td align="left">混淆处理</td>
+<td align="left">将函数、类和变量重命名为更短的任意标识符。</td>
+</tr>
+<tr>
+<td align="left">死代码消除</td>
+<td align="left">移除未引用的模块和未使用的代码。</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  <p>有关 CLI 构建选项及其效果的更多信息，请参阅 <a href="cli/build"><code>ng build</code></a>。</p>
+
+  <h3 id="development-only-features">
+    <a href="#development-only-features" class="docs-anchor" tabindex="-1" aria-label="Link to Development-only features">仅限开发环境的功能</a>
+  </h3>
+  <p>当你在本地使用 <code>ng serve</code> 运行应用时，Angular 在运行时使用开发配置，该配置启用：</p>
+
+  <ul class="docs-list">
+    <li>额外的安全检查，例如 <a href="errors/NG0100"><code>expression-changed-after-checked</code></a> 检测。</li>
+<li>更详细的错误消息。</li>
+<li>其他调试实用工具，例如带有 <a href="api#core-global">调试函数</a> 的全局 <code>ng</code> 变量和 <a href="tools/devtools">Angular DevTools</a> 支持。</li>
+
+  </ul>
+  <p>这些功能在开发期间很有用，但它们需要在应用中添加额外的代码，这在生产环境中是不可取的。为了确保这些功能不会对最终用户的捆绑包大小产生负面影响，Angular CLI 在为生产环境构建时，会从捆绑包中移除仅限开发环境的代码。</p>
+<p>默认情况下，使用 <code>ng build</code> 构建你的应用会使用 <code>production</code> 配置，该配置会从输出中移除这些功能，以获得最佳的捆绑包大小。</p>
+
+  <h2 id="--deploy-url">
+    <a href="#--deploy-url" class="docs-anchor" tabindex="-1" aria-label="Link to <code>--deploy-url</code>"><code>--deploy-url</code></a>
+  </h2>
+  <p><code>--deploy-url</code> 是一个命令行选项，用于指定在<em>编译</em>时解析诸如图像、脚本和样式表等资产的相对 URL 的基本路径。</p>
+<div class="docs-code shell">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">ng</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> build</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --deploy-url</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> /my/assets</span></span></code></pre>
+    </pre>
+  </div><p><code>--deploy-url</code> 的效果和目的与 <a href="guide/routing/common-router-tasks"><code>&lt;base href&gt;</code></a> 重叠。两者都可用于初始脚本、样式表、惰性脚本和 CSS 资源。</p>
+<p>与可以在运行时在单个位置定义的 <code>&lt;base href&gt;</code> 不同，<code>--deploy-url</code> 需要在构建时硬编码到应用中。在可能的情况下，首选 <code>&lt;base href&gt;</code>。</p>

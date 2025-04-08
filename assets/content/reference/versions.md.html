@@ -1,0 +1,425 @@
+<header class="docs-header">
+      <docs-breadcrumb></docs-breadcrumb>
+
+      
+  <!-- Page title -->
+  <div class="docs-page-title">
+    <h1 tabindex="-1">版本兼容性</h1>
+    <a class="docs-github-links" target="_blank" href="https://github.com/angular/angular/edit/main/adev/src/content/reference/versions.md" title="Edit this page" aria-label="Edit this page">
+      <!-- Pencil -->
+      <docs-icon role="presentation">edit</docs-icon>
+    </a>
+  </div>
+    </header>
+    <p>下表描述了每个 Angular 版本所需的 Node.js、TypeScript 和 RxJS 版本。</p>
+
+  <h2 id="actively-supported-versions">
+    <a href="#actively-supported-versions" class="docs-anchor" tabindex="-1" aria-label="Link to Actively supported versions">处于积极支持的版本</a>
+  </h2>
+  <p>此表涵盖<a href="reference/releases#actively-supported-versions">处于积极支持的 Angular 版本</a>。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>Angular</th>
+<th>Node.js</th>
+<th>TypeScript</th>
+<th>RxJS</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>19.2.x</td>
+<td>^18.19.1 || ^20.11.1 || ^22.0.0</td>
+<td>&gt;=5.5.0 &lt;5.9.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>19.1.x</td>
+<td>^18.19.1 || ^20.11.1 || ^22.0.0</td>
+<td>&gt;=5.5.0 &lt;5.8.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>19.0.x</td>
+<td>^18.19.1 || ^20.11.1 || ^22.0.0</td>
+<td>&gt;=5.5.0 &lt;5.7.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>18.1.x || 18.2.x</td>
+<td>^18.19.1 || ^20.11.1 || ^22.0.0</td>
+<td>&gt;=5.4.0 &lt;5.6.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>18.0.x</td>
+<td>^18.19.1 || ^20.11.1 || ^22.0.0</td>
+<td>&gt;=5.4.0 &lt;5.5.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>17.3.x</td>
+<td>^18.13.0 || ^20.9.0</td>
+<td>&gt;=5.2.0 &lt;5.5.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>17.1.x || 17.2.x</td>
+<td>^18.13.0 || ^20.9.0</td>
+<td>&gt;=5.2.0 &lt;5.4.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>17.0.x</td>
+<td>^18.13.0 || ^20.9.0</td>
+<td>&gt;=5.2.0 &lt;5.3.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="unsupported-angular-versions">
+    <a href="#unsupported-angular-versions" class="docs-anchor" tabindex="-1" aria-label="Link to Unsupported Angular versions">不受支持的 Angular 版本</a>
+  </h2>
+  <p>此表涵盖了不再处于长期支持 (LTS) 的 Angular 版本。当每个版本退出 LTS 时，此信息是正确的，并且不提供任何进一步的保证。此处列出以供历史参考。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>Angular</th>
+<th>Node.js</th>
+<th>TypeScript</th>
+<th>RxJS</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>16.1.x || 16.2.x</td>
+<td>^16.14.0 || ^18.10.0</td>
+<td>&gt;=4.9.3 &lt;5.2.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>16.0.x</td>
+<td>^16.14.0 || ^18.10.0</td>
+<td>&gt;=4.9.3 &lt;5.1.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>15.1.x || 15.2.x</td>
+<td>^14.20.0 || ^16.13.0 || ^18.10.0</td>
+<td>&gt;=4.8.2 &lt;5.0.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>15.0.x</td>
+<td>^14.20.0 || ^16.13.0 || ^18.10.0</td>
+<td>~4.8.2</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>14.2.x || 14.3.x</td>
+<td>^14.15.0 || ^16.10.0</td>
+<td>&gt;=4.6.2 &lt;4.9.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>14.0.x || 14.1.x</td>
+<td>^14.15.0 || ^16.10.0</td>
+<td>&gt;=4.6.2 &lt;4.8.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>13.3.x || 13.4.x</td>
+<td>^12.20.0 || ^14.15.0 || ^16.10.0</td>
+<td>&gt;=4.4.3 &lt;4.7.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>13.1.x || 13.2.x</td>
+<td>^12.20.0 || ^14.15.0 || ^16.10.0</td>
+<td>&gt;=4.4.3 &lt;4.6.0</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>13.0.x</td>
+<td>^12.20.0 || ^14.15.0 || ^16.10.0</td>
+<td>~4.4.3</td>
+<td>^6.5.3 || ^7.4.0</td>
+</tr>
+<tr>
+<td>12.2.x</td>
+<td>^12.14.0 || ^14.15.0</td>
+<td>&gt;=4.2.3 &lt;4.4.0</td>
+<td>^6.5.3 || ^7.0.0</td>
+</tr>
+<tr>
+<td>12.1.x</td>
+<td>^12.14.0 || ^14.15.0</td>
+<td>&gt;=4.2.3 &lt;4.4.0</td>
+<td>^6.5.3</td>
+</tr>
+<tr>
+<td>12.0.x</td>
+<td>^12.14.0 || ^14.15.0</td>
+<td>~4.2.3</td>
+<td>^6.5.3</td>
+</tr>
+<tr>
+<td>11.2.x</td>
+<td>^10.13.0 || ^12.11.0</td>
+<td>&gt;=4.0.0 &lt;4.2.0</td>
+<td>^6.5.3</td>
+</tr>
+<tr>
+<td>11.1.x</td>
+<td>^10.13.0 || ^12.11.0</td>
+<td>&gt;=4.0.0 &lt;4.2.0</td>
+<td>^6.5.3</td>
+</tr>
+<tr>
+<td>11.0.x</td>
+<td>^10.13.0 || ^12.11.0</td>
+<td>~4.0.0</td>
+<td>^6.5.3</td>
+</tr>
+<tr>
+<td>10.2.x</td>
+<td>^10.13.0 || ^12.11.0</td>
+<td>&gt;=3.9.0 &lt;4.1.0</td>
+<td>^6.5.3</td>
+</tr>
+<tr>
+<td>10.1.x</td>
+<td>^10.13.0 || ^12.11.0</td>
+<td>&gt;=3.9.0 &lt;4.1.0</td>
+<td>^6.5.3</td>
+</tr>
+<tr>
+<td>10.0.x</td>
+<td>^10.13.0 || ^12.11.0</td>
+<td>~3.9.0</td>
+<td>^6.5.3</td>
+</tr>
+<tr>
+<td>9.1.x</td>
+<td>^10.13.0 || ^12.11.0</td>
+<td>&gt;=3.6.0 &lt;3.9.0</td>
+<td>^6.5.3</td>
+</tr>
+<tr>
+<td>9.0.x</td>
+<td>^10.13.0 || ^12.11.0</td>
+<td>&gt;=3.6.0 &lt;3.8.0</td>
+<td>^6.5.3</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h3 id="before-v9">
+    <a href="#before-v9" class="docs-anchor" tabindex="-1" aria-label="Link to Before v9">v9 之前</a>
+  </h3>
+  <p>在 Angular v9 之前，Angular 和 Angular CLI 版本没有同步。</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th>Angular</th>
+<th>Angular CLI</th>
+<th>Node.js</th>
+<th>TypeScript</th>
+<th>RxJS</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td>8.2.x</td>
+<td>8.2.x || 8.3.x</td>
+<td>^10.9.0</td>
+<td>&gt;=3.4.2 &lt;3.6.0</td>
+<td>^6.4.0</td>
+</tr>
+<tr>
+<td>8.0.x || 8.1.x</td>
+<td>8.0.x || 8.1.x</td>
+<td>^10.9.0</td>
+<td>~3.4.2</td>
+<td>^6.4.0</td>
+</tr>
+<tr>
+<td>7.2.x</td>
+<td>7.2.x || 7.3.x</td>
+<td>^8.9.0 || ^10.9.0</td>
+<td>&gt;=3.1.3 &lt;3.3.0</td>
+<td>^6.0.0</td>
+</tr>
+<tr>
+<td>7.0.x || 7.1.x</td>
+<td>7.0.x || 7.1.x</td>
+<td>^8.9.0 || ^10.9.0</td>
+<td>~3.1.3</td>
+<td>^6.0.0</td>
+</tr>
+<tr>
+<td>6.1.x</td>
+<td>6.1.x || 6.2.x</td>
+<td>^8.9.0</td>
+<td>&gt;=2.7.2 &lt;3.0.0</td>
+<td>^6.0.0</td>
+</tr>
+<tr>
+<td>6.0.x</td>
+<td>6.0.x</td>
+<td>^8.9.0</td>
+<td>~2.7.2</td>
+<td>^6.0.0</td>
+</tr>
+<tr>
+<td>5.2.x</td>
+<td>1.6.x || 1.7.x</td>
+<td>^6.9.0 || ^8.9.0</td>
+<td>&gt;=2.4.2 &lt;2.7.0</td>
+<td>^5.5.0</td>
+</tr>
+<tr>
+<td>5.0.x || 5.1.x</td>
+<td>1.5.x</td>
+<td>^6.9.0 || ^8.9.0</td>
+<td>~2.4.2</td>
+<td>^5.5.0</td>
+</tr>
+<tr>
+<td>4.2.x || 4.3.x || 4.4.x</td>
+<td>1.4.x</td>
+<td>^6.9.0 || ^8.9.0</td>
+<td>&gt;=2.1.6 &lt;2.5.0</td>
+<td>^5.0.1</td>
+</tr>
+<tr>
+<td>4.2.x || 4.3.x || 4.4.x</td>
+<td>1.3.x</td>
+<td>^6.9.0</td>
+<td>&gt;=2.1.6 &lt;2.5.0</td>
+<td>^5.0.1</td>
+</tr>
+<tr>
+<td>4.0.x || 4.1.x</td>
+<td>1.0.x || 1.1.x || 1.2.x</td>
+<td>^6.9.0</td>
+<td>&gt;=2.1.6 &lt;2.4.0</td>
+<td>^5.0.1</td>
+</tr>
+<tr>
+<td>2.x</td>
+<td>-</td>
+<td>^6.9.0</td>
+<td>&gt;=1.8.0 &lt;2.2.0</td>
+<td>^5.0.1</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+  <h2 id="browser-support">
+    <a href="#browser-support" class="docs-anchor" tabindex="-1" aria-label="Link to Browser support">浏览器支持</a>
+  </h2>
+  <p>Angular 支持大多数最新版本的浏览器。
+其中包括以下特定版本：</p>
+
+  <div class="docs-table docs-scroll-track-transparent">
+    <table>
+      <thead>
+        <tr>
+<th align="left">浏览器</th>
+<th align="left">支持的版本</th>
+</tr>
+
+      </thead>
+      <tbody>
+        <tr>
+<td align="left">Chrome 浏览器</td>
+<td align="left">最近 2 个版本</td>
+</tr>
+<tr>
+<td align="left">Firefox 浏览器</td>
+<td align="left">最新版和扩展支持版本 (ESR)</td>
+</tr>
+<tr>
+<td align="left">Edge 浏览器</td>
+<td align="left">最近 2 个主要版本</td>
+</tr>
+<tr>
+<td align="left">Safari 浏览器</td>
+<td align="left">最近 2 个主要版本</td>
+</tr>
+<tr>
+<td align="left">iOS</td>
+<td align="left">最近 2 个主要版本</td>
+</tr>
+<tr>
+<td align="left">Android</td>
+<td align="left">最近 2 个主要版本</td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+  
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> Angular 的持续集成过程在所有这些浏览器上，针对每个 Pull Request 运行该框架的单元测试，使用的是 <a href="https://saucelabs.com" target="_blank">Sauce Labs</a>。</p>
+
+    </div>
+    
+  <h2 id="polyfills">
+    <a href="#polyfills" class="docs-anchor" tabindex="-1" aria-label="Link to Polyfills">腻子脚本</a>
+  </h2>
+  <p>Angular 构建于最新的 Web 平台标准之上。
+定位如此广泛的浏览器具有挑战性，因为它们并非都支持现代浏览器的所有特性。
+你需要为你必须支持的浏览器加载腻子脚本（“polyfills”）来弥补。
+请参阅下面的说明，了解如何将腻子脚本包含到你的项目中。</p>
+
+    <div class="docs-alert docs-alert-important">
+    <p><strong>重点：</strong> 建议的腻子脚本是那些运行完整的 Angular 应用的脚本。
+你可能需要额外的腻子脚本来支持此列表未涵盖的特性。</p>
+
+    </div>
+    
+    <div class="docs-alert docs-alert-helpful">
+    <p><strong>提示：</strong> 腻子脚本无法神奇地将旧的、慢速的浏览器转换为现代的、快速的浏览器。</p>
+
+    </div>
+    
+  <h2 id="enabling-polyfills-with-cli-projects">
+    <a href="#enabling-polyfills-with-cli-projects" class="docs-anchor" tabindex="-1" aria-label="Link to Enabling polyfills with CLI projects">在 CLI 项目中启用腻子脚本</a>
+  </h2>
+  <p><a href="tools/cli">Angular CLI</a> 提供了对腻子脚本的支持。
+如果你没有使用 CLI 来创建项目，请参阅<a href="#polyfills-for-non-cli-users">非 CLI 用户的腻子脚本说明</a>。</p>
+<p><a href="tools/cli/cli-builder">浏览器和测试构建器</a>的 <code>polyfills</code> 选项可以是文件的完整路径（范例：<code>src/polyfills.ts</code>），也可以是相对于当前工作区或模块标识符的路径（范例：<code>zone.js</code>）。</p>
+<p>如果你创建了一个 TypeScript 文件，请确保将其包含在 <code>tsconfig</code> 文件的 <code>files</code> 属性中。</p>
+<div class="docs-code">
+    
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "extends"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"./tsconfig.json"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "compilerOptions"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">    ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  },</span></span><span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  "files"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "src/main.ts"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span></span><span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">    "src/polyfills.ts"</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ]</span></span><span class="line"><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">  ...</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+    </pre>
+  </div>
+  <h2 id="polyfills-for-non-cli-users">
+    <a href="#polyfills-for-non-cli-users" class="docs-anchor" tabindex="-1" aria-label="Link to Polyfills for non-CLI users">非 CLI 用户的腻子脚本</a>
+  </h2>
+  <p>如果你没有使用 CLI，请将你的腻子脚本直接添加到宿主网页 (<code>index.html</code>) 中。</p>
+<p>例如：</p>
+<div class="docs-code" header="src/index.html">
+    <div class="docs-code-header"><h3>src/index.html</h3></div>
+    <pre class="docs-mini-scroll-track">      <pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- pre-zone polyfills --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">script</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> src</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"node_modules/core-js/client/shim.min.js"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">script</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">script</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  /**</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">   * you can configure some zone flags which can disable zone interception for some</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">   * asynchronous activities to improve startup performance - use these options only</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">   * if you know what you are doing as it could result in hard to trace down bugs.</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">   */</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // __Zone_disable_requestAnimationFrame = true; // disable patch requestAnimationFrame</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // __Zone_disable_on_property = true; // disable patch onProperty such as onclick</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // __zone_symbol__UNPATCHED_EVENTS = ['scroll', 'mousemove']; // disable patch specified eventNames</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  /*</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">   * in Edge developer tools, the addEventListener will also be wrapped by zone.js</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">   * with the following flag, it will bypass `zone.js` patch for Edge.</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">   */</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // __Zone_enable_cross_context_check = true;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">script</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- zone.js required by Angular --&gt;</span></span><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">script</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> src</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"node_modules/zone.js/bundles/zone.umd.js"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">script</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&lt;!-- application polyfills --&gt;</span></span></code></pre>
+    </pre>
+  </div>
